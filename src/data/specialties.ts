@@ -12,6 +12,3 @@ export const specialties: SpecialtyMeta[] = [
   { id: "event" },
   { id: "wildlife" },
 ];
-
-// The specialty active by default in the reference.
-export const defaultSpecialtyId = "street" as const;

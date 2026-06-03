@@ -1,53 +1,62 @@
 "use client";
 
-import { motion } from "motion/react";
+import { motion, type Variants } from "motion/react";
 import type { Specialty } from "@/types";
 import { CatIcon } from "./Icons";
 
 interface SpecialtyCardProps {
   specialty: Specialty;
-  index: number;
-  isActive: boolean;
-  onSelect: (id: Specialty["id"]) => void;
 }
 
-export const SpecialtyCard = ({
-  specialty,
-  index,
-  isActive,
-  onSelect,
-}: SpecialtyCardProps) => (
-  <motion.button
-    type="button"
-    onClick={() => onSelect(specialty.id)}
-    initial={{ opacity: 0, y: 30 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, margin: "-50px" }}
-    transition={{
-      duration: 0.6,
-      delay: (index % 4) * 0.06,
-      ease: [0.22, 1, 0.36, 1],
-    }}
-    animate={isActive ? { scale: 1.04, rotate: -1.5 } : { scale: 1, rotate: 0 }}
-    whileHover={{ y: -4 }}
-    className={`flex aspect-square flex-col justify-between rounded-card p-7 text-left transition-colors duration-300 ${
-      isActive ? "bg-accent text-ink" : "bg-panel text-white hover:bg-panel2"
-    }`}
+// Hover-driven, fully presentational. All hover animation runs through
+// motion/react variant propagation: the root's active "hover" label cascades
+// to the child motion elements, so every colour animates in sync (no CSS hover).
+const transition = { duration: 0.3, ease: [0.22, 1, 0.36, 1] } as const;
+
+const cardVariants: Variants = {
+  rest: { scale: 1, rotate: 0, backgroundColor: "#141414" },
+  hover: { scale: 1.04, rotate: -1.5, backgroundColor: "#f5e155" },
+};
+
+const inkVariants: Variants = {
+  rest: { color: "#fafafa" },
+  hover: { color: "#0a0a0a" },
+};
+
+const descVariants: Variants = {
+  rest: { color: "rgba(250,250,250,0.55)" },
+  hover: { color: "rgba(10,10,10,0.7)" },
+};
+
+export const SpecialtyCard = ({ specialty }: SpecialtyCardProps) => (
+  <motion.div
+    initial="rest"
+    whileHover="hover"
+    animate="rest"
+    variants={cardVariants}
+    transition={transition}
+    className="flex aspect-square w-full flex-col justify-between rounded-card p-7 text-left"
   >
     <div className="flex justify-end">
-      <CatIcon kind={specialty.id} className="h-9 w-9" />
+      <motion.span variants={inkVariants} transition={transition}>
+        <CatIcon kind={specialty.id} className="h-9 w-9" />
+      </motion.span>
     </div>
     <div>
-      <div className="mb-2 text-2xl font-semibold tracking-tight md:text-[28px]">
+      <motion.div
+        variants={inkVariants}
+        transition={transition}
+        className="mb-2 text-2xl font-semibold tracking-tight md:text-[28px]"
+      >
         {specialty.title}
-      </div>
-      <p
-        className={`text-[13px] leading-snug ${
-          isActive ? "text-ink/70" : "text-white/55"
-        }`}
+      </motion.div>
+      <motion.p
+        variants={descVariants}
+        transition={transition}
+        className="text-[13px] leading-snug"
       >
         {specialty.desc}
-      </p>
+      </motion.p>
     </div>
-  </motion.button>
+  </motion.div>
 );

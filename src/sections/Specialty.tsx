@@ -1,15 +1,14 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useState } from "react";
 import { SectionHeader } from "@/components/SectionHeader";
 import { SpecialtyCard } from "@/components/SpecialtyCard";
-import { defaultSpecialtyId, specialties } from "@/data/specialties";
-import type { IconKind, Specialty as SpecialtyType } from "@/types";
+import { SpecialtyCarouselRow } from "@/components/SpecialtyCarouselRow";
+import { specialties } from "@/data/specialties";
+import type { Specialty as SpecialtyType } from "@/types";
 
 export const Specialty = () => {
   const t = useTranslations("specialty");
-  const [active, setActive] = useState<IconKind>(defaultSpecialtyId);
 
   const items: SpecialtyType[] = specialties.map((s) => ({
     ...s,
@@ -23,16 +22,18 @@ export const Specialty = () => {
         tag={t("tag")}
         lines={[t("titleLine1"), t("titleLine2")]}
       />
-      <div className="mt-16 grid grid-cols-2 gap-5 md:grid-cols-4">
-        {items.map((item, i) => (
-          <SpecialtyCard
-            key={item.id}
-            specialty={item}
-            index={i}
-            isActive={item.id === active}
-            onSelect={setActive}
-          />
+
+      {/* Mobile: static 2-col grid (layout unchanged). */}
+      <div className="mt-16 grid grid-cols-2 gap-5 md:hidden">
+        {items.map((item) => (
+          <SpecialtyCard key={item.id} specialty={item} />
         ))}
+      </div>
+
+      {/* Desktop: two infinite carousel rows, scrolling in opposite directions. */}
+      <div className="mt-16 hidden flex-col gap-5 md:flex">
+        <SpecialtyCarouselRow items={items.slice(0, 4)} direction="left" />
+        <SpecialtyCarouselRow items={items.slice(4)} direction="right" />
       </div>
     </section>
   );
