@@ -11,10 +11,13 @@ interface PillButtonProps {
   href?: string;
   type?: "button" | "submit";
   disabled?: boolean;
+  onClick?: () => void;
+  ariaExpanded?: boolean;
+  ariaControls?: string;
 }
 
 const base =
-  "relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full px-7 py-4 text-[15px] font-medium";
+  "relative inline-flex cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-full px-7 py-4 text-[15px] font-medium";
 
 interface VariantConfig {
   bg: string; // static base background
@@ -61,6 +64,9 @@ export const PillButton = ({
   href,
   type = "button",
   disabled = false,
+  onClick,
+  ariaExpanded,
+  ariaControls,
 }: PillButtonProps) => {
   const reduce = useReducedMotion();
   const cfg = config[variant];
@@ -132,7 +138,14 @@ export const PillButton = ({
   }
 
   return (
-    <motion.button type={type} disabled={disabled} {...rootProps}>
+    <motion.button
+      type={type}
+      disabled={disabled}
+      onClick={onClick}
+      aria-expanded={ariaExpanded}
+      aria-controls={ariaControls}
+      {...rootProps}
+    >
       {fill}
       {content}
     </motion.button>

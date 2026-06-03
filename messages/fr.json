@@ -4,7 +4,16 @@
     "description": "Photographie documentaire, de portrait et éditoriale par Lili Marchetti, basée à Paris."
   },
   "nav": {
-    "menu": "MENU"
+    "menu": "MENU",
+    "close": "FERMER",
+    "email": "hello@lilispics.com",
+    "items": {
+      "about": "À propos",
+      "portfolio": "Portfolio",
+      "process": "Process",
+      "pricing": "Tarifs",
+      "contact": "Contact"
+    }
   },
   "hero": {
     "kicker": "Portfolio",
