@@ -2,10 +2,16 @@
 
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
+import { useState } from "react";
+import { Modal } from "@/components/admin/Modal";
+import { PhotoForm } from "@/components/admin/PhotoForm";
+import { PillButton } from "@/components/PillButton";
 import { apiFetch } from "@/lib/api/client";
 import { type PhotoWithTags, resolveImageUrl } from "@/types/db";
 
 export default function AdminDashboard() {
+  const [uploadOpen, setUploadOpen] = useState(false);
+
   const {
     data: photos,
     isLoading,
@@ -25,7 +31,18 @@ export default function AdminDashboard() {
             {photos ? `${photos.length} in the portfolio` : "Loading…"}
           </p>
         </div>
+        <PillButton variant="light" onClick={() => setUploadOpen(true)}>
+          + New photo
+        </PillButton>
       </div>
+
+      <Modal
+        open={uploadOpen}
+        onClose={() => setUploadOpen(false)}
+        title="New photo"
+      >
+        <PhotoForm onSuccess={() => setUploadOpen(false)} />
+      </Modal>
 
       {isLoading && <p className="text-white/55">Loading photos…</p>}
 
