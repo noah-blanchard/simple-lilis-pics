@@ -9,7 +9,7 @@ import { z } from "zod";
 import { PillButton } from "@/components/PillButton";
 import { apiFetch } from "@/lib/api/client";
 import { ACCEPTED_IMAGE_TYPES } from "@/lib/api/schemas";
-import type { TagRow } from "@/types/db";
+import type { PhotoWithTags, TagRow } from "@/types/db";
 
 const schema = z.object({
   title_en: z.string().min(1, "Required"),
@@ -31,12 +31,22 @@ const fieldClass =
 const labelClass = "tag-mono mb-2 block uppercase text-white/70";
 const errorClass = "mt-1.5 text-[13px] text-red-400";
 
-export function PhotoForm({ onSuccess }: { onSuccess?: () => void }) {
+interface PhotoFormProps {
+  /** When provided, the form edits this photo (metadata + tags) instead of
+   *  creating a new one. Image replacement is not supported in edit mode. */
+  photo?: PhotoWithTags;
+  onSuccess?: () => void;
+}
+
+export function PhotoForm({ photo, onSuccess }: PhotoFormProps) {
+  const isEdit = Boolean(photo);
   const queryClient = useQueryClient();
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [fileError, setFileError] = useState<string | null>(null);
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>(
+    () => photo?.tags.map((t) => t.id) ?? [],
+  );
   const [status, setStatus] = useState<string | null>(null);
 
   const { data: tags } = useQuery({
@@ -51,14 +61,14 @@ export function PhotoForm({ onSuccess }: { onSuccess?: () => void }) {
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      title_en: "",
-      title_fr: "",
-      shoot_date: "",
-      featured: false,
+      title_en: photo?.title_en ?? "",
+      title_fr: photo?.title_fr ?? "",
+      shoot_date: photo?.shoot_date ?? "",
+      featured: photo?.featured ?? false,
     },
   });
 
-  // Manage the object-URL preview lifecycle.
+  // Manage the object-URL preview lifecycle (create mode only).
   useEffect(() => {
     if (!file) {
       setPreviewUrl(null);
@@ -71,6 +81,14 @@ export function PhotoForm({ onSuccess }: { onSuccess?: () => void }) {
 
   const mutation = useMutation({
     mutationFn: async (values: FormValues) => {
+      if (isEdit && photo) {
+        return apiFetch<{ id: string }>(`/api/photos/${photo.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...values, tag_ids: selectedTags }),
+        });
+      }
+
       if (!file) throw new Error("Please choose an image");
       setStatus("Compressing…");
       const compressed = await imageCompression(file, COMPRESSION_OPTIONS);
@@ -115,42 +133,45 @@ export function PhotoForm({ onSuccess }: { onSuccess?: () => void }) {
 
   const onSubmit = handleSubmit((values) => mutation.mutate(values));
   const busy = mutation.isPending;
+  const submitLabel = isEdit ? "Save changes" : (status ?? "Add photo");
 
   return (
     <form onSubmit={onSubmit} noValidate className="space-y-6">
-      {/* Image picker + preview */}
-      <div>
-        <span className={labelClass}>Photo</span>
-        <label
-          htmlFor="photo-file"
-          className="flex cursor-pointer items-center gap-4 rounded-2xl border border-line border-dashed bg-panel2 p-4 transition-colors hover:border-accent"
-        >
-          <div className="relative h-20 w-16 shrink-0 overflow-hidden rounded-lg bg-ink">
-            {previewUrl && (
-              // biome-ignore lint/performance/noImgElement: local blob preview
-              <img
-                src={previewUrl}
-                alt="Preview"
-                className="h-full w-full object-cover"
-              />
-            )}
-          </div>
-          <div className="text-[14px] text-white/60">
-            {file ? file.name : "Click to choose an image"}
-            <p className="mt-1 text-[12px] text-white/40">
-              Compressed to ≤ 5MB before upload.
-            </p>
-          </div>
-          <input
-            id="photo-file"
-            type="file"
-            accept={ACCEPTED_IMAGE_TYPES.join(",")}
-            onChange={onFileChange}
-            className="hidden"
-          />
-        </label>
-        {fileError && <p className={errorClass}>{fileError}</p>}
-      </div>
+      {/* Image picker + preview (create mode only) */}
+      {!isEdit && (
+        <div>
+          <span className={labelClass}>Photo</span>
+          <label
+            htmlFor="photo-file"
+            className="flex cursor-pointer items-center gap-4 rounded-2xl border border-line border-dashed bg-panel2 p-4 transition-colors hover:border-accent"
+          >
+            <div className="relative h-20 w-16 shrink-0 overflow-hidden rounded-lg bg-ink">
+              {previewUrl && (
+                // biome-ignore lint/performance/noImgElement: local blob preview
+                <img
+                  src={previewUrl}
+                  alt="Preview"
+                  className="h-full w-full object-cover"
+                />
+              )}
+            </div>
+            <div className="text-[14px] text-white/60">
+              {file ? file.name : "Click to choose an image"}
+              <p className="mt-1 text-[12px] text-white/40">
+                Compressed to ≤ 5MB before upload.
+              </p>
+            </div>
+            <input
+              id="photo-file"
+              type="file"
+              accept={ACCEPTED_IMAGE_TYPES.join(",")}
+              onChange={onFileChange}
+              className="hidden"
+            />
+          </label>
+          {fileError && <p className={errorClass}>{fileError}</p>}
+        </div>
+      )}
 
       {/* Titles */}
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
@@ -252,7 +273,7 @@ export function PhotoForm({ onSuccess }: { onSuccess?: () => void }) {
 
       <div className="flex items-center gap-4">
         <PillButton type="submit" variant="light" disabled={busy}>
-          {status ?? "Add photo"}
+          {submitLabel}
         </PillButton>
       </div>
     </form>
