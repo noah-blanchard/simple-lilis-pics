@@ -30,7 +30,7 @@ function HomeSections() {
   return (
     <main className="bg-ink text-white">
       <Hero />
-      <Marquee items={tMarquee.raw("items") as string[]} />
+      {/* <Marquee items={tMarquee.raw("items") as string[]} /> */}
       <About />
       <Specialty />
       <Portfolio />
