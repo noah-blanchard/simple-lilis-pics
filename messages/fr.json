@@ -1,0 +1,242 @@
+{
+  "meta": {
+    "title": "Lilis Pics — Portfolio de photographie",
+    "description": "Photographie documentaire, de portrait et éditoriale par Lili Marchetti, basée à Paris."
+  },
+  "nav": {
+    "menu": "MENU"
+  },
+  "hero": {
+    "kicker": "Portfolio",
+    "byline": "PAR LILI MARCHETTI",
+    "location": "PARIS, FRANCE",
+    "titleLine1": "Là où la lumière",
+    "titleLine2": "devient récit",
+    "intro": "Photographie documentaire, de portrait et éditoriale pour les marques et les personnes qui veulent que leur histoire soit racontée avec sincérité — avec atmosphère, patience et un regard attentif à la lumière.",
+    "cta": "Prendre contact"
+  },
+  "marquee": {
+    "items": [
+      "Éditorial",
+      "Portrait",
+      "Documentaire",
+      "Rue",
+      "Marque",
+      "Mariage",
+      "Voyage",
+      "Studio"
+    ]
+  },
+  "about": {
+    "tag": "À PROPOS",
+    "titleLine1": "Des images qui parlent",
+    "titleLine2": "plus fort que les mots.",
+    "body": "Je poursuis la lumière depuis douze ans — dans des appartements silencieux, des studios bondés, des rues étrangères à l'aube. Le travail que j'aime le plus se situe entre l'immobilité et l'émotion. Que ce soit votre visage, votre marque ou un mardi ordinaire, je veux que cela vous ressemble, simplement plus sincère.",
+    "readMore": "En savoir plus"
+  },
+  "specialty": {
+    "tag": "NOTRE SPÉCIALITÉ",
+    "titleLine1": "Conçu pour les créateurs,",
+    "titleLine2": "pensé pour marquer.",
+    "items": {
+      "landscape": {
+        "title": "Paysage",
+        "desc": "Mettre en valeur la nature, les décors et les environnements extérieurs."
+      },
+      "street": {
+        "title": "Rue",
+        "desc": "Des instants pris sur le vif de la vie quotidienne et des scènes urbaines."
+      },
+      "product": {
+        "title": "Produit",
+        "desc": "Photographie commerciale de produits pour la publicité et l'e-commerce."
+      },
+      "portrait": {
+        "title": "Portrait",
+        "desc": "Les émotions, les expressions et les histoires personnelles."
+      },
+      "fashion": {
+        "title": "Mode",
+        "desc": "Concepts éditoriaux réalisés pour les magazines et les books de marque."
+      },
+      "macro": {
+        "title": "Macro",
+        "desc": "Gros plans révélant des détails trop petits pour être remarqués."
+      },
+      "event": {
+        "title": "Événement",
+        "desc": "Une couverture en direct qui capture les vrais moments tels qu'ils arrivent."
+      },
+      "wildlife": {
+        "title": "Faune",
+        "desc": "Un travail documentaire patient dans les habitats naturels."
+      }
+    }
+  },
+  "portfolio": {
+    "tag": "TRAVAUX SÉLECTIONNÉS",
+    "title": "Projets récents.",
+    "viewAll": "Tout voir",
+    "projects": {
+      "1": { "title": "Visages de grâce", "tags": "Portrait, Studio" },
+      "2": { "title": "Liens familiaux", "tags": "Personnes, Instants" },
+      "3": { "title": "Racines & Ailes", "tags": "Sport, Événements" },
+      "4": { "title": "Cap au nord", "tags": "Voyage, Paysage" },
+      "5": { "title": "Heures calmes", "tags": "Éditorial, Ambiance" },
+      "6": { "title": "Jours de béton", "tags": "Rue, Urbain" }
+    }
+  },
+  "process": {
+    "tag": "NOTRE MÉTHODE",
+    "titleLine1": "Votre vision,",
+    "titleLine2": "notre savoir-faire.",
+    "steps": {
+      "01": {
+        "title": "Phase de recherche",
+        "body": "Nous commençons par vous comprendre — la marque, les personnes, l'atmosphère que vous recherchez.",
+        "bullets": [
+          "Appel de découverte et brief créatif",
+          "Collecte de références et accord sur le ton",
+          "Définition du périmètre et planning de production"
+        ]
+      },
+      "02": {
+        "title": "Direction créative",
+        "body": "Nous élaborons un concept visuel qui reflète votre vision et sublime votre histoire.",
+        "bullets": [
+          "Concepts de prises de vue et thèmes visuels",
+          "Repérage des lieux, accessoires et talents",
+          "Planches d'ambiance et listes de plans pour s'aligner"
+        ]
+      },
+      "03": {
+        "title": "Jour de production",
+        "body": "Sur le plateau, nous avançons avec soin — calmes, préparés et prêts à l'imprévu.",
+        "bullets": [
+          "Installation complète de l'éclairage et du matériel",
+          "Direction des talents sur le plateau",
+          "Revue en direct de chaque image"
+        ]
+      },
+      "04": {
+        "title": "Livraison & retouche",
+        "body": "Étalonnage, retouche, livraison. Fichiers bien nommés, prêts pour le web et l'impression, révisions incluses.",
+        "bullets": [
+          "Étalonnage colorimétrique et passes de retouche",
+          "Deux séries de révisions incluses",
+          "Exports web + impression + archive des fichiers bruts"
+        ]
+      }
+    }
+  },
+  "pricing": {
+    "tag": "FORMULES",
+    "title": "Choisissez une formule à la hauteur de votre vision.",
+    "description": "Des tarifs transparents pour chaque type de séance. Besoin de quelque chose sur mesure ? Dites-moi ce que vous avez en tête et je vous prépare une proposition sous 48 heures.",
+    "includesLabel": "Ce qui est inclus :",
+    "cta": "Prendre contact",
+    "plans": {
+      "basic": {
+        "name": "Séance Essentielle",
+        "blurb": "Parfait pour des séances de portrait rapides ou des photos professionnelles.",
+        "unit": "/Séance",
+        "includes": [
+          "Séance photo d'1 heure",
+          "15 photos retouchées",
+          "Accès à la galerie en ligne",
+          "1 changement de tenue",
+          "Retouche de base"
+        ]
+      },
+      "premium": {
+        "name": "Formule Premium",
+        "blurb": "Idéale pour les couples, les séances en famille ou les shootings de marque.",
+        "unit": "/Séance",
+        "includes": [
+          "Séance photo de 2 heures",
+          "40 photos retouchées",
+          "Accès à la galerie en ligne",
+          "3 changements de tenue",
+          "Retouche avancée"
+        ]
+      },
+      "editorial": {
+        "name": "Journée Éditoriale",
+        "blurb": "Production créative complète pour les marques et l'éditorial.",
+        "unit": "/Jour",
+        "includes": [
+          "Shooting d'une journée complète",
+          "Plus de 80 photos retouchées",
+          "Direction créative",
+          "Repérage des lieux",
+          "Licence commerciale"
+        ]
+      }
+    }
+  },
+  "testimonials": {
+    "tag": "TÉMOIGNAGES",
+    "titleLine1": "Ce que nos clients",
+    "titleLine2": "en disent.",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "reviews": {
+      "cody": {
+        "name": "Cody Fisher",
+        "role": "Fondateur de BlueAI",
+        "quote": "Je suis encore émerveillé par le rendu de mes photos. Lili sait vraiment comment vous mettre à l'aise devant l'objectif."
+      },
+      "savannah": {
+        "name": "Savannah Nguyen",
+        "role": "Fondatrice d'Ayobisa",
+        "quote": "Dès que nous sommes entrés dans le studio de Lili, nous nous sommes sentis entre de bonnes mains. Tout le shooting a été d'une grande fluidité."
+      },
+      "wade": {
+        "name": "Wade Warren",
+        "role": "Fondateur de Lagoon",
+        "quote": "J'ai réservé Lili pour nos portraits de remise de diplôme — complètement bluffé. Elle a dirigé chaque pose et veillé à ce que nous soyons à notre avantage."
+      },
+      "floyd": {
+        "name": "Floyd Miles",
+        "role": "Fondateur d'Ocean",
+        "quote": "Lili a rendu notre séance de grossesse vraiment spéciale. Les photos sont douces et tendres — exactement ce que nous espérions."
+      },
+      "jenny": {
+        "name": "Jenny Wilson",
+        "role": "Directrice artistique",
+        "quote": "Notre marque avait besoin d'une photographe capable d'aller vite sans perdre en goût. Lili était tout cela, et plus encore."
+      }
+    }
+  },
+  "contact": {
+    "tag": "PRENDRE CONTACT",
+    "titleLine1": "Racontons votre",
+    "titleLine2": "histoire ensemble.",
+    "description": "Parlez-moi de votre projet et je vous réponds sous 48 heures.",
+    "name": { "label": "Nom", "placeholder": "Votre nom" },
+    "email": { "label": "E-mail", "placeholder": "vous@email.com" },
+    "message": { "label": "Message", "placeholder": "Parlez-moi de votre séance…" },
+    "submit": "Envoyer le message",
+    "submitting": "Envoi…",
+    "success": "Merci — votre message est en route. Je vous recontacte très vite.",
+    "errors": {
+      "nameRequired": "Veuillez saisir votre nom.",
+      "emailRequired": "Veuillez saisir votre e-mail.",
+      "emailInvalid": "Veuillez saisir une adresse e-mail valide.",
+      "messageRequired": "Veuillez saisir un message.",
+      "messageMin": "Dites-m'en un peu plus (au moins 10 caractères)."
+    }
+  },
+  "footer": {
+    "ctaLead": "Capturer l'éclat à chaque déclic",
+    "ctaMuted": " — là où les instants deviennent intemporels et où les histoires rayonnent.",
+    "getInTouch": "Prendre contact",
+    "sitemapLabel": "PLAN DU SITE",
+    "sitemap": ["À propos", "Portfolio", "Journal", "Contact", "Tarifs"],
+    "detailsLabel": "DÉTAILS",
+    "details": ["Détails du portfolio", "Journal", "Licence", "Journal des modifications", "404"],
+    "social": ["Instagram", "Are.na", "Twitter", "YouTube"],
+    "copyright": "© 2026 Lilis Pics. Site réalisé par Lili Marchetti.",
+    "watermark": "LILIS·PICS"
+  }
+}

@@ -1,0 +1,242 @@
+{
+  "meta": {
+    "title": "Lilis Pics — Photography Portfolio",
+    "description": "Documentary, portrait and editorial photography by Lili Marchetti, based in Paris."
+  },
+  "nav": {
+    "menu": "MENU"
+  },
+  "hero": {
+    "kicker": "Portfolio",
+    "byline": "BY LILI MARCHETTI",
+    "location": "PARIS, FRANCE",
+    "titleLine1": "Where light",
+    "titleLine2": "becomes story",
+    "intro": "Documentary, portrait and editorial photography for brands and humans who want their stories told honestly — with mood, patience, and a careful eye for light.",
+    "cta": "Get in Touch"
+  },
+  "marquee": {
+    "items": [
+      "Editorial",
+      "Portrait",
+      "Documentary",
+      "Street",
+      "Brand",
+      "Wedding",
+      "Travel",
+      "Studio"
+    ]
+  },
+  "about": {
+    "tag": "ABOUT US",
+    "titleLine1": "Frames that speak",
+    "titleLine2": "louder than words.",
+    "body": "I've been chasing light for twelve years — through quiet apartments, packed studios, foreign streets at dawn. The work I love most sits between stillness and feeling. Whether it's your face, your brand or your ordinary tuesday, I want it to look like itself, only honest.",
+    "readMore": "Read more"
+  },
+  "specialty": {
+    "tag": "OUR SPECIALTY",
+    "titleLine1": "Crafted for creators,",
+    "titleLine2": "built for impact.",
+    "items": {
+      "landscape": {
+        "title": "Landscape",
+        "desc": "Showcasing nature, scenery and outdoor environments."
+      },
+      "street": {
+        "title": "Street",
+        "desc": "Candid shots of everyday life and urban scenes."
+      },
+      "product": {
+        "title": "Product",
+        "desc": "Commercial product work for advertisements and e-commerce."
+      },
+      "portrait": {
+        "title": "Portrait",
+        "desc": "People's emotions, expressions and personal stories."
+      },
+      "fashion": {
+        "title": "Fashion",
+        "desc": "Editorial concepts shot for magazines and brand books."
+      },
+      "macro": {
+        "title": "Macro",
+        "desc": "Close-up work revealing detail too small to notice."
+      },
+      "event": {
+        "title": "Event",
+        "desc": "Live coverage that captures real moments as they happen."
+      },
+      "wildlife": {
+        "title": "Wildlife",
+        "desc": "Patient documentary work in natural habitats."
+      }
+    }
+  },
+  "portfolio": {
+    "tag": "SELECTED WORK",
+    "title": "Recent projects.",
+    "viewAll": "View all",
+    "projects": {
+      "1": { "title": "Faces of Grace", "tags": "Portrait, Studio" },
+      "2": { "title": "Family Ties", "tags": "People, Moments" },
+      "3": { "title": "Roots & Wings", "tags": "Sports, Events" },
+      "4": { "title": "Northbound", "tags": "Travel, Landscape" },
+      "5": { "title": "Quiet Hours", "tags": "Editorial, Mood" },
+      "6": { "title": "Concrete Days", "tags": "Street, Urban" }
+    }
+  },
+  "process": {
+    "tag": "HOW WE WORK",
+    "titleLine1": "Your vision,",
+    "titleLine2": "our craft.",
+    "steps": {
+      "01": {
+        "title": "Research Phase",
+        "body": "We start by understanding you — the brand, the people, the mood you're chasing.",
+        "bullets": [
+          "Discovery call and creative brief",
+          "Reference gathering and tone alignment",
+          "Production scope and timeline planning"
+        ]
+      },
+      "02": {
+        "title": "Creative Direction",
+        "body": "We craft a visual concept that reflects your vision and elevates your story.",
+        "bullets": [
+          "Shot concepts and visual themes",
+          "Location scouting, props and talent",
+          "Moodboards and shot lists for alignment"
+        ]
+      },
+      "03": {
+        "title": "Production Day",
+        "body": "On set, we move with care — calm, prepared, and ready for the unexpected.",
+        "bullets": [
+          "Full lighting and gear setup",
+          "Direction for talent on set",
+          "Live tethered review of every frame"
+        ]
+      },
+      "04": {
+        "title": "Delivery & Edit",
+        "body": "Color, retouch, deliver. Cleanly named, web and print ready, with revisions baked in.",
+        "bullets": [
+          "Color grading and retouch passes",
+          "Two revision rounds included",
+          "Web + print exports + raw archive"
+        ]
+      }
+    }
+  },
+  "pricing": {
+    "tag": "PRICING PLAN",
+    "title": "Choose a plan that fits your vision.",
+    "description": "Transparent pricing for every kind of shoot. Need something custom? Tell me what you have in mind and I'll put a proposal together within 48 hours.",
+    "includesLabel": "What's included:",
+    "cta": "Get in Touch",
+    "plans": {
+      "basic": {
+        "name": "Basic Session",
+        "blurb": "Perfect for quick portrait sessions or headshots.",
+        "unit": "/Session",
+        "includes": [
+          "1-Hour Photo Session",
+          "15 Edited Photos",
+          "Online Gallery Access",
+          "1 Outfit Change",
+          "Basic Retouching"
+        ]
+      },
+      "premium": {
+        "name": "Premium Package",
+        "blurb": "Ideal for couples, family sessions or branding shoots.",
+        "unit": "/Session",
+        "includes": [
+          "2-Hour Photo Session",
+          "40 Edited Photos",
+          "Online Gallery Access",
+          "3 Outfit Changes",
+          "Advanced Retouching"
+        ]
+      },
+      "editorial": {
+        "name": "Editorial Day",
+        "blurb": "Full creative production for brands and editorial.",
+        "unit": "/Day",
+        "includes": [
+          "Full Day Shoot",
+          "80+ Edited Photos",
+          "Creative Direction",
+          "Location Scouting",
+          "Commercial License"
+        ]
+      }
+    }
+  },
+  "testimonials": {
+    "tag": "TESTIMONIAL",
+    "titleLine1": "What our clients",
+    "titleLine2": "are saying.",
+    "previous": "Previous",
+    "next": "Next",
+    "reviews": {
+      "cody": {
+        "name": "Cody Fisher",
+        "role": "Founder of BlueAI",
+        "quote": "I'm still in awe of how stunning my photos turned out. Lili truly knows how to make you feel comfortable in front of the camera."
+      },
+      "savannah": {
+        "name": "Savannah Nguyen",
+        "role": "Founder of Ayobisa",
+        "quote": "From the moment we walked into Lili's studio, we knew we were in good hands. The whole shoot felt effortless."
+      },
+      "wade": {
+        "name": "Wade Warren",
+        "role": "Founder of Lagoon",
+        "quote": "Booked Lili for our graduation portraits — completely blown away. She directed every pose and made sure we looked our best."
+      },
+      "floyd": {
+        "name": "Floyd Miles",
+        "role": "Founder of Ocean",
+        "quote": "Lili made our maternity shoot feel so special. The photos are quiet and tender — exactly what we hoped for."
+      },
+      "jenny": {
+        "name": "Jenny Wilson",
+        "role": "Creative Director",
+        "quote": "Our brand needed a photographer who could move fast without losing taste. Lili was that and more."
+      }
+    }
+  },
+  "contact": {
+    "tag": "GET IN TOUCH",
+    "titleLine1": "Let's tell your",
+    "titleLine2": "story together.",
+    "description": "Tell me about your project and I'll get back to you within 48 hours.",
+    "name": { "label": "Name", "placeholder": "Your name" },
+    "email": { "label": "Email", "placeholder": "you@email.com" },
+    "message": { "label": "Message", "placeholder": "Tell me about your shoot…" },
+    "submit": "Send message",
+    "submitting": "Sending…",
+    "success": "Thanks — your message is on its way. I'll be in touch soon.",
+    "errors": {
+      "nameRequired": "Please enter your name.",
+      "emailRequired": "Please enter your email.",
+      "emailInvalid": "Please enter a valid email address.",
+      "messageRequired": "Please enter a message.",
+      "messageMin": "Tell me a little more (at least 10 characters)."
+    }
+  },
+  "footer": {
+    "ctaLead": "Capturing brilliance in every flash",
+    "ctaMuted": " — where moments turn timeless and stories shine bright.",
+    "getInTouch": "Get in Touch",
+    "sitemapLabel": "SITEMAP",
+    "sitemap": ["About", "Portfolio", "Journal", "Contact", "Pricing"],
+    "detailsLabel": "DETAILS",
+    "details": ["Portfolio Details", "Journal", "License", "Changelog", "404"],
+    "social": ["Instagram", "Are.na", "Twitter", "YouTube"],
+    "copyright": "© 2026 Lilis Pics. Site by Lili Marchetti.",
+    "watermark": "LILIS·PICS"
+  }
+}
