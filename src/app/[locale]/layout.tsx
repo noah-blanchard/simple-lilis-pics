@@ -8,14 +8,14 @@ import { routing } from "@/i18n/routing";
 import "../globals.css";
 
 const hankenGrotesk = Hanken_Grotesk({
-  variable: "--font-sans",
+  variable: "--font-hanken-grotesk",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800"],
   display: "swap",
 });
 
 const jetBrainsMono = JetBrains_Mono({
-  variable: "--font-mono",
+  variable: "--font-jetbrains-mono",
   subsets: ["latin"],
   weight: ["400", "500"],
   display: "swap",
@@ -58,7 +58,7 @@ export default async function LocaleLayout({
       lang={locale}
       className={`${hankenGrotesk.variable} ${jetBrainsMono.variable}`}
     >
-      <body className="bg-ink text-white antialiased">
+      <body className="bg-ink font-sans text-white antialiased">
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
     </html>
