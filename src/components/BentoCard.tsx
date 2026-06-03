@@ -1,12 +1,12 @@
 "use client";
 
 import { motion } from "motion/react";
-import type { Project } from "@/types";
+import type { ResolvedPhoto } from "@/types/db";
 import { IconArrow } from "./Icons";
 import { RoundedImage } from "./RoundedImage";
 
 interface BentoCardProps {
-  project: Project;
+  project: ResolvedPhoto;
   index: number;
   /** Resolved Tailwind grid span classes from the bento pattern. */
   spanClassName: string;

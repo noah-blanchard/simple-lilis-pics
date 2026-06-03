@@ -25,7 +25,9 @@ import { specialties } from "../src/data/specialties";
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
 if (!url || !key) {
-  throw new Error("Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY (.env.local)");
+  throw new Error(
+    "Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY (.env.local)",
+  );
 }
 
 const supabase = createClient(url, key, { auth: { persistSession: false } });
@@ -36,8 +38,12 @@ type Messages = {
 };
 
 const root = process.cwd();
-const en = JSON.parse(readFileSync(join(root, "messages/en.json"), "utf8")) as Messages;
-const fr = JSON.parse(readFileSync(join(root, "messages/fr.json"), "utf8")) as Messages;
+const en = JSON.parse(
+  readFileSync(join(root, "messages/en.json"), "utf8"),
+) as Messages;
+const fr = JSON.parse(
+  readFileSync(join(root, "messages/fr.json"), "utf8"),
+) as Messages;
 
 /** Best-effort: each legacy project -> taxonomy slug(s). Review in /admin. */
 const TAGS_BY_PROJECT: Record<number, string[]> = {
@@ -74,17 +80,26 @@ async function main() {
     label_en: en.specialty.items[s.id].title,
     label_fr: fr.specialty.items[s.id].title,
   }));
-  const { error: tagErr } = await supabase.from("tags").upsert(tagRows, { onConflict: "slug" });
+  const { error: tagErr } = await supabase
+    .from("tags")
+    .upsert(tagRows, { onConflict: "slug" });
   if (tagErr) throw new Error(`Tag upsert failed: ${tagErr.message}`);
 
-  const { data: tags, error: tagFetchErr } = await supabase.from("tags").select("id, slug");
-  if (tagFetchErr || !tags) throw new Error(`Tag fetch failed: ${tagFetchErr?.message}`);
-  const tagIdBySlug = new Map<string, string>(tags.map((t) => [t.slug as string, t.id as string]));
+  const { data: tags, error: tagFetchErr } = await supabase
+    .from("tags")
+    .select("id, slug");
+  if (tagFetchErr || !tags)
+    throw new Error(`Tag fetch failed: ${tagFetchErr?.message}`);
+  const tagIdBySlug = new Map<string, string>(
+    tags.map((t) => [t.slug as string, t.id as string]),
+  );
   console.log(`✓ ${tags.length} tags ready`);
 
   // 2) Photos (skip already-seeded by image_path)
   const { data: existing } = await supabase.from("photos").select("image_path");
-  const existingPaths = new Set((existing ?? []).map((p) => p.image_path as string));
+  const existingPaths = new Set(
+    (existing ?? []).map((p) => p.image_path as string),
+  );
 
   let inserted = 0;
   for (const p of projects) {
@@ -112,13 +127,18 @@ async function main() {
       .filter((id): id is string => Boolean(id))
       .map((tag_id) => ({ photo_id: photo.id as string, tag_id }));
     if (links.length > 0) {
-      const { error: linkErr } = await supabase.from("photo_tags").insert(links);
-      if (linkErr) console.error(`  ! tags for project ${p.id}: ${linkErr.message}`);
+      const { error: linkErr } = await supabase
+        .from("photo_tags")
+        .insert(links);
+      if (linkErr)
+        console.error(`  ! tags for project ${p.id}: ${linkErr.message}`);
     }
     inserted += 1;
   }
 
-  console.log(`✓ ${inserted} photos inserted (${existingPaths.size} skipped as existing)`);
+  console.log(
+    `✓ ${inserted} photos inserted (${existingPaths.size} skipped as existing)`,
+  );
 }
 
 main().catch((err) => {

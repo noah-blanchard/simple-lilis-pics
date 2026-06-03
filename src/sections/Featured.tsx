@@ -1,23 +1,18 @@
-import { useTranslations } from "next-intl";
+import { getLocale, getTranslations } from "next-intl/server";
 import { ProjectCard } from "@/components/ProjectCard";
 import { Reveal } from "@/components/Reveal";
 import { TagLabel } from "@/components/TagLabel";
-import { projects } from "@/data/projects";
 import { Link } from "@/i18n/navigation";
-import type { Project } from "@/types";
+import type { Locale } from "@/i18n/routing";
+import { getFeaturedPhotos } from "@/lib/data/photos";
 
-export const Featured = () => {
-  const t = useTranslations("portfolio");
+export const Featured = async () => {
+  const locale = (await getLocale()) as Locale;
+  const t = await getTranslations("portfolio");
 
-  // Home page shows only the curated featured projects; the full archive lives
-  // on the dedicated /portfolio bento page.
-  const items: Project[] = projects
-    .filter((p) => p.featured)
-    .map((p) => ({
-      ...p,
-      title: t(`projects.${p.id}.title`),
-      tags: t(`projects.${p.id}.tags`),
-    }));
+  // Home page shows only the curated featured photos (newest first, capped at
+  // 6); the full archive lives on the dedicated /portfolio bento page.
+  const items = await getFeaturedPhotos(locale);
 
   return (
     <section className="px-6 py-24 md:px-12 md:py-32">

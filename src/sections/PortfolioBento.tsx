@@ -6,10 +6,9 @@ import { BentoCard } from "@/components/BentoCard";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 import { Reveal } from "@/components/Reveal";
 import { TagLabel } from "@/components/TagLabel";
-import { projects } from "@/data/projects";
 import { Link } from "@/i18n/navigation";
 import { Footer } from "@/sections/Footer";
-import type { Project } from "@/types";
+import type { ResolvedPhoto } from "@/types/db";
 
 // Desktop bento rhythm (lg+). Mostly tall 1×2 tiles with sparse wide/extra-tall
 // accents so `grid-flow-dense` backfills cleanly without leaving holes.
@@ -33,14 +32,12 @@ const BENTO_PATTERN = [
 const baseSpan = (i: number) =>
   i % 5 === 0 ? "col-span-2 row-span-2 sm:col-span-1" : "col-span-1 row-span-2";
 
-export const PortfolioBento = () => {
-  const t = useTranslations("portfolio");
+interface PortfolioBentoProps {
+  items: ResolvedPhoto[];
+}
 
-  const items: Project[] = projects.map((p) => ({
-    ...p,
-    title: t(`projects.${p.id}.title`),
-    tags: t(`projects.${p.id}.tags`),
-  }));
+export const PortfolioBento = ({ items }: PortfolioBentoProps) => {
+  const t = useTranslations("portfolio");
 
   return (
     <main className="min-h-screen bg-ink text-white">

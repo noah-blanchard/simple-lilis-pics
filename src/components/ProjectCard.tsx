@@ -1,12 +1,12 @@
 "use client";
 
 import { motion } from "motion/react";
-import type { Project } from "@/types";
+import type { ResolvedPhoto } from "@/types/db";
 import { IconArrow } from "./Icons";
 import { RoundedImage } from "./RoundedImage";
 
 interface ProjectCardProps {
-  project: Project;
+  project: ResolvedPhoto;
   index: number;
 }
 
