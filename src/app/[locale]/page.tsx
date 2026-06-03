@@ -2,9 +2,9 @@ import { setRequestLocale } from "next-intl/server";
 import { use } from "react";
 import { About } from "@/sections/About";
 import { Contact } from "@/sections/Contact";
+import { Featured } from "@/sections/Featured";
 import { Footer } from "@/sections/Footer";
 import { Hero } from "@/sections/Hero";
-import { Portfolio } from "@/sections/Portfolio";
 import { Pricing } from "@/sections/Pricing";
 import { Process } from "@/sections/Process";
 import { Specialty } from "@/sections/Specialty";
@@ -29,7 +29,7 @@ function HomeSections() {
       {/* <Marquee items={tMarquee.raw("items") as string[]} /> */}
       <About />
       <Specialty />
-      <Portfolio />
+      <Featured />
       <Process />
       <Pricing />
       <Testimonials />

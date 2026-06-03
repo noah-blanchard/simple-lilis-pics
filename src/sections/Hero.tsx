@@ -7,7 +7,8 @@ import { NavBar } from "@/components/NavBar";
 import { PillButton } from "@/components/PillButton";
 import { TagLabel } from "@/components/TagLabel";
 
-const HERO_IMG = "";
+const HERO_IMG =
+  "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=2000&q=80&auto=format&fit=crop";
 
 export const Hero = () => {
   const t = useTranslations("hero");

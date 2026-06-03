@@ -77,13 +77,38 @@
     "tag": "TRAVAUX SÉLECTIONNÉS",
     "title": "Projets récents.",
     "viewAll": "Tout voir",
+    "allTag": "ARCHIVE COMPLÈTE",
+    "allTitle": "Chaque image, chaque histoire.",
+    "worksLabel": "projets",
+    "backHome": "Accueil",
     "projects": {
       "1": { "title": "Visages de grâce", "tags": "Portrait, Studio" },
       "2": { "title": "Liens familiaux", "tags": "Personnes, Instants" },
       "3": { "title": "Racines & Ailes", "tags": "Sport, Événements" },
       "4": { "title": "Cap au nord", "tags": "Voyage, Paysage" },
       "5": { "title": "Heures calmes", "tags": "Éditorial, Ambiance" },
-      "6": { "title": "Jours de béton", "tags": "Rue, Urbain" }
+      "6": { "title": "Jours de béton", "tags": "Rue, Urbain" },
+      "7": { "title": "L'heure dorée", "tags": "Portrait, Lumière naturelle" },
+      "8": { "title": "La ville en mouvement", "tags": "Rue, Documentaire" },
+      "9": { "title": "Sel & Peau", "tags": "Éditorial, Beauté" },
+      "10": { "title": "Horizons lointains", "tags": "Voyage, Paysage" },
+      "11": { "title": "Libre et sauvage", "tags": "Lifestyle, Plein air" },
+      "12": { "title": "Séances studio", "tags": "Portrait, Studio" },
+      "13": { "title": "Lunes de papier", "tags": "Conceptuel, Art" },
+      "14": { "title": "Après la pluie", "tags": "Ambiance, Éditorial" },
+      "15": { "title": "Routes ouvertes", "tags": "Voyage, Aventure" },
+      "16": { "title": "Lumière du matin", "tags": "Lifestyle, Spontané" },
+      "17": { "title": "Nuits néon", "tags": "Rue, Urbain" },
+      "18": {
+        "title": "Portraits silencieux",
+        "tags": "Portrait, Noir & Blanc"
+      },
+      "19": { "title": "Heures de velours", "tags": "Éditorial, Studio" },
+      "20": { "title": "Littoral", "tags": "Voyage, Bord de mer" },
+      "21": { "title": "En fleur", "tags": "Nature, Macro" },
+      "22": { "title": "Le long chemin", "tags": "Documentaire, Voyage" },
+      "23": { "title": "Flou artistique", "tags": "Portrait, Ambiance" },
+      "24": { "title": "Dernière lueur", "tags": "Paysage, Heure dorée" }
     }
   },
   "process": {

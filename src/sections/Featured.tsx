@@ -3,16 +3,21 @@ import { ProjectCard } from "@/components/ProjectCard";
 import { Reveal } from "@/components/Reveal";
 import { TagLabel } from "@/components/TagLabel";
 import { projects } from "@/data/projects";
+import { Link } from "@/i18n/navigation";
 import type { Project } from "@/types";
 
-export const Portfolio = () => {
+export const Featured = () => {
   const t = useTranslations("portfolio");
 
-  const items: Project[] = projects.map((p) => ({
-    ...p,
-    title: t(`projects.${p.id}.title`),
-    tags: t(`projects.${p.id}.tags`),
-  }));
+  // Home page shows only the curated featured projects; the full archive lives
+  // on the dedicated /portfolio bento page.
+  const items: Project[] = projects
+    .filter((p) => p.featured)
+    .map((p) => ({
+      ...p,
+      title: t(`projects.${p.id}.title`),
+      tags: t(`projects.${p.id}.tags`),
+    }));
 
   return (
     <section className="px-6 py-24 md:px-12 md:py-32">
@@ -27,13 +32,13 @@ export const Portfolio = () => {
               {t("title")}
             </h2>
           </div>
-          <a
-            href="#"
+          <Link
+            href="/portfolio"
             className="inline-flex items-center gap-2 text-white/80 hover:text-white"
           >
             <span>{t("viewAll")}</span>
             <span aria-hidden>→</span>
-          </a>
+          </Link>
         </div>
       </Reveal>
       <div className="grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
