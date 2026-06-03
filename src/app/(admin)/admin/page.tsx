@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { Modal } from "@/components/admin/Modal";
 import { PhotoForm } from "@/components/admin/PhotoForm";
+import { PhotoSkeletonGrid } from "@/components/admin/PhotoSkeletonGrid";
 import { TagsManager } from "@/components/admin/TagsManager";
 import { PillButton } from "@/components/PillButton";
 import { apiFetch } from "@/lib/api/client";
@@ -77,7 +78,7 @@ export default function AdminDashboard() {
         <TagsManager />
       </Modal>
 
-      {isLoading && <p className="text-white/55">Loading photos…</p>}
+      {isLoading && <PhotoSkeletonGrid />}
 
       {isError && (
         <p className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-[14px] text-red-300">
