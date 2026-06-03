@@ -51,7 +51,11 @@ export const ContactForm = ({ onSubmit }: ContactFormProps) => {
   const errorClass = "mt-2 text-[13px] text-red-400";
 
   return (
-    <form onSubmit={submit} noValidate className="rounded-card bg-panel p-7 md:p-10">
+    <form
+      onSubmit={submit}
+      noValidate
+      className="rounded-card bg-panel p-7 md:p-10"
+    >
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
         <div>
           <label htmlFor="contact-name" className={labelClass}>

@@ -215,7 +215,10 @@
     "description": "Parlez-moi de votre projet et je vous réponds sous 48 heures.",
     "name": { "label": "Nom", "placeholder": "Votre nom" },
     "email": { "label": "E-mail", "placeholder": "vous@email.com" },
-    "message": { "label": "Message", "placeholder": "Parlez-moi de votre séance…" },
+    "message": {
+      "label": "Message",
+      "placeholder": "Parlez-moi de votre séance…"
+    },
     "submit": "Envoyer le message",
     "submitting": "Envoi…",
     "success": "Merci — votre message est en route. Je vous recontacte très vite.",
@@ -234,7 +237,13 @@
     "sitemapLabel": "PLAN DU SITE",
     "sitemap": ["À propos", "Portfolio", "Journal", "Contact", "Tarifs"],
     "detailsLabel": "DÉTAILS",
-    "details": ["Détails du portfolio", "Journal", "Licence", "Journal des modifications", "404"],
+    "details": [
+      "Détails du portfolio",
+      "Journal",
+      "Licence",
+      "Journal des modifications",
+      "404"
+    ],
     "social": ["Instagram", "Are.na", "Twitter", "YouTube"],
     "copyright": "© 2026 Lilis Pics. Site réalisé par Lili Marchetti.",
     "watermark": "LILIS·PICS"

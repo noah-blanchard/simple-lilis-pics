@@ -31,7 +31,11 @@ export const ProcessRow = ({ step, open, onToggle }: ProcessRowProps) => (
         </span>
       </div>
       <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-panel2 text-white">
-        {open ? <IconMinus className="h-5 w-5" /> : <IconPlus className="h-5 w-5" />}
+        {open ? (
+          <IconMinus className="h-5 w-5" />
+        ) : (
+          <IconPlus className="h-5 w-5" />
+        )}
       </span>
     </button>
     <AnimatePresence initial={false}>

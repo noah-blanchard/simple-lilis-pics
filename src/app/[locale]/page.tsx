@@ -1,6 +1,16 @@
 import { useTranslations } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { use } from "react";
+import { Marquee } from "@/components/Marquee";
+import { About } from "@/sections/About";
+import { Contact } from "@/sections/Contact";
+import { Footer } from "@/sections/Footer";
+import { Hero } from "@/sections/Hero";
+import { Portfolio } from "@/sections/Portfolio";
+import { Pricing } from "@/sections/Pricing";
+import { Process } from "@/sections/Process";
+import { Specialty } from "@/sections/Specialty";
+import { Testimonials } from "@/sections/Testimonials";
 
 export default function Home({
   params,
@@ -8,21 +18,27 @@ export default function Home({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = use(params);
+  // Opt into static rendering for this locale before reading translations.
   setRequestLocale(locale);
 
-  return <HomeContent />;
+  return <HomeSections />;
 }
 
-function HomeContent() {
-  const t = useTranslations("hero");
+function HomeSections() {
+  const tMarquee = useTranslations("marquee");
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-12 text-center">
-      <p className="tag-mono uppercase">[{t("kicker")}]</p>
-      <h1 className="display-xl text-5xl uppercase md:text-8xl">
-        <span className="block">{t("titleLine1")}</span>
-        <span className="block">{t("titleLine2")}</span>
-      </h1>
-      <p className="max-w-xl text-white/75">{t("intro")}</p>
+    <main className="bg-ink text-white">
+      <Hero />
+      <Marquee items={tMarquee.raw("items") as string[]} />
+      <About />
+      <Specialty />
+      <Portfolio />
+      <Process />
+      <Pricing />
+      <Testimonials />
+      <Contact />
+      <Footer />
     </main>
   );
 }

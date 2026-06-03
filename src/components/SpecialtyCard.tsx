@@ -31,9 +31,7 @@ export const SpecialtyCard = ({
     animate={isActive ? { scale: 1.04, rotate: -1.5 } : { scale: 1, rotate: 0 }}
     whileHover={{ y: -4 }}
     className={`flex aspect-square flex-col justify-between rounded-card p-7 text-left transition-colors duration-300 ${
-      isActive
-        ? "bg-accent text-ink"
-        : "bg-panel text-white hover:bg-panel2"
+      isActive ? "bg-accent text-ink" : "bg-panel text-white hover:bg-panel2"
     }`}
   >
     <div className="flex justify-end">

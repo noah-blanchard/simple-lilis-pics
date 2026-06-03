@@ -32,9 +32,7 @@ export const LocaleSwitcher = () => {
             disabled={isPending}
             aria-pressed={active}
             className={`rounded-full px-3 py-1.5 uppercase transition-colors ${
-              active
-                ? "bg-white text-ink"
-                : "text-white/70 hover:text-white"
+              active ? "bg-white text-ink" : "text-white/70 hover:text-white"
             }`}
           >
             {loc}

@@ -215,7 +215,10 @@
     "description": "Tell me about your project and I'll get back to you within 48 hours.",
     "name": { "label": "Name", "placeholder": "Your name" },
     "email": { "label": "Email", "placeholder": "you@email.com" },
-    "message": { "label": "Message", "placeholder": "Tell me about your shoot…" },
+    "message": {
+      "label": "Message",
+      "placeholder": "Tell me about your shoot…"
+    },
     "submit": "Send message",
     "submitting": "Sending…",
     "success": "Thanks — your message is on its way. I'll be in touch soon.",
