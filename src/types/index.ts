@@ -12,7 +12,7 @@ export type IconKind =
   | "event"
   | "wildlife";
 
-export type PillVariant = "light" | "dark" | "accent" | "ghost";
+export type PillVariant = "light" | "dark" | "accent" | "ghost" | "danger";
 
 /* ── Specialty ── */
 export interface SpecialtyMeta {

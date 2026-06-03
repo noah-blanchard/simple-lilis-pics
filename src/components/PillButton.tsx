@@ -53,6 +53,13 @@ const config: Record<PillVariant, VariantConfig> = {
     textHover: "#0a0a0a",
     extra: "border border-white/15",
   },
+  danger: {
+    bg: "transparent",
+    fill: "#ef4444",
+    textRest: "#ffffff",
+    textHover: "#ffffff",
+    extra: "border border-white/15",
+  },
 };
 
 const transition = { duration: 0.45, ease: [0.22, 1, 0.36, 1] } as const;
