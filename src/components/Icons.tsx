@@ -132,7 +132,7 @@ export const CatIcon = ({
   switch (kind) {
     case "landscape":
       return (
-        <svg {...common}>
+        <svg {...common} aria-hidden="true">
           <rect x="4" y="6" width="24" height="20" rx="3" />
           <path d="M4 22l7-7 5 5 4-4 8 8" />
           <circle cx="22" cy="12" r="2" />
@@ -140,7 +140,7 @@ export const CatIcon = ({
       );
     case "street":
       return (
-        <svg {...common}>
+        <svg {...common} aria-hidden="true">
           <path d="M16 5v22" />
           <path d="M10 9c4 1 8 1 12 0" />
           <path d="M10 13c4 1 8 1 12 0" />
@@ -150,7 +150,7 @@ export const CatIcon = ({
       );
     case "product":
       return (
-        <svg {...common}>
+        <svg {...common} aria-hidden="true">
           <path d="M16 4l11 6v12l-11 6L5 22V10z" />
           <path d="M5 10l11 6 11-6" />
           <path d="M16 16v12" />
@@ -158,20 +158,20 @@ export const CatIcon = ({
       );
     case "portrait":
       return (
-        <svg {...common}>
+        <svg {...common} aria-hidden="true">
           <path d="M9 27v-3a7 7 0 0 1 14 0v3" />
           <circle cx="16" cy="12" r="5" />
         </svg>
       );
     case "fashion":
       return (
-        <svg {...common}>
+        <svg {...common} aria-hidden="true">
           <path d="M11 5l5 4 5-4 6 4-4 5-2-1v15H8V13l-2 1-4-5z" />
         </svg>
       );
     case "macro":
       return (
-        <svg {...common}>
+        <svg {...common} aria-hidden="true">
           <circle cx="11" cy="13" r="6" />
           <circle cx="21" cy="13" r="6" />
           <circle cx="16" cy="22" r="6" />
@@ -179,13 +179,13 @@ export const CatIcon = ({
       );
     case "event":
       return (
-        <svg {...common}>
+        <svg {...common} aria-hidden="true">
           <path d="M16 4l3 9 10 1-7.5 6.5L24 30l-8-5-8 5 2.5-9.5L3 14l10-1z" />
         </svg>
       );
     case "wildlife":
       return (
-        <svg {...common}>
+        <svg {...common} aria-hidden="true">
           <path d="M5 6c10 0 22 8 22 22" />
           <path d="M5 6v22h22" />
         </svg>

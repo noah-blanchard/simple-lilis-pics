@@ -10,7 +10,7 @@ export const Marquee = ({ items }: MarqueeProps) => {
       <div className="marquee-track">
         {all.map((item, i) => (
           <span
-            // Repeated content: index is required for a stable key.
+            // biome-ignore lint/suspicious/noArrayIndexKey: the marquee repeats a fixed, static list, so the index is the only stable discriminator.
             key={`${item}-${i}`}
             className="display flex items-center gap-12 text-3xl uppercase tracking-tight text-white/15 md:text-5xl"
           >

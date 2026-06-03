@@ -111,9 +111,7 @@ export const ContactForm = ({ onSubmit }: ContactFormProps) => {
           {isSubmitting ? t("submitting") : t("submit")}
         </PillButton>
         {submitted && (
-          <p className="text-[14px] text-accent" role="status">
-            {t("success")}
-          </p>
+          <output className="text-[14px] text-accent">{t("success")}</output>
         )}
       </div>
     </form>

@@ -1,8 +1,8 @@
 "use client";
 
 import { motion } from "motion/react";
-import { useTranslations } from "next-intl";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { NavBar } from "@/components/NavBar";
 import { PillButton } from "@/components/PillButton";
 import { TagLabel } from "@/components/TagLabel";
