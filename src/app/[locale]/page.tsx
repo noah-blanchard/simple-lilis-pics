@@ -1,7 +1,5 @@
-import { useTranslations } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { use } from "react";
-import { Marquee } from "@/components/Marquee";
 import { About } from "@/sections/About";
 import { Contact } from "@/sections/Contact";
 import { Footer } from "@/sections/Footer";
@@ -25,8 +23,6 @@ export default function Home({
 }
 
 function HomeSections() {
-  const tMarquee = useTranslations("marquee");
-
   return (
     <main className="bg-ink text-white">
       <Hero />

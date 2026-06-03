@@ -66,8 +66,12 @@ body {
     transparent 1px
   );
   background-size: 3px 3px;
-  mix-blend-mode: overlay;
   pointer-events: none;
+  /* Promote to its own cached GPU layer so the grain is painted once and only
+     translated while scrolling (mix-blend-mode was forcing a full re-raster of
+     the hero on every scroll frame — the source of the jank). */
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 /* hover-zoom for image cards */

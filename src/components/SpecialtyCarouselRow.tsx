@@ -42,7 +42,8 @@ export const SpecialtyCarouselRow = ({
     const total = trackRef.current?.scrollWidth ?? 0;
     const one = total / REPEAT;
     if (!one) return;
-    let next = x.get() + (direction === "left" ? -1 : 1) * SPEED * (delta / 1000);
+    let next =
+      x.get() + (direction === "left" ? -1 : 1) * SPEED * (delta / 1000);
     if (next <= -one) next += one;
     if (next > 0) next -= one;
     x.set(next);

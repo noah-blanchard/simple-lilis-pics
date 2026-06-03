@@ -28,7 +28,7 @@ export const PriceCard = ({
     }`}
   >
     <div className="p-8 md:p-10">
-      <h3 className="text-2xl font-semibold tracking-tight md:text-3xl">
+      <h3 className="font-semibold text-2xl tracking-tight md:text-3xl">
         {plan.name}
       </h3>
       <p
@@ -61,7 +61,7 @@ export const PriceCard = ({
         plan.highlighted ? "bg-ink text-white" : "bg-panel2"
       }`}
     >
-      <div className="mb-5 text-[15px] font-medium">{includesLabel}</div>
+      <div className="mb-5 font-medium text-[15px]">{includesLabel}</div>
       <ul className="space-y-3">
         {plan.includes.map((item) => (
           <li key={item} className="flex items-center gap-3 text-[15px]">

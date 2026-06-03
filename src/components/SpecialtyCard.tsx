@@ -46,7 +46,7 @@ export const SpecialtyCard = ({ specialty }: SpecialtyCardProps) => (
       <motion.div
         variants={inkVariants}
         transition={transition}
-        className="mb-2 text-2xl font-semibold tracking-tight md:text-[28px]"
+        className="mb-2 font-semibold text-2xl tracking-tight md:text-[28px]"
       >
         {specialty.title}
       </motion.div>

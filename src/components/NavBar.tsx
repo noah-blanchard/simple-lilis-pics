@@ -16,7 +16,7 @@ export const NavBar = ({ menuLabel }: NavBarProps) => (
     className="relative z-20 flex items-center justify-between px-6 pt-8 md:px-12"
   >
     {/* Brand mark (logotype — not translated) */}
-    <a href="#" className="text-[22px] font-semibold italic tracking-tight">
+    <a href="#" className="font-semibold text-[22px] italic tracking-tight">
       <span>Lilis</span>
       <span className="text-accent">.</span>
       <span>Pics</span>
@@ -26,7 +26,7 @@ export const NavBar = ({ menuLabel }: NavBarProps) => (
       <LocaleSwitcher />
       <button
         type="button"
-        className="flex items-center gap-2 rounded-full bg-white px-5 py-3 text-[14px] font-medium text-ink transition-colors hover:bg-accent"
+        className="flex items-center gap-2 rounded-full bg-white px-5 py-3 font-medium text-[14px] text-ink transition-colors hover:bg-accent"
       >
         <IconMenu className="h-5 w-5" />
         <span>{menuLabel}</span>

@@ -23,10 +23,10 @@ export const ProcessRow = ({ step, open, onToggle }: ProcessRowProps) => (
       className="flex w-full items-center justify-between gap-6 px-6 py-6 text-left md:px-8"
     >
       <div className="flex min-w-0 items-center gap-5 md:gap-7">
-        <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-accent text-[15px] font-semibold text-ink">
+        <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-accent font-semibold text-[15px] text-ink">
           {step.n}
         </span>
-        <span className="truncate text-2xl font-semibold tracking-tight md:text-3xl">
+        <span className="truncate font-semibold text-2xl tracking-tight md:text-3xl">
           {step.title}
         </span>
       </div>
@@ -50,7 +50,7 @@ export const ProcessRow = ({ step, open, onToggle }: ProcessRowProps) => (
         >
           <div className="grid grid-cols-1 gap-6 px-6 pb-8 md:grid-cols-12 md:px-8">
             <div className="flex flex-col justify-between md:col-span-5 md:pl-[68px]">
-              <p className="max-w-[420px] text-[15px] leading-relaxed text-white/80 md:text-[16px]">
+              <p className="max-w-[420px] text-[15px] text-white/80 leading-relaxed md:text-[16px]">
                 {step.body}
               </p>
               <ul className="mt-6 space-y-2 text-[14px] text-white/65">

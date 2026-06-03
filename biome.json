@@ -30,6 +30,9 @@
       },
       "a11y": {
         "useValidAnchor": "off"
+      },
+      "nursery": {
+        "useSortedClasses": "warn"
       }
     },
     "domains": {

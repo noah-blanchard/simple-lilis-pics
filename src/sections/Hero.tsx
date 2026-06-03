@@ -7,8 +7,7 @@ import { NavBar } from "@/components/NavBar";
 import { PillButton } from "@/components/PillButton";
 import { TagLabel } from "@/components/TagLabel";
 
-const HERO_IMG =
-  "https://images.unsplash.com/photo-1515462277126-2dd0c162007a?w=2000&q=80&auto=format&fit=crop";
+const HERO_IMG = "";
 
 export const Hero = () => {
   const t = useTranslations("hero");
@@ -38,7 +37,7 @@ export const Hero = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.9, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
-          className="absolute left-6 top-[42%] hidden md:left-12 md:block"
+          className="absolute top-[42%] left-6 hidden md:left-12 md:block"
         >
           <TagLabel>{t("byline")}</TagLabel>
         </motion.div>
@@ -46,7 +45,7 @@ export const Hero = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.9, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
-          className="absolute right-6 top-[42%] hidden md:right-12 md:block"
+          className="absolute top-[42%] right-6 hidden md:right-12 md:block"
         >
           <TagLabel>{t("location")}</TagLabel>
         </motion.div>
@@ -66,7 +65,7 @@ export const Hero = () => {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-8 max-w-[640px] text-[15px] leading-relaxed text-white/75 md:text-[17px]"
+          className="mt-8 max-w-[640px] text-[15px] text-white/75 leading-relaxed md:text-[17px]"
         >
           {t("intro")}
         </motion.p>
@@ -84,7 +83,7 @@ export const Hero = () => {
       </div>
 
       {/* mobile-only meta row */}
-      <div className="relative z-10 -mt-4 flex justify-between px-6 pb-8 md:hidden">
+      <div className="-mt-4 relative z-10 flex justify-between px-6 pb-8 md:hidden">
         <TagLabel>{t("byline")}</TagLabel>
         <TagLabel>{t("location")}</TagLabel>
       </div>

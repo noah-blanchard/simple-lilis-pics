@@ -25,9 +25,24 @@ interface VariantConfig {
 }
 
 const config: Record<PillVariant, VariantConfig> = {
-  light: { bg: "#ffffff", fill: "#f5e155", textRest: "#0a0a0a", textHover: "#0a0a0a" },
-  dark: { bg: "#141414", fill: "#1c1c1c", textRest: "#ffffff", textHover: "#ffffff" },
-  accent: { bg: "#f5e155", fill: "#ffffff", textRest: "#0a0a0a", textHover: "#0a0a0a" },
+  light: {
+    bg: "#ffffff",
+    fill: "#f5e155",
+    textRest: "#0a0a0a",
+    textHover: "#0a0a0a",
+  },
+  dark: {
+    bg: "#141414",
+    fill: "#1c1c1c",
+    textRest: "#ffffff",
+    textHover: "#ffffff",
+  },
+  accent: {
+    bg: "#f5e155",
+    fill: "#ffffff",
+    textRest: "#0a0a0a",
+    textHover: "#0a0a0a",
+  },
   ghost: {
     bg: "transparent",
     fill: "#ffffff",
@@ -76,12 +91,20 @@ export const PillButton = ({
   // The label rolls within a one-line window; the column holds two identical
   // copies (the second hidden from assistive tech so the name isn't doubled).
   const content = reduce ? (
-    <motion.span variants={textVariants} transition={transition} className="relative z-10">
+    <motion.span
+      variants={textVariants}
+      transition={transition}
+      className="relative z-10"
+    >
       {children}
     </motion.span>
   ) : (
     <span className="relative z-10 block h-[1.5em] overflow-hidden">
-      <motion.span variants={textVariants} transition={transition} className="flex flex-col">
+      <motion.span
+        variants={textVariants}
+        transition={transition}
+        className="flex flex-col"
+      >
         <span className="block h-[1.5em] leading-[1.5em]">{children}</span>
         <span aria-hidden className="block h-[1.5em] leading-[1.5em]">
           {children}

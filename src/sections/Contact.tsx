@@ -22,7 +22,7 @@ export const Contact = () => {
         lines={[t("titleLine1"), t("titleLine2")]}
       />
       <Reveal delay={0.1} className="mx-auto mt-12 max-w-[820px]">
-        <p className="mb-8 text-center text-[15px] leading-relaxed text-white/65">
+        <p className="mb-8 text-center text-[15px] text-white/65 leading-relaxed">
           {t("description")}
         </p>
         <ContactForm onSubmit={handleSubmit} />

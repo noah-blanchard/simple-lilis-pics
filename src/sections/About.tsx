@@ -33,7 +33,7 @@ export const About = () => {
           />
         </Reveal>
         <Reveal delay={0.2} className="flex flex-col justify-end md:col-span-4">
-          <p className="max-w-[420px] text-[15px] leading-relaxed text-white/75 md:text-[16px]">
+          <p className="max-w-[420px] text-[15px] text-white/75 leading-relaxed md:text-[16px]">
             {t("body")}
           </p>
           <a

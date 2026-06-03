@@ -41,13 +41,17 @@ export const ReviewCard = ({ review }: ReviewCardProps) => (
     transition={transition}
     className="flex w-[300px] shrink-0 flex-col justify-between rounded-card p-7 md:w-[380px] md:p-8"
   >
-    <motion.span variants={iconVariants} transition={transition} className="mb-6 block">
+    <motion.span
+      variants={iconVariants}
+      transition={transition}
+      className="mb-6 block"
+    >
       <IconQuote className="h-9 w-9" />
     </motion.span>
-    <p className="text-[15px] leading-relaxed text-white/85 md:text-[16px]">
+    <p className="text-[15px] text-white/85 leading-relaxed md:text-[16px]">
       &ldquo;{review.quote}&rdquo;
     </p>
-    <div className="mt-8 flex items-center gap-4 border-t border-line pt-6">
+    <div className="mt-8 flex items-center gap-4 border-line border-t pt-6">
       <Image
         src={review.avatar}
         alt={review.name}

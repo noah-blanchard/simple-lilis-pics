@@ -29,7 +29,7 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => (
       className="mb-5"
     >
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-ink/30 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-      <div className="absolute right-5 top-5 -translate-y-2 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+      <div className="-translate-y-2 absolute top-5 right-5 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
         <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-white text-ink">
           <IconArrow className="h-5 w-5" />
         </span>
@@ -44,7 +44,7 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => (
             }`}
           />
           <h3
-            className={`text-[20px] font-semibold tracking-tight md:text-[22px] ${
+            className={`font-semibold text-[20px] tracking-tight md:text-[22px] ${
               project.featured ? "text-accent" : "text-white"
             }`}
           >

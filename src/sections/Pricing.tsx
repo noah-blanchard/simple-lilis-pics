@@ -30,7 +30,7 @@ export const Pricing = () => {
         </Reveal>
         <Reveal
           delay={0.1}
-          className="max-w-[520px] text-[15px] leading-relaxed text-white/65 lg:col-span-7 lg:pl-10"
+          className="max-w-[520px] text-[15px] text-white/65 leading-relaxed lg:col-span-7 lg:pl-10"
         >
           {t("description")}
         </Reveal>
