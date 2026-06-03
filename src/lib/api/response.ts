@@ -31,7 +31,8 @@ export function apiError(
 ): Response {
   const body: ApiError = {
     ok: false,
-    error: details === undefined ? { code, message } : { code, message, details },
+    error:
+      details === undefined ? { code, message } : { code, message, details },
   };
   return Response.json(body, { status });
 }
