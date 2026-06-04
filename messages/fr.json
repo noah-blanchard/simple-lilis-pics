@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "Lilis Pics — Portfolio de photo",
-    "description": "Photographie documentaire, de portrait et éditoriale par Lili Marchetti, basée à Paris."
+    "title": "Lilis Pics — Lili Marchetti, photographe",
+    "description": "Portraits, rue et les petits instants du quotidien, par Lili Marchetti, photographe indépendante à Montréal."
   },
   "nav": {
     "menu": "MENU",
@@ -11,86 +11,86 @@
     "items": {
       "about": "À propos",
       "portfolio": "Portfolio",
-      "process": "Process",
+      "process": "Ma façon de travailler",
       "pricing": "Tarifs",
-      "contact": "Contact"
+      "contact": "Me dire bonjour"
     }
   },
   "hero": {
-    "kicker": "Portfolio",
-    "byline": "PAR LILI MARCHETTI",
-    "location": "PARIS, FRANCE",
+    "kicker": "Photographie par Lili",
+    "byline": "LILI MARCHETTI",
+    "location": "MONTRÉAL, QUÉBEC",
     "titleLine1": "Là où la lumière",
-    "titleLine2": "devient récit",
-    "intro": "Photographie documentaire, de portrait et éditoriale pour les marques et les personnes qui veulent que leur histoire soit racontée avec sincérité — avec atmosphère, patience et un regard attentif à la lumière.",
-    "cta": "Prendre contact"
+    "titleLine2": "devient une histoire",
+    "intro": "Je m'appelle Lili — photographe indépendante, je travaille la plupart du temps seule. Je shoote des portraits, des rues et tous les petits instants vrais entre les deux, pour des particuliers, des couples, des marques, et parfois juste un mardi.",
+    "cta": "Me dire bonjour"
   },
   "marquee": {
     "items": [
-      "Éditorial",
-      "Portrait",
-      "Documentaire",
+      "Portraits",
+      "Couples",
+      "Événements",
       "Rue",
-      "Marque",
-      "Mariage",
+      "Marques",
       "Voyage",
-      "Studio"
+      "Studio",
+      "Animaux"
     ]
   },
   "about": {
-    "tag": "À PROPOS",
-    "titleLine1": "Des images qui parlent",
+    "tag": "À PROPOS DE MOI",
+    "titleLine1": "Des images qui respirent",
     "titleLine2": "plus fort que les mots.",
-    "body": "Je poursuis la lumière depuis douze ans — dans des appartements silencieux, des studios bondés, des rues étrangères à l'aube. Le travail que j'aime le plus se situe entre l'immobilité et l'émotion. Que ce soit votre visage, votre marque ou un mardi ordinaire, je veux que cela vous ressemble, simplement plus sincère.",
-    "readMore": "En savoir plus"
+    "body": "Bonjour, moi c'est Lili. J'ai commencé la photo il y a douze ans, et je ressens toujours ce petit frisson quand la lumière tombe juste. Aujourd'hui je travaille seule, à mon rythme — un visage en fin de journée, des mains posées sur une table, une rue après la pluie, deux personnes au tout début. Pas de grosse production, pas d'équipe : juste moi, mon appareil, et un regard attentif sur celles et ceux qui sont en face.",
+    "readMore": "En savoir plus sur moi"
   },
   "specialty": {
-    "tag": "NOTRE SPÉCIALITÉ",
-    "titleLine1": "Conçu pour les créateurs,",
-    "titleLine2": "pensé pour marquer.",
+    "tag": "CE QUE JE SHOOTE",
+    "titleLine1": "Quelques choses",
+    "titleLine2": "que j'adore photographier.",
     "items": {
       "landscape": {
-        "title": "Paysage",
-        "desc": "Mettre en valeur la nature, les décors et les environnements extérieurs."
+        "title": "Paysages",
+        "desc": "Le grand air, les horizons doux, le silence d'une longue marche."
       },
       "street": {
         "title": "Rue",
-        "desc": "Des instants pris sur le vif de la vie quotidienne et des scènes urbaines."
+        "desc": "Des gens au milieu de leur propre vie, saisis entre deux pas."
       },
       "product": {
-        "title": "Produit",
-        "desc": "Photographie commerciale de produits pour la publicité et l'e-commerce."
+        "title": "Nature morte",
+        "desc": "De petits objets, des tables chaudes, la poésie d'une chose bien faite."
       },
       "portrait": {
-        "title": "Portrait",
-        "desc": "Les émotions, les expressions et les histoires personnelles."
+        "title": "Portraits",
+        "desc": "Un visage, un mood, un après-midi. Je remarque les petits détails que vous oublieriez."
       },
       "fashion": {
-        "title": "Mode",
-        "desc": "Concepts éditoriaux réalisés pour les magazines et les books de marque."
+        "title": "Éditoriaux",
+        "desc": "Des histoires calmes et réfléchies — souvent juste moi, une personne, et la lumière trouvée ce jour-là."
       },
       "macro": {
         "title": "Macro",
-        "desc": "Gros plans révélant des détails trop petits pour être remarqués."
+        "desc": "Un pétale, un fil, une goutte. Le monde à l'échelle du presque-rien."
       },
       "event": {
-        "title": "Événement",
-        "desc": "Une couverture en direct qui capture les vrais moments tels qu'ils arrivent."
+        "title": "Événements",
+        "desc": "Mariages, anniversaires, petites fêtes, grandes soirées. Je reste proche, je ne m'impose pas, et je repars avec les moments que vous auriez ratés."
       },
       "wildlife": {
-        "title": "Faune",
-        "desc": "Un travail documentaire patient dans les habitats naturels."
+        "title": "Animaux",
+        "desc": "Patiente, lente, à leur rythme. Beaucoup d'attente, un peu de chance."
       }
     }
   },
   "portfolio": {
-    "tag": "TRAVAUX SÉLECTIONNÉS",
-    "title": "Projets récents.",
+    "tag": "QUELQUES IMAGES",
+    "title": "Une poignée de cette année.",
     "viewAll": "Tout voir",
     "allTag": "ARCHIVE COMPLÈTE",
-    "allTitle": "Chaque image, chaque histoire.",
-    "worksLabel": "projets",
-    "backHome": "Accueil",
+    "allTitle": "Toutes les photos que j'ai gardées.",
+    "worksLabel": "photos",
+    "backHome": "Retour à l'accueil",
     "projects": {
       "1": { "title": "Visages de grâce", "tags": "Portrait, Studio" },
       "2": { "title": "Liens familiaux", "tags": "Personnes, Instants" },
@@ -122,114 +122,111 @@
     }
   },
   "process": {
-    "tag": "NOTRE MÉTHODE",
-    "titleLine1": "Votre vision,",
-    "titleLine2": "notre savoir-faire.",
+    "tag": "MA FAÇON DE TRAVAILLER",
+    "titleLine1": "Je suis seule,",
+    "titleLine2": "et c'est important.",
     "steps": {
       "01": {
-        "title": "Phase de recherche",
-        "body": "Nous commençons par vous comprendre — la marque, les personnes, l'atmosphère que vous recherchez.",
+        "title": "On en parle",
+        "body": "Un café, un appel, un long message — on voit ce que vous voulez vraiment, et si le courant passe.",
         "bullets": [
-          "Appel de découverte et brief créatif",
-          "Collecte de références et accord sur le ton",
-          "Définition du périmètre et planning de production"
+          "Un premier échange détendu",
+          "Vous partagez des références, je pose des questions",
+          "On choisit ensemble une date et un lieu"
         ]
       },
       "02": {
-        "title": "Direction créative",
-        "body": "Nous élaborons un concept visuel qui reflète votre vision et sublime votre histoire.",
+        "title": "Je prépare",
+        "body": "Quand j'arrive, j'ai déjà pensé la lumière, l'endroit et l'ambiance. Moins d'à-peu-près, plus de respiration.",
         "bullets": [
-          "Concepts de prises de vue et thèmes visuels",
-          "Repérage des lieux, accessoires et talents",
-          "Planches d'ambiance et listes de plans pour s'aligner"
+          "Un petit moodboard, juste pour vous",
+          "Je repère le lieu si je peux",
+          "Un plan souple, adaptable le jour J"
         ]
       },
       "03": {
-        "title": "Jour de production",
-        "body": "Sur le plateau, nous avançons avec soin — calmes, préparés et prêts à l'imprévu.",
+        "title": "On shoote",
+        "body": "Allure calme, indications douces, la place d'être vous-même. Je suis là pour observer, pas pour performer.",
         "bullets": [
-          "Installation complète de l'éclairage et du matériel",
-          "Direction des talents sur le plateau",
-          "Revue en direct de chaque image"
+          "Des pistes si vous n'avez pas l'habitude",
+          "Des pauses, jamais de course",
+          "Le temps qu'il faut pour que ça sonne juste"
         ]
       },
       "04": {
-        "title": "Livraison & retouche",
-        "body": "Étalonnage, retouche, livraison. Fichiers bien nommés, prêts pour le web et l'impression, révisions incluses.",
+        "title": "Vous recevez les photos",
+        "body": "J'édite à la main, j'envoie une première sélection, et on fait une petite série d'ajustements. Ensuite elles sont à vous.",
         "bullets": [
-          "Étalonnage colorimétrique et passes de retouche",
-          "Deux séries de révisions incluses",
-          "Exports web + impression + archive des fichiers bruts"
+          "Une galerie privée, facile à partager",
+          "Haute définition pour l'impression, versions web en ligne",
+          "Une seule passe de retouches, en douceur"
         ]
       }
     }
   },
   "pricing": {
-    "tag": "FORMULES",
-    "title": "Choisissez une formule à la hauteur de votre vision.",
-    "description": "Des tarifs transparents pour chaque type de séance. Besoin de quelque chose sur mesure ? Dites-moi ce que vous avez en tête et je vous prépare une proposition sous 48 heures.",
-    "includesLabel": "Ce qui est inclus :",
-    "cta": "Prendre contact",
+    "tag": "TARIFS",
+    "title": "Quelques façons de travailler ensemble.",
+    "description": "Chaque séance est un peu unique, alors je préfère vous écouter que vous vendre un menu. Ce sont des points de départ — écrivez-moi et je vous envoie un devis sur-mesure.",
+    "includesLabel": "Ce qui est généralement inclus :",
+    "cta": "M'écrire",
     "plans": {
       "basic": {
-        "name": "Séance Essentielle",
-        "blurb": "Parfait pour des séances de portrait rapides ou des photos professionnelles.",
-        "unit": "/Séance",
+        "name": "Portrait",
+        "blurb": "Un visage, un couple, un après-midi.",
+        "unit": "à partir de 350 $",
         "includes": [
-          "Séance photo d'1 heure",
-          "15 photos retouchées",
-          "Accès à la galerie en ligne",
-          "1 changement de tenue",
-          "Retouche de base"
+          "Environ une heure ensemble",
+          "10 à 15 photos retouchées à la main",
+          "Une galerie privée en ligne",
+          "Une passe de petites retouches"
         ]
       },
       "premium": {
-        "name": "Formule Premium",
-        "blurb": "Idéale pour les couples, les séances en famille ou les shootings de marque.",
-        "unit": "/Séance",
+        "name": "Demi-journée",
+        "blurb": "Une famille, une petite marque, une histoire plus longue.",
+        "unit": "à partir de 850 $",
         "includes": [
-          "Séance photo de 2 heures",
-          "40 photos retouchées",
-          "Accès à la galerie en ligne",
-          "3 changements de tenue",
-          "Retouche avancée"
+          "Jusqu'à quatre heures",
+          "Environ 30 photos retouchées",
+          "Des idées de lieux si besoin",
+          "Une passe de petites retouches"
         ]
       },
       "editorial": {
-        "name": "Journée Éditoriale",
-        "blurb": "Production créative complète pour les marques et l'éditorial.",
-        "unit": "/Jour",
+        "name": "Journée complète",
+        "blurb": "Un mariage, un événement, un éditorial, une vraie journée.",
+        "unit": "à partir de 1 950 $",
         "includes": [
-          "Shooting d'une journée complète",
-          "Plus de 80 photos retouchées",
-          "Direction créative",
-          "Repérage des lieux",
-          "Licence commerciale"
+          "Une journée entière, du début à la fin",
+          "Une galerie généreuse de photos retouchées",
+          "Déplacements autour de Montréal inclus",
+          "Une passe de petites retouches"
         ]
       }
     }
   },
   "testimonials": {
-    "tag": "TÉMOIGNAGES",
-    "titleLine1": "Ce que nos clients",
-    "titleLine2": "en disent.",
+    "tag": "MOTS DOUX",
+    "titleLine1": "Ce qu'on",
+    "titleLine2": "m'envoie en retour.",
     "previous": "Précédent",
     "next": "Suivant",
     "reviews": {
       "cody": {
         "name": "Cody Fisher",
         "role": "Fondateur de BlueAI",
-        "quote": "Je suis encore émerveillé par le rendu de mes photos. Lili sait vraiment comment vous mettre à l'aise devant l'objectif."
+        "quote": "Je suis encore un peu sous le choc de la beauté des photos. Lili a un don pour vous faire oublier l'appareil."
       },
       "savannah": {
         "name": "Savannah Nguyen",
         "role": "Fondatrice d'Ayobisa",
-        "quote": "Dès que nous sommes entrés dans le studio de Lili, nous nous sommes sentis entre de bonnes mains. Tout le shooting a été d'une grande fluidité."
+        "quote": "Dès le premier message, tout a coulé de source. Lili a écouté, proposé des coins que je n'aurais jamais trouvés, et le shooting ressemblait à une balade avec une amie."
       },
       "wade": {
         "name": "Wade Warren",
         "role": "Fondateur de Lagoon",
-        "quote": "J'ai réservé Lili pour nos portraits de remise de diplôme — complètement bluffé. Elle a dirigé chaque pose et veillé à ce que nous soyons à notre avantage."
+        "quote": "J'ai réservé Lili pour nos photos de finissants et je ne regrette vraiment pas. Elle a dirigé le tout en douceur, et les photos nous ressemblent parfaitement."
       },
       "floyd": {
         "name": "Floyd Miles",
@@ -239,42 +236,42 @@
       "jenny": {
         "name": "Jenny Wilson",
         "role": "Directrice artistique",
-        "quote": "Notre marque avait besoin d'une photographe capable d'aller vite sans perdre en goût. Lili était tout cela, et plus encore."
+        "quote": "J'avais besoin de quelqu'un capable d'aller vite sans perdre le rendu que j'avais en tête. Lili a été cette personne — et les photos étaient bonnes dès la première sélection."
       }
     }
   },
   "contact": {
-    "tag": "PRENDRE CONTACT",
-    "titleLine1": "Racontons votre",
-    "titleLine2": "histoire ensemble.",
-    "description": "Parlez-moi de votre projet et je vous réponds sous 48 heures.",
+    "tag": "ME DIRE BONJOUR",
+    "titleLine1": "Dites-moi",
+    "titleLine2": "ce que vous imaginez.",
+    "description": "Un portrait, un mariage, une petite idée — écrivez-moi en quelques lignes, je vous réponds sous deux jours.",
     "name": { "label": "Nom", "placeholder": "Votre nom" },
     "email": { "label": "E-mail", "placeholder": "vous@email.com" },
     "message": {
       "label": "Message",
-      "placeholder": "Parlez-moi de votre séance…"
+      "placeholder": "C'est quoi la séance, le jour, l'ambiance ?"
     },
-    "submit": "Envoyer le message",
+    "submit": "Envoyer",
     "submitting": "Envoi…",
-    "success": "Merci — votre message est en route. Je vous recontacte très vite.",
+    "success": "Merci — j'ai bien reçu votre message. Je vous réponds sous deux jours.",
     "errors": {
-      "nameRequired": "Veuillez saisir votre nom.",
-      "emailRequired": "Veuillez saisir votre e-mail.",
-      "emailInvalid": "Veuillez saisir une adresse e-mail valide.",
-      "messageRequired": "Veuillez saisir un message.",
+      "nameRequired": "J'aimerais bien connaître votre prénom.",
+      "emailRequired": "Un e-mail pour que je vous réponde.",
+      "emailInvalid": "Cet e-mail ne ressemble pas tout à fait à un e-mail.",
+      "messageRequired": "Quelques mots sur votre projet, s'il vous plaît.",
       "messageMin": "Dites-m'en un peu plus (au moins 10 caractères)."
     }
   },
   "footer": {
-    "ctaLead": "Capturer l'éclat à chaque déclic",
-    "ctaMuted": " — là où les instants deviennent intemporels et où les histoires rayonnent.",
-    "getInTouch": "Prendre contact",
+    "ctaLead": "Je suis Lili, et j'adorerais",
+    "ctaMuted": " photographier ce qui est vrai chez vous.",
+    "getInTouch": "Me dire bonjour",
     "sitemapLabel": "PLAN DU SITE",
     "sitemap": [
       "À propos",
       "Portfolio",
       "Journal",
-      "Contact",
+      "Me dire bonjour",
       "Tarifs",
       "Tableau de bord"
     ],
@@ -286,8 +283,8 @@
       "Journal des modifications",
       "404"
     ],
-    "social": ["Instagram", "Tik Tok", "RedNote", "LinkedIn"],
-    "copyright": "© 2026 Lilis Pics. Site réalisé par Noah Blanchard.",
+    "social": ["Instagram", "TikTok", "RedNote", "LinkedIn"],
+    "copyright": "© 2026 Lili Marchetti. Site réalisé par Noah Blanchard.",
     "watermark": "LILIS·PICS"
   }
 }
