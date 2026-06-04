@@ -39,6 +39,8 @@ interface PortfolioBentoProps {
 export const PortfolioBento = ({ items }: PortfolioBentoProps) => {
   const t = useTranslations("portfolio");
 
+  console.log("items", items);
+
   return (
     <main className="min-h-screen bg-ink text-white">
       {/* Slim header (this route has no Hero/NavBar of its own) */}

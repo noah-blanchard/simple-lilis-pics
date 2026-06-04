@@ -217,6 +217,12 @@ export const MenuOverlay = ({ open, onClose }: MenuOverlayProps) => {
                 {t("email")}
               </a>
               <LocaleSwitcher />
+              <a
+                href="/admin"
+                className="text-[14px] text-white/65 transition-colors hover:text-white"
+              >
+                {t("dashboard")}
+              </a>
             </div>
           </motion.div>
         </motion.div>

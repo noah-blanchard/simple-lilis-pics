@@ -5,6 +5,7 @@
   },
   "nav": {
     "menu": "MENU",
+    "dashboard": "🔒 Tableau de bord",
     "close": "FERMER",
     "email": "hello@lilispics.com",
     "items": {
@@ -269,7 +270,14 @@
     "ctaMuted": " — là où les instants deviennent intemporels et où les histoires rayonnent.",
     "getInTouch": "Prendre contact",
     "sitemapLabel": "PLAN DU SITE",
-    "sitemap": ["À propos", "Portfolio", "Journal", "Contact", "Tarifs"],
+    "sitemap": [
+      "À propos",
+      "Portfolio",
+      "Journal",
+      "Contact",
+      "Tarifs",
+      "Tableau de bord"
+    ],
     "detailsLabel": "DÉTAILS",
     "details": [
       "Détails du portfolio",
@@ -278,8 +286,8 @@
       "Journal des modifications",
       "404"
     ],
-    "social": ["Instagram", "Are.na", "Twitter", "YouTube"],
-    "copyright": "© 2026 Lilis Pics. Site réalisé par Lili Marchetti.",
+    "social": ["Instagram", "Tik Tok", "RedNote", "LinkedIn"],
+    "copyright": "© 2026 Lilis Pics. Site réalisé par Noah Blanchard.",
     "watermark": "LILIS·PICS"
   }
 }

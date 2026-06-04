@@ -11,7 +11,7 @@ const FOOTER_IMG_2 =
 export const Footer = () => {
   const t = useTranslations("footer");
   const sitemap = t.raw("sitemap") as string[];
-  const details = t.raw("details") as string[];
+  const _details = t.raw("details") as string[];
   const social = t.raw("social") as string[];
 
   return (
@@ -62,7 +62,7 @@ export const Footer = () => {
             sizes="(max-width: 768px) 50vw, 25vw"
           />
         </div>
-        <div className="space-y-2 md:col-span-3 md:text-right">
+        {/* <div className="space-y-2 md:col-span-3 md:text-right">
           <div className="tag-mono mb-4 text-white/35 uppercase">
             {t("detailsLabel")}
           </div>
@@ -75,7 +75,7 @@ export const Footer = () => {
               {label}
             </a>
           ))}
-        </div>
+        </div> */}
       </div>
 
       {/* bottom bar */}

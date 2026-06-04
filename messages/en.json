@@ -4,6 +4,7 @@
     "description": "Documentary, portrait and editorial photography by Lili Marchetti, based in Paris."
   },
   "nav": {
+    "dashboard": "🔒 Dashboard",
     "menu": "MENU",
     "close": "CLOSE",
     "email": "hello@lilispics.com",
@@ -266,11 +267,18 @@
     "ctaMuted": " — where moments turn timeless and stories shine bright.",
     "getInTouch": "Get in Touch",
     "sitemapLabel": "SITEMAP",
-    "sitemap": ["About", "Portfolio", "Journal", "Contact", "Pricing"],
+    "sitemap": [
+      "About",
+      "Portfolio",
+      "Journal",
+      "Contact",
+      "Pricing",
+      "Dashboard"
+    ],
     "detailsLabel": "DETAILS",
     "details": ["Portfolio Details", "Journal", "License", "Changelog", "404"],
-    "social": ["Instagram", "Are.na", "Twitter", "YouTube"],
-    "copyright": "© 2026 Lilis Pics. Site by Lili Marchetti.",
+    "social": ["Instagram", "Tik Tok", "RedNote", "LinkedIn"],
+    "copyright": "© 2026 Lilis Pics. Site by Noah Blanchard.",
     "watermark": "LILIS·PICS"
   }
 }
