@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { ReactNode } from "react";
+import { ThemeProvider } from "@/components/theme/ThemeProvider";
+import { themeScript } from "@/components/theme/theme-script";
 import { routing } from "@/i18n/routing";
 import "../globals.css";
 
@@ -57,9 +59,18 @@ export default async function LocaleLayout({
     <html
       lang={locale}
       className={`${hankenGrotesk.variable} ${jetBrainsMono.variable}`}
+      suppressHydrationWarning
     >
-      <body className="bg-ink font-sans text-white antialiased">
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+      <head>
+        {/* Blocking pre-paint theme resolution — prevents a flash of the wrong
+            theme on first load. Must run before the body renders. */}
+        {/** biome-ignore lint/security/noDangerouslySetInnerHtml: trusted static string */}
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
+      <body className="bg-ink font-sans text-fg antialiased">
+        <ThemeProvider>
+          <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

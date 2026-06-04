@@ -9,6 +9,7 @@ import { Link } from "@/i18n/navigation";
 import { IconArrow } from "./Icons";
 import { LocaleSwitcher } from "./LocaleSwitcher";
 import { MenuToggle } from "./MenuToggle";
+import { ThemeToggle } from "./theme/ThemeToggle";
 
 interface MenuOverlayProps {
   open: boolean;
@@ -217,6 +218,10 @@ export const MenuOverlay = ({ open, onClose }: MenuOverlayProps) => {
                 {t("email")}
               </a>
               <LocaleSwitcher />
+              <ThemeToggle
+                toLightLabel={t("theme.toLight")}
+                toDarkLabel={t("theme.toDark")}
+              />
               <a
                 href="/admin"
                 className="text-[14px] text-white/65 transition-colors hover:text-white"

@@ -19,7 +19,7 @@ export const MenuToggle = ({
   closeLabel,
 }: MenuToggleProps) => (
   <PillButton
-    variant="light"
+    variant="ghost"
     onClick={onToggle}
     ariaExpanded={open}
     ariaControls="site-menu"

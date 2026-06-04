@@ -1,13 +1,20 @@
 @import "tailwindcss";
+@import "../styles/theme.css";
 
-@theme {
-  /* Reference palette (REFERENCE_PROJECT/index.html tailwind.config) */
-  --color-ink: #0a0a0a;
-  --color-panel: #141414;
-  --color-panel2: #1c1c1c;
-  --color-line: #262626;
-  --color-muted: #9a9a9a;
-  --color-accent: #f5e155;
+/* `inline` makes each utility reference the CSS variable at runtime (rather
+   than copying its value), so flipping `.dark` on <html> re-themes the page. */
+@theme inline {
+  --color-ink: var(--bg);
+  --color-fg: var(--fg);
+  --color-panel: var(--panel);
+  --color-panel2: var(--panel-2);
+  --color-line: var(--line);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --color-inverse: var(--inverse);
+  --color-on-inverse: var(--on-inverse);
+  --color-scrim: var(--scrim);
 
   /* Card radius */
   --radius-card: 28px;
@@ -19,8 +26,8 @@
 
 html,
 body {
-  background: #0a0a0a;
-  color: #fafafa;
+  background: var(--bg);
+  color: var(--fg);
 }
 
 body {
@@ -44,7 +51,7 @@ body {
   font-family: var(--font-mono);
   font-size: 12px;
   letter-spacing: 0.06em;
-  color: #9a9a9a;
+  color: var(--muted);
 }
 
 /* hide scrollbar on horizontal carousels */
@@ -62,7 +69,7 @@ body {
   position: absolute;
   inset: 0;
   background-image: radial-gradient(
-    rgba(255, 255, 255, 0.04) 1px,
+    rgb(var(--fg-rgb) / 0.04) 1px,
     transparent 1px
   );
   background-size: 3px 3px;
@@ -104,5 +111,5 @@ body {
   letter-spacing: -0.04em;
   line-height: 0.85;
   color: transparent;
-  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.06);
+  -webkit-text-stroke: 1px rgb(var(--fg-rgb) / 0.06);
 }

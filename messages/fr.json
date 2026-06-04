@@ -8,6 +8,10 @@
     "dashboard": "🔒 Tableau de bord",
     "close": "FERMER",
     "email": "hello@lilispics.com",
+    "theme": {
+      "toLight": "Passer au thème clair",
+      "toDark": "Passer au thème sombre"
+    },
     "items": {
       "about": "À propos",
       "portfolio": "Portfolio",

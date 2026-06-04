@@ -6,6 +6,7 @@ import { useState } from "react";
 import { LocaleSwitcher } from "./LocaleSwitcher";
 import { MenuOverlay } from "./MenuOverlay";
 import { MenuToggle } from "./MenuToggle";
+import { ThemeToggle } from "./theme/ThemeToggle";
 
 export const NavBar = () => {
   const t = useTranslations("nav");
@@ -28,6 +29,10 @@ export const NavBar = () => {
 
         <div className="flex items-center gap-3">
           <LocaleSwitcher />
+          <ThemeToggle
+            toLightLabel={t("theme.toLight")}
+            toDarkLabel={t("theme.toDark")}
+          />
           <MenuToggle
             open={open}
             onToggle={() => setOpen((o) => !o)}

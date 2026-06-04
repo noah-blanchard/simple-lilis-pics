@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Hanken_Grotesk, JetBrains_Mono } from "next/font/google";
 import type { ReactNode } from "react";
+import { ThemeProvider } from "@/components/theme/ThemeProvider";
+import { themeScript } from "@/components/theme/theme-script";
 import "../globals.css";
 
 const hankenGrotesk = Hanken_Grotesk({
@@ -30,9 +32,14 @@ export default function AdminRootLayout({ children }: { children: ReactNode }) {
     <html
       lang="en"
       className={`${hankenGrotesk.variable} ${jetBrainsMono.variable}`}
+      suppressHydrationWarning
     >
-      <body className="bg-ink font-sans text-white antialiased">
-        {children}
+      <head>
+        {/** biome-ignore lint/security/noDangerouslySetInnerHtml: trusted static string */}
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
+      <body className="bg-ink font-sans text-fg antialiased">
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   );
