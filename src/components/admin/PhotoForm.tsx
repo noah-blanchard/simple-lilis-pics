@@ -3,13 +3,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import imageCompression from "browser-image-compression";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { PillButton } from "@/components/PillButton";
 import { apiFetch } from "@/lib/api/client";
 import { ACCEPTED_IMAGE_TYPES } from "@/lib/api/schemas";
-import type { PhotoWithTags, TagRow } from "@/types/db";
+import { type PhotoWithTags, resolveImageUrl, type TagRow } from "@/types/db";
 
 const schema = z.object({
   title_en: z.string().min(1, "Required"),
@@ -36,9 +37,11 @@ interface PhotoFormProps {
    *  creating a new one. Image replacement is not supported in edit mode. */
   photo?: PhotoWithTags;
   onSuccess?: () => void;
+  /** Opens the tag-management side panel (wires the modal's expandable aside). */
+  onManageTags?: () => void;
 }
 
-export function PhotoForm({ photo, onSuccess }: PhotoFormProps) {
+export function PhotoForm({ photo, onSuccess, onManageTags }: PhotoFormProps) {
   const isEdit = Boolean(photo);
   const queryClient = useQueryClient();
   const [file, setFile] = useState<File | null>(null);
@@ -135,44 +138,67 @@ export function PhotoForm({ photo, onSuccess }: PhotoFormProps) {
   const busy = mutation.isPending;
   const submitLabel = isEdit ? "Save changes" : (status ?? "Add photo");
 
-  return (
-    <form onSubmit={onSubmit} noValidate className="space-y-6">
-      {/* Image picker + preview (create mode only) */}
-      {!isEdit && (
-        <div>
-          <span className={labelClass}>Photo</span>
-          <label
-            htmlFor="photo-file"
-            className="flex cursor-pointer items-center gap-4 rounded-2xl border border-line border-dashed bg-panel2 p-4 transition-colors hover:border-accent"
-          >
-            <div className="relative h-20 w-16 shrink-0 overflow-hidden rounded-lg bg-ink">
-              {previewUrl && (
-                // biome-ignore lint/performance/noImgElement: local blob preview
-                <img
-                  src={previewUrl}
-                  alt="Preview"
-                  className="h-full w-full object-cover"
-                />
-              )}
-            </div>
-            <div className="text-[14px] text-white/60">
-              {file ? file.name : "Click to choose an image"}
+  // ── Reusable blocks ──
+
+  // Left column: existing image (edit) or an upload dropzone that fills with
+  // the preview once a file is chosen (create). Always full height.
+  const leftPanel = (
+    <div className="flex h-full flex-col">
+      {isEdit && photo ? (
+        <div className="relative min-h-[320px] flex-1 overflow-hidden rounded-2xl bg-ink">
+          <Image
+            src={resolveImageUrl(photo.image_path)}
+            alt={photo.title_en}
+            fill
+            sizes="(max-width: 768px) 100vw, 460px"
+            className="object-cover"
+          />
+        </div>
+      ) : (
+        <label
+          htmlFor="photo-file"
+          className="group relative flex min-h-[320px] flex-1 cursor-pointer items-center justify-center overflow-hidden rounded-2xl border border-line border-dashed bg-panel2 transition-colors hover:border-accent"
+        >
+          {previewUrl ? (
+            // biome-ignore lint/performance/noImgElement: local blob preview
+            <img
+              src={previewUrl}
+              alt="Preview"
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <div className="px-6 text-center">
+              <p className="text-[15px] text-white/70">
+                Click to choose an image
+              </p>
               <p className="mt-1 text-[12px] text-white/40">
                 Compressed to ≤ 5MB before upload.
               </p>
             </div>
-            <input
-              id="photo-file"
-              type="file"
-              accept={ACCEPTED_IMAGE_TYPES.join(",")}
-              onChange={onFileChange}
-              className="hidden"
-            />
-          </label>
-          {fileError && <p className={errorClass}>{fileError}</p>}
-        </div>
+          )}
+          <input
+            id="photo-file"
+            type="file"
+            accept={ACCEPTED_IMAGE_TYPES.join(",")}
+            onChange={onFileChange}
+            className="hidden"
+          />
+        </label>
       )}
+      {(file || fileError) && (
+        <p
+          className={
+            fileError ? errorClass : "mt-2 truncate text-[12px] text-white/40"
+          }
+        >
+          {fileError ?? file?.name}
+        </p>
+      )}
+    </div>
+  );
 
+  const fieldsBody = (
+    <>
       {/* Titles */}
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         <div>
@@ -242,7 +268,18 @@ export function PhotoForm({ photo, onSuccess }: PhotoFormProps) {
 
       {/* Tags */}
       <div>
-        <span className={labelClass}>Tags</span>
+        <div className="mb-2 flex items-center justify-between">
+          <span className="tag-mono text-white/70 uppercase">Tags</span>
+          {onManageTags && (
+            <button
+              type="button"
+              onClick={onManageTags}
+              className="text-[12px] text-accent transition-opacity hover:opacity-70"
+            >
+              + Manage tags
+            </button>
+          )}
+        </div>
         <div className="flex flex-wrap gap-2">
           {tags?.map((tag) => {
             const active = selectedTags.includes(tag.id);
@@ -264,17 +301,36 @@ export function PhotoForm({ photo, onSuccess }: PhotoFormProps) {
           {!tags && <span className="text-[13px] text-white/40">Loading…</span>}
         </div>
       </div>
+    </>
+  );
 
+  const footer = (
+    <div className="shrink-0 pt-5">
       {mutation.isError && (
-        <p className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-[14px] text-red-300">
+        <p className="mb-4 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-[14px] text-red-300">
           {(mutation.error as Error).message}
         </p>
       )}
+      <PillButton type="submit" variant="light" disabled={busy}>
+        {submitLabel}
+      </PillButton>
+    </div>
+  );
 
-      <div className="flex items-center gap-4">
-        <PillButton type="submit" variant="light" disabled={busy}>
-          {submitLabel}
-        </PillButton>
+  // ── Layout: photo / dropzone on the left (full height), scrollable fields +
+  //    pinned submit on the right. Fills the modal's fixed height. ──
+  return (
+    <form
+      onSubmit={onSubmit}
+      noValidate
+      className="flex h-full flex-col gap-6 md:flex-row"
+    >
+      <div className="md:w-[42%] md:shrink-0">{leftPanel}</div>
+      <div className="flex min-w-0 flex-1 flex-col">
+        <div className="min-h-0 flex-1 space-y-6 overflow-y-auto pr-1">
+          {fieldsBody}
+        </div>
+        {footer}
       </div>
     </form>
   );

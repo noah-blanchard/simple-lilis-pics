@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { apiFetch } from "@/lib/api/client";
 import type { TagRow } from "@/types/db";
+import { ConfirmDialog } from "./ConfirmDialog";
 
 const miniField =
   "min-w-0 flex-1 rounded-lg border border-line bg-ink px-3 py-2 text-[13px] text-white outline-none focus:border-accent";
@@ -15,8 +16,9 @@ export function TagsManager() {
   });
 
   return (
-    <div className="space-y-5">
-      <div className="space-y-2">
+    <div className="flex h-full flex-col">
+      {/* Scrollable tag list */}
+      <div className="min-h-0 flex-1 space-y-2 overflow-y-auto pr-1">
         {tags?.map((tag) => (
           <TagRowEditor key={tag.id} tag={tag} />
         ))}
@@ -26,7 +28,8 @@ export function TagsManager() {
         )}
       </div>
 
-      <div className="border-line border-t pt-5">
+      {/* Pinned add-a-tag section (always visible) */}
+      <div className="mt-4 shrink-0 border-line border-t pt-4">
         <p className="tag-mono mb-2 text-white/70 uppercase">Add a tag</p>
         <AddTagRow />
       </div>
@@ -38,6 +41,7 @@ function TagRowEditor({ tag }: { tag: TagRow }) {
   const queryClient = useQueryClient();
   const [labelEn, setLabelEn] = useState(tag.label_en);
   const [labelFr, setLabelFr] = useState(tag.label_fr);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   const save = useMutation({
     mutationFn: () =>
@@ -57,6 +61,7 @@ function TagRowEditor({ tag }: { tag: TagRow }) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tags"] });
       queryClient.invalidateQueries({ queryKey: ["photos"] });
+      setConfirmOpen(false);
     },
   });
 
@@ -90,13 +95,20 @@ function TagRowEditor({ tag }: { tag: TagRow }) {
       <button
         type="button"
         aria-label={`Delete ${tag.label_en}`}
-        onClick={() => {
-          if (window.confirm(`Delete tag "${tag.label_en}"?`)) del.mutate();
-        }}
+        onClick={() => setConfirmOpen(true)}
         className="shrink-0 rounded-lg border border-line px-3 py-2 text-[12px] text-white/60 transition-colors hover:border-red-500 hover:bg-red-500 hover:text-white"
       >
         ✕
       </button>
+
+      <ConfirmDialog
+        open={confirmOpen}
+        title="Delete tag"
+        message={`“${tag.label_en}” will be removed from every photo using it.`}
+        loading={del.isPending}
+        onConfirm={() => del.mutate()}
+        onClose={() => setConfirmOpen(false)}
+      />
     </div>
   );
 }

@@ -3,6 +3,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { useState } from "react";
+import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
 import { Modal } from "@/components/admin/Modal";
 import { PhotoForm } from "@/components/admin/PhotoForm";
 import { PhotoSkeletonGrid } from "@/components/admin/PhotoSkeletonGrid";
@@ -15,6 +16,8 @@ export default function AdminDashboard() {
   const [uploadOpen, setUploadOpen] = useState(false);
   const [tagsOpen, setTagsOpen] = useState(false);
   const [editing, setEditing] = useState<PhotoWithTags | null>(null);
+  // Tag side-panel state, shared by the create & edit modals.
+  const [tagPanelOpen, setTagPanelOpen] = useState(false);
 
   const {
     data: photos,
@@ -25,6 +28,15 @@ export default function AdminDashboard() {
     queryKey: ["photos"],
     queryFn: () => apiFetch<PhotoWithTags[]>("/api/photos"),
   });
+
+  const closeUpload = () => {
+    setUploadOpen(false);
+    setTagPanelOpen(false);
+  };
+  const closeEdit = () => {
+    setEditing(null);
+    setTagPanelOpen(false);
+  };
 
   return (
     <div>
@@ -48,28 +60,39 @@ export default function AdminDashboard() {
       {/* Create */}
       <Modal
         open={uploadOpen}
-        onClose={() => setUploadOpen(false)}
+        onClose={closeUpload}
         title="New photo"
+        aside={<TagsManager />}
+        asideOpen={tagPanelOpen}
+        asideTitle="Tags"
       >
-        <PhotoForm onSuccess={() => setUploadOpen(false)} />
+        <PhotoForm
+          onSuccess={closeUpload}
+          onManageTags={() => setTagPanelOpen((o) => !o)}
+        />
       </Modal>
 
-      {/* Edit */}
+      {/* Edit — wider, photo on the left */}
       <Modal
         open={!!editing}
-        onClose={() => setEditing(null)}
+        onClose={closeEdit}
         title="Edit photo"
+        baseWidthRem={66}
+        aside={<TagsManager />}
+        asideOpen={tagPanelOpen}
+        asideTitle="Tags"
       >
         {editing && (
           <PhotoForm
             key={editing.id}
             photo={editing}
-            onSuccess={() => setEditing(null)}
+            onSuccess={closeEdit}
+            onManageTags={() => setTagPanelOpen((o) => !o)}
           />
         )}
       </Modal>
 
-      {/* Tags */}
+      {/* Standalone tags manager */}
       <Modal
         open={tagsOpen}
         onClose={() => setTagsOpen(false)}
@@ -113,6 +136,7 @@ function AdminPhotoCard({
   onEdit: () => void;
 }) {
   const queryClient = useQueryClient();
+  const [confirmOpen, setConfirmOpen] = useState(false);
   const invalidate = () =>
     queryClient.invalidateQueries({ queryKey: ["photos"] });
 
@@ -128,7 +152,10 @@ function AdminPhotoCard({
 
   const del = useMutation({
     mutationFn: () => apiFetch(`/api/photos/${photo.id}`, { method: "DELETE" }),
-    onSuccess: invalidate,
+    onSuccess: () => {
+      invalidate();
+      setConfirmOpen(false);
+    },
   });
 
   const year = photo.shoot_date.slice(0, 4);
@@ -184,15 +211,22 @@ function AdminPhotoCard({
           <button
             type="button"
             disabled={busy}
-            onClick={() => {
-              if (window.confirm(`Delete "${photo.title_en}"?`)) del.mutate();
-            }}
+            onClick={() => setConfirmOpen(true)}
             className="ml-auto rounded-lg border border-line px-2.5 py-1.5 text-[12px] text-white/60 transition-colors hover:border-red-500 hover:bg-red-500 hover:text-white disabled:opacity-40"
           >
             Delete
           </button>
         </div>
       </div>
+
+      <ConfirmDialog
+        open={confirmOpen}
+        title="Delete photo"
+        message={`“${photo.title_en}” and its image will be permanently removed.`}
+        loading={del.isPending}
+        onConfirm={() => del.mutate()}
+        onClose={() => setConfirmOpen(false)}
+      />
     </article>
   );
 }
