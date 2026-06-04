@@ -44,7 +44,7 @@ export function Modal({
             type="button"
             aria-label="Close"
             onClick={onClose}
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            className="absolute inset-0 bg-scrim backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -52,7 +52,7 @@ export function Modal({
           <motion.div
             role="dialog"
             aria-modal="true"
-            className="relative z-10 flex h-[88vh] w-full flex-col overflow-hidden rounded-card border border-white/10 bg-panel shadow-2xl"
+            className="relative z-10 flex h-[88vh] w-full flex-col overflow-hidden rounded-card border border-fg/10 bg-panel shadow-2xl"
             initial={{ opacity: 0, y: 24, scale: 0.97, maxWidth }}
             animate={{ opacity: 1, y: 0, scale: 1, maxWidth }}
             exit={{ opacity: 0, y: 24, scale: 0.97 }}
@@ -64,7 +64,7 @@ export function Modal({
                 type="button"
                 onClick={onClose}
                 aria-label="Close"
-                className="text-[22px] text-white/50 leading-none transition-colors hover:text-white"
+                className="text-[22px] text-fg/50 leading-none transition-colors hover:text-fg"
               >
                 ×
               </button>

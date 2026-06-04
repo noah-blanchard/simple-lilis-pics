@@ -59,8 +59,8 @@ export default function LoginPage() {
   });
 
   const fieldClass =
-    "w-full rounded-2xl border border-line bg-panel2 px-5 py-4 text-[15px] text-white placeholder:text-white/40 outline-none transition-colors focus:border-accent";
-  const labelClass = "tag-mono mb-2 block uppercase text-white/70";
+    "w-full rounded-2xl border border-line bg-panel2 px-5 py-4 text-[15px] text-fg placeholder:text-fg/40 outline-none transition-colors focus:border-accent";
+  const labelClass = "tag-mono mb-2 block uppercase text-fg/70";
   const errorClass = "mt-2 text-[13px] text-red-400";
 
   return (
@@ -74,13 +74,13 @@ export default function LoginPage() {
       >
         {/* Thin animated neon border: a crisp rotating conic clipped to a
             1.5px frame, with a faint constant ring + one bright sweeping arc. */}
-        <div className="relative overflow-hidden rounded-card p-[1.5px] shadow-[0_0_25px_-8px_rgba(245,225,85,0.4)]">
+        <div className="relative overflow-hidden rounded-card p-[1.5px] shadow-[0_0_25px_-8px_rgba(74,124,255,0.4)]">
           <motion.div
             aria-hidden
             className="-translate-x-1/2 -translate-y-1/2 absolute top-1/2 left-1/2 aspect-square w-[160%]"
             style={{
               background:
-                "conic-gradient(from 0deg, rgba(245,225,85,0.12), rgba(245,225,85,1) 25deg, rgba(255,255,255,0.9) 40deg, rgba(245,225,85,0.12) 70deg, rgba(245,225,85,0.12) 360deg)",
+                "conic-gradient(from 0deg, rgba(74,124,255,0.12), rgba(74,124,255,1) 25deg, rgba(200,220,255,0.9) 40deg, rgba(74,124,255,0.12) 70deg, rgba(74,124,255,0.12) 360deg)",
             }}
             animate={reduce ? undefined : { rotate: 360 }}
             transition={{ duration: 5, repeat: INFINITE, ease: "linear" }}
@@ -92,7 +92,7 @@ export default function LoginPage() {
             {!reduce && (
               <motion.div
                 aria-hidden
-                className="pointer-events-none absolute inset-y-0 w-1/2 bg-gradient-to-r from-transparent via-white/5 to-transparent"
+                className="pointer-events-none absolute inset-y-0 w-1/2 bg-gradient-to-r from-transparent via-fg/5 to-transparent"
                 initial={{ x: "-150%" }}
                 animate={{ x: "250%" }}
                 transition={{ duration: 1.4, ease: EASE, delay: 0.5 }}
@@ -121,12 +121,12 @@ export default function LoginPage() {
                   .
                 </motion.span>
                 <span>Pics</span>
-                <span className="ml-2 font-normal text-white/45">admin</span>
+                <span className="ml-2 font-normal text-fg/45">admin</span>
               </motion.h1>
 
               <motion.p
                 variants={item}
-                className="mt-2 mb-8 text-[14px] text-white/55"
+                className="mt-2 mb-8 text-[14px] text-fg/55"
               >
                 Sign in to manage the portfolio.
               </motion.p>
@@ -236,7 +236,7 @@ export default function LoginPage() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1, duration: 0.6 }}
-        className="absolute bottom-6 text-[13px] text-white/45 transition-colors hover:text-white"
+        className="absolute bottom-6 text-[13px] text-fg/45 transition-colors hover:text-fg"
       >
         ← Back to site
       </motion.a>

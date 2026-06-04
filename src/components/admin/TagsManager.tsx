@@ -7,7 +7,7 @@ import type { TagRow } from "@/types/db";
 import { ConfirmDialog } from "./ConfirmDialog";
 
 const miniField =
-  "min-w-0 flex-1 rounded-lg border border-line bg-ink px-3 py-2 text-[13px] text-white outline-none focus:border-accent";
+  "min-w-0 flex-1 rounded-lg border border-line bg-ink px-3 py-2 text-[13px] text-fg outline-none focus:border-accent";
 
 export function TagsManager() {
   const { data: tags } = useQuery({
@@ -22,15 +22,15 @@ export function TagsManager() {
         {tags?.map((tag) => (
           <TagRowEditor key={tag.id} tag={tag} />
         ))}
-        {!tags && <p className="text-[13px] text-white/40">Loading…</p>}
+        {!tags && <p className="text-[13px] text-fg/40">Loading…</p>}
         {tags && tags.length === 0 && (
-          <p className="text-[13px] text-white/40">No tags yet.</p>
+          <p className="text-[13px] text-fg/40">No tags yet.</p>
         )}
       </div>
 
       {/* Pinned add-a-tag section (always visible) */}
       <div className="mt-4 shrink-0 border-line border-t pt-4">
-        <p className="tag-mono mb-2 text-white/70 uppercase">Add a tag</p>
+        <p className="tag-mono mb-2 text-fg/70 uppercase">Add a tag</p>
         <AddTagRow />
       </div>
     </div>
@@ -69,7 +69,7 @@ function TagRowEditor({ tag }: { tag: TagRow }) {
 
   return (
     <div className="flex items-center gap-2 rounded-2xl border border-line bg-panel2 p-2">
-      <code className="w-20 shrink-0 px-1 text-[12px] text-white/40">
+      <code className="w-20 shrink-0 px-1 text-[12px] text-fg/40">
         {tag.slug}
       </code>
       <input
@@ -88,7 +88,7 @@ function TagRowEditor({ tag }: { tag: TagRow }) {
         type="button"
         disabled={!dirty || save.isPending}
         onClick={() => save.mutate()}
-        className="shrink-0 rounded-lg bg-white px-3 py-2 font-medium text-[12px] text-ink transition-opacity disabled:opacity-30"
+        className="shrink-0 rounded-lg bg-inverse px-3 py-2 font-medium text-[12px] text-on-inverse transition-opacity disabled:opacity-30"
       >
         Save
       </button>
@@ -96,7 +96,7 @@ function TagRowEditor({ tag }: { tag: TagRow }) {
         type="button"
         aria-label={`Delete ${tag.label_en}`}
         onClick={() => setConfirmOpen(true)}
-        className="shrink-0 rounded-lg border border-line px-3 py-2 text-[12px] text-white/60 transition-colors hover:border-red-500 hover:bg-red-500 hover:text-white"
+        className="shrink-0 rounded-lg border border-line px-3 py-2 text-[12px] text-fg/60 transition-colors hover:border-red-500 hover:bg-red-500 hover:text-white"
       >
         ✕
       </button>
@@ -164,7 +164,7 @@ function AddTagRow() {
           type="button"
           disabled={!valid || add.isPending}
           onClick={() => add.mutate()}
-          className="shrink-0 rounded-lg bg-accent px-3 py-2 font-medium text-[12px] text-ink transition-opacity disabled:opacity-30"
+          className="shrink-0 rounded-lg bg-accent px-3 py-2 font-medium text-[12px] text-on-accent transition-opacity disabled:opacity-30"
         >
           Add
         </button>

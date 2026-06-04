@@ -7,32 +7,32 @@
 
 /* ----------------------------- LIGHT (default) ---------------------------- */
 :root {
-  --bg: #fafafa; /* page background        -> bg-ink            */
-  --fg: #0a0a0a; /* primary text/foreground -> text-fg           */
-  --fg-rgb: 10 10 10; /* fg as RGB triplet (grain / watermark)        */
-  --panel: #ffffff; /* surface level 1         -> bg-panel          */
-  --panel-2: #f1f1f1; /* surface level 2         -> bg-panel2         */
-  --line: #e4e4e4; /* borders                 -> border-line       */
-  --muted: #6b6b6b; /* secondary text          -> text-muted        */
-  --accent: #f5e155; /* brand accent            -> *-accent          */
-  --on-accent: #0a0a0a; /* text/icon over accent   -> text-on-accent    */
-  --inverse: #0a0a0a; /* inverted chip surface   -> bg-inverse        */
-  --on-inverse: #fafafa; /* text over inverse chip  -> text-on-inverse   */
-  --scrim: rgba(0, 0, 0, 0.5); /* modal backdrop          -> bg-scrim         */
+  --bg: #f2f4f7; /* page background        -> bg-ink            */
+  --fg: #0e1220; /* primary text/foreground -> text-fg           */
+  --fg-rgb: 14 18 32; /* fg as RGB triplet (grain / watermark)        */
+  --panel: #e8eaee; /* surface level 1         -> bg-panel          */
+  --panel-2: #dde0e6; /* surface level 2         -> bg-panel2         */
+  --line: #c4c8d0; /* borders                 -> border-line       */
+  --muted: #687080; /* secondary text          -> text-muted        */
+  --accent: #2a5ce0; /* brand accent            -> *-accent          */
+  --on-accent: #f2f4f7; /* text/icon over accent   -> text-on-accent    */
+  --inverse: #0e1220; /* inverted chip surface   -> bg-inverse        */
+  --on-inverse: #f2f4f7; /* text over inverse chip  -> text-on-inverse   */
+  --scrim: rgba(14, 18, 32, 0.45); /* modal backdrop          -> bg-scrim         */
 }
 
 /* --------------------------------- DARK ----------------------------------- */
 .dark {
-  --bg: #0a0a0a;
-  --fg: #fafafa;
-  --fg-rgb: 250 250 250;
-  --panel: #141414;
-  --panel-2: #1c1c1c;
-  --line: #262626;
-  --muted: #9a9a9a;
-  --accent: #f5e155;
-  --on-accent: #0a0a0a;
-  --inverse: #ffffff;
-  --on-inverse: #0a0a0a;
-  --scrim: rgba(0, 0, 0, 0.6);
+  --bg: #0c0e14;
+  --fg: #e8eaf0;
+  --fg-rgb: 232 234 240;
+  --panel: #141720;
+  --panel-2: #1c2028;
+  --line: #252930;
+  --muted: #7080a0;
+  --accent: #4a7cff;
+  --on-accent: #0c0e14;
+  --inverse: #e8eaf0;
+  --on-inverse: #0c0e14;
+  --scrim: rgba(0, 0, 0, 0.65);
 }

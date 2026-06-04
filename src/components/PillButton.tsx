@@ -19,46 +19,51 @@ interface PillButtonProps {
 const base =
   "relative inline-flex cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-full px-7 py-4 text-[15px] font-medium";
 
+// All colors are Tailwind utility classes so they flip with the `.dark` class
+// on <html>. motion only animates transforms (the fill wipe + text roll) — it
+// never owns a theme-dependent color, which is what caused the white-on-white
+// bug (motion drops `var()` color values and propagated child variants don't
+// re-resolve on theme change).
 interface VariantConfig {
-  bg: string; // static base background
-  fill: string; // colour that wipes in on hover
-  textRest: string;
-  textHover: string;
-  extra?: string; // extra static classes (e.g. ghost border)
+  bg: string; // static base background class
+  fill: string; // class for the colour that wipes in on hover
+  textRest: string; // text colour class shown at rest
+  textHover: string; // text colour class shown on hover (under the fill)
+  extra?: string; // extra static classes (e.g. ghost/danger border)
 }
 
 const config: Record<PillVariant, VariantConfig> = {
   light: {
-    bg: "#ffffff",
-    fill: "#f5e155",
-    textRest: "#0a0a0a",
-    textHover: "#0a0a0a",
+    bg: "bg-inverse",
+    fill: "bg-accent",
+    textRest: "text-on-inverse",
+    textHover: "text-on-accent",
   },
   dark: {
-    bg: "#141414",
-    fill: "#1c1c1c",
-    textRest: "#ffffff",
-    textHover: "#ffffff",
+    bg: "bg-panel",
+    fill: "bg-panel2",
+    textRest: "text-fg",
+    textHover: "text-fg",
   },
   accent: {
-    bg: "#f5e155",
-    fill: "#ffffff",
-    textRest: "#0a0a0a",
-    textHover: "#0a0a0a",
+    bg: "bg-accent",
+    fill: "bg-inverse",
+    textRest: "text-on-accent",
+    textHover: "text-on-inverse",
   },
   ghost: {
-    bg: "transparent",
-    fill: "#ffffff",
-    textRest: "#ffffff",
-    textHover: "#0a0a0a",
-    extra: "border border-white/15",
+    bg: "bg-transparent",
+    fill: "bg-inverse",
+    textRest: "text-fg",
+    textHover: "text-on-inverse",
+    extra: "border border-fg/15",
   },
   danger: {
-    bg: "transparent",
-    fill: "#ef4444",
-    textRest: "#ffffff",
-    textHover: "#ffffff",
-    extra: "border border-white/15",
+    bg: "bg-transparent",
+    fill: "bg-red-500",
+    textRest: "text-fg",
+    textHover: "text-white",
+    extra: "border border-fg/15",
   },
 };
 
@@ -83,34 +88,27 @@ export const PillButton = ({
     ? { rest: { opacity: 0 }, hover: { opacity: 1 } }
     : { rest: { scaleX: 0 }, hover: { scaleX: 1 } };
 
-  // Slot-machine roll + text colour (colour only when motion is reduced).
+  // Slot-machine roll (transform only — colours live on the two copies below).
   const textVariants: Variants = reduce
-    ? { rest: { color: cfg.textRest }, hover: { color: cfg.textHover } }
-    : {
-        rest: { y: "-50%", color: cfg.textRest },
-        hover: { y: "0%", color: cfg.textHover },
-      };
+    ? { rest: {}, hover: {} }
+    : { rest: { y: "-50%" }, hover: { y: "0%" } };
 
   const fill = (
     <motion.span
       aria-hidden
       variants={fillVariants}
       transition={transition}
-      style={{ originX: 0, backgroundColor: cfg.fill }}
-      className="absolute inset-0 rounded-full"
+      style={{ originX: 0 }}
+      className={`absolute inset-0 rounded-full ${cfg.fill}`}
     />
   );
 
-  // The label rolls within a one-line window; the column holds two identical
-  // copies (the second hidden from assistive tech so the name isn't doubled).
+  // The label rolls within a one-line window; the column holds two copies. The
+  // window shows the SECOND copy at rest and the FIRST copy on hover, so the
+  // first copy carries the hover colour and the second the rest colour. The
+  // second copy is hidden from assistive tech so the name isn't doubled.
   const content = reduce ? (
-    <motion.span
-      variants={textVariants}
-      transition={transition}
-      className="relative z-10"
-    >
-      {children}
-    </motion.span>
+    <span className={`relative z-10 ${cfg.textRest}`}>{children}</span>
   ) : (
     <span className="relative z-10 block h-[1.5em] overflow-hidden">
       <motion.span
@@ -118,8 +116,13 @@ export const PillButton = ({
         transition={transition}
         className="flex flex-col"
       >
-        <span className="block h-[1.5em] leading-[1.5em]">{children}</span>
-        <span aria-hidden className="block h-[1.5em] leading-[1.5em]">
+        <span className={`block h-[1.5em] leading-[1.5em] ${cfg.textHover}`}>
+          {children}
+        </span>
+        <span
+          aria-hidden
+          className={`block h-[1.5em] leading-[1.5em] ${cfg.textRest}`}
+        >
           {children}
         </span>
       </motion.span>
@@ -131,8 +134,7 @@ export const PillButton = ({
     animate: "rest",
     whileHover: "hover",
     variants: { rest: {}, hover: {} } as Variants,
-    style: { backgroundColor: cfg.bg },
-    className: `${base} ${cfg.extra ?? ""} ${className}`,
+    className: `${base} ${cfg.bg} ${cfg.extra ?? ""} ${className}`,
   };
 
   if (href) {

@@ -30,7 +30,7 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => (
     >
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-ink/30 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
       <div className="-translate-y-2 absolute top-5 right-5 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
-        <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-white text-ink">
+        <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-inverse text-on-inverse">
           <IconArrow className="h-5 w-5" />
         </span>
       </div>
@@ -40,24 +40,24 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => (
         <div className="mb-1 flex items-center gap-2">
           <span
             className={`h-2.5 w-2.5 rounded-full ${
-              project.featured ? "bg-accent" : "bg-white/70"
+              project.featured ? "bg-accent" : "bg-fg/70"
             }`}
           />
           <h3
             className={`font-semibold text-[20px] tracking-tight md:text-[22px] ${
-              project.featured ? "text-accent" : "text-white"
+              project.featured ? "text-accent" : "text-fg"
             }`}
           >
             {project.title}
           </h3>
         </div>
-        <div className="pl-[18px] text-[13px] text-white/55">
+        <div className="pl-[18px] text-[13px] text-fg/55">
           {project.year} — {project.tags}
         </div>
       </div>
       <a
         href="#"
-        className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-line text-white/80 transition-colors hover:bg-white hover:text-ink"
+        className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-line text-fg/80 transition-colors hover:bg-inverse hover:text-on-inverse"
         aria-label={project.title}
       >
         <IconArrow className="h-4 w-4" />

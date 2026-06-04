@@ -29,7 +29,7 @@ export const Featured = async () => {
           </div>
           <Link
             href="/portfolio"
-            className="inline-flex items-center gap-2 text-white/80 hover:text-white"
+            className="inline-flex items-center gap-2 text-fg/80 hover:text-fg"
           >
             <span>{t("viewAll")}</span>
             <span aria-hidden>→</span>

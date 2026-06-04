@@ -23,8 +23,8 @@ export const Footer = () => {
             className="display text-3xl tracking-tight md:text-5xl lg:text-[56px]"
             style={{ textWrap: "balance" }}
           >
-            <span className="text-white">{t("ctaLead")}</span>
-            <span className="text-white/40">{t("ctaMuted")}</span>
+            <span className="text-fg">{t("ctaLead")}</span>
+            <span className="text-fg/40">{t("ctaMuted")}</span>
           </h2>
         </Reveal>
         <Reveal delay={0.1} className="lg:col-span-5 lg:flex lg:justify-end">
@@ -37,14 +37,14 @@ export const Footer = () => {
       {/* photo + nav row */}
       <div className="mt-20 grid grid-cols-1 items-start gap-8 md:grid-cols-12 md:gap-6">
         <div className="space-y-2 md:col-span-3">
-          <div className="tag-mono mb-4 text-white/35 uppercase">
+          <div className="tag-mono mb-4 text-fg/35 uppercase">
             {t("sitemapLabel")}
           </div>
           {sitemap.map((label) => (
             <a
               key={label}
               href="#"
-              className="block text-[15px] text-white/80 uppercase tracking-wide hover:text-accent"
+              className="block text-[15px] text-fg/80 uppercase tracking-wide hover:text-accent"
             >
               {label}
             </a>
@@ -63,14 +63,14 @@ export const Footer = () => {
           />
         </div>
         {/* <div className="space-y-2 md:col-span-3 md:text-right">
-          <div className="tag-mono mb-4 text-white/35 uppercase">
+          <div className="tag-mono mb-4 text-fg/35 uppercase">
             {t("detailsLabel")}
           </div>
           {details.map((label) => (
             <a
               key={label}
               href="#"
-              className="block text-[15px] text-white/80 uppercase tracking-wide hover:text-accent"
+              className="block text-[15px] text-fg/80 uppercase tracking-wide hover:text-accent"
             >
               {label}
             </a>
@@ -80,13 +80,13 @@ export const Footer = () => {
 
       {/* bottom bar */}
       <div className="mt-16 flex flex-col items-start justify-between gap-6 border-line border-t pt-8 md:flex-row md:items-center">
-        <div className="text-[14px] text-white/55">{t("copyright")}</div>
+        <div className="text-[14px] text-fg/55">{t("copyright")}</div>
         <div className="flex gap-3">
           {social.map((label) => (
             <a
               key={label}
               href="#"
-              className="rounded-full bg-panel px-5 py-2.5 text-[13px] text-white/80 transition-colors hover:bg-white hover:text-ink"
+              className="rounded-full bg-panel px-5 py-2.5 text-[13px] text-fg/80 transition-colors hover:bg-inverse hover:text-on-inverse"
             >
               {label}
             </a>

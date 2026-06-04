@@ -42,7 +42,7 @@ export const PortfolioBento = ({ items }: PortfolioBentoProps) => {
   console.log("items", items);
 
   return (
-    <main className="min-h-screen bg-ink text-white">
+    <main className="min-h-screen bg-ink text-fg">
       {/* Slim header (this route has no Hero/NavBar of its own) */}
       <motion.header
         initial={{ opacity: 0, y: -16 }}
@@ -62,7 +62,7 @@ export const PortfolioBento = ({ items }: PortfolioBentoProps) => {
           <LocaleSwitcher />
           <Link
             href="/"
-            className="inline-flex items-center gap-2 rounded-full border border-line px-5 py-3 font-medium text-[14px] text-white/80 transition-colors hover:bg-white hover:text-ink"
+            className="inline-flex items-center gap-2 rounded-full border border-line px-5 py-3 font-medium text-[14px] text-fg/80 transition-colors hover:bg-inverse hover:text-on-inverse"
           >
             <span aria-hidden>←</span>
             <span>{t("backHome")}</span>
@@ -82,7 +82,7 @@ export const PortfolioBento = ({ items }: PortfolioBentoProps) => {
                 {t("allTitle")}
               </h2>
             </div>
-            <span className="tag-mono text-white/45 uppercase">
+            <span className="tag-mono text-fg/45 uppercase">
               {items.length} {t("worksLabel")}
             </span>
           </div>

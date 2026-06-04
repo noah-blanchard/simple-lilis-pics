@@ -1,14 +1,22 @@
 import type { Metadata } from "next";
-import { Hanken_Grotesk, JetBrains_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono, Playfair_Display } from "next/font/google";
 import type { ReactNode } from "react";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { themeScript } from "@/components/theme/theme-script";
 import "../globals.css";
 
-const hankenGrotesk = Hanken_Grotesk({
-  variable: "--font-hanken-grotesk",
+const playfairDisplay = Playfair_Display({
+  variable: "--font-display",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+  style: ["normal", "italic"],
+  display: "swap",
+});
+
+const inter = Inter({
+  variable: "--font-sans-body",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -31,7 +39,7 @@ export default function AdminRootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
-      className={`${hankenGrotesk.variable} ${jetBrainsMono.variable}`}
+      className={`${playfairDisplay.variable} ${inter.variable} ${jetBrainsMono.variable}`}
       suppressHydrationWarning
     >
       <head>

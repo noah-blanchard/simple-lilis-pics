@@ -10,27 +10,17 @@ interface ReviewCardProps {
 }
 
 // Hover-driven via motion/react variant propagation (no CSS hover/transitions).
-// The accent outline uses boxShadow (not a border) so layout never shifts — the
-// card stays byte-identical at rest, including in the untouched mobile carousel.
+// Colours come from Tailwind classes (so they flip with the theme); motion only
+// animates transforms/opacity. The hover surface (panel → panel-2) is an opacity
+// overlay and the quote glyph cross-fades between two colour layers.
 const transition = { duration: 0.3, ease: [0.22, 1, 0.36, 1] } as const;
 
 const cardVariants: Variants = {
-  rest: {
-    y: 0,
-    backgroundColor: "#141414",
-    boxShadow: "0 0 0 0px rgba(245,225,85,0)",
-  },
-  hover: {
-    y: -6,
-    backgroundColor: "#1c1c1c",
-    boxShadow: "0 0 0 1.5px rgba(245,225,85,1)",
-  },
+  rest: { y: 0, boxShadow: "0 0 0 0px rgba(74,124,255,0)" },
+  hover: { y: -6, boxShadow: "0 0 0 1.5px rgba(74,124,255,1)" },
 };
-
-const iconVariants: Variants = {
-  rest: { color: "#fafafa" },
-  hover: { color: "#f5e155" },
-};
+const fadeIn: Variants = { rest: { opacity: 0 }, hover: { opacity: 1 } };
+const fadeOut: Variants = { rest: { opacity: 1 }, hover: { opacity: 0 } };
 
 export const ReviewCard = ({ review }: ReviewCardProps) => (
   <motion.div
@@ -39,19 +29,40 @@ export const ReviewCard = ({ review }: ReviewCardProps) => (
     animate="rest"
     variants={cardVariants}
     transition={transition}
-    className="flex w-[300px] shrink-0 flex-col justify-between rounded-card p-7 md:w-[380px] md:p-8"
+    className="relative flex w-[300px] shrink-0 flex-col justify-between rounded-card bg-panel p-7 md:w-[380px] md:p-8"
   >
+    {/* hover surface (panel → panel-2) */}
     <motion.span
-      variants={iconVariants}
+      aria-hidden
+      variants={fadeIn}
       transition={transition}
-      className="mb-6 block"
-    >
-      <IconQuote className="h-9 w-9" />
-    </motion.span>
-    <p className="text-[15px] text-white/85 leading-relaxed md:text-[16px]">
+      className="absolute inset-0 rounded-card bg-panel2"
+    />
+
+    {/* quote glyph — cross-fades fg → accent on hover */}
+    <span className="relative z-10 mb-6 block h-9 w-9">
+      <motion.span
+        aria-hidden
+        variants={fadeOut}
+        transition={transition}
+        className="absolute inset-0 text-fg"
+      >
+        <IconQuote className="h-9 w-9" />
+      </motion.span>
+      <motion.span
+        aria-hidden
+        variants={fadeIn}
+        transition={transition}
+        className="absolute inset-0 text-accent"
+      >
+        <IconQuote className="h-9 w-9" />
+      </motion.span>
+    </span>
+
+    <p className="relative z-10 text-[15px] text-fg/85 leading-relaxed md:text-[16px]">
       &ldquo;{review.quote}&rdquo;
     </p>
-    <div className="mt-8 flex items-center gap-4 border-line border-t pt-6">
+    <div className="relative z-10 mt-8 flex items-center gap-4 border-line border-t pt-6">
       <Image
         src={review.avatar}
         alt={review.name}
@@ -61,7 +72,7 @@ export const ReviewCard = ({ review }: ReviewCardProps) => (
       />
       <div>
         <div className="font-semibold">{review.name}</div>
-        <div className="text-[13px] text-white/55">{review.role}</div>
+        <div className="text-[13px] text-fg/55">{review.role}</div>
       </div>
     </div>
   </motion.div>

@@ -46,7 +46,7 @@ export const BentoCard = ({
 
       {/* Top-right arrow drops in on hover */}
       <div className="-translate-y-2 absolute top-4 right-4 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
-        <span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-ink">
+        <span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-inverse text-on-inverse">
           <IconArrow className="h-5 w-5" />
         </span>
       </div>
@@ -57,18 +57,18 @@ export const BentoCard = ({
           <div className="mb-1 flex items-center gap-2">
             <span
               className={`h-2.5 w-2.5 rounded-full ${
-                project.featured ? "bg-accent" : "bg-white/70"
+                project.featured ? "bg-accent" : "bg-fg/70"
               }`}
             />
             <h3
               className={`font-semibold text-[18px] tracking-tight md:text-[22px] ${
-                project.featured ? "text-accent" : "text-white"
+                project.featured ? "text-accent" : "text-fg"
               }`}
             >
               {project.title}
             </h3>
           </div>
-          <div className="tag-mono pl-[18px] text-white/70 uppercase">
+          <div className="tag-mono pl-[18px] text-fg/70 uppercase">
             {project.year} — {project.tags}
           </div>
         </div>

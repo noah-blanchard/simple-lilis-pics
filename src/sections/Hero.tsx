@@ -65,7 +65,7 @@ export const Hero = () => {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-8 max-w-[640px] text-[15px] text-white/75 leading-relaxed md:text-[17px]"
+          className="mt-8 max-w-[640px] text-[15px] text-fg/75 leading-relaxed md:text-[17px]"
         >
           {t("intro")}
         </motion.p>

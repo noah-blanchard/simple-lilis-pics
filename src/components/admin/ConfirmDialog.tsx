@@ -36,7 +36,7 @@ export function ConfirmDialog({
             type="button"
             aria-label={cancelLabel}
             onClick={onClose}
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            className="absolute inset-0 bg-scrim backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -44,7 +44,7 @@ export function ConfirmDialog({
           <motion.div
             role="alertdialog"
             aria-modal="true"
-            className="relative z-10 w-full max-w-sm overflow-hidden rounded-card border border-white/10 bg-panel p-7 shadow-2xl"
+            className="relative z-10 w-full max-w-sm overflow-hidden rounded-card border border-fg/10 bg-panel p-7 shadow-2xl"
             initial={{ opacity: 0, y: 20, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.96 }}
@@ -54,7 +54,7 @@ export function ConfirmDialog({
               {title}
             </h2>
             {message && (
-              <p className="mt-2 text-[14px] text-white/55">{message}</p>
+              <p className="mt-2 text-[14px] text-fg/55">{message}</p>
             )}
             <div className="mt-7 flex items-center justify-end gap-3">
               <PillButton variant="ghost" onClick={onClose}>

@@ -46,7 +46,7 @@ export const ContactForm = ({ onSubmit }: ContactFormProps) => {
   });
 
   const fieldClass =
-    "w-full rounded-2xl border border-line bg-panel2 px-5 py-4 text-[15px] text-white placeholder:text-white/40 outline-none transition-colors focus:border-accent";
+    "w-full rounded-2xl border border-line bg-panel2 px-5 py-4 text-[15px] text-fg placeholder:text-fg/40 outline-none transition-colors focus:border-accent";
   const labelClass = "tag-mono mb-2 block uppercase";
   const errorClass = "mt-2 text-[13px] text-red-400";
 

@@ -43,7 +43,7 @@ export default function AdminDashboard() {
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="font-semibold text-[26px] tracking-tight">Photos</h1>
-          <p className="mt-1 text-[14px] text-white/55">
+          <p className="mt-1 text-[14px] text-fg/55">
             {photos ? `${photos.length} in the portfolio` : "Loading…"}
           </p>
         </div>
@@ -110,7 +110,7 @@ export default function AdminDashboard() {
       )}
 
       {photos && photos.length === 0 && (
-        <p className="text-white/55">No photos yet.</p>
+        <p className="text-fg/55">No photos yet.</p>
       )}
 
       {photos && photos.length > 0 && (
@@ -173,7 +173,7 @@ function AdminPhotoCard({
           className="object-cover"
         />
         {photo.featured && (
-          <span className="absolute top-3 left-3 rounded-full bg-accent px-2.5 py-1 font-medium text-[11px] text-ink uppercase tracking-wide">
+          <span className="absolute top-3 left-3 rounded-full bg-accent px-2.5 py-1 font-medium text-[11px] text-on-accent uppercase tracking-wide">
             Featured
           </span>
         )}
@@ -183,7 +183,7 @@ function AdminPhotoCard({
         <h3 className="truncate font-semibold text-[15px] tracking-tight">
           {photo.title_en}
         </h3>
-        <p className="mt-1 truncate text-[12px] text-white/50">
+        <p className="mt-1 truncate text-[12px] text-fg/50">
           {year}
           {tags && ` — ${tags}`}
         </p>
@@ -195,8 +195,8 @@ function AdminPhotoCard({
             onClick={() => toggleFeatured.mutate()}
             className={`rounded-lg border px-2.5 py-1.5 text-[12px] transition-colors disabled:opacity-40 ${
               photo.featured
-                ? "border-accent text-accent hover:bg-accent hover:text-ink"
-                : "border-line text-white/60 hover:border-white/40"
+                ? "border-accent text-accent hover:bg-accent hover:text-on-accent"
+                : "border-line text-fg/60 hover:border-fg/40"
             }`}
           >
             {photo.featured ? "★ Featured" : "☆ Feature"}
@@ -204,7 +204,7 @@ function AdminPhotoCard({
           <button
             type="button"
             onClick={onEdit}
-            className="rounded-lg border border-line px-2.5 py-1.5 text-[12px] text-white/70 transition-colors hover:border-white/40"
+            className="rounded-lg border border-line px-2.5 py-1.5 text-[12px] text-fg/70 transition-colors hover:border-fg/40"
           >
             Edit
           </button>
@@ -212,7 +212,7 @@ function AdminPhotoCard({
             type="button"
             disabled={busy}
             onClick={() => setConfirmOpen(true)}
-            className="ml-auto rounded-lg border border-line px-2.5 py-1.5 text-[12px] text-white/60 transition-colors hover:border-red-500 hover:bg-red-500 hover:text-white disabled:opacity-40"
+            className="ml-auto rounded-lg border border-line px-2.5 py-1.5 text-[12px] text-fg/60 transition-colors hover:border-red-500 hover:bg-red-500 hover:text-white disabled:opacity-40"
           >
             Delete
           </button>

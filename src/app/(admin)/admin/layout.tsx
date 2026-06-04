@@ -16,7 +16,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             <span>Lilis</span>
             <span className="text-accent">.</span>
             <span>Pics</span>
-            <span className="ml-2 text-[14px] text-white/45 not-italic">
+            <span className="ml-2 text-[14px] text-fg/45 not-italic">
               admin
             </span>
           </a>

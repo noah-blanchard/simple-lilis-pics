@@ -28,8 +28,8 @@ const COMPRESSION_OPTIONS = {
 };
 
 const fieldClass =
-  "w-full rounded-2xl border border-line bg-panel2 px-4 py-3 text-[15px] text-white placeholder:text-white/40 outline-none transition-colors focus:border-accent";
-const labelClass = "tag-mono mb-2 block uppercase text-white/70";
+  "w-full rounded-2xl border border-line bg-panel2 px-4 py-3 text-[15px] text-fg placeholder:text-fg/40 outline-none transition-colors focus:border-accent";
+const labelClass = "tag-mono mb-2 block uppercase text-fg/70";
 const errorClass = "mt-1.5 text-[13px] text-red-400";
 
 interface PhotoFormProps {
@@ -168,10 +168,8 @@ export function PhotoForm({ photo, onSuccess, onManageTags }: PhotoFormProps) {
             />
           ) : (
             <div className="px-6 text-center">
-              <p className="text-[15px] text-white/70">
-                Click to choose an image
-              </p>
-              <p className="mt-1 text-[12px] text-white/40">
+              <p className="text-[15px] text-fg/70">Click to choose an image</p>
+              <p className="mt-1 text-[12px] text-fg/40">
                 Compressed to ≤ 5MB before upload.
               </p>
             </div>
@@ -188,7 +186,7 @@ export function PhotoForm({ photo, onSuccess, onManageTags }: PhotoFormProps) {
       {(file || fileError) && (
         <p
           className={
-            fileError ? errorClass : "mt-2 truncate text-[12px] text-white/40"
+            fileError ? errorClass : "mt-2 truncate text-[12px] text-fg/40"
           }
         >
           {fileError ?? file?.name}
@@ -240,7 +238,7 @@ export function PhotoForm({ photo, onSuccess, onManageTags }: PhotoFormProps) {
           <input
             id="shoot_date"
             type="date"
-            className={`${fieldClass} [color-scheme:dark]`}
+            className={fieldClass}
             {...register("shoot_date")}
           />
           {errors.shoot_date && (
@@ -259,7 +257,7 @@ export function PhotoForm({ photo, onSuccess, onManageTags }: PhotoFormProps) {
               className="h-4 w-4 accent-accent"
               {...register("featured")}
             />
-            <span className="text-[14px] text-white/70">
+            <span className="text-[14px] text-fg/70">
               Featured (show on home)
             </span>
           </label>
@@ -269,7 +267,7 @@ export function PhotoForm({ photo, onSuccess, onManageTags }: PhotoFormProps) {
       {/* Tags */}
       <div>
         <div className="mb-2 flex items-center justify-between">
-          <span className="tag-mono text-white/70 uppercase">Tags</span>
+          <span className="tag-mono text-fg/70 uppercase">Tags</span>
           {onManageTags && (
             <button
               type="button"
@@ -290,15 +288,15 @@ export function PhotoForm({ photo, onSuccess, onManageTags }: PhotoFormProps) {
                 onClick={() => toggleTag(tag.id)}
                 className={`rounded-full border px-3.5 py-1.5 text-[13px] transition-colors ${
                   active
-                    ? "border-accent bg-accent text-ink"
-                    : "border-line text-white/70 hover:border-white/40"
+                    ? "border-accent bg-accent text-on-accent"
+                    : "border-line text-fg/70 hover:border-fg/40"
                 }`}
               >
                 {tag.label_en}
               </button>
             );
           })}
-          {!tags && <span className="text-[13px] text-white/40">Loading…</span>}
+          {!tags && <span className="text-[13px] text-fg/40">Loading…</span>}
         </div>
       </div>
     </>

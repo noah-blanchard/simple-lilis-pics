@@ -59,7 +59,7 @@ export const ProcessCard = ({
         className="flex items-center gap-5 px-6 md:gap-7 md:px-8"
         style={{ height: `${headerH}px` }}
       >
-        <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-accent font-semibold text-[15px] text-ink">
+        <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-accent font-semibold text-[15px] text-on-accent">
           {step.n}
         </span>
         <span className="truncate font-semibold text-2xl tracking-tight md:text-3xl">
@@ -78,10 +78,10 @@ export const ProcessCard = ({
           />
         </div>
         <div className="col-span-7 flex flex-col justify-center">
-          <p className="max-w-[460px] text-[15px] text-white/80 leading-relaxed md:text-[16px]">
+          <p className="max-w-[460px] text-[15px] text-fg/80 leading-relaxed md:text-[16px]">
             {step.body}
           </p>
-          <ul className="mt-6 space-y-2 text-[14px] text-white/65">
+          <ul className="mt-6 space-y-2 text-[14px] text-fg/65">
             {step.bullets.map((bullet) => (
               <li key={bullet} className="flex gap-3">
                 <span className="text-accent">•</span>
@@ -96,7 +96,7 @@ export const ProcessCard = ({
       {!reduce && (
         <motion.div
           aria-hidden
-          className="pointer-events-none absolute inset-0 bg-black"
+          className="pointer-events-none absolute inset-0 bg-ink"
           style={{ opacity: dim }}
         />
       )}

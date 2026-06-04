@@ -85,7 +85,7 @@ export const MenuOverlay = ({ open, onClose }: MenuOverlayProps) => {
           role="dialog"
           aria-modal="true"
           aria-label={t("menu")}
-          className="grain fixed inset-0 z-[100] flex flex-col bg-ink text-white"
+          className="grain fixed inset-0 z-[100] flex flex-col bg-ink text-fg"
           variants={overlayVariants}
           initial="hidden"
           animate="visible"
@@ -121,16 +121,25 @@ export const MenuOverlay = ({ open, onClose }: MenuOverlayProps) => {
                   <span className="tag-mono w-9 shrink-0 pt-3 md:pt-5">
                     {number}
                   </span>
-                  <motion.span
-                    variants={{
-                      rest: { color: "#ffffff" },
-                      hover: { color: "#f5e155" },
-                    }}
-                    transition={{ duration: 0.3, ease: EASE }}
-                    className="display text-5xl uppercase leading-none sm:text-6xl md:text-7xl"
-                  >
-                    {label}
-                  </motion.span>
+                  {/* Label recolours fg → accent by cross-fading two copies
+                      (colours are CSS classes so they flip with the theme). */}
+                  <span className="display relative text-5xl uppercase leading-none sm:text-6xl md:text-7xl">
+                    <motion.span
+                      variants={{ rest: { opacity: 1 }, hover: { opacity: 0 } }}
+                      transition={{ duration: 0.3, ease: EASE }}
+                      className="block text-fg"
+                    >
+                      {label}
+                    </motion.span>
+                    <motion.span
+                      aria-hidden
+                      variants={{ rest: { opacity: 0 }, hover: { opacity: 1 } }}
+                      transition={{ duration: 0.3, ease: EASE }}
+                      className="absolute inset-0 text-accent"
+                    >
+                      {label}
+                    </motion.span>
+                  </span>
                   <motion.span
                     aria-hidden
                     variants={{
@@ -197,14 +206,14 @@ export const MenuOverlay = ({ open, onClose }: MenuOverlayProps) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: reduce ? 0 : 0.5, duration: 0.5, ease: EASE }}
-            className="flex flex-col gap-5 border-white/10 border-t px-6 py-8 md:flex-row md:items-center md:justify-between md:px-12"
+            className="flex flex-col gap-5 border-fg/10 border-t px-6 py-8 md:flex-row md:items-center md:justify-between md:px-12"
           >
             <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
               {socials.map((name) => (
                 <a
                   key={name}
                   href="#"
-                  className="text-[14px] text-white/65 transition-colors hover:text-white"
+                  className="text-[14px] text-fg/65 transition-colors hover:text-fg"
                 >
                   {name}
                 </a>
@@ -213,7 +222,7 @@ export const MenuOverlay = ({ open, onClose }: MenuOverlayProps) => {
             <div className="flex items-center gap-6">
               <a
                 href={`mailto:${t("email")}`}
-                className="text-[14px] text-white/65 transition-colors hover:text-white"
+                className="text-[14px] text-fg/65 transition-colors hover:text-fg"
               >
                 {t("email")}
               </a>
@@ -224,7 +233,7 @@ export const MenuOverlay = ({ open, onClose }: MenuOverlayProps) => {
               />
               <a
                 href="/admin"
-                className="text-[14px] text-white/65 transition-colors hover:text-white"
+                className="text-[14px] text-fg/65 transition-colors hover:text-fg"
               >
                 {t("dashboard")}
               </a>

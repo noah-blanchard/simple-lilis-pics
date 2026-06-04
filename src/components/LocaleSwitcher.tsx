@@ -21,7 +21,7 @@ export const LocaleSwitcher = () => {
   };
 
   return (
-    <div className="tag-mono flex items-center gap-1 rounded-full border border-white/15 p-1">
+    <div className="tag-mono flex cursor-pointer items-center gap-1 rounded-full border border-fg/15 p-1">
       {routing.locales.map((loc) => {
         const active = loc === locale;
         return (
@@ -31,8 +31,8 @@ export const LocaleSwitcher = () => {
             onClick={() => onSelect(loc)}
             disabled={isPending}
             aria-pressed={active}
-            className={`rounded-full px-3 py-1.5 uppercase transition-colors ${
-              active ? "bg-white text-ink" : "text-white/70 hover:text-white"
+            className={`cursor-pointer rounded-full px-3 py-1.5 uppercase transition-colors ${
+              active ? "bg-inverse text-on-inverse" : "text-fg/70 hover:text-fg"
             }`}
           >
             {loc}

@@ -33,12 +33,12 @@ export const About = () => {
           />
         </Reveal>
         <Reveal delay={0.2} className="flex flex-col justify-end md:col-span-4">
-          <p className="max-w-[420px] text-[15px] text-white/75 leading-relaxed md:text-[16px]">
+          <p className="max-w-[420px] text-[15px] text-fg/75 leading-relaxed md:text-[16px]">
             {t("body")}
           </p>
           <a
             href="#"
-            className="mt-8 inline-flex items-center gap-2 text-white transition-colors hover:text-accent"
+            className="mt-8 inline-flex items-center gap-2 text-fg transition-colors hover:text-accent"
           >
             <span className="font-medium">{t("readMore")}</span>
             <span aria-hidden>→</span>

@@ -26,10 +26,10 @@ export function PhotoSkeletonGrid({ count = 8 }: { count?: number }) {
     <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
       {ids.map((id) => (
         <div key={id} className="overflow-hidden rounded-card bg-panel">
-          <motion.div className="aspect-4/5 bg-white/5" {...pulse} />
+          <motion.div className="aspect-4/5 bg-fg/5" {...pulse} />
           <div className="space-y-2 p-4">
-            <motion.div className="h-4 w-3/4 rounded bg-white/5" {...pulse} />
-            <motion.div className="h-3 w-1/2 rounded bg-white/5" {...pulse} />
+            <motion.div className="h-4 w-3/4 rounded bg-fg/5" {...pulse} />
+            <motion.div className="h-3 w-1/2 rounded bg-fg/5" {...pulse} />
           </div>
         </div>
       ))}
