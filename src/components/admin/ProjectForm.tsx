@@ -6,6 +6,7 @@ import imageCompression from "browser-image-compression";
 import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { TranslatableField } from "@/components/admin/TranslatableField";
 import { PillButton } from "@/components/PillButton";
 import { apiFetch } from "@/lib/api/client";
 import {
@@ -133,7 +134,7 @@ export function ProjectForm({
     queryFn: () => apiFetch<TagRow[]>("/api/tags"),
   });
 
-  const { register, handleSubmit } = useForm<FormValues>({
+  const { register, handleSubmit, watch, setValue } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
       title_en: project?.title_en ?? "",
@@ -143,6 +144,14 @@ export function ProjectForm({
       project_date: project?.project_date ?? "",
     },
   });
+
+  // Live values powering the per-field AI translation buttons.
+  const [titleEn, titleFr, descEn, descFr] = watch([
+    "title_en",
+    "title_fr",
+    "description_en",
+    "description_fr",
+  ]);
 
   // Revoke object URLs on unmount.
   useEffect(() => {
@@ -505,57 +514,71 @@ export function ProjectForm({
   const fieldsBody = (
     <>
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-        <div>
-          <label htmlFor="title_en" className={labelClass}>
-            Title (EN)
-          </label>
-          <input
-            id="title_en"
-            type="text"
-            placeholder="Optional"
-            className={fieldClass}
-            {...register("title_en")}
-          />
-        </div>
-        <div>
-          <label htmlFor="title_fr" className={labelClass}>
-            Title (FR)
-          </label>
-          <input
-            id="title_fr"
-            type="text"
-            placeholder="Optionnel"
-            className={fieldClass}
-            {...register("title_fr")}
-          />
-        </div>
+        <TranslatableField
+          id="title_en"
+          label="Title (EN)"
+          placeholder="Optional"
+          registration={register("title_en")}
+          fieldClass={fieldClass}
+          labelClass={labelClass}
+          from="fr"
+          to="en"
+          kind="title"
+          sourceValue={titleFr}
+          targetValue={titleEn}
+          onTranslated={(t) => setValue("title_en", t, { shouldDirty: true })}
+        />
+        <TranslatableField
+          id="title_fr"
+          label="Title (FR)"
+          placeholder="Optionnel"
+          registration={register("title_fr")}
+          fieldClass={fieldClass}
+          labelClass={labelClass}
+          from="en"
+          to="fr"
+          kind="title"
+          sourceValue={titleEn}
+          targetValue={titleFr}
+          onTranslated={(t) => setValue("title_fr", t, { shouldDirty: true })}
+        />
       </div>
 
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-        <div>
-          <label htmlFor="description_en" className={labelClass}>
-            Description (EN)
-          </label>
-          <textarea
-            id="description_en"
-            rows={3}
-            placeholder="Optional"
-            className={`${fieldClass} resize-none`}
-            {...register("description_en")}
-          />
-        </div>
-        <div>
-          <label htmlFor="description_fr" className={labelClass}>
-            Description (FR)
-          </label>
-          <textarea
-            id="description_fr"
-            rows={3}
-            placeholder="Optionnel"
-            className={`${fieldClass} resize-none`}
-            {...register("description_fr")}
-          />
-        </div>
+        <TranslatableField
+          id="description_en"
+          label="Description (EN)"
+          placeholder="Optional"
+          multiline
+          registration={register("description_en")}
+          fieldClass={fieldClass}
+          labelClass={labelClass}
+          from="fr"
+          to="en"
+          kind="description"
+          sourceValue={descFr}
+          targetValue={descEn}
+          onTranslated={(t) =>
+            setValue("description_en", t, { shouldDirty: true })
+          }
+        />
+        <TranslatableField
+          id="description_fr"
+          label="Description (FR)"
+          placeholder="Optionnel"
+          multiline
+          registration={register("description_fr")}
+          fieldClass={fieldClass}
+          labelClass={labelClass}
+          from="en"
+          to="fr"
+          kind="description"
+          sourceValue={descEn}
+          targetValue={descFr}
+          onTranslated={(t) =>
+            setValue("description_fr", t, { shouldDirty: true })
+          }
+        />
       </div>
 
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
