@@ -5,29 +5,31 @@ import Image from "next/image";
 import { useState } from "react";
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
 import { Modal } from "@/components/admin/Modal";
-import { PhotoForm } from "@/components/admin/PhotoForm";
 import { PhotoSkeletonGrid } from "@/components/admin/PhotoSkeletonGrid";
+import { ProjectForm } from "@/components/admin/ProjectForm";
 import { TagsManager } from "@/components/admin/TagsManager";
 import { PillButton } from "@/components/PillButton";
 import { apiFetch } from "@/lib/api/client";
-import { type PhotoWithTags, resolveImageUrl } from "@/types/db";
+import { MAX_FEATURED_PROJECTS } from "@/lib/api/schemas";
+import { type ProjectWithRelations, resolveImageUrl } from "@/types/db";
 
 export default function AdminDashboard() {
   const [uploadOpen, setUploadOpen] = useState(false);
   const [tagsOpen, setTagsOpen] = useState(false);
-  const [editing, setEditing] = useState<PhotoWithTags | null>(null);
-  // Tag side-panel state, shared by the create & edit modals.
+  const [editing, setEditing] = useState<ProjectWithRelations | null>(null);
   const [tagPanelOpen, setTagPanelOpen] = useState(false);
 
   const {
-    data: photos,
+    data: projects,
     isLoading,
     isError,
     error,
   } = useQuery({
-    queryKey: ["photos"],
-    queryFn: () => apiFetch<PhotoWithTags[]>("/api/photos"),
+    queryKey: ["projects"],
+    queryFn: () => apiFetch<ProjectWithRelations[]>("/api/projects"),
   });
+
+  const featuredCount = projects?.filter((p) => p.featured).length ?? 0;
 
   const closeUpload = () => {
     setUploadOpen(false);
@@ -42,17 +44,19 @@ export default function AdminDashboard() {
     <div>
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="font-semibold text-[26px] tracking-tight">Photos</h1>
+          <h1 className="font-semibold text-[26px] tracking-tight">Projects</h1>
           <p className="mt-1 text-[14px] text-fg/55">
-            {photos ? `${photos.length} in the portfolio` : "Loading…"}
+            {projects
+              ? `${projects.length} project${projects.length === 1 ? "" : "s"} · ${featuredCount}/${MAX_FEATURED_PROJECTS} featured`
+              : "Loading…"}
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <PillButton variant="ghost" onClick={() => setTagsOpen(true)}>
+          <PillButton variant="ghost" size="sm" onClick={() => setTagsOpen(true)}>
             Manage tags
           </PillButton>
-          <PillButton variant="light" onClick={() => setUploadOpen(true)}>
-            + New photo
+          <PillButton variant="light" size="sm" onClick={() => setUploadOpen(true)}>
+            + New project
           </PillButton>
         </div>
       </div>
@@ -61,31 +65,34 @@ export default function AdminDashboard() {
       <Modal
         open={uploadOpen}
         onClose={closeUpload}
-        title="New photo"
+        title="New project"
+        baseWidthRem={66}
         aside={<TagsManager />}
         asideOpen={tagPanelOpen}
         asideTitle="Tags"
       >
-        <PhotoForm
+        <ProjectForm
+          featuredCount={featuredCount}
           onSuccess={closeUpload}
           onManageTags={() => setTagPanelOpen((o) => !o)}
         />
       </Modal>
 
-      {/* Edit — wider, photo on the left */}
+      {/* Edit */}
       <Modal
         open={!!editing}
         onClose={closeEdit}
-        title="Edit photo"
+        title="Edit project"
         baseWidthRem={66}
         aside={<TagsManager />}
         asideOpen={tagPanelOpen}
         asideTitle="Tags"
       >
         {editing && (
-          <PhotoForm
+          <ProjectForm
             key={editing.id}
-            photo={editing}
+            project={editing}
+            featuredCount={featuredCount}
             onSuccess={closeEdit}
             onManageTags={() => setTagPanelOpen((o) => !o)}
           />
@@ -109,17 +116,18 @@ export default function AdminDashboard() {
         </p>
       )}
 
-      {photos && photos.length === 0 && (
-        <p className="text-fg/55">No photos yet.</p>
+      {projects && projects.length === 0 && (
+        <p className="text-fg/55">No projects yet.</p>
       )}
 
-      {photos && photos.length > 0 && (
+      {projects && projects.length > 0 && (
         <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
-          {photos.map((photo) => (
-            <AdminPhotoCard
-              key={photo.id}
-              photo={photo}
-              onEdit={() => setEditing(photo)}
+          {projects.map((project) => (
+            <AdminProjectCard
+              key={project.id}
+              project={project}
+              featuredCount={featuredCount}
+              onEdit={() => setEditing(project)}
             />
           ))}
         </div>
@@ -128,60 +136,74 @@ export default function AdminDashboard() {
   );
 }
 
-function AdminPhotoCard({
-  photo,
+function AdminProjectCard({
+  project,
+  featuredCount,
   onEdit,
 }: {
-  photo: PhotoWithTags;
+  project: ProjectWithRelations;
+  featuredCount: number;
   onEdit: () => void;
 }) {
   const queryClient = useQueryClient();
   const [confirmOpen, setConfirmOpen] = useState(false);
   const invalidate = () =>
-    queryClient.invalidateQueries({ queryKey: ["photos"] });
+    queryClient.invalidateQueries({ queryKey: ["projects"] });
 
   const toggleFeatured = useMutation({
     mutationFn: () =>
-      apiFetch(`/api/photos/${photo.id}`, {
+      apiFetch(`/api/projects/${project.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ featured: !photo.featured }),
+        body: JSON.stringify({ featured: !project.featured }),
       }),
     onSuccess: invalidate,
   });
 
   const del = useMutation({
-    mutationFn: () => apiFetch(`/api/photos/${photo.id}`, { method: "DELETE" }),
+    mutationFn: () =>
+      apiFetch(`/api/projects/${project.id}`, { method: "DELETE" }),
     onSuccess: () => {
       invalidate();
       setConfirmOpen(false);
     },
   });
 
-  const year = photo.shoot_date.slice(0, 4);
-  const tags = photo.tags.map((t) => t.label_en).join(", ");
+  const cover =
+    project.project_photos.find((p) => p.id === project.cover_photo_id) ??
+    project.project_photos[0];
+  const title = project.title_en || project.title_fr || "Untitled";
+  const year = project.project_date?.slice(0, 4) ?? "";
+  const tags = project.project_tags.map((pt) => pt.tags.label_en).join(", ");
+  const photoCount = project.project_photos.length;
   const busy = toggleFeatured.isPending || del.isPending;
+  const capReached = !project.featured && featuredCount >= MAX_FEATURED_PROJECTS;
 
   return (
     <article className="group overflow-hidden rounded-card bg-panel">
       <div className="relative aspect-4/5 overflow-hidden">
-        <Image
-          src={resolveImageUrl(photo.image_path)}
-          alt={photo.title_en}
-          fill
-          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-          className="object-cover"
-        />
-        {photo.featured && (
+        {cover && (
+          <Image
+            src={resolveImageUrl(cover.image_path)}
+            alt={title}
+            fill
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            className="object-cover"
+          />
+        )}
+        {project.featured && (
           <span className="absolute top-3 left-3 rounded-full bg-accent px-2.5 py-1 font-medium text-[11px] text-on-accent uppercase tracking-wide">
             Featured
           </span>
         )}
+        <span className="absolute top-3 right-3 rounded-full bg-ink/70 px-2.5 py-1 font-medium text-[11px] text-fg backdrop-blur">
+          {photoCount} 📷
+        </span>
       </div>
 
       <div className="p-4">
         <h3 className="truncate font-semibold text-[15px] tracking-tight">
-          {photo.title_en}
+          {title}
         </h3>
         <p className="mt-1 truncate text-[12px] text-fg/50">
           {year}
@@ -191,15 +213,16 @@ function AdminPhotoCard({
         <div className="mt-3 flex items-center gap-2">
           <button
             type="button"
-            disabled={busy}
+            disabled={busy || capReached}
             onClick={() => toggleFeatured.mutate()}
+            title={capReached ? "Featured limit reached" : undefined}
             className={`rounded-lg border px-2.5 py-1.5 text-[12px] transition-colors disabled:opacity-40 ${
-              photo.featured
+              project.featured
                 ? "border-accent text-accent hover:bg-accent hover:text-on-accent"
                 : "border-line text-fg/60 hover:border-fg/40"
             }`}
           >
-            {photo.featured ? "★ Featured" : "☆ Feature"}
+            {project.featured ? "★ Featured" : "☆ Feature"}
           </button>
           <button
             type="button"
@@ -221,8 +244,8 @@ function AdminPhotoCard({
 
       <ConfirmDialog
         open={confirmOpen}
-        title="Delete photo"
-        message={`“${photo.title_en}” and its image will be permanently removed.`}
+        title="Delete project"
+        message={`“${title}” and its ${photoCount} photo${photoCount === 1 ? "" : "s"} will be permanently removed.`}
         loading={del.isPending}
         onConfirm={() => del.mutate()}
         onClose={() => setConfirmOpen(false)}
