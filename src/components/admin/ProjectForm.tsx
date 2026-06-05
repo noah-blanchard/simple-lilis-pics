@@ -31,7 +31,7 @@ const schema = z.object({
 type FormValues = z.infer<typeof schema>;
 
 const COMPRESSION_OPTIONS = {
-  maxSizeMB: 4.5,
+  maxSizeMB: 9,
   maxWidthOrHeight: 2560,
   useWebWorker: true,
 };
