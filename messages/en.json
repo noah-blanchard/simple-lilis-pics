@@ -95,32 +95,7 @@
     "allTitle": "Every photo I've kept.",
     "worksLabel": "photos",
     "backHome": "Back home",
-    "projects": {
-      "1": { "title": "Faces of Grace", "tags": "Portrait, Studio" },
-      "2": { "title": "Family Ties", "tags": "People, Moments" },
-      "3": { "title": "Roots & Wings", "tags": "Sports, Events" },
-      "4": { "title": "Northbound", "tags": "Travel, Landscape" },
-      "5": { "title": "Quiet Hours", "tags": "Editorial, Mood" },
-      "6": { "title": "Concrete Days", "tags": "Street, Urban" },
-      "7": { "title": "Golden Hour", "tags": "Portrait, Natural Light" },
-      "8": { "title": "City in Motion", "tags": "Street, Documentary" },
-      "9": { "title": "Salt & Skin", "tags": "Editorial, Beauty" },
-      "10": { "title": "Far Horizons", "tags": "Travel, Landscape" },
-      "11": { "title": "Wild & Free", "tags": "Lifestyle, Outdoor" },
-      "12": { "title": "Studio Sessions", "tags": "Portrait, Studio" },
-      "13": { "title": "Paper Moons", "tags": "Conceptual, Fine Art" },
-      "14": { "title": "After the Rain", "tags": "Mood, Editorial" },
-      "15": { "title": "Open Roads", "tags": "Travel, Adventure" },
-      "16": { "title": "Morning Light", "tags": "Lifestyle, Candid" },
-      "17": { "title": "Neon Nights", "tags": "Street, Urban" },
-      "18": { "title": "Quiet Portraits", "tags": "Portrait, Black & White" },
-      "19": { "title": "Velvet Hours", "tags": "Editorial, Studio" },
-      "20": { "title": "Coastline", "tags": "Travel, Seascape" },
-      "21": { "title": "In Bloom", "tags": "Nature, Macro" },
-      "22": { "title": "The Long Way", "tags": "Documentary, Journey" },
-      "23": { "title": "Soft Focus", "tags": "Portrait, Mood" },
-      "24": { "title": "Last Light", "tags": "Landscape, Golden Hour" }
-    }
+    "untitled": "Untitled"
   },
   "process": {
     "tag": "MY WAY OF WORKING",

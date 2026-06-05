@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import type { ResolvedProject } from "@/types/db";
 import { IconArrow } from "./Icons";
@@ -17,11 +18,12 @@ export const BentoCard = ({
   index,
   priority = false,
 }: BentoCardProps) => {
+  const t = useTranslations("portfolio");
   const ratio =
     project.cover?.orientation === "portrait"
       ? "aspect-[9/16]"
       : "aspect-[16/9]";
-  const title = project.title || "Untitled";
+  const title = project.title || t("untitled");
 
   return (
     <motion.article

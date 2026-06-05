@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import type { ResolvedProject } from "@/types/db";
 import { IconArrow } from "./Icons";
@@ -12,7 +13,8 @@ interface ProjectCardProps {
 }
 
 export const ProjectCard = ({ project, index }: ProjectCardProps) => {
-  const title = project.title || "Untitled";
+  const t = useTranslations("portfolio");
+  const title = project.title || t("untitled");
 
   return (
     <motion.article

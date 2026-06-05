@@ -46,7 +46,7 @@ export function ProjectGallery({ project }: ProjectGalleryProps) {
   }, [paginate, count]);
 
   const photo = photos[index];
-  const title = project.title || "Untitled";
+  const title = project.title || t("untitled");
 
   // Slide + fade transition; respects reduced motion.
   const slideVariants = {

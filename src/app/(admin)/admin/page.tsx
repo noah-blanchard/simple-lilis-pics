@@ -52,10 +52,18 @@ export default function AdminDashboard() {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <PillButton variant="ghost" size="sm" onClick={() => setTagsOpen(true)}>
+          <PillButton
+            variant="ghost"
+            size="sm"
+            onClick={() => setTagsOpen(true)}
+          >
             Manage tags
           </PillButton>
-          <PillButton variant="light" size="sm" onClick={() => setUploadOpen(true)}>
+          <PillButton
+            variant="light"
+            size="sm"
+            onClick={() => setUploadOpen(true)}
+          >
             + New project
           </PillButton>
         </div>
@@ -177,7 +185,8 @@ function AdminProjectCard({
   const tags = project.project_tags.map((pt) => pt.tags.label_en).join(", ");
   const photoCount = project.project_photos.length;
   const busy = toggleFeatured.isPending || del.isPending;
-  const capReached = !project.featured && featuredCount >= MAX_FEATURED_PROJECTS;
+  const capReached =
+    !project.featured && featuredCount >= MAX_FEATURED_PROJECTS;
 
   return (
     <article className="group overflow-hidden rounded-card bg-panel">

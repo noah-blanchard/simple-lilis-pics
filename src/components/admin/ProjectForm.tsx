@@ -125,11 +125,7 @@ export function ProjectForm({
     queryFn: () => apiFetch<TagRow[]>("/api/tags"),
   });
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormValues>({
+  const { register, handleSubmit } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
       title_en: project?.title_en ?? "",
@@ -324,7 +320,9 @@ export function ProjectForm({
                   {orientationToggle(p.orientation, (o) =>
                     setEditOrientation(p.id, o),
                   )}
-                  {coverBadge(coverPhotoId === p.id, () => setCoverPhotoId(p.id))}
+                  {coverBadge(coverPhotoId === p.id, () =>
+                    setCoverPhotoId(p.id),
+                  )}
                 </div>
               </div>
             ))
@@ -467,7 +465,9 @@ export function ProjectForm({
           <label
             htmlFor="featured"
             className={`flex h-[50px] items-center gap-3 rounded-2xl border border-line bg-panel2 px-4 ${
-              featuredLocked ? "cursor-not-allowed opacity-50" : "cursor-pointer"
+              featuredLocked
+                ? "cursor-not-allowed opacity-50"
+                : "cursor-pointer"
             }`}
           >
             <input
