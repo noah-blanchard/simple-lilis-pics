@@ -31,7 +31,7 @@ export function TranslateButton({
       disabled={disabled || state === "loading"}
       title={title}
       aria-label={title}
-      className={`grid h-7 w-7 place-items-center rounded-lg transition-colors disabled:cursor-not-allowed disabled:opacity-30 ${color}`}
+      className={`grid h-7 w-7 cursor-pointer place-items-center rounded-lg transition-colors disabled:cursor-not-allowed disabled:opacity-30 ${color}`}
     >
       {state === "loading" ? (
         <motion.span
