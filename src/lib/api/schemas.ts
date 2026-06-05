@@ -16,6 +16,21 @@ export const tagUpdateSchema = tagCreateSchema.partial();
 export type TagCreateInput = z.infer<typeof tagCreateSchema>;
 export type TagUpdateInput = z.infer<typeof tagUpdateSchema>;
 
+/* ── AI translation ── */
+
+/** Payload for POST /api/translate — translate `text` from one language to the
+ *  other. `kind` lets the prompt adapt (short title vs longer description). */
+export const translateSchema = z
+  .object({
+    text: z.string().trim().min(1).max(2000),
+    from: z.enum(["en", "fr"]),
+    to: z.enum(["en", "fr"]),
+    kind: z.enum(["title", "description"]),
+  })
+  .refine((v) => v.from !== v.to, { message: "from and to must differ" });
+
+export type TranslateInput = z.infer<typeof translateSchema>;
+
 /* ── File upload constraints ── */
 
 export const MAX_FILE_BYTES = 5 * 1024 * 1024; // 5 MB
