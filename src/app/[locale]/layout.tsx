@@ -8,9 +8,7 @@ import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { ReactNode } from "react";
-import { InlineScript } from "@/components/theme/InlineScript";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
-import { themeScript } from "@/components/theme/theme-script";
 import { routing } from "@/i18n/routing";
 import "../globals.css";
 
@@ -71,14 +69,10 @@ export default async function LocaleLayout({
   return (
     <html
       lang={locale}
-      className={`${playfairDisplay.variable} ${inter.variable} ${jetBrainsMono.variable}`}
+      className={`${playfairDisplay.variable} ${inter.variable} ${jetBrainsMono.variable} dark`}
+      style={{ colorScheme: "dark" }}
       suppressHydrationWarning
     >
-      <head>
-        {/* Blocking pre-paint theme resolution — prevents a flash of the wrong
-            theme on first load. Must run before the body renders. */}
-        <InlineScript html={themeScript} />
-      </head>
       <body className="bg-ink font-sans text-fg antialiased">
         <ThemeProvider>
           <NextIntlClientProvider>{children}</NextIntlClientProvider>

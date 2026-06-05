@@ -5,9 +5,7 @@ import {
   Lexend_Deca,
 } from "next/font/google";
 import type { ReactNode } from "react";
-import { InlineScript } from "@/components/theme/InlineScript";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
-import { themeScript } from "@/components/theme/theme-script";
 import "../globals.css";
 
 const playfairDisplay = Cormorant_Garamond({
@@ -44,12 +42,10 @@ export default function AdminRootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
-      className={`${playfairDisplay.variable} ${inter.variable} ${jetBrainsMono.variable}`}
+      className={`${playfairDisplay.variable} ${inter.variable} ${jetBrainsMono.variable} dark`}
+      style={{ colorScheme: "dark" }}
       suppressHydrationWarning
     >
-      <head>
-        <InlineScript html={themeScript} />
-      </head>
       <body className="bg-ink font-sans text-fg antialiased">
         <ThemeProvider>{children}</ThemeProvider>
       </body>
