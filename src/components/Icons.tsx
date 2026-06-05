@@ -31,6 +31,26 @@ export const IconPlus = ({ className = "" }: IconProps) => (
   </svg>
 );
 
+export const IconSparkle = ({ className = "" }: IconProps) => (
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.6"
+    aria-hidden="true"
+  >
+    <path
+      d="M12 3l1.8 4.9L18.7 9.7 13.8 11.5 12 16.4 10.2 11.5 5.3 9.7 10.2 7.9 12 3z"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M18 15l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7.7-2z"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
 export const IconMinus = ({ className = "" }: IconProps) => (
   <svg
     className={className}
