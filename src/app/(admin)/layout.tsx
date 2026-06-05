@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter, JetBrains_Mono } from "next/font/google";
 import type { ReactNode } from "react";
+import { InlineScript } from "@/components/theme/InlineScript";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { themeScript } from "@/components/theme/theme-script";
 import "../globals.css";
@@ -43,8 +44,7 @@ export default function AdminRootLayout({ children }: { children: ReactNode }) {
       suppressHydrationWarning
     >
       <head>
-        {/** biome-ignore lint/security/noDangerouslySetInnerHtml: trusted static string */}
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <InlineScript html={themeScript} />
       </head>
       <body className="bg-ink font-sans text-fg antialiased">
         <ThemeProvider>{children}</ThemeProvider>

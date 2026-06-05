@@ -5,7 +5,9 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
+import { navIconControl } from "@/components/nav/navControl";
 import { TagLabel } from "@/components/TagLabel";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { Link } from "@/i18n/navigation";
 import type { ResolvedProject } from "@/types/db";
 import { IconArrow } from "./Icons";
@@ -18,6 +20,7 @@ interface ProjectGalleryProps {
 
 export function ProjectGallery({ project }: ProjectGalleryProps) {
   const t = useTranslations("portfolio");
+  const tNav = useTranslations("nav");
   const prefersReduced = useReducedMotion();
   const photos = project.photos;
   const count = photos.length;
@@ -78,10 +81,14 @@ export function ProjectGallery({ project }: ProjectGalleryProps) {
             </span>
           )}
           <LocaleSwitcher />
+          <ThemeToggle
+            toLightLabel={tNav("theme.toLight")}
+            toDarkLabel={tNav("theme.toDark")}
+          />
           <Link
             href="/portfolio"
             aria-label={t("backHome")}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-line text-fg/80 transition-colors hover:bg-inverse hover:text-on-inverse"
+            className={navIconControl}
           >
             <span aria-hidden className="text-[18px] leading-none">
               ✕

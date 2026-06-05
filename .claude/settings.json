@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(Remove-Item -Recurse -Force \"c:\\\\Users\\\\matan\\\\Desktop\\\\Lilis Pics\\\\lili-simple-portfolio\\\\src\\\\app\\\\api\\\\photos\")"
+      "Bash(Remove-Item -Recurse -Force \"c:\\\\Users\\\\matan\\\\Desktop\\\\Lilis Pics\\\\lili-simple-portfolio\\\\src\\\\app\\\\api\\\\photos\")",
+      "Bash(python -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d['portfolio'], indent=2, ensure_ascii=False\\)\\)\")"
     ]
   }
 }

@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { ReactNode } from "react";
+import { InlineScript } from "@/components/theme/InlineScript";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { themeScript } from "@/components/theme/theme-script";
 import { routing } from "@/i18n/routing";
@@ -72,8 +73,7 @@ export default async function LocaleLayout({
       <head>
         {/* Blocking pre-paint theme resolution — prevents a flash of the wrong
             theme on first load. Must run before the body renders. */}
-        {/** biome-ignore lint/security/noDangerouslySetInnerHtml: trusted static string */}
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <InlineScript html={themeScript} />
       </head>
       <body className="bg-ink font-sans text-fg antialiased">
         <ThemeProvider>

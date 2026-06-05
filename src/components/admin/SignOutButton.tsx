@@ -15,7 +15,7 @@ export function SignOutButton() {
   };
 
   return (
-    <PillButton variant="danger" onClick={onSignOut}>
+    <PillButton variant="danger" size="sm" onClick={onSignOut}>
       Sign out
     </PillButton>
   );
