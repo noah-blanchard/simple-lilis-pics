@@ -4,10 +4,11 @@
 
 import type { TranslateInput } from "@/lib/api/schemas";
 
-export interface ChatMessage {
-  role: "system" | "user";
-  content: string;
-}
+/** Discriminated per role so the array is assignable to the OpenRouter SDK's
+ *  `ChatMessages[]` union without coupling this module to the SDK types. */
+export type ChatMessage =
+  | { role: "system"; content: string }
+  | { role: "user"; content: string };
 
 const LANGUAGE_NAMES: Record<TranslateInput["from"], string> = {
   en: "English",

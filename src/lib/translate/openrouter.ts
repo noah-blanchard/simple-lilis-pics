@@ -1,5 +1,6 @@
 import "server-only";
 
+import { OpenRouter } from "@openrouter/sdk";
 import type { TranslateInput } from "@/lib/api/schemas";
 import { buildMessages } from "./prompts";
 
@@ -12,12 +13,64 @@ export class TranslateConfigError extends Error {
   }
 }
 
-const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
-const DEFAULT_MODEL = "meta-llama/llama-3.3-70b-instruct:free";
+/** Thrown on an upstream OpenRouter/provider failure, carrying the HTTP status
+ *  so the route can forward a meaningful code (e.g. 429 rate-limit). */
+export class TranslateUpstreamError extends Error {
+  status: number;
+  constructor(message: string, status: number) {
+    super(message);
+    this.name = "TranslateUpstreamError";
+    this.status = status;
+  }
+}
+
+/** Shape of the OpenRouter SDK's typed error responses (best-effort). */
+interface SdkErrorShape {
+  statusCode?: number;
+  message?: string;
+  error?: {
+    message?: string;
+    metadata?: { raw?: string; retry_after_seconds?: number };
+  };
+}
+
+/** Turn an unknown thrown value into a clean message + HTTP status. */
+function describeUpstreamError(err: unknown): TranslateUpstreamError {
+  console.error("[translate] OpenRouter request failed:", err);
+  const e = (err ?? {}) as SdkErrorShape;
+  const status = typeof e.statusCode === "number" ? e.statusCode : 502;
+
+  if (status === 429) {
+    const retry = e.error?.metadata?.retry_after_seconds;
+    const wait = retry ? ` Retry in ~${Math.ceil(retry)}s.` : "";
+    return new TranslateUpstreamError(
+      `Translation model is rate-limited upstream.${wait} Please try again shortly.`,
+      429,
+    );
+  }
+
+  const message =
+    e.error?.metadata?.raw ??
+    e.error?.message ??
+    e.message ??
+    "Translation failed";
+  return new TranslateUpstreamError(message, status);
+}
+
+const DEFAULT_MODEL = "openai/gpt-oss-120b:free";
 const TIMEOUT_MS = 20_000;
 
-interface ChatCompletionResponse {
-  choices?: Array<{ message?: { content?: string } }>;
+/** Lazily-built singleton client, created on the first request once the API key
+ *  has been validated. */
+let client: OpenRouter | null = null;
+
+function getClient(): OpenRouter {
+  const apiKey = process.env.OPENROUTER_API_KEY;
+  if (!apiKey) {
+    throw new TranslateConfigError("Translation service is not configured");
+  }
+  client ??= new OpenRouter({ apiKey });
+  return client;
 }
 
 /** Strip a single pair of surrounding quotes the model may have added. */
@@ -30,49 +83,42 @@ function unquote(text: string): string {
   return quoted ? trimmed.slice(1, -1).trim() : trimmed;
 }
 
-/** Translate `text` between FR and EN via OpenRouter. Server-only.
+/** Reject after TIMEOUT_MS so a hung upstream call can't block the request. */
+function withTimeout<T>(promise: Promise<T>): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error("Translation timed out")), TIMEOUT_MS),
+    ),
+  ]);
+}
+
+/** Translate `text` between FR and EN via the OpenRouter SDK. Server-only.
  *  Throws TranslateConfigError if unconfigured, or Error on upstream failure. */
 export async function translateText(input: TranslateInput): Promise<string> {
-  const apiKey = process.env.OPENROUTER_API_KEY;
-  if (!apiKey) {
-    throw new TranslateConfigError("Translation service is not configured");
-  }
+  const openRouter = getClient();
   const model = process.env.OPENROUTER_MODEL || DEFAULT_MODEL;
 
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), TIMEOUT_MS);
-
-  let res: Response;
+  let content: unknown;
   try {
-    res = await fetch(OPENROUTER_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model,
-        temperature: 0.2,
-        messages: buildMessages(input),
+    const result = await withTimeout(
+      openRouter.chat.send({
+        chatRequest: {
+          model,
+          temperature: 0.2,
+          messages: buildMessages(input),
+        },
       }),
-      signal: controller.signal,
-    });
+    );
+    content = result.choices?.[0]?.message?.content;
   } catch (err) {
-    if (err instanceof Error && err.name === "AbortError") {
-      throw new Error("Translation timed out");
+    if (err instanceof Error && err.message === "Translation timed out") {
+      throw new TranslateUpstreamError(err.message, 504);
     }
-    throw new Error("Could not reach the translation service");
-  } finally {
-    clearTimeout(timeout);
+    throw describeUpstreamError(err);
   }
 
-  if (!res.ok) {
-    throw new Error(`Translation service error (${res.status})`);
-  }
-
-  const data = (await res.json()) as ChatCompletionResponse;
-  const content = data.choices?.[0]?.message?.content;
-  if (!content || !content.trim()) {
+  if (typeof content !== "string" || !content.trim()) {
     throw new Error("Translation service returned an empty result");
   }
 

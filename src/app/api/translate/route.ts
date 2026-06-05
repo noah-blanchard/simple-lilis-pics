@@ -4,6 +4,7 @@ import { validate } from "@/lib/api/validate";
 import { withAuth } from "@/lib/api/with-auth";
 import {
   TranslateConfigError,
+  TranslateUpstreamError,
   translateText,
 } from "@/lib/translate/openrouter";
 
@@ -27,6 +28,9 @@ export const POST = withAuth(async ({ request }) => {
   } catch (err) {
     if (err instanceof TranslateConfigError) {
       return apiError("CONFIG_ERROR", err.message, 500);
+    }
+    if (err instanceof TranslateUpstreamError) {
+      return apiError("TRANSLATE_FAILED", err.message, err.status);
     }
     const message = err instanceof Error ? err.message : "Translation failed";
     return apiError("TRANSLATE_FAILED", message, 502);
