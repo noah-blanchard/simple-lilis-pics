@@ -52,6 +52,9 @@ export function ProjectGallery({ project }: ProjectGalleryProps) {
   const [closing, setClosing] = useState(false);
   const handleClose = useCallback(() => setClosing(true), []);
 
+  // Chrome (top bar / info / thumbnails) can be hidden to view the photo alone.
+  const [showChrome, setShowChrome] = useState(true);
+
   const paginate = useCallback(
     (dir: number) => {
       setState(([prev]) => {
@@ -126,126 +129,139 @@ export function ProjectGallery({ project }: ProjectGalleryProps) {
                 sizes="100vw"
                 priority
                 onLoaded={() => setImgLoaded(true)}
+                onTap={() => setShowChrome((v) => !v)}
+                onSwipe={count > 1 ? paginate : undefined}
               />
             </motion.div>
           </AnimatePresence>
         </div>
 
-        {/* ── Edge scrims for overlay legibility (don't block image gestures) ── */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-linear-to-b from-ink/70 to-transparent" />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-56 bg-linear-to-t from-ink/80 to-transparent" />
+        {/* ── Chrome: scrims + nav + info, hideable to view the photo alone.
+            Wrapper is click-through; interactive children opt back in with
+            pointer-events-auto. `inert` fully disables it while hidden. ── */}
+        <motion.div
+          className="pointer-events-none absolute inset-0"
+          initial={false}
+          animate={{ opacity: showChrome ? 1 : 0 }}
+          transition={{ duration: 0.25, ease: EASE }}
+          inert={!showChrome}
+        >
+          {/* ── Edge scrims for overlay legibility (don't block gestures) ── */}
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-linear-to-b from-ink/70 to-transparent" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-56 bg-linear-to-t from-ink/80 to-transparent" />
 
-        {/* ── Prev / Next arrows ── */}
-        {count > 1 && (
-          <>
-            <button
-              type="button"
-              onClick={() => paginate(-1)}
-              aria-label="Previous photo"
-              className="-translate-y-1/2 absolute top-1/2 left-3 inline-flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-line bg-ink/30 text-fg/80 backdrop-blur transition-colors hover:bg-inverse hover:text-on-inverse md:left-6"
-            >
-              <IconArrow className="h-5 w-5 rotate-225" />
-            </button>
-            <button
-              type="button"
-              onClick={() => paginate(1)}
-              aria-label="Next photo"
-              className="-translate-y-1/2 absolute top-1/2 right-3 inline-flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-line bg-ink/30 text-fg/80 backdrop-blur transition-colors hover:bg-inverse hover:text-on-inverse md:right-6"
-            >
-              <IconArrow className="h-5 w-5 rotate-45" />
-            </button>
-          </>
-        )}
-
-        {/* ── Top bar (overlay) ── */}
-        <header className="pointer-events-none absolute inset-x-0 top-0 flex items-center justify-between px-6 py-5 md:px-10">
-          <Link
-            href="/"
-            className="pointer-events-auto font-semibold text-[20px] italic tracking-tight"
-          >
-            <span>Lilis</span>
-            <span className="text-accent">.</span>
-            <span>Pics</span>
-          </Link>
-
-          <div className="pointer-events-auto flex items-center gap-3">
-            {count > 1 && (
-              <span className="tag-mono text-fg/60 tabular-nums">
-                {String(index + 1).padStart(2, "0")} /{" "}
-                {String(count).padStart(2, "0")}
-              </span>
-            )}
-            <LocaleSwitcher />
-            <ThemeToggle
-              toLightLabel={tNav("theme.toLight")}
-              toDarkLabel={tNav("theme.toDark")}
-            />
-            <PillButton
-              size="sm"
-              onClick={handleClose}
-              variant="danger"
-              className="shrink-0"
-            >
-              ✕
-            </PillButton>
-          </div>
-        </header>
-
-        {/* ── Persistent info overlay ── */}
-        <footer className="pointer-events-none absolute inset-x-0 bottom-0 px-6 pt-4 pb-6 md:px-10 md:pb-8">
-          <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-3">
-            <div className="min-w-0">
-              {project.tags && (
-                <TagLabel className="mb-2 block text-fg/60">
-                  {project.tags}
-                </TagLabel>
-              )}
-              <h1 className="display font-semibold text-2xl text-fg tracking-tight md:text-4xl">
-                {title}
-              </h1>
-              {project.description && (
-                <p className="mt-2 max-w-prose text-[14px] text-fg/60">
-                  {project.description}
-                </p>
-              )}
-            </div>
-            {project.year && (
-              <span className="tag-mono shrink-0 text-fg/45">
-                {project.year}
-              </span>
-            )}
-          </div>
-
-          {/* ── Thumbnail strip ── */}
+          {/* ── Prev / Next arrows ── */}
           {count > 1 && (
-            <div className="pointer-events-auto mt-5 flex w-fit gap-2.5">
-              {photos.map((p, i) => (
-                <button
-                  key={p.id}
-                  type="button"
-                  onClick={() => setState([i, i > index ? 1 : -1])}
-                  onContextMenu={(e) => e.preventDefault()}
-                  aria-label={`Go to photo ${i + 1}`}
-                  className={`no-save relative h-12 w-16 shrink-0 overflow-hidden rounded-lg border transition-all ${
-                    i === index
-                      ? "border-accent opacity-100"
-                      : "border-line opacity-50 hover:opacity-80"
-                  }`}
-                >
-                  <Image
-                    src={p.img}
-                    alt=""
-                    fill
-                    sizes="64px"
-                    draggable={false}
-                    className="no-save object-cover"
-                    onDragStart={(e) => e.preventDefault()}
-                  />
-                </button>
-              ))}
-            </div>
+            <>
+              <button
+                type="button"
+                onClick={() => paginate(-1)}
+                aria-label="Previous photo"
+                className="-translate-y-1/2 pointer-events-auto absolute top-1/2 left-3 inline-flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-line bg-ink/30 text-fg/80 backdrop-blur transition-colors hover:bg-inverse hover:text-on-inverse md:left-6"
+              >
+                <IconArrow className="h-5 w-5 rotate-225" />
+              </button>
+              <button
+                type="button"
+                onClick={() => paginate(1)}
+                aria-label="Next photo"
+                className="-translate-y-1/2 pointer-events-auto absolute top-1/2 right-3 inline-flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-line bg-ink/30 text-fg/80 backdrop-blur transition-colors hover:bg-inverse hover:text-on-inverse md:right-6"
+              >
+                <IconArrow className="h-5 w-5 rotate-45" />
+              </button>
+            </>
           )}
-        </footer>
+
+          {/* ── Top bar (overlay) ── */}
+          <header className="pointer-events-none absolute inset-x-0 top-0 flex items-center justify-between px-6 py-5 md:px-10">
+            <Link
+              href="/"
+              className="pointer-events-auto font-semibold text-[20px] italic tracking-tight"
+            >
+              <span>Lilis</span>
+              <span className="text-accent">.</span>
+              <span>Pics</span>
+            </Link>
+
+            <div className="pointer-events-auto flex items-center gap-3">
+              {count > 1 && (
+                <span className="tag-mono text-fg/60 tabular-nums">
+                  {String(index + 1).padStart(2, "0")} /{" "}
+                  {String(count).padStart(2, "0")}
+                </span>
+              )}
+              <LocaleSwitcher />
+              <ThemeToggle
+                toLightLabel={tNav("theme.toLight")}
+                toDarkLabel={tNav("theme.toDark")}
+              />
+              <PillButton
+                size="sm"
+                onClick={handleClose}
+                variant="danger"
+                className="shrink-0"
+              >
+                ✕
+              </PillButton>
+            </div>
+          </header>
+
+          {/* ── Persistent info overlay ── */}
+          <footer className="pointer-events-none absolute inset-x-0 bottom-0 px-6 pt-4 pb-6 md:px-10 md:pb-8">
+            <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-3">
+              <div className="min-w-0">
+                {project.tags && (
+                  <TagLabel className="mb-2 block text-fg/60">
+                    {project.tags}
+                  </TagLabel>
+                )}
+                <h1 className="display font-semibold text-2xl text-fg tracking-tight md:text-4xl">
+                  {title}
+                </h1>
+                {project.description && (
+                  <p className="mt-2 max-w-prose text-[14px] text-fg/60">
+                    {project.description}
+                  </p>
+                )}
+              </div>
+              {project.year && (
+                <span className="tag-mono shrink-0 text-fg/45">
+                  {project.year}
+                </span>
+              )}
+            </div>
+
+            {/* ── Thumbnail strip ── */}
+            {count > 1 && (
+              <div className="pointer-events-auto mt-5 flex w-fit gap-2.5">
+                {photos.map((p, i) => (
+                  <button
+                    key={p.id}
+                    type="button"
+                    onClick={() => setState([i, i > index ? 1 : -1])}
+                    onContextMenu={(e) => e.preventDefault()}
+                    aria-label={`Go to photo ${i + 1}`}
+                    className={`no-save relative h-12 w-16 shrink-0 overflow-hidden rounded-lg border transition-all ${
+                      i === index
+                        ? "border-accent opacity-100"
+                        : "border-line opacity-50 hover:opacity-80"
+                    }`}
+                  >
+                    <Image
+                      src={p.img}
+                      alt=""
+                      fill
+                      sizes="64px"
+                      draggable={false}
+                      className="no-save object-cover"
+                      onDragStart={(e) => e.preventDefault()}
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
+          </footer>
+        </motion.div>
       </motion.div>
     </>
   );

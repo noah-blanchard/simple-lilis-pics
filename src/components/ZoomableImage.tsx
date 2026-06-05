@@ -13,6 +13,10 @@ const MIN_SCALE = 1;
 const MAX_SCALE = 4;
 const DOUBLE_CLICK_SCALE = 2.5;
 const EASE = [0.22, 1, 0.36, 1] as const;
+// Movement (px) past which a press is treated as a drag/swipe, not a tap.
+const TAP_MOVE_THRESHOLD = 8;
+// Horizontal travel (px) needed to count as a prev/next swipe (only when unzoomed).
+const SWIPE_THRESHOLD = 50;
 
 interface ZoomableImageProps {
   src: string;
@@ -23,6 +27,10 @@ interface ZoomableImageProps {
   sizes?: string;
   /** Called once the underlying image has decoded (or errored). */
   onLoaded?: () => void;
+  /** A clean tap (no drag, not a double-click) on the image — e.g. toggle chrome. */
+  onTap?: () => void;
+  /** Horizontal swipe while unzoomed: dir 1 = next, -1 = previous. */
+  onSwipe?: (dir: number) => void;
 }
 
 const clampScale = (s: number) => Math.min(MAX_SCALE, Math.max(MIN_SCALE, s));
@@ -40,6 +48,8 @@ export function ZoomableImage({
   priority,
   sizes,
   onLoaded,
+  onTap,
+  onSwipe,
 }: ZoomableImageProps) {
   const prefersReduced = useReducedMotion();
 
@@ -54,6 +64,11 @@ export function ZoomableImage({
   // Active pointers, keyed by pointerId — drives drag (1) vs pinch (2).
   const pointers = useRef(new Map<number, { x: number; y: number }>());
   const pinchDist = useRef(0);
+  // Press tracking to tell taps from drags/swipes, and to debounce single vs
+  // double click.
+  const pressStart = useRef<{ x: number; y: number } | null>(null);
+  const moved = useRef(false);
+  const tapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Pan bounds for a given scale, derived from the container + contained image.
   const bounds = useCallback((s: number) => {
@@ -142,10 +157,22 @@ export function ZoomableImage({
   const dist = (a: { x: number; y: number }, b: { x: number; y: number }) =>
     Math.hypot(a.x - b.x, a.y - b.y);
 
+  // Clean up a pending single-tap timer on unmount.
+  useEffect(
+    () => () => {
+      if (tapTimer.current) clearTimeout(tapTimer.current);
+    },
+    [],
+  );
+
   const onPointerDown = (e: React.PointerEvent) => {
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
     e.currentTarget.setPointerCapture(e.pointerId);
-    if (pointers.current.size === 2) {
+    if (pointers.current.size === 1) {
+      pressStart.current = { x: e.clientX, y: e.clientY };
+      moved.current = false;
+    } else if (pointers.current.size === 2) {
+      moved.current = true; // a pinch is never a tap
       const [a, b] = [...pointers.current.values()];
       pinchDist.current = dist(a, b);
     }
@@ -154,6 +181,14 @@ export function ZoomableImage({
   const onPointerMove = (e: React.PointerEvent) => {
     if (!pointers.current.has(e.pointerId)) return;
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+    const s = pressStart.current;
+    if (
+      s &&
+      Math.hypot(e.clientX - s.x, e.clientY - s.y) > TAP_MOVE_THRESHOLD
+    ) {
+      moved.current = true;
+    }
 
     if (pointers.current.size === 2) {
       const [a, b] = [...pointers.current.values()];
@@ -173,12 +208,45 @@ export function ZoomableImage({
     }
   };
 
+  const onPointerUp = (e: React.PointerEvent) => {
+    const wasLast = pointers.current.size === 1;
+    const start = pressStart.current;
+    pointers.current.delete(e.pointerId);
+    if (pointers.current.size < 2) pinchDist.current = 0;
+
+    // Unzoomed horizontal swipe → previous/next.
+    if (wasLast && start && scale.get() <= MIN_SCALE + 0.001) {
+      const dx = e.clientX - start.x;
+      const dy = e.clientY - start.y;
+      if (Math.abs(dx) > SWIPE_THRESHOLD && Math.abs(dx) > Math.abs(dy)) {
+        onSwipe?.(dx < 0 ? 1 : -1);
+      }
+    }
+    if (wasLast) pressStart.current = null;
+  };
+
   const endPointer = (e: React.PointerEvent) => {
     pointers.current.delete(e.pointerId);
     if (pointers.current.size < 2) pinchDist.current = 0;
+    pressStart.current = null;
+  };
+
+  // Single click (not a drag/swipe) toggles chrome — debounced so a double
+  // click zooms instead of toggling.
+  const onClick = () => {
+    if (moved.current || !onTap) return;
+    if (tapTimer.current) return;
+    tapTimer.current = setTimeout(() => {
+      tapTimer.current = null;
+      onTap();
+    }, 230);
   };
 
   const onDoubleClick = (e: React.MouseEvent) => {
+    if (tapTimer.current) {
+      clearTimeout(tapTimer.current);
+      tapTimer.current = null;
+    }
     if (scale.get() > 1) {
       apply(1, 0, 0, true);
     } else {
@@ -188,14 +256,16 @@ export function ZoomableImage({
 
   return (
     // biome-ignore lint/a11y/noStaticElementInteractions: image viewport; keyboard nav lives in the parent gallery.
+    // biome-ignore lint/a11y/useKeyWithClickEvents: pointer-driven image viewer; keyboard nav (arrows) is handled by the parent gallery.
     <div
       ref={containerRef}
       className="no-save relative h-full w-full touch-none select-none overflow-hidden"
       style={{ overscrollBehavior: "contain" }}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
-      onPointerUp={endPointer}
+      onPointerUp={onPointerUp}
       onPointerCancel={endPointer}
+      onClick={onClick}
       onDoubleClick={onDoubleClick}
       onContextMenu={(e) => e.preventDefault()}
       onDragStart={(e) => e.preventDefault()}
