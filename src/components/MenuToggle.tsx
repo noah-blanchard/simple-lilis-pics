@@ -20,12 +20,13 @@ export const MenuToggle = ({
 }: MenuToggleProps) => (
   <PillButton
     variant="ghost"
+    size="sm"
     onClick={onToggle}
     ariaExpanded={open}
     ariaControls="site-menu"
   >
     <span className="flex items-center gap-2">
-      <MenuIcon open={open} className="h-5 w-5" />
+      <MenuIcon open={open} className="h-4 w-4" />
       <span>{open ? closeLabel : openLabel}</span>
     </span>
   </PillButton>

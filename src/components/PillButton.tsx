@@ -4,9 +4,12 @@ import { motion, useReducedMotion, type Variants } from "motion/react";
 import type { ReactNode } from "react";
 import type { PillVariant } from "@/types";
 
+type PillSize = "sm" | "md";
+
 interface PillButtonProps {
   children: ReactNode;
   variant?: PillVariant;
+  size?: PillSize;
   className?: string;
   href?: string;
   type?: "button" | "submit";
@@ -17,7 +20,14 @@ interface PillButtonProps {
 }
 
 const base =
-  "relative inline-flex cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-full px-7 py-4 text-[15px] font-medium";
+  "relative inline-flex cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-full font-medium";
+
+// `sm` matches the LocaleSwitcher / ThemeToggle control height (~36px) so the
+// nav cluster lines up; `md` is the default page CTA size.
+const sizeClass: Record<PillSize, string> = {
+  sm: "px-4 py-2 text-[12px]",
+  md: "px-7 py-4 text-[15px]",
+};
 
 // All colors are Tailwind utility classes so they flip with the `.dark` class
 // on <html>. motion only animates transforms (the fill wipe + text roll) — it
@@ -72,6 +82,7 @@ const transition = { duration: 0.45, ease: [0.22, 1, 0.36, 1] } as const;
 export const PillButton = ({
   children,
   variant = "light",
+  size = "md",
   className = "",
   href,
   type = "button",
@@ -134,7 +145,7 @@ export const PillButton = ({
     animate: "rest",
     whileHover: "hover",
     variants: { rest: {}, hover: {} } as Variants,
-    className: `${base} ${cfg.bg} ${cfg.extra ?? ""} ${className}`,
+    className: `${base} ${sizeClass[size]} ${cfg.bg} ${cfg.extra ?? ""} ${className}`,
   };
 
   if (href) {
