@@ -3,6 +3,7 @@
 import {
   animate,
   motion,
+  useDragControls,
   useMotionValue,
   useReducedMotion,
 } from "motion/react";
@@ -57,11 +58,14 @@ export function ZoomableImage({
   const scale = useMotionValue(1);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
+  // Motion drag controls — panning is delegated entirely to motion's drag
+  // system so it works reliably on mobile (avoids unreliable movementX/Y).
+  const dragControls = useDragControls();
 
   // Natural pixel dimensions of the loaded image, used to compute the
   // contained ("fit") box so panning can be clamped to the image's own edges.
   const natural = useRef<{ w: number; h: number } | null>(null);
-  // Active pointers, keyed by pointerId — drives drag (1) vs pinch (2).
+  // Active pointers, keyed by pointerId — drives pinch (2 pointers) detection.
   const pointers = useRef(new Map<number, { x: number; y: number }>());
   const pinchDist = useRef(0);
   // Press tracking to tell taps from drags/swipes, and to debounce single vs
@@ -167,12 +171,19 @@ export function ZoomableImage({
 
   const onPointerDown = (e: React.PointerEvent) => {
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
-    e.currentTarget.setPointerCapture(e.pointerId);
     if (pointers.current.size === 1) {
       pressStart.current = { x: e.clientX, y: e.clientY };
       moved.current = false;
+      if (scale.get() > MIN_SCALE + 0.001) {
+        // Zoomed in: hand panning off to motion's drag system (reliable on mobile).
+        dragControls.start(e);
+      } else {
+        // Not zoomed: capture pointer ourselves for swipe detection.
+        e.currentTarget.setPointerCapture(e.pointerId);
+      }
     } else if (pointers.current.size === 2) {
       moved.current = true; // a pinch is never a tap
+      e.currentTarget.setPointerCapture(e.pointerId);
       const [a, b] = [...pointers.current.values()];
       pinchDist.current = dist(a, b);
     }
@@ -191,6 +202,7 @@ export function ZoomableImage({
     }
 
     if (pointers.current.size === 2) {
+      // Pinch-to-zoom — motion drag handles single-finger panning.
       const [a, b] = [...pointers.current.values()];
       const next = dist(a, b);
       if (pinchDist.current > 0) {
@@ -199,14 +211,15 @@ export function ZoomableImage({
         zoomAt(next / pinchDist.current, midX, midY, false);
       }
       pinchDist.current = next;
-    } else if (scale.get() > 1) {
-      const b = bounds(scale.get());
-      const nx = Math.min(b.maxX, Math.max(-b.maxX, x.get() + e.movementX));
-      const ny = Math.min(b.maxY, Math.max(-b.maxY, y.get() + e.movementY));
-      x.set(nx);
-      y.set(ny);
     }
   };
+
+  // Called by motion on every drag frame; clamps x/y to the image's pan bounds.
+  const onDragHandler = useCallback(() => {
+    const b = bounds(scale.get());
+    x.set(Math.min(b.maxX, Math.max(-b.maxX, x.get())));
+    y.set(Math.min(b.maxY, Math.max(-b.maxY, y.get())));
+  }, [bounds, scale, x, y]);
 
   const onPointerUp = (e: React.PointerEvent) => {
     const wasLast = pointers.current.size === 1;
@@ -271,6 +284,12 @@ export function ZoomableImage({
       onDragStart={(e) => e.preventDefault()}
     >
       <motion.div
+        drag
+        dragControls={dragControls}
+        dragListener={false}
+        dragMomentum={false}
+        dragElastic={0}
+        onDrag={onDragHandler}
         className="relative h-full w-full cursor-zoom-in active:cursor-grabbing"
         style={{ scale, x, y }}
       >
