@@ -20,6 +20,18 @@ export function resolveImageUrl(imagePath: string): string {
   return `${SUPABASE_URL}/storage/v1/object/public/${PHOTOS_BUCKET}/${imagePath}`;
 }
 
+/** Temporary stub — admin page uses this until Step 10 rewrites it. */
+export interface PhotoWithTags {
+  id: string;
+  title_en: string;
+  title_fr: string;
+  shoot_date: string;
+  image_path: string;
+  featured: boolean;
+  created_at: string;
+  tags: TagRow[];
+}
+
 /* ── Raw DB rows (snake_case, mirrors SQL schema) ── */
 
 export interface ProjectPhotoRow {

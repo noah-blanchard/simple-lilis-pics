@@ -4,7 +4,7 @@ import { Reveal } from "@/components/Reveal";
 import { TagLabel } from "@/components/TagLabel";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
-import { getFeaturedPhotos } from "@/lib/data/photos";
+import { getFeaturedProjects } from "@/lib/data/projects";
 
 export const Featured = async () => {
   const locale = (await getLocale()) as Locale;
@@ -12,7 +12,7 @@ export const Featured = async () => {
 
   // Home page shows only the curated featured photos (newest first, capped at
   // 6); the full archive lives on the dedicated /portfolio bento page.
-  const items = await getFeaturedPhotos(locale);
+  const items = await getFeaturedProjects(locale);
 
   return (
     <section className="px-6 py-24 md:px-12 md:py-32">

@@ -8,7 +8,7 @@ import { Reveal } from "@/components/Reveal";
 import { TagLabel } from "@/components/TagLabel";
 import { Link } from "@/i18n/navigation";
 import { Footer } from "@/sections/Footer";
-import type { ResolvedPhoto } from "@/types/db";
+import type { ResolvedProject } from "@/types/db";
 
 // Desktop bento rhythm (lg+). Mostly tall 1×2 tiles with sparse wide/extra-tall
 // accents so `grid-flow-dense` backfills cleanly without leaving holes.
@@ -33,7 +33,7 @@ const baseSpan = (i: number) =>
   i % 5 === 0 ? "col-span-2 row-span-2 sm:col-span-1" : "col-span-1 row-span-2";
 
 interface PortfolioBentoProps {
-  items: ResolvedPhoto[];
+  items: ResolvedProject[];
 }
 
 export const PortfolioBento = ({ items }: PortfolioBentoProps) => {

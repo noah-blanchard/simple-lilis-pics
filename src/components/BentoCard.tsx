@@ -1,12 +1,12 @@
 "use client";
 
 import { motion } from "motion/react";
-import type { ResolvedPhoto } from "@/types/db";
+import type { ResolvedProject } from "@/types/db";
 import { IconArrow } from "./Icons";
 import { RoundedImage } from "./RoundedImage";
 
 interface BentoCardProps {
-  project: ResolvedPhoto;
+  project: ResolvedProject;
   index: number;
   /** Resolved Tailwind grid span classes from the bento pattern. */
   spanClassName: string;
@@ -34,7 +34,7 @@ export const BentoCard = ({
     className={`group h-full min-h-0 ${spanClassName}`}
   >
     <RoundedImage
-      src={project.img}
+      src={project.cover?.img ?? ""}
       alt={project.title}
       ratio="h-full"
       className="h-full"

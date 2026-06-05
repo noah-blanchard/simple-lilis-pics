@@ -1,12 +1,12 @@
 "use client";
 
 import { motion } from "motion/react";
-import type { ResolvedPhoto } from "@/types/db";
+import type { ResolvedProject } from "@/types/db";
 import { IconArrow } from "./Icons";
 import { RoundedImage } from "./RoundedImage";
 
 interface ProjectCardProps {
-  project: ResolvedPhoto;
+  project: ResolvedProject;
   index: number;
 }
 
@@ -23,7 +23,7 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => (
     className="group"
   >
     <RoundedImage
-      src={project.img}
+      src={project.cover?.img ?? ""}
       alt={project.title}
       ratio="aspect-[4/5]"
       className="mb-5"
