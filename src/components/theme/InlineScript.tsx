@@ -1,3 +1,5 @@
+"use client";
+
 // Renders a synchronous inline <script> that runs during HTML parsing (before
 // first paint) without tripping React 19's "script tag while rendering" warning
 // or losing its DOM mutations during hydration recovery.
@@ -9,6 +11,12 @@
 // already run by the time the client sees it, so making it inert is harmless —
 // and it stops React from re-rendering/re-executing it and clobbering the class
 // the script set on <html>.
+//
+// This MUST be a Client Component. The type swap relies on the component function
+// re-executing in the browser (where `typeof window !== "undefined"` yields the
+// inert `text/plain`). As a Server Component, the function only runs on the server,
+// so `text/javascript` would be serialized into the RSC payload and React would
+// warn ("Encountered a script tag while rendering React component") on hydration.
 export function InlineScript({ html }: { html: string }) {
   return (
     <script

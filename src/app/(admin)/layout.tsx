@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Inter, JetBrains_Mono } from "next/font/google";
+import {
+  Cormorant_Garamond,
+  JetBrains_Mono,
+  Lexend_Deca,
+} from "next/font/google";
 import type { ReactNode } from "react";
 import { InlineScript } from "@/components/theme/InlineScript";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
@@ -14,7 +18,7 @@ const playfairDisplay = Cormorant_Garamond({
   display: "swap",
 });
 
-const inter = Inter({
+const inter = Lexend_Deca({
   variable: "--font-sans-body",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
