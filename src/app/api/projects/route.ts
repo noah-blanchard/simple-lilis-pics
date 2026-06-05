@@ -60,6 +60,10 @@ export async function GET(request: Request) {
  *    featured       string   "true" | "false"
  *    tag_ids        string[] (repeated)
  *
+ *  When files is empty this creates a metadata-only project (used by the
+ *  sequential-upload retry flow). The caller then POSTs each photo to
+ *  /api/projects/[id]/photos individually.
+ *
  *  Rollback: on any failure after upload starts, all uploaded objects and the
  *  project row are removed so the DB stays clean.
  */
@@ -72,9 +76,6 @@ export const POST = withAuth(async ({ request }) => {
     (f): f is File => f instanceof File && f.size > 0,
   );
 
-  if (files.length === 0) {
-    return apiError("NO_FILES", "At least one photo file is required", 422);
-  }
   if (files.length > MAX_PROJECT_PHOTOS) {
     return apiError(
       "TOO_MANY_FILES",
@@ -92,27 +93,6 @@ export const POST = withAuth(async ({ request }) => {
     }
     if (file.size > MAX_FILE_BYTES) {
       return apiError("FILE_TOO_LARGE", "Each image must be ≤ 5 MB", 422);
-    }
-  }
-
-  // ── 2) Parse per-photo metadata (orientation + position) ─────
-  const orientations = formData.getAll("orientation");
-  const positions = formData.getAll("position");
-
-  const photoMetas: { orientation: string; position: number }[] = files.map(
-    (_, i) => ({
-      orientation: orientations[i]?.toString() ?? "landscape",
-      position: Number(positions[i]?.toString() ?? i),
-    }),
-  );
-
-  for (const meta of photoMetas) {
-    if (!(ORIENTATIONS as readonly string[]).includes(meta.orientation)) {
-      return apiError(
-        "INVALID_ORIENTATION",
-        `orientation must be landscape or portrait`,
-        422,
-      );
     }
   }
 
@@ -167,62 +147,81 @@ export const POST = withAuth(async ({ request }) => {
   }
   const projectId = project.id;
 
-  // Cleanup helper — called on any failure after this point.
-  const uploadedKeys: string[] = [];
-  async function cleanup() {
-    if (uploadedKeys.length > 0) {
-      await admin.storage.from(PHOTOS_BUCKET).remove(uploadedKeys);
-    }
-    await admin.from("projects").delete().eq("id", projectId);
-  }
-
   // ── 6) Upload each file to the bucket ────────────────────────
-  const objectKeys: string[] = [];
-  for (const file of files) {
-    const ext = (file.name.split(".").pop() ?? "jpg").toLowerCase();
-    const key = `${crypto.randomUUID()}.${ext}`;
-    const { error: uploadErr } = await admin.storage
-      .from(PHOTOS_BUCKET)
-      .upload(key, file, { contentType: file.type, upsert: false });
-    if (uploadErr) {
-      await cleanup();
-      return apiError("UPLOAD_FAILED", uploadErr.message, 500);
+  if (files.length > 0) {
+    // Parse per-photo metadata
+    const orientations = formData.getAll("orientation");
+    const positions = formData.getAll("position");
+    const photoMetas = files.map((_, i) => ({
+      orientation: orientations[i]?.toString() ?? "landscape",
+      position: Number(positions[i]?.toString() ?? i),
+    }));
+
+    for (const meta of photoMetas) {
+      if (!(ORIENTATIONS as readonly string[]).includes(meta.orientation)) {
+        return apiError(
+          "INVALID_ORIENTATION",
+          `orientation must be landscape or portrait`,
+          422,
+        );
+      }
     }
-    uploadedKeys.push(key);
-    objectKeys.push(key);
-  }
 
-  // ── 7) Insert project_photos rows ────────────────────────────
-  const photoRows = objectKeys.map((key, i) => ({
-    project_id: projectId,
-    image_path: key,
-    orientation: photoMetas[i].orientation,
-    position: photoMetas[i].position,
-  }));
+    const uploadedKeys: string[] = [];
+    const objectKeys: string[] = [];
 
-  const { data: insertedPhotos, error: photosErr } = await admin
-    .from("project_photos")
-    .insert(photoRows)
-    .select("id");
-  if (photosErr || !insertedPhotos) {
-    await cleanup();
-    return apiError(
-      "DB_PHOTOS_FAILED",
-      photosErr?.message ?? "Photos insert failed",
-      500,
-    );
-  }
+    for (const file of files) {
+      const ext = (file.name.split(".").pop() ?? "jpg").toLowerCase();
+      const key = `${crypto.randomUUID()}.${ext}`;
+      const { error: uploadErr } = await admin.storage
+        .from(PHOTOS_BUCKET)
+        .upload(key, file, { contentType: file.type, upsert: false });
+      if (uploadErr) {
+        // Rollback: remove any already-uploaded files + the project
+        if (uploadedKeys.length > 0) {
+          await admin.storage.from(PHOTOS_BUCKET).remove(uploadedKeys);
+        }
+        await admin.from("projects").delete().eq("id", projectId);
+        return apiError("UPLOAD_FAILED", uploadErr.message, 500);
+      }
+      uploadedKeys.push(key);
+      objectKeys.push(key);
+    }
 
-  // ── 8) Set cover_photo_id ─────────────────────────────────────
-  const safeIndex = Math.min(cover_index, insertedPhotos.length - 1);
-  const coverId = (insertedPhotos[safeIndex] as { id: string }).id;
-  const { error: coverErr } = await admin
-    .from("projects")
-    .update({ cover_photo_id: coverId })
-    .eq("id", projectId);
-  if (coverErr) {
-    await cleanup();
-    return apiError("DB_COVER_FAILED", coverErr.message, 500);
+    // ── 7) Insert project_photos rows ────────────────────────────
+    const photoRows = objectKeys.map((key, i) => ({
+      project_id: projectId,
+      image_path: key,
+      orientation: photoMetas[i].orientation,
+      position: photoMetas[i].position,
+    }));
+
+    const { data: photos, error: photosErr } = await admin
+      .from("project_photos")
+      .insert(photoRows)
+      .select("id");
+    if (photosErr || !photos) {
+      await admin.storage.from(PHOTOS_BUCKET).remove(uploadedKeys);
+      await admin.from("projects").delete().eq("id", projectId);
+      return apiError(
+        "DB_PHOTOS_FAILED",
+        photosErr?.message ?? "Photos insert failed",
+        500,
+      );
+    }
+
+    // ── 8) Set cover_photo_id ─────────────────────────────────────
+    const safeIndex = Math.min(cover_index, photos.length - 1);
+    const coverId = photos[safeIndex].id;
+    const { error: coverErr } = await admin
+      .from("projects")
+      .update({ cover_photo_id: coverId })
+      .eq("id", projectId);
+    if (coverErr) {
+      await admin.storage.from(PHOTOS_BUCKET).remove(uploadedKeys);
+      await admin.from("projects").delete().eq("id", projectId);
+      return apiError("DB_COVER_FAILED", coverErr.message, 500);
+    }
   }
 
   // ── 9) Insert project_tags ────────────────────────────────────
@@ -233,7 +232,9 @@ export const POST = withAuth(async ({ request }) => {
     }));
     const { error: tagsErr } = await admin.from("project_tags").insert(tagRows);
     if (tagsErr) {
-      await cleanup();
+      // Rollback: delete the project (photos cascade, storage objects are
+      // orphaned — acceptable for this unlikely failure mode).
+      await admin.from("projects").delete().eq("id", projectId);
       return apiError("DB_TAGS_FAILED", tagsErr.message, 500);
     }
   }

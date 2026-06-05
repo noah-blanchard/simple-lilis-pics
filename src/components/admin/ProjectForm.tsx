@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import imageCompression from "browser-image-compression";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { PillButton } from "@/components/PillButton";
@@ -116,6 +116,14 @@ export function ProjectForm({
   const [fileError, setFileError] = useState<string | null>(null);
   const [status, setStatus] = useState<string | null>(null);
 
+  // Sequential upload retry (when batch POST fails with 413).
+  const [uploadMode, setUploadMode] = useState<"batch" | "sequential">("batch");
+  const [seqProgress, setSeqProgress] = useState<{
+    current: number;
+    total: number;
+  } | null>(null);
+  const [seqError, setSeqError] = useState<string | null>(null);
+
   // Featured cap: an already-featured project doesn't count against itself.
   const othersFeatured = project?.featured ? featuredCount - 1 : featuredCount;
   const featuredLocked = !featured && othersFeatured >= MAX_FEATURED_PROJECTS;
@@ -193,6 +201,94 @@ export function ProjectForm({
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
     );
 
+  // ── Sequential upload retry (used when batch POST returns 413) ──
+  const startSequentialUpload = useCallback(
+    async (values: FormValues) => {
+      if (isEdit) return; // sequential is create-only
+      setUploadMode("sequential");
+      setSeqError(null);
+
+      try {
+        // 1) Create metadata-only project
+        setSeqProgress({ current: 0, total: newPhotos.length });
+        const body: Record<string, string> = {};
+        if (values.title_en) body.title_en = values.title_en;
+        if (values.title_fr) body.title_fr = values.title_fr;
+        if (values.description_en) body.description_en = values.description_en;
+        if (values.description_fr) body.description_fr = values.description_fr;
+        if (values.project_date) body.project_date = values.project_date;
+        body.featured = String(featured);
+        const metaFd = new FormData();
+        for (const [k, v] of Object.entries(body)) metaFd.append(k, v);
+        for (const id of selectedTags) metaFd.append("tag_ids", id);
+
+        const project = await apiFetch<{ id: string }>("/api/projects", {
+          method: "POST",
+          body: metaFd,
+        });
+        const projectId = project.id;
+
+        // 2) Upload each photo sequentially with 1.5s delay
+        const photoIds: string[] = [];
+        for (let i = 0; i < newPhotos.length; i++) {
+          setSeqProgress({ current: i + 1, total: newPhotos.length });
+          setSeqError(`Uploading photo ${i + 1}/${newPhotos.length}…`);
+
+          const compressed = await imageCompression(
+            newPhotos[i].file,
+            COMPRESSION_OPTIONS,
+          );
+
+          const fd = new FormData();
+          fd.append("file", compressed, newPhotos[i].file.name);
+          fd.append("orientation", newPhotos[i].orientation);
+          fd.append("position", String(i));
+
+          const photo = await apiFetch<{ id: string }>(
+            `/api/projects/${projectId}/photos`,
+            { method: "POST", body: fd },
+          );
+          photoIds.push(photo.id);
+
+          // 1.5s delay between uploads to keep request size low
+          if (i < newPhotos.length - 1) {
+            await new Promise((r) => setTimeout(r, 1500));
+          }
+        }
+
+        // 3) Set cover photo
+        if (photoIds.length > 0) {
+          const coverIdx = Math.min(coverIndex, photoIds.length - 1);
+          await apiFetch(`/api/projects/${projectId}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ cover_photo_id: photoIds[coverIdx] }),
+          });
+        }
+
+        // 4) Done
+        setSeqProgress(null);
+        setSeqError(null);
+        queryClient.invalidateQueries({ queryKey: ["projects"] });
+        onSuccess?.();
+      } catch (err) {
+        setSeqError(
+          err instanceof Error ? err.message : "Sequential upload failed",
+        );
+        setSeqProgress(null);
+      }
+    },
+    [
+      newPhotos,
+      selectedTags,
+      featured,
+      coverIndex,
+      isEdit,
+      queryClient,
+      onSuccess,
+    ],
+  );
+
   const mutation = useMutation({
     mutationFn: async (values: FormValues) => {
       if (isEdit && project) {
@@ -250,12 +346,26 @@ export function ProjectForm({
       setStatus(null);
       onSuccess?.();
     },
-    onError: () => setStatus(null),
+    onError: () => {
+      setStatus(null);
+    },
   });
 
   const onSubmit = handleSubmit((values) => mutation.mutate(values));
   const busy = mutation.isPending;
-  const submitLabel = isEdit ? "Save changes" : (status ?? "Create project");
+
+  // Detect 413 — the server response is not JSON so apiFetch throws
+  // "Unexpected response (413)".
+  const is413Error =
+    mutation.isError &&
+    !isEdit &&
+    (mutation.error as Error).message.includes("413");
+
+  const submitLabel = isEdit
+    ? "Save changes"
+    : uploadMode === "sequential"
+      ? "Uploading…"
+      : (status ?? "Create project");
 
   // ── Orientation toggle (shared) ──
   const orientationToggle = (
@@ -306,7 +416,7 @@ export function ProjectForm({
               >
                 <div
                   className={`relative shrink-0 overflow-hidden rounded-lg bg-ink ${
-                    p.orientation === "portrait" ? "h-24 w-[54px]" : "h-24 w-40"
+                    p.orientation === "portrait" ? "h-24 w-13.5" : "h-24 w-40"
                   }`}
                 >
                   {/* biome-ignore lint/performance/noImgElement: stored remote thumb */}
@@ -333,7 +443,7 @@ export function ProjectForm({
               >
                 <div
                   className={`relative shrink-0 overflow-hidden rounded-lg bg-ink ${
-                    p.orientation === "portrait" ? "h-24 w-[54px]" : "h-24 w-40"
+                    p.orientation === "portrait" ? "h-24 w-13.5" : "h-24 w-40"
                   }`}
                 >
                   {/* biome-ignore lint/performance/noImgElement: local blob preview */}
@@ -365,7 +475,7 @@ export function ProjectForm({
         {!isEdit && newPhotos.length < MAX_PROJECT_PHOTOS && (
           <label
             htmlFor="project-files"
-            className="flex min-h-[88px] cursor-pointer items-center justify-center rounded-2xl border border-line border-dashed bg-panel2 px-4 text-center transition-colors hover:border-accent"
+            className="flex min-h-22 cursor-pointer items-center justify-center rounded-2xl border border-line border-dashed bg-panel2 px-4 text-center transition-colors hover:border-accent"
           >
             <div>
               <p className="text-[14px] text-fg/70">
@@ -464,7 +574,7 @@ export function ProjectForm({
           <span className={labelClass}>Visibility</span>
           <label
             htmlFor="featured"
-            className={`flex h-[50px] items-center gap-3 rounded-2xl border border-line bg-panel2 px-4 ${
+            className={`flex h-12.5 items-center gap-3 rounded-2xl border border-line bg-panel2 px-4 ${
               featuredLocked
                 ? "cursor-not-allowed opacity-50"
                 : "cursor-pointer"
@@ -529,14 +639,34 @@ export function ProjectForm({
 
   const footer = (
     <div className="shrink-0 pt-5">
-      {mutation.isError && (
+      {mutation.isError && !is413Error && (
         <p className="mb-4 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-[14px] text-red-300">
           {(mutation.error as Error).message}
         </p>
       )}
-      <PillButton type="submit" variant="light" disabled={busy}>
-        {submitLabel}
-      </PillButton>
+
+      {is413Error && (
+        <div className="mb-4 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-[14px] text-amber-300">
+          <p className="mb-2">
+            Request too large — the photos couldn&apos;t be uploaded in one
+            batch.
+          </p>
+          <PillButton
+            type="button"
+            variant="light"
+            disabled={mutation.isPending}
+            onClick={handleSubmit(startSequentialUpload)}
+          >
+            ⟳ Retry — upload photos one by one
+          </PillButton>
+        </div>
+      )}
+
+      {!is413Error && (
+        <PillButton type="submit" variant="light" disabled={busy}>
+          {submitLabel}
+        </PillButton>
+      )}
     </div>
   );
 
@@ -546,13 +676,48 @@ export function ProjectForm({
       noValidate
       className="flex h-full flex-col gap-6 md:flex-row"
     >
-      <div className="md:w-[42%] md:shrink-0">{photosPanel}</div>
-      <div className="flex min-w-0 flex-1 flex-col">
-        <div className="min-h-0 flex-1 space-y-6 overflow-y-auto pr-1">
-          {fieldsBody}
+      {uploadMode === "sequential" ? (
+        <div className="flex w-full flex-col items-center justify-center gap-5 py-12">
+          {seqProgress ? (
+            <>
+              {/* Progress bar */}
+              <div className="h-2 w-full max-w-sm overflow-hidden rounded-full bg-line">
+                <div
+                  className="h-full rounded-full bg-accent transition-all duration-300"
+                  style={{
+                    width: `${(seqProgress.current / seqProgress.total) * 100}%`,
+                  }}
+                />
+              </div>
+              <p className="text-[15px] text-fg/70">
+                Uploading photo {seqProgress.current} of {seqProgress.total}
+              </p>
+              {seqError && <p className="text-[13px] text-fg/50">{seqError}</p>}
+            </>
+          ) : seqError ? (
+            <>
+              <p className="text-[14px] text-red-400">{seqError}</p>
+              <PillButton
+                type="button"
+                variant="light"
+                onClick={handleSubmit(startSequentialUpload)}
+              >
+                ⟳ Retry sequential upload
+              </PillButton>
+            </>
+          ) : null}
         </div>
-        {footer}
-      </div>
+      ) : (
+        <>
+          <div className="md:w-[42%] md:shrink-0">{photosPanel}</div>
+          <div className="flex min-w-0 flex-1 flex-col">
+            <div className="min-h-0 flex-1 space-y-6 overflow-y-auto pr-1">
+              {fieldsBody}
+            </div>
+            {footer}
+          </div>
+        </>
+      )}
     </form>
   );
 }
