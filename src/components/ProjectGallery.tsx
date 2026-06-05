@@ -8,6 +8,7 @@ import { GalleryIntro } from "@/components/GalleryIntro";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 import { TagLabel } from "@/components/TagLabel";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { ZoomableImage } from "@/components/ZoomableImage";
 import { Link, useRouter } from "@/i18n/navigation";
 import type { ResolvedProject } from "@/types/db";
 import { IconArrow } from "./Icons";
@@ -91,7 +92,7 @@ export function ProjectGallery({ project }: ProjectGalleryProps) {
       </AnimatePresence>
 
       <motion.div
-        className="fixed inset-0 flex flex-col bg-ink text-fg"
+        className="fixed inset-0 bg-ink text-fg"
         animate={
           closing
             ? { opacity: 0, scale: prefersReduced ? 1 : 0.97 }
@@ -102,18 +103,72 @@ export function ProjectGallery({ project }: ProjectGalleryProps) {
           if (closing) router.back();
         }}
       >
-        {/* ── Top bar ── */}
-        <header className="flex items-center justify-between px-6 py-5 md:px-10">
+        {/* ── Full-bleed image stage ── */}
+        <div className="absolute inset-0">
+          <AnimatePresence custom={direction} mode="popLayout" initial={false}>
+            <motion.div
+              key={photo.id}
+              custom={direction}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.5, ease: EASE }}
+              className="absolute inset-0"
+            >
+              {/* object-contain so the full photo is always visible (no crop);
+                  ZoomableImage adds scroll/pinch zoom + drag-pan, scoped to the
+                  image, plus basic download deterrence. */}
+              <ZoomableImage
+                src={photo.img}
+                alt={title}
+                resetKey={photo.id}
+                sizes="100vw"
+                priority
+                onLoaded={() => setImgLoaded(true)}
+              />
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* ── Edge scrims for overlay legibility (don't block image gestures) ── */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-linear-to-b from-ink/70 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-56 bg-linear-to-t from-ink/80 to-transparent" />
+
+        {/* ── Prev / Next arrows ── */}
+        {count > 1 && (
+          <>
+            <button
+              type="button"
+              onClick={() => paginate(-1)}
+              aria-label="Previous photo"
+              className="-translate-y-1/2 absolute top-1/2 left-3 inline-flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-line bg-ink/30 text-fg/80 backdrop-blur transition-colors hover:bg-inverse hover:text-on-inverse md:left-6"
+            >
+              <IconArrow className="h-5 w-5 rotate-225" />
+            </button>
+            <button
+              type="button"
+              onClick={() => paginate(1)}
+              aria-label="Next photo"
+              className="-translate-y-1/2 absolute top-1/2 right-3 inline-flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-line bg-ink/30 text-fg/80 backdrop-blur transition-colors hover:bg-inverse hover:text-on-inverse md:right-6"
+            >
+              <IconArrow className="h-5 w-5 rotate-45" />
+            </button>
+          </>
+        )}
+
+        {/* ── Top bar (overlay) ── */}
+        <header className="pointer-events-none absolute inset-x-0 top-0 flex items-center justify-between px-6 py-5 md:px-10">
           <Link
             href="/"
-            className="font-semibold text-[20px] italic tracking-tight"
+            className="pointer-events-auto font-semibold text-[20px] italic tracking-tight"
           >
             <span>Lilis</span>
             <span className="text-accent">.</span>
             <span>Pics</span>
           </Link>
 
-          <div className="flex items-center gap-3">
+          <div className="pointer-events-auto flex items-center gap-3">
             {count > 1 && (
               <span className="tag-mono text-fg/60 tabular-nums">
                 {String(index + 1).padStart(2, "0")} /{" "}
@@ -136,58 +191,8 @@ export function ProjectGallery({ project }: ProjectGalleryProps) {
           </div>
         </header>
 
-        {/* ── Stage ── */}
-        <div className="relative flex min-h-0 flex-1 items-center justify-center px-4 md:px-20">
-          <AnimatePresence custom={direction} mode="popLayout" initial={false}>
-            <motion.div
-              key={photo.id}
-              custom={direction}
-              variants={slideVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={{ duration: 0.5, ease: EASE }}
-              className="relative flex h-full w-full items-center justify-center"
-            >
-              {/* object-contain so the full photo is always visible (no crop) */}
-              <Image
-                src={photo.img}
-                alt={title}
-                fill
-                sizes="100vw"
-                className="object-contain"
-                priority
-                onLoad={() => setImgLoaded(true)}
-                onError={() => setImgLoaded(true)}
-              />
-            </motion.div>
-          </AnimatePresence>
-
-          {/* ── Prev / Next arrows ── */}
-          {count > 1 && (
-            <>
-              <button
-                type="button"
-                onClick={() => paginate(-1)}
-                aria-label="Previous photo"
-                className="-translate-y-1/2 absolute top-1/2 left-3 inline-flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-line bg-ink/30 text-fg/80 backdrop-blur transition-colors hover:bg-inverse hover:text-on-inverse md:left-6"
-              >
-                <IconArrow className="h-5 w-5 rotate-225" />
-              </button>
-              <button
-                type="button"
-                onClick={() => paginate(1)}
-                aria-label="Next photo"
-                className="-translate-y-1/2 absolute top-1/2 right-3 inline-flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-line bg-ink/30 text-fg/80 backdrop-blur transition-colors hover:bg-inverse hover:text-on-inverse md:right-6"
-              >
-                <IconArrow className="h-5 w-5 rotate-45" />
-              </button>
-            </>
-          )}
-        </div>
-
         {/* ── Persistent info overlay ── */}
-        <footer className="px-6 pt-4 pb-6 md:px-10 md:pb-8">
+        <footer className="pointer-events-none absolute inset-x-0 bottom-0 px-6 pt-4 pb-6 md:px-10 md:pb-8">
           <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-3">
             <div className="min-w-0">
               {project.tags && (
@@ -213,14 +218,15 @@ export function ProjectGallery({ project }: ProjectGalleryProps) {
 
           {/* ── Thumbnail strip ── */}
           {count > 1 && (
-            <div className="mt-5 flex gap-2.5">
+            <div className="pointer-events-auto mt-5 flex w-fit gap-2.5">
               {photos.map((p, i) => (
                 <button
                   key={p.id}
                   type="button"
                   onClick={() => setState([i, i > index ? 1 : -1])}
+                  onContextMenu={(e) => e.preventDefault()}
                   aria-label={`Go to photo ${i + 1}`}
-                  className={`relative h-12 w-16 shrink-0 overflow-hidden rounded-lg border transition-all ${
+                  className={`no-save relative h-12 w-16 shrink-0 overflow-hidden rounded-lg border transition-all ${
                     i === index
                       ? "border-accent opacity-100"
                       : "border-line opacity-50 hover:opacity-80"
@@ -231,7 +237,9 @@ export function ProjectGallery({ project }: ProjectGalleryProps) {
                     alt=""
                     fill
                     sizes="64px"
-                    className="object-cover"
+                    draggable={false}
+                    className="no-save object-cover"
+                    onDragStart={(e) => e.preventDefault()}
                   />
                 </button>
               ))}
