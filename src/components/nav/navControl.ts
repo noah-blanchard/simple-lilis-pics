@@ -10,4 +10,4 @@ const base =
 export const navTextControl = `${base} gap-2 px-4 text-[13px] font-medium`;
 
 /** Square icon button (e.g. the gallery close button). */
-export const navIconControl = `${base} w-9`;
+export const navIconControl = `${base} w-9 cursor-pointer`;
