@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
 import { BentoCard } from "@/components/BentoCard";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 import { Reveal } from "@/components/Reveal";
@@ -10,27 +11,49 @@ import { Link } from "@/i18n/navigation";
 import { Footer } from "@/sections/Footer";
 import type { ResolvedProject } from "@/types/db";
 
-// Desktop bento rhythm (lg+). Mostly tall 1×2 tiles with sparse wide/extra-tall
-// accents so `grid-flow-dense` backfills cleanly without leaving holes.
-const BENTO_PATTERN = [
-  "lg:col-span-2 lg:row-span-2",
-  "lg:row-span-2",
-  "lg:row-span-3",
-  "lg:col-span-2 lg:row-span-2",
-  "lg:row-span-2",
-  "lg:row-span-2",
-  "lg:col-span-2 lg:row-span-3",
-  "lg:row-span-2",
-  "lg:row-span-2",
-  "lg:col-span-2 lg:row-span-2",
-  "lg:row-span-3",
-  "lg:row-span-2",
-];
+// Portrait covers are ~1.78× taller than landscape for the same column width.
+// We use this ratio to estimate column heights for the packing algorithm.
+const PORTRAIT_RATIO = 16 / 9; // height = width × ratio
+const LANDSCAPE_RATIO = 9 / 16;
 
-// Every tile is a tall 1×2 on phone/tablet; every 5th gets a wide accent so the
-// 2-column mobile bento keeps some variety.
-const baseSpan = (i: number) =>
-  i % 5 === 0 ? "col-span-2 row-span-2 sm:col-span-1" : "col-span-1 row-span-2";
+/** Distribute items across N columns using a shortest-column-first algorithm.
+ *  This preserves reading order within each column and avoids CSS `columns`
+ *  (which breaks tab order and motion stagger). */
+function packColumns<T extends { cover: { orientation: string } | null }>(
+  items: T[],
+  cols: number,
+): T[][] {
+  const columns: T[][] = Array.from({ length: cols }, () => []);
+  const heights: number[] = new Array(cols).fill(0);
+
+  for (const item of items) {
+    const shortest = heights.indexOf(Math.min(...heights));
+    columns[shortest].push(item);
+    const ratio =
+      item.cover?.orientation === "portrait" ? PORTRAIT_RATIO : LANDSCAPE_RATIO;
+    heights[shortest] += ratio;
+  }
+
+  return columns;
+}
+
+function useColumnCount(): number {
+  const [cols, setCols] = useState(1);
+
+  useEffect(() => {
+    const update = () => {
+      if (window.matchMedia("(min-width: 1024px)").matches) setCols(3);
+      else if (window.matchMedia("(min-width: 640px)").matches) setCols(2);
+      else setCols(1);
+    };
+    update();
+    const mq = window.matchMedia("(min-width: 640px)");
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  return cols;
+}
 
 interface PortfolioBentoProps {
   items: ResolvedProject[];
@@ -38,12 +61,21 @@ interface PortfolioBentoProps {
 
 export const PortfolioBento = ({ items }: PortfolioBentoProps) => {
   const t = useTranslations("portfolio");
+  const cols = useColumnCount();
+  const columns = packColumns(items, cols);
 
-  console.log("items", items);
+  // Flat index per item for stagger delay (stable across re-renders).
+  const flatIndex = new Map<string, number>();
+  let i = 0;
+  for (const col of columns) {
+    for (const item of col) {
+      flatIndex.set(item.id, i++);
+    }
+  }
 
   return (
     <main className="min-h-screen bg-ink text-fg">
-      {/* Slim header (this route has no Hero/NavBar of its own) */}
+      {/* Slim header */}
       <motion.header
         initial={{ opacity: 0, y: -16 }}
         animate={{ opacity: 1, y: 0 }}
@@ -88,15 +120,22 @@ export const PortfolioBento = ({ items }: PortfolioBentoProps) => {
           </div>
         </Reveal>
 
-        <div className="grid grid-flow-dense auto-rows-[11rem] grid-cols-2 gap-4 sm:auto-rows-[13rem] md:grid-cols-3 md:gap-5 lg:auto-rows-[15rem] lg:grid-cols-4">
-          {items.map((project, i) => (
-            <BentoCard
-              key={project.id}
-              project={project}
-              index={i}
-              spanClassName={`${baseSpan(i)} ${BENTO_PATTERN[i % BENTO_PATTERN.length]}`}
-              priority={i < 4}
-            />
+        {/* Aspect-matched masonry: equal-width columns, covers at true ratio */}
+        <div className="flex gap-4 md:gap-5">
+          {columns.map((col) => (
+            <div
+              key={col[0]?.id ?? "empty"}
+              className="flex min-w-0 flex-1 flex-col gap-4 md:gap-5"
+            >
+              {col.map((project) => (
+                <BentoCard
+                  key={project.id}
+                  project={project}
+                  index={flatIndex.get(project.id) ?? 0}
+                  priority={(flatIndex.get(project.id) ?? 99) < 3}
+                />
+              ))}
+            </div>
           ))}
         </div>
       </section>
