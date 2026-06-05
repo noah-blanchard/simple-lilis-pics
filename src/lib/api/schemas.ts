@@ -35,7 +35,11 @@ export const MAX_FEATURED_PROJECTS = 6;
 /** Per-photo metadata sent alongside each uploaded file. */
 export const projectPhotoMetaSchema = z.object({
   orientation: z.enum(ORIENTATIONS),
-  position: z.number().int().min(0).max(MAX_PROJECT_PHOTOS - 1),
+  position: z
+    .number()
+    .int()
+    .min(0)
+    .max(MAX_PROJECT_PHOTOS - 1),
 });
 
 /** Project creation — all text fields optional, featured defaults false. */
@@ -52,7 +56,12 @@ export const projectCreateSchema = z.object({
   featured: z.boolean().default(false),
   tag_ids: z.array(z.string().uuid()).default([]),
   /** Index into the uploaded files array that becomes the cover (default 0). */
-  cover_index: z.number().int().min(0).max(MAX_PROJECT_PHOTOS - 1).default(0),
+  cover_index: z
+    .number()
+    .int()
+    .min(0)
+    .max(MAX_PROJECT_PHOTOS - 1)
+    .default(0),
 });
 
 /** Project update — all fields optional; photos[] allows reorder/orientation edits. */
@@ -73,7 +82,11 @@ export const projectUpdateSchema = z.object({
     .array(
       z.object({
         id: z.string().uuid(),
-        position: z.number().int().min(0).max(MAX_PROJECT_PHOTOS - 1),
+        position: z
+          .number()
+          .int()
+          .min(0)
+          .max(MAX_PROJECT_PHOTOS - 1),
         orientation: z.enum(ORIENTATIONS),
       }),
     )
