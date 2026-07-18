@@ -1,10 +1,12 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { hoverColorTransition } from "@/lib/motion";
 import type { ContactFormValues } from "@/types";
 import { PillButton } from "./PillButton";
 
@@ -46,7 +48,8 @@ export const ContactForm = ({ onSubmit }: ContactFormProps) => {
   });
 
   const fieldClass =
-    "w-full rounded-2xl border border-line bg-panel2 px-5 py-4 text-[15px] text-fg placeholder:text-fg/40 outline-none transition-colors focus:border-accent";
+    "w-full rounded-2xl border border-line bg-panel2 px-5 py-4 text-[15px] text-fg placeholder:text-fg/40 outline-none";
+  const focusBorder = { borderColor: "var(--accent)" };
   const labelClass = "tag-mono mb-2 block uppercase";
   const errorClass = "mt-2 text-[13px] text-red-400";
 
@@ -61,13 +64,15 @@ export const ContactForm = ({ onSubmit }: ContactFormProps) => {
           <label htmlFor="contact-name" className={labelClass}>
             {t("name.label")}
           </label>
-          <input
+          <motion.input
             id="contact-name"
             type="text"
             autoComplete="name"
             placeholder={t("name.placeholder")}
             aria-invalid={errors.name ? "true" : "false"}
             className={fieldClass}
+            whileFocus={focusBorder}
+            transition={hoverColorTransition}
             {...register("name")}
           />
           {errors.name && <p className={errorClass}>{errors.name.message}</p>}
@@ -76,13 +81,15 @@ export const ContactForm = ({ onSubmit }: ContactFormProps) => {
           <label htmlFor="contact-email" className={labelClass}>
             {t("email.label")}
           </label>
-          <input
+          <motion.input
             id="contact-email"
             type="email"
             autoComplete="email"
             placeholder={t("email.placeholder")}
             aria-invalid={errors.email ? "true" : "false"}
             className={fieldClass}
+            whileFocus={focusBorder}
+            transition={hoverColorTransition}
             {...register("email")}
           />
           {errors.email && <p className={errorClass}>{errors.email.message}</p>}
@@ -93,12 +100,14 @@ export const ContactForm = ({ onSubmit }: ContactFormProps) => {
         <label htmlFor="contact-message" className={labelClass}>
           {t("message.label")}
         </label>
-        <textarea
+        <motion.textarea
           id="contact-message"
           rows={5}
           placeholder={t("message.placeholder")}
           aria-invalid={errors.message ? "true" : "false"}
           className={`${fieldClass} resize-none`}
+          whileFocus={focusBorder}
+          transition={hoverColorTransition}
           {...register("message")}
         />
         {errors.message && (

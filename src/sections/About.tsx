@@ -1,4 +1,5 @@
 import { useTranslations } from "next-intl";
+import { HoverLink } from "@/components/HoverLink";
 import { Reveal } from "@/components/Reveal";
 import { RoundedImage } from "@/components/RoundedImage";
 import { SectionHeader } from "@/components/SectionHeader";
@@ -36,13 +37,14 @@ export const About = () => {
           <p className="max-w-[420px] text-[15px] text-fg/75 leading-relaxed md:text-[16px]">
             {t("body")}
           </p>
-          <a
+          <HoverLink
             href="#"
-            className="mt-8 inline-flex items-center gap-2 text-fg transition-colors hover:text-accent"
+            className="mt-8 inline-flex items-center gap-2 text-fg"
+            whileHover={{ color: "var(--accent)" }}
           >
             <span className="font-medium">{t("readMore")}</span>
             <span aria-hidden>→</span>
-          </a>
+          </HoverLink>
         </Reveal>
       </div>
     </section>

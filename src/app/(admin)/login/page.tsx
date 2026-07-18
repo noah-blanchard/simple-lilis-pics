@@ -59,7 +59,8 @@ export default function LoginPage() {
   });
 
   const fieldClass =
-    "w-full rounded-2xl border border-line bg-panel2 px-5 py-4 text-[15px] text-fg placeholder:text-fg/40 outline-none transition-colors focus:border-accent";
+    "w-full rounded-2xl border border-line bg-panel2 px-5 py-4 text-[15px] text-fg placeholder:text-fg/40 outline-none";
+  const focusBorder = { borderColor: "var(--accent)" };
   const labelClass = "tag-mono mb-2 block uppercase text-fg/70";
   const errorClass = "mt-2 text-[13px] text-red-400";
 
@@ -92,7 +93,7 @@ export default function LoginPage() {
             {!reduce && (
               <motion.div
                 aria-hidden
-                className="pointer-events-none absolute inset-y-0 w-1/2 bg-gradient-to-r from-transparent via-fg/5 to-transparent"
+                className="pointer-events-none absolute inset-y-0 w-1/2 bg-linear-to-r from-transparent via-fg/5 to-transparent"
                 initial={{ x: "-150%" }}
                 animate={{ x: "250%" }}
                 transition={{ duration: 1.4, ease: EASE, delay: 0.5 }}
@@ -144,7 +145,9 @@ export default function LoginPage() {
                       placeholder="you@example.com"
                       aria-invalid={errors.email ? "true" : "false"}
                       className={fieldClass}
-                      whileFocus={reduce ? undefined : { scale: 1.01 }}
+                      whileFocus={
+                        reduce ? focusBorder : { scale: 1.01, ...focusBorder }
+                      }
                       transition={{ duration: 0.25, ease: EASE }}
                       {...emailReg}
                       onFocus={() => setFocused("email")}
@@ -178,7 +181,9 @@ export default function LoginPage() {
                       placeholder="••••••••"
                       aria-invalid={errors.password ? "true" : "false"}
                       className={fieldClass}
-                      whileFocus={reduce ? undefined : { scale: 1.01 }}
+                      whileFocus={
+                        reduce ? focusBorder : { scale: 1.01, ...focusBorder }
+                      }
                       transition={{ duration: 0.25, ease: EASE }}
                       {...passwordReg}
                       onFocus={() => setFocused("password")}
@@ -236,7 +241,8 @@ export default function LoginPage() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1, duration: 0.6 }}
-        className="absolute bottom-6 text-[13px] text-fg/45 transition-colors hover:text-fg"
+        whileHover={{ color: "var(--fg)" }}
+        className="absolute bottom-6 text-[13px] text-fg/45"
       >
         ← Back to site
       </motion.a>

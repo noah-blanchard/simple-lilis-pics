@@ -93,14 +93,6 @@ body {
   -webkit-touch-callout: none;
 }
 
-/* hover-zoom for image cards */
-.img-zoom {
-  transition: transform 1.2s cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-.group:hover .img-zoom {
-  transform: scale(1.06);
-}
-
 /* overlay watermark text at footer */
 .wm-text {
   font-weight: 800;

@@ -10,8 +10,16 @@ import { Reveal } from "@/components/Reveal";
 import { TagLabel } from "@/components/TagLabel";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { Link } from "@/i18n/navigation";
+import { hoverColorTransition } from "@/lib/motion";
 import { Footer } from "@/sections/Footer";
 import type { ResolvedProject } from "@/types/db";
+
+const MotionLink = motion.create(Link);
+
+const navHover = {
+  backgroundColor: "var(--inverse)",
+  color: "var(--on-inverse)",
+} as const;
 
 // Portrait covers are ~1.78× taller than landscape for the same column width.
 // We use this ratio to estimate column heights for the packing algorithm.
@@ -99,10 +107,15 @@ export const PortfolioBento = ({ items }: PortfolioBentoProps) => {
             toLightLabel={tNav("theme.toLight")}
             toDarkLabel={tNav("theme.toDark")}
           />
-          <Link href="/" className={navTextControl}>
+          <MotionLink
+            href="/"
+            className={navTextControl}
+            whileHover={navHover}
+            transition={hoverColorTransition}
+          >
             <span aria-hidden>←</span>
             <span>{t("backHome")}</span>
-          </Link>
+          </MotionLink>
         </div>
       </motion.header>
 

@@ -1,4 +1,5 @@
 import { useTranslations } from "next-intl";
+import { HoverLink } from "@/components/HoverLink";
 import { PillButton } from "@/components/PillButton";
 import { Reveal } from "@/components/Reveal";
 import { RoundedImage } from "@/components/RoundedImage";
@@ -68,13 +69,17 @@ export const Footer = () => {
         <div className="text-[14px] text-fg/55">{t("copyright")}</div>
         <div className="flex gap-3">
           {social.map((label) => (
-            <a
+            <HoverLink
               key={label}
               href="#"
-              className="rounded-full bg-panel px-5 py-2.5 text-[13px] text-fg/80 transition-colors hover:bg-inverse hover:text-on-inverse"
+              className="rounded-full bg-panel px-5 py-2.5 text-[13px] text-fg/80"
+              whileHover={{
+                backgroundColor: "var(--inverse)",
+                color: "var(--on-inverse)",
+              }}
             >
               {label}
-            </a>
+            </HoverLink>
           ))}
         </div>
       </div>

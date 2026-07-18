@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { navItems } from "@/data/nav";
 import { Link } from "@/i18n/navigation";
+import { HoverLink } from "./HoverLink";
 import { IconArrow } from "./Icons";
 import { LocaleSwitcher } from "./LocaleSwitcher";
 import { MenuToggle } from "./MenuToggle";
@@ -210,33 +211,30 @@ export const MenuOverlay = ({ open, onClose }: MenuOverlayProps) => {
           >
             <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
               {socials.map((name) => (
-                <a
+                <HoverLink
                   key={name}
                   href="#"
-                  className="text-[14px] text-fg/65 transition-colors hover:text-fg"
+                  className="text-[14px] text-fg/65"
                 >
                   {name}
-                </a>
+                </HoverLink>
               ))}
             </div>
             <div className="flex items-center gap-6">
-              <a
+              <HoverLink
                 href={`mailto:${t("email")}`}
-                className="text-[14px] text-fg/65 transition-colors hover:text-fg"
+                className="text-[14px] text-fg/65"
               >
                 {t("email")}
-              </a>
+              </HoverLink>
               <LocaleSwitcher />
               <ThemeToggle
                 toLightLabel={t("theme.toLight")}
                 toDarkLabel={t("theme.toDark")}
               />
-              <a
-                href="/admin"
-                className="text-[14px] text-fg/65 transition-colors hover:text-fg"
-              >
+              <HoverLink href="/admin" className="text-[14px] text-fg/65">
                 {t("dashboard")}
-              </a>
+              </HoverLink>
             </div>
           </motion.div>
         </motion.div>

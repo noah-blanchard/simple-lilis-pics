@@ -1,5 +1,9 @@
+"use client";
+
+import { motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
 import type { ReactNode } from "react";
+import { zoomTransition } from "@/lib/motion";
 
 interface RoundedImageProps {
   src: string;
@@ -15,7 +19,10 @@ interface RoundedImageProps {
 }
 
 // Rounded, cover-fit image with optional hover-zoom and overlay children.
-// Uses next/image (fill) for optimization + low CLS.
+// Uses next/image (fill) for optimization + low CLS. The hover-zoom (and any
+// overlay chrome passed as children) is driven by motion/react variant
+// propagation from this container — hovering it flips the "rest" → "hover"
+// label that descendant motion components inherit.
 export const RoundedImage = ({
   src,
   alt = "",
@@ -25,18 +32,35 @@ export const RoundedImage = ({
   priority = false,
   zoom = true,
   children,
-}: RoundedImageProps) => (
-  <div
-    className={`group relative overflow-hidden rounded-card bg-panel ${ratio} ${className}`}
-  >
-    <Image
-      src={src}
-      alt={alt}
-      fill
-      sizes={sizes}
-      priority={priority}
-      className={`object-cover ${zoom ? "img-zoom" : ""}`}
-    />
-    {children}
-  </div>
-);
+}: RoundedImageProps) => {
+  const reduce = useReducedMotion();
+  const enableZoom = zoom && !reduce;
+
+  return (
+    <motion.div
+      className={`group relative overflow-hidden rounded-card bg-panel ${ratio} ${className}`}
+      initial="rest"
+      animate="rest"
+      whileHover="hover"
+    >
+      <motion.div
+        className="absolute inset-0"
+        variants={{
+          rest: { scale: 1 },
+          hover: { scale: enableZoom ? 1.06 : 1 },
+        }}
+        transition={zoomTransition}
+      >
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          sizes={sizes}
+          priority={priority}
+          className="object-cover"
+        />
+      </motion.div>
+      {children}
+    </motion.div>
+  );
+};

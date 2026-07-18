@@ -1,11 +1,14 @@
 "use client";
 
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { hoverColorTransition, hoverRevealTransition } from "@/lib/motion";
 import type { ResolvedProject } from "@/types/db";
 import { IconArrow } from "./Icons";
 import { RoundedImage } from "./RoundedImage";
+
+const MotionLink = motion.create(Link);
 
 interface ProjectCardProps {
   project: ResolvedProject;
@@ -14,6 +17,7 @@ interface ProjectCardProps {
 
 export const ProjectCard = ({ project, index }: ProjectCardProps) => {
   const t = useTranslations("portfolio");
+  const reduce = useReducedMotion();
   const title = project.title || t("untitled");
 
   return (
@@ -26,7 +30,6 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => {
         delay: (index % 3) * 0.1,
         ease: [0.22, 1, 0.36, 1],
       }}
-      className="group"
     >
       <Link href={`/portfolio/${project.id}`} className="block">
         <RoundedImage
@@ -35,12 +38,25 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => {
           ratio="aspect-[4/5]"
           className="mb-5"
         >
-          <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-ink/30 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-          <div className="-translate-y-2 absolute top-5 right-5 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+          <motion.div
+            className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-ink/30"
+            variants={{ rest: { opacity: 0 }, hover: { opacity: 1 } }}
+            initial={false}
+            transition={hoverRevealTransition}
+          />
+          <motion.div
+            className="absolute top-5 right-5"
+            variants={{
+              rest: { opacity: 0, y: reduce ? 0 : -8 },
+              hover: { opacity: 1, y: 0 },
+            }}
+            initial={false}
+            transition={hoverRevealTransition}
+          >
             <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-inverse text-on-inverse">
               <IconArrow className="h-5 w-5" />
             </span>
-          </div>
+          </motion.div>
         </RoundedImage>
       </Link>
       <div className="flex items-start justify-between gap-4">
@@ -64,13 +80,18 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => {
             {project.tags && ` — ${project.tags}`}
           </div>
         </div>
-        <Link
+        <MotionLink
           href={`/portfolio/${project.id}`}
-          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-line text-fg/80 transition-colors hover:bg-inverse hover:text-on-inverse"
+          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-line text-fg/80"
           aria-label={title}
+          whileHover={{
+            backgroundColor: "var(--inverse)",
+            color: "var(--on-inverse)",
+          }}
+          transition={hoverColorTransition}
         >
           <IconArrow className="h-4 w-4" />
-        </Link>
+        </MotionLink>
       </div>
     </motion.article>
   );

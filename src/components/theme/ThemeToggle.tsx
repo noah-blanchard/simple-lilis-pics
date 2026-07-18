@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import { hoverColorTransition } from "@/lib/motion";
 import { IconMoon, IconSun } from "../Icons";
 import { useTheme } from "./ThemeProvider";
 
@@ -25,12 +26,14 @@ export const ThemeToggle = ({
   const label = isDark ? toLightLabel : toDarkLabel;
 
   return (
-    <button
+    <motion.button
       type="button"
       onClick={toggle}
       aria-label={label}
       title={label}
-      className={`grid h-9 w-9 cursor-pointer place-items-center rounded-full border border-line text-fg/70 transition-colors hover:text-fg ${className}`}
+      className={`grid h-9 w-9 cursor-pointer place-items-center rounded-full border border-line text-fg/70 ${className}`}
+      whileHover={{ color: "var(--fg)" }}
+      transition={hoverColorTransition}
     >
       <span className="relative block h-4.5 w-4.5">
         {/* Moon = currently dark. Sun = currently light. They cross-fade and
@@ -60,6 +63,6 @@ export const ThemeToggle = ({
           <IconSun className="h-[18px] w-[18px]" />
         </motion.span>
       </span>
-    </button>
+    </motion.button>
   );
 };

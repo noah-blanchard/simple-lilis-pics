@@ -1,8 +1,9 @@
 "use client";
 
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { hoverRevealTransition } from "@/lib/motion";
 import type { ResolvedProject } from "@/types/db";
 import { IconArrow } from "./Icons";
 import { RoundedImage } from "./RoundedImage";
@@ -19,6 +20,7 @@ export const BentoCard = ({
   priority = false,
 }: BentoCardProps) => {
   const t = useTranslations("portfolio");
+  const reduce = useReducedMotion();
   const ratio =
     project.cover?.orientation === "portrait"
       ? "aspect-[9/16]"
@@ -35,7 +37,7 @@ export const BentoCard = ({
         delay: (index % 6) * 0.06,
         ease: [0.22, 1, 0.36, 1],
       }}
-      className="group w-full"
+      className="w-full"
     >
       <Link href={`/portfolio/${project.id}`} className="block">
         <RoundedImage
@@ -46,18 +48,38 @@ export const BentoCard = ({
           priority={priority}
         >
           {/* Gradient scrim — visible at rest, deepens on hover */}
-          <div className="absolute inset-0 bg-linear-to-t from-ink/85 via-ink/20 to-transparent opacity-70 transition-opacity duration-500 group-hover:opacity-100" />
+          <motion.div
+            className="absolute inset-0 bg-linear-to-t from-ink/85 via-ink/20 to-transparent"
+            variants={{ rest: { opacity: 0.7 }, hover: { opacity: 1 } }}
+            initial={false}
+            transition={hoverRevealTransition}
+          />
 
           {/* Arrow drops in top-right on hover */}
-          <div className="-translate-y-2 absolute top-4 right-4 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+          <motion.div
+            className="absolute top-4 right-4"
+            variants={{
+              rest: { opacity: 0, y: reduce ? 0 : -8 },
+              hover: { opacity: 1, y: 0 },
+            }}
+            initial={false}
+            transition={hoverRevealTransition}
+          >
             <span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-inverse text-on-inverse">
               <IconArrow className="h-5 w-5" />
             </span>
-          </div>
+          </motion.div>
 
           {/* Bottom metadata */}
           <div className="absolute inset-x-0 bottom-0 p-5 md:p-6">
-            <div className="translate-y-1 opacity-90 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+            <motion.div
+              variants={{
+                rest: { opacity: 0.9, y: reduce ? 0 : 4 },
+                hover: { opacity: 1, y: 0 },
+              }}
+              initial={false}
+              transition={hoverRevealTransition}
+            >
               <div className="mb-1 flex items-center gap-2">
                 <span
                   className={`h-2.5 w-2.5 rounded-full ${
@@ -76,7 +98,7 @@ export const BentoCard = ({
                 {project.year}
                 {project.tags && ` — ${project.tags}`}
               </div>
-            </div>
+            </motion.div>
           </div>
         </RoundedImage>
       </Link>

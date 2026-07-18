@@ -10,11 +10,17 @@ import { TagLabel } from "@/components/TagLabel";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { ZoomableImage } from "@/components/ZoomableImage";
 import { Link, useRouter } from "@/i18n/navigation";
+import { hoverColorTransition } from "@/lib/motion";
 import type { ResolvedProject } from "@/types/db";
 import { IconArrow } from "./Icons";
 import { PillButton } from "./PillButton";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
+
+const navBtnHover = {
+  backgroundColor: "var(--inverse)",
+  color: "var(--on-inverse)",
+} as const;
 
 interface ProjectGalleryProps {
   project: ResolvedProject;
@@ -153,22 +159,26 @@ export function ProjectGallery({ project }: ProjectGalleryProps) {
           {/* ── Prev / Next arrows ── */}
           {count > 1 && (
             <>
-              <button
+              <motion.button
                 type="button"
                 onClick={() => paginate(-1)}
                 aria-label="Previous photo"
-                className="-translate-y-1/2 pointer-events-auto absolute top-1/2 left-3 inline-flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-line bg-ink/30 text-fg/80 backdrop-blur transition-colors hover:bg-inverse hover:text-on-inverse md:left-6"
+                className="-translate-y-1/2 pointer-events-auto absolute top-1/2 left-3 inline-flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-line bg-ink/30 text-fg/80 backdrop-blur md:left-6"
+                whileHover={navBtnHover}
+                transition={hoverColorTransition}
               >
                 <IconArrow className="h-5 w-5 rotate-225" />
-              </button>
-              <button
+              </motion.button>
+              <motion.button
                 type="button"
                 onClick={() => paginate(1)}
                 aria-label="Next photo"
-                className="-translate-y-1/2 pointer-events-auto absolute top-1/2 right-3 inline-flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-line bg-ink/30 text-fg/80 backdrop-blur transition-colors hover:bg-inverse hover:text-on-inverse md:right-6"
+                className="-translate-y-1/2 pointer-events-auto absolute top-1/2 right-3 inline-flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-line bg-ink/30 text-fg/80 backdrop-blur md:right-6"
+                whileHover={navBtnHover}
+                transition={hoverColorTransition}
               >
                 <IconArrow className="h-5 w-5 rotate-45" />
-              </button>
+              </motion.button>
             </>
           )}
 
@@ -235,17 +245,20 @@ export function ProjectGallery({ project }: ProjectGalleryProps) {
             {count > 1 && (
               <div className="pointer-events-auto mt-5 flex w-fit gap-2.5">
                 {photos.map((p, i) => (
-                  <button
+                  <motion.button
                     key={p.id}
                     type="button"
                     onClick={() => setState([i, i > index ? 1 : -1])}
                     onContextMenu={(e) => e.preventDefault()}
                     aria-label={`Go to photo ${i + 1}`}
-                    className={`no-save relative h-12 w-16 shrink-0 overflow-hidden rounded-lg border transition-all ${
-                      i === index
-                        ? "border-accent opacity-100"
-                        : "border-line opacity-50 hover:opacity-80"
-                    }`}
+                    className="no-save relative h-12 w-16 shrink-0 overflow-hidden rounded-lg border"
+                    animate={{
+                      opacity: i === index ? 1 : 0.5,
+                      borderColor:
+                        i === index ? "var(--accent)" : "var(--line)",
+                    }}
+                    whileHover={i === index ? undefined : { opacity: 0.8 }}
+                    transition={hoverColorTransition}
                   >
                     <Image
                       src={p.img}
@@ -256,7 +269,7 @@ export function ProjectGallery({ project }: ProjectGalleryProps) {
                       className="no-save object-cover"
                       onDragStart={(e) => e.preventDefault()}
                     />
-                  </button>
+                  </motion.button>
                 ))}
               </div>
             )}

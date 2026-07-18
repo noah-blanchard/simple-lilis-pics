@@ -1,9 +1,11 @@
 "use client";
 
+import { motion } from "motion/react";
 import { useLocale } from "next-intl";
 import { useTransition } from "react";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
+import { hoverColorTransition } from "@/lib/motion";
 
 // Toggles the active locale while preserving the current pathname.
 export const LocaleSwitcher = () => {
@@ -25,18 +27,20 @@ export const LocaleSwitcher = () => {
       {routing.locales.map((loc) => {
         const active = loc === locale;
         return (
-          <button
+          <motion.button
             key={loc}
             type="button"
             onClick={() => onSelect(loc)}
             disabled={isPending}
             aria-pressed={active}
-            className={`cursor-pointer rounded-full px-3 py-1.5 uppercase transition-colors ${
-              active ? "bg-inverse text-on-inverse" : "text-fg/70 hover:text-fg"
+            className={`cursor-pointer rounded-full px-3 py-1.5 uppercase ${
+              active ? "bg-inverse text-on-inverse" : "text-fg/70"
             }`}
+            whileHover={active ? undefined : { color: "var(--fg)" }}
+            transition={hoverColorTransition}
           >
             {loc}
-          </button>
+          </motion.button>
         );
       })}
     </div>

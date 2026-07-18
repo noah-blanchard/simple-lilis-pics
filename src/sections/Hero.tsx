@@ -25,7 +25,7 @@ export const Hero = () => {
           sizes="100vw"
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-ink/70 via-ink/30 to-ink/90" />
+        <div className="absolute inset-0 bg-linear-to-b from-ink/70 via-ink/30 to-ink/90" />
       </div>
       <div className="grain pointer-events-none absolute inset-0 z-[5]" />
 
