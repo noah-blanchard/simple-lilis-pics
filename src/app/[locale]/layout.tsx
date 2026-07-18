@@ -8,7 +8,9 @@ import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { ReactNode } from "react";
+import { InlineScript } from "@/components/theme/InlineScript";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
+import { themeInitScript } from "@/components/theme/theme-script";
 import { routing } from "@/i18n/routing";
 import "../globals.css";
 
@@ -69,11 +71,11 @@ export default async function LocaleLayout({
   return (
     <html
       lang={locale}
-      className={`${playfairDisplay.variable} ${inter.variable} ${jetBrainsMono.variable} dark`}
-      style={{ colorScheme: "dark" }}
+      className={`${playfairDisplay.variable} ${inter.variable} ${jetBrainsMono.variable}`}
       suppressHydrationWarning
     >
       <body className="bg-ink font-sans text-fg antialiased">
+        <InlineScript html={themeInitScript()} />
         <ThemeProvider>
           <NextIntlClientProvider>{children}</NextIntlClientProvider>
         </ThemeProvider>

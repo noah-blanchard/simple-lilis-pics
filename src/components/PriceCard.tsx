@@ -38,15 +38,8 @@ export const PriceCard = ({
       >
         {plan.blurb}
       </p>
-      <div className="mt-10 flex items-baseline gap-2">
-        <span className="display text-5xl md:text-6xl">${plan.price}</span>
-        <span
-          className={`text-[14px] ${
-            plan.highlighted ? "text-on-accent/60" : "text-fg/50"
-          }`}
-        >
-          {plan.unit}
-        </span>
+      <div className="mt-10">
+        <span className="display text-4xl md:text-5xl">{plan.unit}</span>
       </div>
       <PillButton
         href="#contact"

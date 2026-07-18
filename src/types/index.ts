@@ -49,7 +49,6 @@ export interface ProcessStep extends ProcessStepMeta {
 /* ── Pricing plan ── */
 export interface PlanMeta {
   id: string;
-  price: string;
   highlighted: boolean;
 }
 export interface Plan extends PlanMeta {

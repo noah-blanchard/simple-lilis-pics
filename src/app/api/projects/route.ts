@@ -4,8 +4,8 @@ import {
   MAX_FEATURED_PROJECTS,
   MAX_FILE_BYTES,
   MAX_PROJECT_PHOTOS,
-  ORIENTATIONS,
   projectCreateSchema,
+  projectPhotoMetaSchema,
 } from "@/lib/api/schemas";
 import { validate } from "@/lib/api/validate";
 import { withAuth } from "@/lib/api/with-auth";
@@ -68,7 +68,16 @@ export async function GET(request: Request) {
  *  project row are removed so the DB stays clean.
  */
 export const POST = withAuth(async ({ request }) => {
-  const formData = await request.formData();
+  let formData: FormData;
+  try {
+    formData = await request.formData();
+  } catch {
+    return apiError(
+      "INVALID_FORM_DATA",
+      "Request body must be multipart form data",
+      400,
+    );
+  }
 
   // ── 1) Collect and validate files ────────────────────────────
   const rawFiles = formData.getAll("files");
@@ -152,19 +161,17 @@ export const POST = withAuth(async ({ request }) => {
     // Parse per-photo metadata
     const orientations = formData.getAll("orientation");
     const positions = formData.getAll("position");
-    const photoMetas = files.map((_, i) => ({
-      orientation: orientations[i]?.toString() ?? "landscape",
-      position: Number(positions[i]?.toString() ?? i),
-    }));
-
-    for (const meta of photoMetas) {
-      if (!(ORIENTATIONS as readonly string[]).includes(meta.orientation)) {
-        return apiError(
-          "INVALID_ORIENTATION",
-          `orientation must be landscape or portrait`,
-          422,
-        );
-      }
+    const photoMetas: {
+      orientation: "landscape" | "portrait";
+      position: number;
+    }[] = [];
+    for (let i = 0; i < files.length; i++) {
+      const metaParsed = validate(projectPhotoMetaSchema, {
+        orientation: orientations[i]?.toString() ?? "landscape",
+        position: Number(positions[i]?.toString() ?? i),
+      });
+      if (!metaParsed.ok) return metaParsed.response;
+      photoMetas.push(metaParsed.data);
     }
 
     const uploadedKeys: string[] = [];

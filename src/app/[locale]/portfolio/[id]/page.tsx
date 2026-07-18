@@ -11,7 +11,9 @@ export default async function ProjectPage({ params }: Props) {
   setRequestLocale(locale);
 
   const project = await getProject(id, locale as Locale);
-  if (!project) notFound();
+  // A gallery with no photos would crash the viewer (it indexes photos[0]);
+  // treat a photo-less project as not found.
+  if (!project || project.photos.length === 0) notFound();
 
   return <ProjectGallery project={project} />;
 }

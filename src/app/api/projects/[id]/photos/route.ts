@@ -2,8 +2,9 @@ import { apiError, apiSuccess } from "@/lib/api/response";
 import {
   ACCEPTED_IMAGE_TYPES,
   MAX_FILE_BYTES,
-  ORIENTATIONS,
+  projectPhotoMetaSchema,
 } from "@/lib/api/schemas";
+import { validate } from "@/lib/api/validate";
 import { withAuth } from "@/lib/api/with-auth";
 import { PHOTOS_BUCKET } from "@/lib/env";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
@@ -23,7 +24,16 @@ type Ctx = { params: Promise<{ id: string }> };
 export const POST = withAuth<Ctx>(async ({ request, ctx }) => {
   const { id: projectId } = await ctx.params;
 
-  const formData = await request.formData();
+  let formData: FormData;
+  try {
+    formData = await request.formData();
+  } catch {
+    return apiError(
+      "INVALID_FORM_DATA",
+      "Request body must be multipart form data",
+      400,
+    );
+  }
 
   // ── 1) Validate the project exists ────────────────────────────
   const admin = createSupabaseAdminClient();
@@ -57,16 +67,12 @@ export const POST = withAuth<Ctx>(async ({ request, ctx }) => {
   }
 
   // ── 3) Validate orientation + position ────────────────────────
-  const orientation = formData.get("orientation")?.toString() ?? "landscape";
-  if (!(ORIENTATIONS as readonly string[]).includes(orientation)) {
-    return apiError(
-      "INVALID_ORIENTATION",
-      "orientation must be landscape or portrait",
-      422,
-    );
-  }
-
-  const position = Number(formData.get("position")?.toString() ?? 0);
+  const metaParsed = validate(projectPhotoMetaSchema, {
+    orientation: formData.get("orientation")?.toString() ?? "landscape",
+    position: Number(formData.get("position")?.toString() ?? 0),
+  });
+  if (!metaParsed.ok) return metaParsed.response;
+  const { orientation, position } = metaParsed.data;
 
   // ── 4) Upload to storage ──────────────────────────────────────
   const ext = (rawFile.name.split(".").pop() ?? "jpg").toLowerCase();
