@@ -26,7 +26,6 @@ function HomeSections() {
   return (
     <main className="bg-ink text-fg">
       <Hero />
-      {/* <Marquee items={tMarquee.raw("items") as string[]} /> */}
       <About />
       <Specialty />
       <Featured />

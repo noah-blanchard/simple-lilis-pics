@@ -23,18 +23,6 @@ export interface Specialty extends SpecialtyMeta {
   desc: string;
 }
 
-/* ── Portfolio project ── */
-export interface ProjectMeta {
-  id: number;
-  year: string;
-  img: string;
-  featured: boolean;
-}
-export interface Project extends ProjectMeta {
-  title: string;
-  tags: string;
-}
-
 /* ── Process step ── */
 export interface ProcessStepMeta {
   n: string;

@@ -29,18 +29,6 @@
     "intro": "I'm Lili — an independent photographer working mostly on my own. I shoot portraits, streets and the small, true moments in between, for people, couples, brands and the occasional quiet tuesday.",
     "cta": "Say hello"
   },
-  "marquee": {
-    "items": [
-      "Portraits",
-      "Couples",
-      "Events",
-      "Street",
-      "Brands",
-      "Travel",
-      "Studio",
-      "Animals"
-    ]
-  },
   "about": {
     "tag": "ABOUT ME",
     "titleLine1": "Frames that breathe",
@@ -251,8 +239,6 @@
       "Rates",
       "Dashboard"
     ],
-    "detailsLabel": "DETAILS",
-    "details": ["Portfolio details", "Journal", "License", "Changelog", "404"],
     "social": ["Instagram", "TikTok", "RedNote", "LinkedIn"],
     "copyright": "© 2026 Lili Marchetti. Site by Noah Blanchard.",
     "watermark": "LILIS·PICS"

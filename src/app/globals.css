@@ -101,22 +101,6 @@ body {
   transform: scale(1.06);
 }
 
-/* marquee */
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-.marquee-track {
-  display: flex;
-  gap: 3rem;
-  white-space: nowrap;
-  animation: marquee 40s linear infinite;
-}
-
 /* overlay watermark text at footer */
 .wm-text {
   font-weight: 800;

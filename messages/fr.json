@@ -29,18 +29,6 @@
     "intro": "Je m'appelle Lili — photographe indépendante, je travaille la plupart du temps seule. Je shoote des portraits, des rues et tous les petits instants vrais entre les deux, pour des particuliers, des couples, des marques, et parfois juste un mardi.",
     "cta": "Me dire bonjour"
   },
-  "marquee": {
-    "items": [
-      "Portraits",
-      "Couples",
-      "Événements",
-      "Rue",
-      "Marques",
-      "Voyage",
-      "Studio",
-      "Animaux"
-    ]
-  },
   "about": {
     "tag": "À PROPOS DE MOI",
     "titleLine1": "Des images qui respirent",
@@ -250,14 +238,6 @@
       "Me dire bonjour",
       "Tarifs",
       "Tableau de bord"
-    ],
-    "detailsLabel": "DÉTAILS",
-    "details": [
-      "Détails du portfolio",
-      "Journal",
-      "Licence",
-      "Journal des modifications",
-      "404"
     ],
     "social": ["Instagram", "TikTok", "RedNote", "LinkedIn"],
     "copyright": "© 2026 Lili Marchetti. Site réalisé par Noah Blanchard.",

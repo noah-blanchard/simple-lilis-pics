@@ -9,6 +9,8 @@ if (!serviceRoleKey)
  *  on the server, never in client code. Auth is enforced by `withAuth` before
  *  this client touches the database or storage. */
 export function createSupabaseAdminClient() {
+  // Re-narrow inside the closure: the module-level check above doesn't carry
+  // `string` narrowing across the function boundary for a captured binding.
   if (!serviceRoleKey) {
     throw new Error("Missing env var: SUPABASE_SERVICE_ROLE_KEY");
   }
