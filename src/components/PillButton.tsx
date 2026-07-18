@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion, type Variants } from "motion/react";
 import type { ReactNode } from "react";
+import { EASE } from "@/lib/motion";
 import type { PillVariant } from "@/types";
 
 type PillSize = "sm" | "md";
@@ -77,7 +78,7 @@ const config: Record<PillVariant, VariantConfig> = {
   },
 };
 
-const transition = { duration: 0.45, ease: [0.22, 1, 0.36, 1] } as const;
+const transition = { duration: 0.45, ease: EASE } as const;
 
 export const PillButton = ({
   children,

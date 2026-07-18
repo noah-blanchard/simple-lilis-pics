@@ -10,12 +10,10 @@ import { TagLabel } from "@/components/TagLabel";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { ZoomableImage } from "@/components/ZoomableImage";
 import { Link, useRouter } from "@/i18n/navigation";
-import { hoverColorTransition } from "@/lib/motion";
+import { EASE, hoverColorTransition } from "@/lib/motion";
 import type { ResolvedProject } from "@/types/db";
 import { IconArrow } from "./Icons";
 import { PillButton } from "./PillButton";
-
-const EASE = [0.22, 1, 0.36, 1] as const;
 
 const navBtnHover = {
   backgroundColor: "var(--inverse)",

@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion } from "motion/react";
 
-const EASE = [0.22, 1, 0.36, 1] as const;
+import { EASE } from "@/lib/motion";
 
 // Full-screen intro shown while the first gallery photo decodes. It keeps the
 // user looking at something intentional — the project title over a quiet
@@ -13,7 +13,7 @@ export function GalleryIntro({ title }: { title: string }) {
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-6 bg-ink px-6 text-center"
+      className="fixed inset-0 z-[var(--z-overlay)] flex flex-col items-center justify-center gap-6 bg-ink px-6 text-center"
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.6, ease: EASE }}

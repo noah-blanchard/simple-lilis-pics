@@ -3,7 +3,11 @@
 import { motion, useReducedMotion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { hoverColorTransition, hoverRevealTransition } from "@/lib/motion";
+import {
+  EASE,
+  hoverColorTransition,
+  hoverRevealTransition,
+} from "@/lib/motion";
 import type { ResolvedProject } from "@/types/db";
 import { IconArrow } from "./Icons";
 import { RoundedImage } from "./RoundedImage";
@@ -28,7 +32,7 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => {
       transition={{
         duration: 0.8,
         delay: (index % 3) * 0.1,
-        ease: [0.22, 1, 0.36, 1],
+        ease: EASE,
       }}
     >
       <Link href={`/portfolio/${project.id}`} className="block">

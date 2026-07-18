@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { hoverColorTransition } from "@/lib/motion";
+import { FIELD_CLASS, FIELD_FOCUS } from "@/lib/ui";
 import type { ContactFormValues } from "@/types";
 import { PillButton } from "./PillButton";
 
@@ -47,9 +48,8 @@ export const ContactForm = ({ onSubmit }: ContactFormProps) => {
     reset();
   });
 
-  const fieldClass =
-    "w-full rounded-2xl border border-line bg-panel2 px-5 py-4 text-[15px] text-fg placeholder:text-fg/40 outline-none";
-  const focusBorder = { borderColor: "var(--accent)" };
+  const fieldClass = FIELD_CLASS;
+  const focusBorder = FIELD_FOCUS;
   const labelClass = "tag-mono mb-2 block uppercase";
   const errorClass = "mt-2 text-[13px] text-red-400";
 

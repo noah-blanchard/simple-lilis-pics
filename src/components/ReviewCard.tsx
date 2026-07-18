@@ -2,6 +2,7 @@
 
 import { motion, type Variants } from "motion/react";
 import Image from "next/image";
+import { EASE } from "@/lib/motion";
 import type { Review } from "@/types";
 import { IconQuote } from "./Icons";
 
@@ -13,11 +14,14 @@ interface ReviewCardProps {
 // Colours come from Tailwind classes (so they flip with the theme); motion only
 // animates transforms/opacity. The hover surface (panel → panel-2) is an opacity
 // overlay and the quote glyph cross-fades between two colour layers.
-const transition = { duration: 0.3, ease: [0.22, 1, 0.36, 1] } as const;
+const transition = { duration: 0.3, ease: EASE } as const;
 
+// Both endpoints reference the accent token so the hover ring flips with the
+// theme; only the ring spread animates (0px → 1.5px), so the resting state is
+// invisible regardless of colour.
 const cardVariants: Variants = {
-  rest: { y: 0, boxShadow: "0 0 0 0px rgba(74,124,255,0)" },
-  hover: { y: -6, boxShadow: "0 0 0 1.5px rgba(74,124,255,1)" },
+  rest: { y: 0, boxShadow: "0 0 0 0px var(--accent)" },
+  hover: { y: -6, boxShadow: "0 0 0 1.5px var(--accent)" },
 };
 const fadeIn: Variants = { rest: { opacity: 0 }, hover: { opacity: 1 } };
 const fadeOut: Variants = { rest: { opacity: 1 }, hover: { opacity: 0 } };

@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from "motion/react";
 import type { ReactNode } from "react";
 
-const EASE = [0.22, 1, 0.36, 1] as const;
+import { EASE } from "@/lib/motion";
 
 interface ModalProps {
   open: boolean;
@@ -39,7 +39,7 @@ export function Modal({
   return (
     <AnimatePresence>
       {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[var(--z-overlay)] flex items-center justify-center p-4">
           <motion.button
             type="button"
             aria-label="Close"

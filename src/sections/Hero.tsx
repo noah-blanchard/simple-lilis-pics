@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { NavBar } from "@/components/NavBar";
 import { PillButton } from "@/components/PillButton";
 import { TagLabel } from "@/components/TagLabel";
+import { EASE } from "@/lib/motion";
 
 const HERO_IMG =
   "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=2000&q=80&auto=format&fit=crop";
@@ -27,7 +28,7 @@ export const Hero = () => {
         />
         <div className="absolute inset-0 bg-linear-to-b from-ink/70 via-ink/30 to-ink/90" />
       </div>
-      <div className="grain pointer-events-none absolute inset-0 z-[5]" />
+      <div className="grain pointer-events-none absolute inset-0 z-[var(--z-base)]" />
 
       <NavBar />
 
@@ -36,7 +37,7 @@ export const Hero = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.9, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.9, delay: 0.45, ease: EASE }}
           className="absolute top-[42%] left-6 hidden md:left-12 md:block"
         >
           <TagLabel>{t("byline")}</TagLabel>
@@ -44,7 +45,7 @@ export const Hero = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.9, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.9, delay: 0.45, ease: EASE }}
           className="absolute top-[42%] right-6 hidden md:right-12 md:block"
         >
           <TagLabel>{t("location")}</TagLabel>
@@ -53,7 +54,7 @@ export const Hero = () => {
         <motion.h1
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 1, delay: 0.15, ease: EASE }}
           className="display-xl max-w-[1100px] text-[44px] uppercase sm:text-6xl md:text-8xl lg:text-[120px]"
           style={{ textWrap: "balance" }}
         >
@@ -64,7 +65,7 @@ export const Hero = () => {
         <motion.p
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 1, delay: 0.45, ease: EASE }}
           className="mt-8 max-w-[640px] text-[15px] text-fg/75 leading-relaxed md:text-[17px]"
         >
           {t("intro")}
@@ -73,7 +74,7 @@ export const Hero = () => {
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 1, delay: 0.6, ease: EASE }}
           className="mt-10"
         >
           <PillButton href="#contact" variant="light">

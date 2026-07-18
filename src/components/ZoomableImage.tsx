@@ -9,11 +9,12 @@ import {
 } from "motion/react";
 import Image from "next/image";
 import { useCallback, useEffect, useRef } from "react";
+import { EASE } from "@/lib/motion";
 
 const MIN_SCALE = 1;
 const MAX_SCALE = 4;
 const DOUBLE_CLICK_SCALE = 2.5;
-const EASE = [0.22, 1, 0.36, 1] as const;
+
 // Movement (px) past which a press is treated as a drag/swipe, not a tap.
 const TAP_MOVE_THRESHOLD = 8;
 // Horizontal travel (px) needed to count as a prev/next swipe (only when unzoomed).

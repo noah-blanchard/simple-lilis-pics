@@ -21,6 +21,18 @@
   --scrim: rgba(14, 18, 32, 0.45); /* modal backdrop          -> bg-scrim         */
 }
 
+/* ------------------------------ Z-INDEX SCALE ----------------------------- */
+/* Documented single source for GLOBAL stacking layers. Local `relative z-10`
+   stacking contexts inside a component (content above its own background) are
+   left inline — these tokens only govern cross-component layering. */
+:root {
+  --z-base: 5; /* hero grain / background texture      */
+  --z-nav: 20; /* sticky top navigation bar            */
+  --z-overlay: 50; /* full-screen overlays: gallery, modals */
+  --z-overlay-top: 60; /* nested confirm dialog above a modal   */
+  --z-menu: 100; /* fullscreen menu — top-most           */
+}
+
 /* --------------------------------- DARK ----------------------------------- */
 .dark {
   --bg: #0c0e14;

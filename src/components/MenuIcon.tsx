@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
+import { EASE } from "@/lib/motion";
 
 interface MenuIconProps {
   open: boolean;
@@ -12,9 +13,7 @@ interface MenuIconProps {
 // and rotates them ±45° into a cross. All motion via motion/react.
 export const MenuIcon = ({ open, className = "" }: MenuIconProps) => {
   const reduce = useReducedMotion();
-  const transition = reduce
-    ? { duration: 0 }
-    : { duration: 0.4, ease: [0.22, 1, 0.36, 1] as const };
+  const transition = reduce ? { duration: 0 } : { duration: 0.4, ease: EASE };
 
   const lineStyle = {
     transformBox: "fill-box" as const,

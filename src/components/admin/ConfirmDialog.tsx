@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from "motion/react";
 import { PillButton } from "@/components/PillButton";
 
-const EASE = [0.22, 1, 0.36, 1] as const;
+import { EASE } from "@/lib/motion";
 
 interface ConfirmDialogProps {
   open: boolean;
@@ -31,7 +31,7 @@ export function ConfirmDialog({
   return (
     <AnimatePresence>
       {open && (
-        <div className="fixed inset-0 z-60 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[var(--z-overlay-top)] flex items-center justify-center p-4">
           <motion.button
             type="button"
             aria-label={cancelLabel}

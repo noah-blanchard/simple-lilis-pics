@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
+import { EASE } from "@/lib/motion";
 import type { ProcessStep } from "@/types";
 import { IconMinus, IconPlus } from "./Icons";
 import { RoundedImage } from "./RoundedImage";
@@ -14,7 +15,7 @@ interface ProcessRowProps {
 export const ProcessRow = ({ step, open, onToggle }: ProcessRowProps) => (
   <motion.div
     layout
-    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+    transition={{ duration: 0.5, ease: EASE }}
     className={`overflow-hidden rounded-card ${open ? "bg-panel" : "bg-panel/60"}`}
   >
     <button
@@ -45,7 +46,7 @@ export const ProcessRow = ({ step, open, onToggle }: ProcessRowProps) => (
           initial={{ height: 0, opacity: 0 }}
           animate={{ height: "auto", opacity: 1 }}
           exit={{ height: 0, opacity: 0 }}
-          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.45, ease: EASE }}
           className="overflow-hidden"
         >
           <div className="grid grid-cols-1 gap-6 px-6 pb-8 md:grid-cols-12 md:px-8">

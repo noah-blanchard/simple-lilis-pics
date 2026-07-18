@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, type Variants } from "motion/react";
+import { EASE } from "@/lib/motion";
 import type { Specialty } from "@/types";
 import { CatIcon } from "./Icons";
 
@@ -12,7 +13,7 @@ interface SpecialtyCardProps {
 // with the theme); motion only animates transforms + opacity. The card surface
 // (panel → accent) is an opacity overlay and the text recolours by cross-fading
 // two identical content layers — motion never owns a theme-dependent colour.
-const transition = { duration: 0.3, ease: [0.22, 1, 0.36, 1] } as const;
+const transition = { duration: 0.3, ease: EASE } as const;
 
 const cardVariants: Variants = {
   rest: { scale: 1, rotate: 0 },

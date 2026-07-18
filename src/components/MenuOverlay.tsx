@@ -17,7 +17,7 @@ interface MenuOverlayProps {
   onClose: () => void;
 }
 
-const EASE = [0.22, 1, 0.36, 1] as const;
+import { EASE } from "@/lib/motion";
 
 export const MenuOverlay = ({ open, onClose }: MenuOverlayProps) => {
   const t = useTranslations("nav");
@@ -86,7 +86,7 @@ export const MenuOverlay = ({ open, onClose }: MenuOverlayProps) => {
           role="dialog"
           aria-modal="true"
           aria-label={t("menu")}
-          className="grain fixed inset-0 z-[100] flex flex-col bg-ink text-fg"
+          className="grain fixed inset-0 z-[var(--z-menu)] flex flex-col bg-ink text-fg"
           variants={overlayVariants}
           initial="hidden"
           animate="visible"

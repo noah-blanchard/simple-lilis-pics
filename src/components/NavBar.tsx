@@ -3,6 +3,7 @@
 import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
+import { EASE } from "@/lib/motion";
 import { LocaleSwitcher } from "./LocaleSwitcher";
 import { MenuOverlay } from "./MenuOverlay";
 import { MenuToggle } from "./MenuToggle";
@@ -17,8 +18,8 @@ export const NavBar = () => {
       <motion.header
         initial={{ opacity: 0, y: -16 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
-        className="relative z-20 flex items-center justify-between px-6 pt-8 md:px-12"
+        transition={{ duration: 0.9, ease: EASE, delay: 0.15 }}
+        className="relative z-[var(--z-nav)] flex items-center justify-between px-6 pt-8 md:px-12"
       >
         {/* Brand mark (logotype — not translated) */}
         <a href="#" className="font-semibold text-[22px] italic tracking-tight">

@@ -10,7 +10,7 @@ import { Reveal } from "@/components/Reveal";
 import { TagLabel } from "@/components/TagLabel";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { Link } from "@/i18n/navigation";
-import { hoverColorTransition } from "@/lib/motion";
+import { EASE, hoverColorTransition } from "@/lib/motion";
 import { Footer } from "@/sections/Footer";
 import type { ResolvedProject } from "@/types/db";
 
@@ -90,7 +90,7 @@ export const PortfolioBento = ({ items }: PortfolioBentoProps) => {
       <motion.header
         initial={{ opacity: 0, y: -16 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
+        transition={{ duration: 0.9, ease: EASE, delay: 0.1 }}
         className="flex items-center justify-between px-6 pt-8 md:px-12"
       >
         <Link

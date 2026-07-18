@@ -13,7 +13,8 @@ interface ThemeToggleProps {
   className?: string;
 }
 
-const EASE = [0.22, 1, 0.36, 1] as const;
+import { EASE } from "@/lib/motion";
+
 const transition = { duration: 0.35, ease: EASE };
 
 export const ThemeToggle = ({
