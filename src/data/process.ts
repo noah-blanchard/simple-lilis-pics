@@ -19,6 +19,3 @@ export const processSteps: ProcessStepMeta[] = [
     img: "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=1200&q=80&auto=format&fit=crop",
   },
 ];
-
-// The step expanded by default in the reference.
-export const defaultProcessStep = "02";

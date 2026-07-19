@@ -1,26 +1,87 @@
+"use client";
+
+import { motion, useReducedMotion, type Variants } from "motion/react";
+import { EASE } from "@/lib/motion";
 import type { ProcessStep } from "@/types";
 
-/** Number badge + step title — shared by the desktop stacking card
- *  (ProcessCard) and the mobile accordion row (ProcessRow). */
-export const ProcessBadgeTitle = ({ step }: { step: ProcessStep }) => (
-  <>
-    <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-accent font-semibold text-[15px] text-on-accent">
-      {step.n}
-    </span>
-    <span className="truncate font-semibold text-2xl tracking-tight md:text-3xl">
-      {step.title}
-    </span>
-  </>
-);
+const listV: Variants = {
+  hide: {},
+  show: { transition: { staggerChildren: 0.08, delayChildren: 0.08 } },
+};
+const itemV: Variants = {
+  hide: { opacity: 0, x: -10 },
+  show: { opacity: 1, x: 0, transition: { duration: 0.5, ease: EASE } },
+};
+const dashV: Variants = {
+  hide: { scaleX: 0 },
+  show: { scaleX: 1, transition: { duration: 0.4, ease: EASE, delay: 0.12 } },
+};
 
-/** Body paragraph + bullet list — shared. `maxW` tunes the paragraph width to
- *  each layout (card body vs accordion row). */
+/** Bulleted list where each row slides in and its accent dash draws outward.
+ *  Desktop passes `active` (the parent step's centered state) to drive the
+ *  reveal; mobile omits it and reveals on scroll into view. */
+export const ProcessBullets = ({
+  items,
+  active,
+}: {
+  items: string[];
+  active?: boolean;
+}) => {
+  const reduce = useReducedMotion();
+
+  if (reduce) {
+    return (
+      <ul className="mt-6 space-y-2.5 text-[14px] text-fg/65">
+        {items.map((item) => (
+          <li key={item} className="flex gap-3">
+            <span className="mt-2.5 h-px w-4 shrink-0 bg-accent" />
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    );
+  }
+
+  // Controlled by `active` (desktop) or by scroll-into-view (mobile).
+  const activation =
+    active === undefined
+      ? ({
+          whileInView: "show",
+          viewport: { once: true, margin: "-60px" },
+        } as const)
+      : ({ animate: active ? "show" : "hide" } as const);
+
+  return (
+    <motion.ul
+      initial="hide"
+      variants={listV}
+      {...activation}
+      className="mt-6 space-y-2.5 text-[14px] text-fg/65"
+    >
+      {items.map((item) => (
+        <motion.li key={item} variants={itemV} className="flex gap-3">
+          <motion.span
+            variants={dashV}
+            className="mt-2.5 h-px w-4 shrink-0 origin-left bg-accent"
+          />
+          <span>{item}</span>
+        </motion.li>
+      ))}
+    </motion.ul>
+  );
+};
+
+/** Body paragraph + bullet list — shared by the desktop step index
+ *  (ProcessStepItem) and the mobile frame (ProcessFrame). `maxW` tunes the
+ *  paragraph width; `active` forwards the desktop centered-state to the list. */
 export const ProcessBody = ({
   step,
   maxW = "max-w-[460px]",
+  active,
 }: {
   step: ProcessStep;
   maxW?: string;
+  active?: boolean;
 }) => (
   <>
     <p
@@ -28,13 +89,6 @@ export const ProcessBody = ({
     >
       {step.body}
     </p>
-    <ul className="mt-6 space-y-2 text-[14px] text-fg/65">
-      {step.bullets.map((bullet) => (
-        <li key={bullet} className="flex gap-3">
-          <span className="text-accent">•</span>
-          <span>{bullet}</span>
-        </li>
-      ))}
-    </ul>
+    <ProcessBullets items={step.bullets} active={active} />
   </>
 );
