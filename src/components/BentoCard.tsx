@@ -6,6 +6,7 @@ import { Link } from "@/i18n/navigation";
 import { EASE, hoverRevealTransition } from "@/lib/motion";
 import type { ResolvedProject } from "@/types/db";
 import { IconArrow } from "./Icons";
+import { ProjectCaption } from "./ProjectCaption";
 import { RoundedImage } from "./RoundedImage";
 
 interface BentoCardProps {
@@ -80,24 +81,13 @@ export const BentoCard = ({
               initial={false}
               transition={hoverRevealTransition}
             >
-              <div className="mb-1 flex items-center gap-2">
-                <span
-                  className={`h-2.5 w-2.5 rounded-full ${
-                    project.featured ? "bg-accent" : "bg-fg/70"
-                  }`}
-                />
-                <h3
-                  className={`font-semibold text-[18px] tracking-tight md:text-[22px] ${
-                    project.featured ? "text-accent" : "text-fg"
-                  }`}
-                >
-                  {title}
-                </h3>
-              </div>
-              <div className="tag-mono pl-4.5 text-fg/70 uppercase">
-                {project.year}
-                {project.tags && ` — ${project.tags}`}
-              </div>
+              <ProjectCaption
+                title={title}
+                featured={project.featured}
+                year={project.year}
+                tags={project.tags}
+                variant="bento"
+              />
             </motion.div>
           </div>
         </RoundedImage>

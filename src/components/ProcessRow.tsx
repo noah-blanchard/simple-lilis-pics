@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { EASE } from "@/lib/motion";
 import type { ProcessStep } from "@/types";
 import { IconMinus, IconPlus } from "./Icons";
+import { ProcessBadgeTitle, ProcessBody } from "./ProcessParts";
 import { RoundedImage } from "./RoundedImage";
 
 interface ProcessRowProps {
@@ -24,12 +25,7 @@ export const ProcessRow = ({ step, open, onToggle }: ProcessRowProps) => (
       className="flex w-full items-center justify-between gap-6 px-6 py-6 text-left md:px-8"
     >
       <div className="flex min-w-0 items-center gap-5 md:gap-7">
-        <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-accent font-semibold text-[15px] text-on-accent">
-          {step.n}
-        </span>
-        <span className="truncate font-semibold text-2xl tracking-tight md:text-3xl">
-          {step.title}
-        </span>
+        <ProcessBadgeTitle step={step} />
       </div>
       <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-panel2 text-fg">
         {open ? (
@@ -51,17 +47,7 @@ export const ProcessRow = ({ step, open, onToggle }: ProcessRowProps) => (
         >
           <div className="grid grid-cols-1 gap-6 px-6 pb-8 md:grid-cols-12 md:px-8">
             <div className="flex flex-col justify-between md:col-span-5 md:pl-[68px]">
-              <p className="max-w-[420px] text-[15px] text-fg/80 leading-relaxed md:text-[16px]">
-                {step.body}
-              </p>
-              <ul className="mt-6 space-y-2 text-[14px] text-fg/65">
-                {step.bullets.map((bullet) => (
-                  <li key={bullet} className="flex gap-3">
-                    <span className="text-accent">•</span>
-                    <span>{bullet}</span>
-                  </li>
-                ))}
-              </ul>
+              <ProcessBody step={step} maxW="max-w-[420px]" />
             </div>
             <div className="md:col-span-7">
               <RoundedImage

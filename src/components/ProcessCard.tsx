@@ -7,6 +7,7 @@ import {
   useTransform,
 } from "motion/react";
 import type { ProcessStep } from "@/types";
+import { ProcessBadgeTitle, ProcessBody } from "./ProcessParts";
 import { RoundedImage } from "./RoundedImage";
 
 interface ProcessCardProps {
@@ -59,12 +60,7 @@ export const ProcessCard = ({
         className="flex items-center gap-5 px-6 md:gap-7 md:px-8"
         style={{ height: `${headerH}px` }}
       >
-        <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-accent font-semibold text-[15px] text-on-accent">
-          {step.n}
-        </span>
-        <span className="truncate font-semibold text-2xl tracking-tight md:text-3xl">
-          {step.title}
-        </span>
+        <ProcessBadgeTitle step={step} />
       </div>
 
       {/* Body — read while the card is current, hidden behind the next once covered. */}
@@ -78,17 +74,7 @@ export const ProcessCard = ({
           />
         </div>
         <div className="col-span-7 flex flex-col justify-center">
-          <p className="max-w-[460px] text-[15px] text-fg/80 leading-relaxed md:text-[16px]">
-            {step.body}
-          </p>
-          <ul className="mt-6 space-y-2 text-[14px] text-fg/65">
-            {step.bullets.map((bullet) => (
-              <li key={bullet} className="flex gap-3">
-                <span className="text-accent">•</span>
-                <span>{bullet}</span>
-              </li>
-            ))}
-          </ul>
+          <ProcessBody step={step} />
         </div>
       </div>
 

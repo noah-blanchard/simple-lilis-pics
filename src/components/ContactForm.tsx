@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { hoverColorTransition } from "@/lib/motion";
@@ -20,17 +20,21 @@ export const ContactForm = ({ onSubmit }: ContactFormProps) => {
   const t = useTranslations("contact");
   const [submitted, setSubmitted] = useState(false);
 
-  const schema = z.object({
-    name: z.string().min(1, t("errors.nameRequired")),
-    email: z
-      .string()
-      .min(1, t("errors.emailRequired"))
-      .email(t("errors.emailInvalid")),
-    message: z
-      .string()
-      .min(1, t("errors.messageRequired"))
-      .min(10, t("errors.messageMin")),
-  });
+  const schema = useMemo(
+    () =>
+      z.object({
+        name: z.string().min(1, t("errors.nameRequired")),
+        email: z
+          .string()
+          .min(1, t("errors.emailRequired"))
+          .email(t("errors.emailInvalid")),
+        message: z
+          .string()
+          .min(1, t("errors.messageRequired"))
+          .min(10, t("errors.messageMin")),
+      }),
+    [t],
+  );
 
   const {
     register,

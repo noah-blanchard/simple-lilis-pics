@@ -1,9 +1,9 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { InfiniteRow } from "@/components/InfiniteRow";
 import { SectionHeader } from "@/components/SectionHeader";
 import { SpecialtyCard } from "@/components/SpecialtyCard";
-import { SpecialtyCarouselRow } from "@/components/SpecialtyCarouselRow";
 import { specialties } from "@/data/specialties";
 import type { Specialty as SpecialtyType } from "@/types";
 
@@ -32,8 +32,26 @@ export const Specialty = () => {
 
       {/* Desktop: two infinite carousel rows, scrolling in opposite directions. */}
       <div className="mt-16 hidden flex-col gap-5 md:flex">
-        <SpecialtyCarouselRow items={items.slice(0, 4)} direction="left" />
-        <SpecialtyCarouselRow items={items.slice(4)} direction="right" />
+        <InfiniteRow
+          items={items.slice(0, 4)}
+          direction="left"
+          repeat={4}
+          renderItem={(item) => (
+            <div className="w-[300px]">
+              <SpecialtyCard specialty={item} />
+            </div>
+          )}
+        />
+        <InfiniteRow
+          items={items.slice(4)}
+          direction="right"
+          repeat={4}
+          renderItem={(item) => (
+            <div className="w-[300px]">
+              <SpecialtyCard specialty={item} />
+            </div>
+          )}
+        />
       </div>
     </section>
   );

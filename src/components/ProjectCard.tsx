@@ -10,6 +10,7 @@ import {
 } from "@/lib/motion";
 import type { ResolvedProject } from "@/types/db";
 import { IconArrow } from "./Icons";
+import { ProjectCaption } from "./ProjectCaption";
 import { RoundedImage } from "./RoundedImage";
 
 const MotionLink = motion.create(Link);
@@ -65,24 +66,13 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => {
       </Link>
       <div className="flex items-start justify-between gap-4">
         <div>
-          <div className="mb-1 flex items-center gap-2">
-            <span
-              className={`h-2.5 w-2.5 rounded-full ${
-                project.featured ? "bg-accent" : "bg-fg/70"
-              }`}
-            />
-            <h3
-              className={`font-semibold text-[20px] tracking-tight md:text-[22px] ${
-                project.featured ? "text-accent" : "text-fg"
-              }`}
-            >
-              {title}
-            </h3>
-          </div>
-          <div className="pl-4.5 text-[13px] text-fg/55">
-            {project.year}
-            {project.tags && ` — ${project.tags}`}
-          </div>
+          <ProjectCaption
+            title={title}
+            featured={project.featured}
+            year={project.year}
+            tags={project.tags}
+            variant="card"
+          />
         </div>
         <MotionLink
           href={`/portfolio/${project.id}`}

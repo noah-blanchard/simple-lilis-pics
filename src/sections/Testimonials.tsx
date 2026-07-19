@@ -1,10 +1,10 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { InfiniteRow } from "@/components/InfiniteRow";
 import { Reveal } from "@/components/Reveal";
 import { ReviewCard } from "@/components/ReviewCard";
 import { SectionHeader } from "@/components/SectionHeader";
-import { TestimonialsCarousel } from "@/components/TestimonialsCarousel";
 import { reviews } from "@/data/reviews";
 import type { Review } from "@/types";
 
@@ -39,7 +39,11 @@ export const Testimonials = () => {
 
       {/* Desktop: auto infinite marquee, pauses on hover. */}
       <Reveal delay={0.1} className="mt-14 hidden md:block">
-        <TestimonialsCarousel items={items} direction="left" />
+        <InfiniteRow
+          items={items}
+          direction="left"
+          renderItem={(review) => <ReviewCard review={review} />}
+        />
       </Reveal>
     </section>
   );

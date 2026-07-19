@@ -149,11 +149,17 @@ export const PillButton = ({
     className: `${base} ${sizeClass[size]} ${cfg.bg} ${cfg.extra ?? ""} ${className}`,
   };
 
+  const inner = (
+    <>
+      {fill}
+      {content}
+    </>
+  );
+
   if (href) {
     return (
       <motion.a href={href} {...rootProps}>
-        {fill}
-        {content}
+        {inner}
       </motion.a>
     );
   }
@@ -167,8 +173,7 @@ export const PillButton = ({
       aria-controls={ariaControls}
       {...rootProps}
     >
-      {fill}
-      {content}
+      {inner}
     </motion.button>
   );
 };

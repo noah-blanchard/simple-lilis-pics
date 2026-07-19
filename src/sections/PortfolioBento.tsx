@@ -2,7 +2,6 @@
 
 import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
-import { useEffect, useState } from "react";
 import { BentoCard } from "@/components/BentoCard";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 import { navTextControl } from "@/components/nav/navControl";
@@ -10,6 +9,7 @@ import { Reveal } from "@/components/Reveal";
 import { TagLabel } from "@/components/TagLabel";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { Link } from "@/i18n/navigation";
+import { packColumns, useColumnCount } from "@/lib/bento";
 import { EASE, hoverColorTransition } from "@/lib/motion";
 import { Footer } from "@/sections/Footer";
 import type { ResolvedProject } from "@/types/db";
@@ -20,50 +20,6 @@ const navHover = {
   backgroundColor: "var(--inverse)",
   color: "var(--on-inverse)",
 } as const;
-
-// Portrait covers are ~1.78× taller than landscape for the same column width.
-// We use this ratio to estimate column heights for the packing algorithm.
-const PORTRAIT_RATIO = 16 / 9; // height = width × ratio
-const LANDSCAPE_RATIO = 9 / 16;
-
-/** Distribute items across N columns using a shortest-column-first algorithm.
- *  This preserves reading order within each column and avoids CSS `columns`
- *  (which breaks tab order and motion stagger). */
-function packColumns<T extends { cover: { orientation: string } | null }>(
-  items: T[],
-  cols: number,
-): T[][] {
-  const columns: T[][] = Array.from({ length: cols }, () => []);
-  const heights: number[] = new Array(cols).fill(0);
-
-  for (const item of items) {
-    const shortest = heights.indexOf(Math.min(...heights));
-    columns[shortest].push(item);
-    const ratio =
-      item.cover?.orientation === "portrait" ? PORTRAIT_RATIO : LANDSCAPE_RATIO;
-    heights[shortest] += ratio;
-  }
-
-  return columns;
-}
-
-function useColumnCount(): number {
-  const [cols, setCols] = useState(1);
-
-  useEffect(() => {
-    const update = () => {
-      if (window.matchMedia("(min-width: 1024px)").matches) setCols(3);
-      else if (window.matchMedia("(min-width: 640px)").matches) setCols(2);
-      else setCols(1);
-    };
-    update();
-    const mq = window.matchMedia("(min-width: 640px)");
-    mq.addEventListener("change", update);
-    return () => mq.removeEventListener("change", update);
-  }, []);
-
-  return cols;
-}
 
 interface PortfolioBentoProps {
   items: ResolvedProject[];
