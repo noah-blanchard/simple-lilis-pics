@@ -1,3 +1,4 @@
+import { cache } from "react";
 import type { Locale } from "@/i18n/routing";
 import { PROJECT_SELECT, parseProject, parseProjects } from "@/lib/data/parse";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -43,19 +44,20 @@ export async function getAllProjects(
   return rows.map((row) => resolveProject(row, locale));
 }
 
-/** /portfolio/[id] — single project. Returns null if not found (caller notFound()). */
-export async function getProject(
-  id: string,
-  locale: Locale,
-): Promise<ResolvedProject | null> {
-  const supabase = await createSupabaseServerClient();
-  const { data, error } = await supabase
-    .from("projects")
-    .select(PROJECT_SELECT)
-    .eq("id", id)
-    .maybeSingle();
+/** /portfolio/[id] — single project. Returns null if not found (caller notFound()).
+ *  Wrapped in React `cache` so the page and its generateMetadata (same request)
+ *  share one DB round-trip. */
+export const getProject = cache(
+  async (id: string, locale: Locale): Promise<ResolvedProject | null> => {
+    const supabase = await createSupabaseServerClient();
+    const { data, error } = await supabase
+      .from("projects")
+      .select(PROJECT_SELECT)
+      .eq("id", id)
+      .maybeSingle();
 
-  if (error) throw new Error(`Failed to load project: ${error.message}`);
-  if (!data) return null;
-  return resolveProject(parseProject(data), locale);
-}
+    if (error) throw new Error(`Failed to load project: ${error.message}`);
+    if (!data) return null;
+    return resolveProject(parseProject(data), locale);
+  },
+);

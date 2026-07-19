@@ -83,7 +83,8 @@
     "allTitle": "Toutes les photos que j'ai gardées.",
     "worksLabel": "photos",
     "backHome": "Retour à l'accueil",
-    "untitled": "Sans titre"
+    "untitled": "Sans titre",
+    "notFound": "Page introuvable"
   },
   "process": {
     "tag": "MA FAÇON DE TRAVAILLER",
