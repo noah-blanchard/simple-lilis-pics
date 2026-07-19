@@ -30,7 +30,7 @@ function HomeSections() {
       <Specialty />
       <Featured />
       <Process />
-      <Pricing />
+      {/* <Pricing /> */}
       <Testimonials />
       <Contact />
       <Footer />
