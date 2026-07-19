@@ -24,16 +24,16 @@
     "kicker": "Photography by Lili",
     "byline": "LILI MARCHETTI",
     "location": "MONTREAL, CANADA",
-    "titleLine1": "Where the light",
-    "titleLine2": "turns into a story",
-    "intro": "I'm Lili — an independent photographer working mostly on my own. I shoot portraits, streets and the small, true moments in between, for people, couples, brands and the occasional quiet tuesday.",
+    "titleLine1": "Beauty Knows",
+    "titleLine2": "No Limits",
+    "intro": "You don't need to know how to pose. You only need to be yourself. I'll take care of the rest.",
     "cta": "Say hello"
   },
   "about": {
     "tag": "ABOUT ME",
-    "titleLine1": "Frames that breathe",
-    "titleLine2": "louder than words.",
-    "body": "Hi, I'm Lili. I picked up a camera twelve years ago and I still get that little flutter when the light lands just right. Today I work mostly on my own — a face in golden hour, hands resting on a table, a street after the rain, two people at the start of something. No big production, no crew, just me, my camera and a careful look at whoever is in front of me.",
+    "titleLine1": "More than photographs,",
+    "titleLine2": "Memories you can feel.",
+    "body": "Hi, I’m Lili, a photographer based in Montreal. Inspired by cinematic storytelling, I create timeless images filled with genuine emotion. My priority is making every session feel relaxed, comfortable and natural, because the best memories are made when you’re simply yourself.",
     "readMore": "More about me"
   },
   "specialty": {
@@ -88,43 +88,42 @@
   },
   "process": {
     "tag": "MY WAY OF WORKING",
-    "titleLine1": "It's just me,",
-    "titleLine2": "and that matters.",
+    "titleLine1": "A relaxed experience,",
+    "titleLine2": "from start to finish.",
     "steps": {
       "01": {
-        "title": "We talk first",
-        "body": "A coffee, a call, a long message — we figure out what you actually want, and whether we're a good fit.",
+        "title": "We plan together",
+        "body": "Every session starts with a conversation. We’ll discuss your vision, preferred style and location through messages, a phone call or a video chat, whatever feels easiest for you.",
         "bullets": [
-          "A relaxed intro call",
-          "You share references, I ask questions",
-          "We pick a date and a place together"
+          "We’ll choose the perfect location together",
+          "We’ll define the style and mood",
+          "Messages, phone or video consultation available"
         ]
       },
       "02": {
-        "title": "I come prepared",
-        "body": "By the time I show up, I've thought about the light, the spot and the mood. Less guessing, more breathing.",
+        "title": "I prepare everything",
+        "body": "I’ll create a personalized shooting plan based on your ideas. I’ll also review your outfits, offer styling advice and, especially for street photography, prepare poses and prompts that suit you naturally.",
         "bullets": [
-          "A short moodboard, just for you",
-          "I scout the place if I can",
-          "A loose plan, kept flexible on the day"
+          "Outfit recommendations before the session",
+          "Personalized shooting plan",
+          "Natural posing guidance prepared in advance"
         ]
       },
       "03": {
         "title": "We shoot",
-        "body": "Calm pace, gentle direction, room to just be. I'm there to notice, not to perform.",
+        "body": "On the day of your session, there’s no pressure to perform. I’ll guide you naturally while keeping the atmosphere relaxed, comfortable and fun.",
         "bullets": [
-          "Soft prompts if you're not used to the camera",
-          "Plenty of breaks, no rush",
-          "We take our time until it feels right"
+          "Relaxed, guided experience",
+          "No modeling experience needed"
         ]
       },
       "04": {
-        "title": "You get the photos",
-        "body": "I edit by hand, send a first selection, and we do one round of small tweaks. Then they're yours.",
+        "title": "I craft every image",
+        "body": "Every final photograph is carefully edited by hand. My cinematic color grading is an essential part of my style, giving your images a timeless, emotional look while staying true to the moment.",
         "bullets": [
-          "A private gallery, easy to share",
-          "High-res for print, web-sized for online",
-          "One round of tweaks, no fuss"
+          "Hand-edited with care",
+          "Signature cinematic color grading",
+          "High-resolution online gallery"
         ]
       }
     }
@@ -207,9 +206,9 @@
   },
   "contact": {
     "tag": "SAY HELLO",
-    "titleLine1": "Tell me",
-    "titleLine2": "what you're dreaming up.",
-    "description": "A portrait, a wedding, a small idea — write a few lines and I'll come back to you within two days.",
+    "titleLine1": "Let's create something",
+    "titleLine2": "beautiful together.",
+    "description": "A portrait, a wedding, a brand, or something completely unique. Tell me about your vision, and I'll get back to you within 24 hours.",
     "name": { "label": "Name", "placeholder": "Your name" },
     "email": { "label": "Email", "placeholder": "you@email.com" },
     "message": {
@@ -240,7 +239,7 @@
       "Rates",
       "Dashboard"
     ],
-    "social": ["Instagram", "TikTok", "RedNote", "LinkedIn"],
+    "social": ["Instagram", "TikTok", "Douyin (抖音)"],
     "copyright": "© 2026 Lili Marchetti. Site by Noah Blanchard.",
     "watermark": "LILIS·PICS"
   }

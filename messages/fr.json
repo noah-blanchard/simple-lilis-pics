@@ -24,16 +24,16 @@
     "kicker": "Photographie par Lili",
     "byline": "LILI MARCHETTI",
     "location": "MONTRÉAL, QUÉBEC",
-    "titleLine1": "Là où la lumière",
-    "titleLine2": "devient une histoire",
-    "intro": "Je m'appelle Lili — photographe indépendante, je travaille la plupart du temps seule. Je shoote des portraits, des rues et tous les petits instants vrais entre les deux, pour des particuliers, des couples, des marques, et parfois juste un mardi.",
+    "titleLine1": "La beauté",
+    "titleLine2": "n'a pas de limites",
+    "intro": "Vous n'avez pas besoin de savoir comment poser. Vous n'avez qu'à être vous-même. Je m'occupe du reste.",
     "cta": "Me dire bonjour"
   },
   "about": {
     "tag": "À PROPOS DE MOI",
-    "titleLine1": "Des images qui respirent",
-    "titleLine2": "plus fort que les mots.",
-    "body": "Bonjour, moi c'est Lili. J'ai commencé la photo il y a douze ans, et je ressens toujours ce petit frisson quand la lumière tombe juste. Aujourd'hui je travaille seule, à mon rythme — un visage en fin de journée, des mains posées sur une table, une rue après la pluie, deux personnes au tout début. Pas de grosse production, pas d'équipe : juste moi, mon appareil, et un regard attentif sur celles et ceux qui sont en face.",
+    "titleLine1": "Plus que des photographies,",
+    "titleLine2": "des souvenirs qu'on ressent.",
+    "body": "Bonjour, je suis Lili, photographe basée à Montréal. Inspirée par la narration cinématographique, je crée des images intemporelles remplies d'émotion authentique. Ma priorité est de rendre chaque séance détendue, confortable et naturelle, car les plus beaux souvenirs se créent quand on est simplement soi-même.",
     "readMore": "En savoir plus sur moi"
   },
   "specialty": {
@@ -88,43 +88,42 @@
   },
   "process": {
     "tag": "MA FAÇON DE TRAVAILLER",
-    "titleLine1": "Je suis seule,",
-    "titleLine2": "et c'est important.",
+    "titleLine1": "Une expérience détendue,",
+    "titleLine2": "du début à la fin.",
     "steps": {
       "01": {
-        "title": "On en parle",
-        "body": "Un café, un appel, un long message — on voit ce que vous voulez vraiment, et si le courant passe.",
+        "title": "On planifie ensemble",
+        "body": "Chaque séance commence par une conversation. Nous discuterons de votre vision, de votre style préféré et du lieu par messages, appel téléphonique ou vidéo, comme vous le préférez.",
         "bullets": [
-          "Un premier échange détendu",
-          "Vous partagez des références, je pose des questions",
-          "On choisit ensemble une date et un lieu"
+          "Nous choisirons le lieu parfait ensemble",
+          "Nous définirons le style et l'ambiance",
+          "Messages, appel ou consultation vidéo disponibles"
         ]
       },
       "02": {
-        "title": "Je prépare",
-        "body": "Quand j'arrive, j'ai déjà pensé la lumière, l'endroit et l'ambiance. Moins d'à-peu-près, plus de respiration.",
+        "title": "Je prépare tout",
+        "body": "Je créerai un plan de shooting personnalisé basé sur vos idées. Je réviserai également vos tenues, offrirai des conseils de style et, surtout pour la photographie de rue, préparerai des poses et des indices qui vous conviennent naturellement.",
         "bullets": [
-          "Un petit moodboard, juste pour vous",
-          "Je repère le lieu si je peux",
-          "Un plan souple, adaptable le jour J"
+          "Recommandations de tenues avant la séance",
+          "Plan de shooting personnalisé",
+          "Conseils de posage naturel préparés à l'avance"
         ]
       },
       "03": {
         "title": "On shoote",
-        "body": "Allure calme, indications douces, la place d'être vous-même. Je suis là pour observer, pas pour performer.",
+        "body": "Le jour de votre séance, il n'y a aucune pression pour performer. Je vous guiderai naturellement en gardant l'ambiance détendue, confortable et amusante.",
         "bullets": [
-          "Des pistes si vous n'avez pas l'habitude",
-          "Des pauses, jamais de course",
-          "Le temps qu'il faut pour que ça sonne juste"
+          "Une expérience détendue et guidée",
+          "Aucune expérience de mannequinat nécessaire"
         ]
       },
       "04": {
-        "title": "Vous recevez les photos",
-        "body": "J'édite à la main, j'envoie une première sélection, et on fait une petite série d'ajustements. Ensuite elles sont à vous.",
+        "title": "Je retouche chaque image",
+        "body": "Chaque photographie finale est soigneusement retouchée à la main. Ma correction des couleurs cinématographique est une partie essentielle de mon style, donnant à vos images un aspect intemporel et émotionnel tout en restant fidèle au moment.",
         "bullets": [
-          "Une galerie privée, facile à partager",
-          "Haute définition pour l'impression, versions web en ligne",
-          "Une seule passe de retouches, en douceur"
+          "Retouchée avec soin",
+          "Correction des couleurs cinématographique signature",
+          "Galerie en ligne haute résolution"
         ]
       }
     }
@@ -207,9 +206,9 @@
   },
   "contact": {
     "tag": "ME DIRE BONJOUR",
-    "titleLine1": "Dites-moi",
-    "titleLine2": "ce que vous imaginez.",
-    "description": "Un portrait, un mariage, une petite idée — écrivez-moi en quelques lignes, je vous réponds sous deux jours.",
+    "titleLine1": "Créons quelque chose",
+    "titleLine2": "de beau ensemble.",
+    "description": "Un portrait, un mariage, une marque ou quelque chose d'entièrement unique. Parlez-moi de votre vision, et je vous répondrai dans les 24 heures.",
     "name": { "label": "Nom", "placeholder": "Votre nom" },
     "email": { "label": "E-mail", "placeholder": "vous@email.com" },
     "message": {
@@ -240,7 +239,7 @@
       "Tarifs",
       "Tableau de bord"
     ],
-    "social": ["Instagram", "TikTok", "RedNote", "LinkedIn"],
+    "social": ["Instagram", "TikTok", "Douyin (抖音)"],
     "copyright": "© 2026 Lili Marchetti. Site réalisé par Noah Blanchard.",
     "watermark": "LILIS·PICS"
   }
