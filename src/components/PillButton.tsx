@@ -71,9 +71,9 @@ const config: Record<PillVariant, VariantConfig> = {
   },
   danger: {
     bg: "bg-transparent",
-    fill: "bg-red-500",
+    fill: "bg-danger",
     textRest: "text-fg",
-    textHover: "text-white",
+    textHover: "text-on-danger",
     extra: "border border-fg/15",
   },
 };

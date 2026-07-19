@@ -119,7 +119,7 @@ export default function AdminDashboard() {
       {isLoading && <PhotoSkeletonGrid />}
 
       {isError && (
-        <p className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-[14px] text-red-300">
+        <p className="rounded-xl border border-danger/30 bg-danger/10 px-4 py-3 text-[14px] text-danger">
           {(error as Error).message}
         </p>
       )}
@@ -244,7 +244,7 @@ function AdminProjectCard({
             type="button"
             disabled={busy}
             onClick={() => setConfirmOpen(true)}
-            className="ml-auto rounded-lg border border-line px-2.5 py-1.5 text-[12px] text-fg/60 transition-colors hover:border-red-500 hover:bg-red-500 hover:text-white disabled:opacity-40"
+            className="ml-auto rounded-lg border border-line px-2.5 py-1.5 text-[12px] text-fg/60 transition-colors hover:border-danger hover:bg-danger hover:text-on-danger disabled:opacity-40"
           >
             Delete
           </button>

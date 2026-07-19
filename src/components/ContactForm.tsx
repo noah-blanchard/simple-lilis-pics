@@ -55,7 +55,7 @@ export const ContactForm = ({ onSubmit }: ContactFormProps) => {
   const fieldClass = FIELD_CLASS;
   const focusBorder = FIELD_FOCUS;
   const labelClass = "tag-mono mb-2 block uppercase";
-  const errorClass = "mt-2 text-[13px] text-red-400";
+  const errorClass = "mt-2 text-[13px] text-danger";
 
   return (
     <form

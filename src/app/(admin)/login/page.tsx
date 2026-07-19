@@ -63,7 +63,7 @@ export default function LoginPage() {
   const fieldClass = FIELD_CLASS;
   const focusBorder = FIELD_FOCUS;
   const labelClass = "tag-mono mb-2 block uppercase text-fg/70";
-  const errorClass = "mt-2 text-[13px] text-red-400";
+  const errorClass = "mt-2 text-[13px] text-danger";
 
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden px-6">
@@ -213,7 +213,7 @@ export default function LoginPage() {
                       animate={{ opacity: 1, height: "auto", marginBottom: 20 }}
                       exit={{ opacity: 0, height: 0, marginBottom: 0 }}
                       transition={{ duration: 0.3, ease: EASE }}
-                      className="overflow-hidden rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-[14px] text-red-300"
+                      className="overflow-hidden rounded-xl border border-danger/30 bg-danger/10 px-4 py-3 text-[14px] text-danger"
                     >
                       {authError}
                     </motion.p>

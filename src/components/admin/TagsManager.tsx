@@ -102,7 +102,7 @@ function TagRowEditor({ tag }: { tag: TagRow }) {
         type="button"
         aria-label={`Delete ${tag.label_en}`}
         onClick={() => setConfirmOpen(true)}
-        className="shrink-0 rounded-lg border border-line px-3 py-2 text-[12px] text-fg/60 transition-colors hover:border-red-500 hover:bg-red-500 hover:text-white"
+        className="shrink-0 rounded-lg border border-line px-3 py-2 text-[12px] text-fg/60 transition-colors hover:border-danger hover:bg-danger hover:text-on-danger"
       >
         ✕
       </button>
@@ -175,7 +175,7 @@ function AddTagRow() {
         </button>
       </div>
       {add.isError && (
-        <p className="mt-2 text-[13px] text-red-400">
+        <p className="mt-2 text-[13px] text-danger">
           {(add.error as Error).message}
         </p>
       )}

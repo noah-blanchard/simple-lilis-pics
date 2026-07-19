@@ -126,14 +126,14 @@ export function TranslatableField({
       </div>
 
       {phase === "confirm" && (
-        <p className="mt-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 text-[12px] text-amber-300">
+        <p className="mt-1.5 rounded-lg border border-warning/30 bg-warning/10 px-3 py-1.5 text-[12px] text-warning">
           This will overwrite the current {LANGUAGE_LABELS[to]} {kind}. Click
           the sparkle again to confirm.
         </p>
       )}
 
       {mutation.isError && (
-        <p className="mt-1.5 text-[12px] text-red-400">
+        <p className="mt-1.5 text-[12px] text-danger">
           {(mutation.error as Error).message}
         </p>
       )}

@@ -22,7 +22,7 @@ export function TranslateButton({
   onClick,
 }: TranslateButtonProps) {
   const color =
-    state === "confirm" ? "text-amber-400" : "text-fg/40 hover:text-accent";
+    state === "confirm" ? "text-warning" : "text-fg/40 hover:text-accent";
 
   return (
     <button

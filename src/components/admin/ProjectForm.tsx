@@ -526,7 +526,7 @@ export function ProjectForm({
           )}
         </Reorder.Group>
       )}
-      {fileError && <p className="text-[13px] text-red-400">{fileError}</p>}
+      {fileError && <p className="text-[13px] text-danger">{fileError}</p>}
     </div>
   );
 
@@ -562,7 +562,7 @@ export function ProjectForm({
           </button>
         </div>
         {bulkError && (
-          <p className="w-full text-[12px] text-red-400">{bulkError}</p>
+          <p className="w-full text-[12px] text-danger">{bulkError}</p>
         )}
       </div>
 
@@ -716,13 +716,13 @@ export function ProjectForm({
   const footer = (
     <div className="shrink-0 pt-5">
       {mutation.isError && !is413Error && (
-        <p className="mb-4 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-[14px] text-red-300">
+        <p className="mb-4 rounded-xl border border-danger/30 bg-danger/10 px-4 py-3 text-[14px] text-danger">
           {(mutation.error as Error).message}
         </p>
       )}
 
       {is413Error && (
-        <div className="mb-4 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-[14px] text-amber-300">
+        <div className="mb-4 rounded-xl border border-warning/30 bg-warning/10 px-4 py-3 text-[14px] text-warning">
           <p className="mb-2">
             Request too large — the photos couldn&apos;t be uploaded in one
             batch.
@@ -775,7 +775,7 @@ export function ProjectForm({
               </>
             ) : seqError ? (
               <>
-                <p className="text-[14px] text-red-400">{seqError}</p>
+                <p className="text-[14px] text-danger">{seqError}</p>
                 <PillButton
                   type="button"
                   variant="light"

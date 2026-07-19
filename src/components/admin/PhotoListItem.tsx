@@ -86,7 +86,7 @@ export function PhotoListItem({
             <button
               type="button"
               onClick={onRemove}
-              className="ml-auto rounded-lg border border-line px-2 py-1 text-[11px] text-fg/60 transition-colors hover:border-red-500 hover:text-red-400"
+              className="ml-auto rounded-lg border border-line px-2 py-1 text-[11px] text-fg/60 transition-colors hover:border-danger hover:text-danger"
             >
               Remove
             </button>

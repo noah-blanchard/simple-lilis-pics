@@ -15,6 +15,12 @@
   --color-inverse: var(--inverse);
   --color-on-inverse: var(--on-inverse);
   --color-scrim: var(--scrim);
+  --color-line-strong: var(--line-strong);
+  --color-danger: var(--danger);
+  --color-on-danger: var(--on-danger);
+  --color-warning: var(--warning);
+  --color-on-warning: var(--on-warning);
+  --color-success: var(--accent);
 
   /* Card radius */
   --radius-card: 28px;

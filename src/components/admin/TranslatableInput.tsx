@@ -100,14 +100,14 @@ export function TranslatableInput({
       </div>
 
       {phase === "confirm" && (
-        <p className="mt-1 text-[11px] text-amber-400">
+        <p className="mt-1 text-[11px] text-warning">
           Overwrite {LANGUAGE_LABELS[to]}? Click the sparkle again to
           confirm.
         </p>
       )}
 
       {mutation.isError && (
-        <p className="mt-1 text-[11px] text-red-400">
+        <p className="mt-1 text-[11px] text-danger">
           {(mutation.error as Error).message}
         </p>
       )}
