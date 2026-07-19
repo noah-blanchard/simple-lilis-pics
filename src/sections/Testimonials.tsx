@@ -22,7 +22,8 @@ export const Testimonials = () => {
     <section className="overflow-hidden py-24 md:py-32">
       <SectionHeader
         tag={t("tag")}
-        lines={[t("titleLine1"), t("titleLine2")]}
+        titleBase={t("titleBase")}
+        titleAccent={t("titleAccent")}
       />
 
       {/* Mobile: manual swipe carousel (layout unchanged). */}

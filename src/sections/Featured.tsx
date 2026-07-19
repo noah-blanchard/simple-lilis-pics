@@ -24,7 +24,8 @@ export const Featured = async () => {
               className="display mt-3 text-4xl md:text-6xl"
               style={{ textWrap: "balance" }}
             >
-              {t("title")}
+              <span>{t("titleBase")}</span>
+              <span className="text-accent">{t("titleAccent")}</span>
             </h2>
           </div>
           <Link

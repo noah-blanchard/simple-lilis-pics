@@ -24,22 +24,22 @@
     "kicker": "Photographie par Lili",
     "byline": "LILI MARCHETTI",
     "location": "MONTRÉAL, QUÉBEC",
-    "titleLine1": "La beauté",
-    "titleLine2": "n'a pas de limites",
+    "titleLine1": "La **beauté**",
+    "titleLine2": "n'a pas de **limites**",
     "intro": "Vous n'avez pas besoin de savoir comment poser. Vous n'avez qu'à être vous-même. Je m'occupe du reste.",
     "cta": "Me dire bonjour"
   },
   "about": {
     "tag": "À PROPOS DE MOI",
-    "titleLine1": "Plus que des photographies,",
-    "titleLine2": "des souvenirs qu'on ressent.",
+    "titleBase": "Plus que des photographies,",
+    "titleAccent": "des souvenirs qu'on ressent.",
     "body": "Bonjour, je suis Lili, photographe basée à Montréal. Inspirée par la narration cinématographique, je crée des images intemporelles remplies d'émotion authentique. Ma priorité est de rendre chaque séance détendue, confortable et naturelle, car les plus beaux souvenirs se créent quand on est simplement soi-même.",
     "readMore": "En savoir plus sur moi"
   },
   "specialty": {
     "tag": "CE QUE JE SHOOTE",
-    "titleLine1": "Quelques choses",
-    "titleLine2": "que j'adore photographier.",
+    "titleBase": "Quelques choses",
+    "titleAccent": "que j'adore photographier.",
     "items": {
       "landscape": {
         "title": "Paysages",
@@ -77,10 +77,12 @@
   },
   "portfolio": {
     "tag": "QUELQUES IMAGES",
-    "title": "Mes meilleurs travaux",
+    "titleBase": "Mes meilleurs",
+    "titleAccent": " travaux",
     "viewAll": "Tout voir",
     "allTag": "ARCHIVE COMPLÈTE",
-    "allTitle": "Toutes les photos que j'ai gardées.",
+    "allTitleBase": "Toutes les photos que j'ai",
+    "allTitleAccent": " gardées.",
     "worksLabel": "photos",
     "backHome": "Retour à l'accueil",
     "untitled": "Sans titre",
@@ -88,8 +90,8 @@
   },
   "process": {
     "tag": "MA FAÇON DE TRAVAILLER",
-    "titleLine1": "Une expérience détendue,",
-    "titleLine2": "du début à la fin.",
+    "titleBase": "Une expérience détendue,",
+    "titleAccent": "du début à la fin.",
     "steps": {
       "01": {
         "title": "On planifie ensemble",
@@ -172,8 +174,8 @@
   },
   "testimonials": {
     "tag": "MOTS DOUX",
-    "titleLine1": "Ce qu'on",
-    "titleLine2": "m'envoie en retour.",
+    "titleBase": "Ce qu'on",
+    "titleAccent": "m'envoie en retour.",
     "previous": "Précédent",
     "next": "Suivant",
     "reviews": {
@@ -206,8 +208,8 @@
   },
   "contact": {
     "tag": "ME DIRE BONJOUR",
-    "titleLine1": "Créons quelque chose",
-    "titleLine2": "de beau ensemble.",
+    "titleBase": "Créons quelque chose",
+    "titleAccent": "de beau ensemble.",
     "description": "Un portrait, un mariage, une marque ou quelque chose d'entièrement unique. Parlez-moi de votre vision, et je vous répondrai dans les 24 heures.",
     "name": { "label": "Nom", "placeholder": "Votre nom" },
     "email": { "label": "E-mail", "placeholder": "vous@email.com" },
@@ -227,8 +229,8 @@
     }
   },
   "footer": {
-    "ctaLead": "Je suis Lili, et j'adorerais",
-    "ctaMuted": " photographier ce qui est vrai chez vous.",
+    "ctaBase": "Je suis Lili, et j'adorerais",
+    "ctaAccent": " photographier ce qui est vrai chez vous.",
     "getInTouch": "Me dire bonjour",
     "sitemapLabel": "PLAN DU SITE",
     "sitemap": [

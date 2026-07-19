@@ -19,7 +19,8 @@ export const Contact = () => {
     <section id="contact" className="px-6 py-24 md:px-12 md:py-32">
       <SectionHeader
         tag={t("tag")}
-        lines={[t("titleLine1"), t("titleLine2")]}
+        titleBase={t("titleBase")}
+        titleAccent={t("titleAccent")}
       />
       <Reveal delay={0.1} className="mx-auto mt-12 max-w-[820px]">
         <p className="mb-8 text-center text-[15px] text-fg/65 leading-relaxed">

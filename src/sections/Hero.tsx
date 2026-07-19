@@ -11,6 +11,23 @@ import { EASE } from "@/lib/motion";
 const HERO_IMG =
   "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=2000&q=80&auto=format&fit=crop";
 
+// Splits a translated line on `**word**` markers and renders the marked
+// portion in accent color. Word position differs by language (e.g. the
+// accent word lands first in English but last in French), so the marker
+// lives in the translation string itself rather than in separate ordered
+// keys.
+const renderAccentLine = (text: string) =>
+  text.split(/\*\*(.+?)\*\*/g).map((part, i) =>
+    i % 2 === 1 ? (
+      // biome-ignore lint/suspicious/noArrayIndexKey: static translation text, order never changes
+      <span key={i} className="text-accent">
+        {part}
+      </span>
+    ) : (
+      part
+    ),
+  );
+
 export const Hero = () => {
   const t = useTranslations("hero");
 
@@ -58,8 +75,8 @@ export const Hero = () => {
           className="display-xl max-w-[1100px] text-[44px] uppercase sm:text-6xl md:text-8xl lg:text-[120px]"
           style={{ textWrap: "balance" }}
         >
-          <span className="block">{t("titleLine1")}</span>
-          <span className="block">{t("titleLine2")}</span>
+          <span className="block">{renderAccentLine(t("titleLine1"))}</span>
+          <span className="block">{renderAccentLine(t("titleLine2"))}</span>
         </motion.h1>
 
         <motion.p

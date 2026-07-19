@@ -24,22 +24,22 @@
     "kicker": "Photography by Lili",
     "byline": "LILI MARCHETTI",
     "location": "MONTREAL, CANADA",
-    "titleLine1": "Beauty Knows",
-    "titleLine2": "No Limits",
+    "titleLine1": "**Beauty** Knows",
+    "titleLine2": "No **Limits**",
     "intro": "You don't need to know how to pose. You only need to be yourself. I'll take care of the rest.",
     "cta": "Say hello"
   },
   "about": {
     "tag": "ABOUT ME",
-    "titleLine1": "More than photographs,",
-    "titleLine2": "Memories you can feel.",
+    "titleBase": "More than photographs,",
+    "titleAccent": "Memories you can feel.",
     "body": "Hi, I’m Lili, a photographer based in Montreal. Inspired by cinematic storytelling, I create timeless images filled with genuine emotion. My priority is making every session feel relaxed, comfortable and natural, because the best memories are made when you’re simply yourself.",
     "readMore": "More about me"
   },
   "specialty": {
     "tag": "WHAT I SHOOT",
-    "titleLine1": "A few things",
-    "titleLine2": "I love to photograph.",
+    "titleBase": "A few things",
+    "titleAccent": "I love to photograph.",
     "items": {
       "landscape": {
         "title": "Landscapes",
@@ -77,10 +77,12 @@
   },
   "portfolio": {
     "tag": "SELECTED FRAMES",
-    "title": "My Best Work",
+    "titleBase": "My Best",
+    "titleAccent": " Work",
     "viewAll": "See the rest",
     "allTag": "FULL ARCHIVE",
-    "allTitle": "Every photo I've kept.",
+    "allTitleBase": "Every photo I've",
+    "allTitleAccent": " kept.",
     "worksLabel": "photos",
     "backHome": "Back home",
     "untitled": "Untitled",
@@ -88,8 +90,8 @@
   },
   "process": {
     "tag": "MY WAY OF WORKING",
-    "titleLine1": "A relaxed experience,",
-    "titleLine2": "from start to finish.",
+    "titleBase": "A relaxed experience,",
+    "titleAccent": "from start to finish.",
     "steps": {
       "01": {
         "title": "We plan together",
@@ -172,8 +174,8 @@
   },
   "testimonials": {
     "tag": "KIND WORDS",
-    "titleLine1": "What people",
-    "titleLine2": "have sent back.",
+    "titleBase": "What people",
+    "titleAccent": "have sent back.",
     "previous": "Previous",
     "next": "Next",
     "reviews": {
@@ -206,8 +208,8 @@
   },
   "contact": {
     "tag": "SAY HELLO",
-    "titleLine1": "Let's create something",
-    "titleLine2": "beautiful together.",
+    "titleBase": "Let's create something",
+    "titleAccent": "beautiful together.",
     "description": "A portrait, a wedding, a brand, or something completely unique. Tell me about your vision, and I'll get back to you within 24 hours.",
     "name": { "label": "Name", "placeholder": "Your name" },
     "email": { "label": "Email", "placeholder": "you@email.com" },
@@ -227,8 +229,8 @@
     }
   },
   "footer": {
-    "ctaLead": "I'm Lili, and I'd love",
-    "ctaMuted": " to photograph what's true about you.",
+    "ctaBase": "I'm Lili, and I'd love",
+    "ctaAccent": " to photograph what's true about you.",
     "getInTouch": "Say hello",
     "sitemapLabel": "SITEMAP",
     "sitemap": [

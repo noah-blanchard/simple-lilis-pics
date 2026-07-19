@@ -84,7 +84,8 @@ export const PortfolioBento = ({ items }: PortfolioBentoProps) => {
                 className="display mt-3 text-4xl md:text-6xl"
                 style={{ textWrap: "balance" }}
               >
-                {t("allTitle")}
+                <span>{t("allTitleBase")}</span>
+                <span className="text-accent">{t("allTitleAccent")}</span>
               </h2>
             </div>
             <span className="tag-mono text-fg/45 uppercase">

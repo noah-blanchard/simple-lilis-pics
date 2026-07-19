@@ -24,8 +24,8 @@ export const Footer = () => {
             className="display text-3xl tracking-tight md:text-5xl lg:text-[56px]"
             style={{ textWrap: "balance" }}
           >
-            <span className="text-fg">{t("ctaLead")}</span>
-            <span className="text-fg/40">{t("ctaMuted")}</span>
+            <span className="text-fg">{t("ctaBase")}</span>
+            <span className="text-accent">{t("ctaAccent")}</span>
           </h2>
         </Reveal>
         <Reveal delay={0.1} className="lg:col-span-5 lg:flex lg:justify-end">

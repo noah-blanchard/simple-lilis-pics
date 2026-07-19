@@ -20,7 +20,8 @@ export const Specialty = () => {
     <section className="px-6 py-24 md:px-12 md:py-32">
       <SectionHeader
         tag={t("tag")}
-        lines={[t("titleLine1"), t("titleLine2")]}
+        titleBase={t("titleBase")}
+        titleAccent={t("titleAccent")}
       />
 
       {/* Mobile: static 2-col grid (layout unchanged). */}

@@ -3,14 +3,16 @@ import { TagLabel } from "./TagLabel";
 
 interface SectionHeaderProps {
   tag: string;
-  lines: string[];
+  titleBase: string;
+  titleAccent: string;
   align?: "center" | "left";
   className?: string;
 }
 
 export const SectionHeader = ({
   tag,
-  lines,
+  titleBase,
+  titleAccent,
   align = "center",
   className = "",
 }: SectionHeaderProps) => (
@@ -25,11 +27,8 @@ export const SectionHeader = ({
         className="display mx-auto max-w-5xl text-4xl tracking-tight sm:text-5xl md:text-6xl lg:text-[68px]"
         style={{ textWrap: "balance" }}
       >
-        {lines.map((line) => (
-          <span key={line} className="block">
-            {line}
-          </span>
-        ))}
+        <span className="block">{titleBase}</span>
+        <span className="block text-accent">{titleAccent}</span>
       </h2>
     </Reveal>
   </div>

@@ -11,7 +11,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "portfolio" });
-  return { title: t("allTitle") };
+  return { title: t("allTitleBase") + t("allTitleAccent") };
 }
 
 export default async function PortfolioPage({

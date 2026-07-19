@@ -16,7 +16,8 @@ export const About = () => {
     <section id="about" className="px-6 py-24 md:px-12 md:py-32">
       <SectionHeader
         tag={t("tag")}
-        lines={[t("titleLine1"), t("titleLine2")]}
+        titleBase={t("titleBase")}
+        titleAccent={t("titleAccent")}
       />
       <div className="mt-16 grid grid-cols-1 items-stretch gap-6 md:grid-cols-12">
         <Reveal className="md:col-span-4">
