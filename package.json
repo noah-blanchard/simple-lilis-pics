@@ -10,6 +10,7 @@
     "format": "biome format --write",
     "fix": "biome check --write",
     "fix:unsafe": "biome check --write --unsafe",
+    "typecheck": "tsc --noEmit",
     "seed": "bun run scripts/seed.ts"
   },
   "dependencies": {

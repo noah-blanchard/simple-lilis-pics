@@ -10,14 +10,19 @@ This file is the single source of truth for any AI agent working on this repo. F
 - This repo uses a Next.js version with breaking changes. Read the official docs at node_modules/next/dist/docs/ before writing any Next.js code.
 - Never assume patterns from older Next.js versions.
 
-## 1) Project Goal: Pixel-Perfect Clone
+## 1) Project Goal
 
-The goal is to reproduce the reference website perfectly. The reference project and assets are located in REFERENCE_PROJECT/.
+The public marketing site aims to reproduce the reference design faithfully. The
+reference project and assets are located in REFERENCE_PROJECT/. Note that the app
+has since grown beyond a static clone into a **bilingual photography CMS**:
+Supabase (Auth + Postgres + Storage), a protected `/admin` dashboard with project/
+photo/tag CRUD, image upload/compression, and AI translation via OpenRouter.
 
-Rules:
-- Match the reference layout, typography, spacing, and visual atmosphere exactly.
-- The final UI should be indistinguishable from the reference design.
-- If there is any ambiguity, defer to the reference visuals over personal preference.
+Rules (for the public/marketing surface):
+- Match the reference layout, typography, spacing, and visual atmosphere.
+- If there is any ambiguity on the marketing site, defer to the reference visuals
+  over personal preference.
+- The admin area is a functional internal tool, not part of the pixel-perfect goal.
 
 ## 2) Tech Stack (Exact Versions)
 
@@ -31,16 +36,19 @@ Use the installed versions only. Do not upgrade or replace without explicit appr
 - TanStack React Query: 5.101.0 (for future data fetching)
 - Biome: 2.2.0 (lint + format)
 
-## 3) Architecture: Ultra-Modular and Dumb Components
+## 3) Architecture: Modular Components with a Clear Data Boundary
 
-All visual components must be dumb/presentational.
+Presentational components stay prop-driven; data fetching lives at the edges.
 
 Rules:
-- No data fetching inside visual components.
-- No async calls in presentational components.
-- All data flows via typed props.
-- Container/section components can compose data and pass it down.
-- Structure the code so data can later be injected via TanStack Query without refactors.
+- Presentational components in `src/components/` take typed props only — no data
+  fetching or async work inside them.
+- Fetching happens in Server Components / sections (e.g. `src/lib/data/*` feeding
+  `Featured`, the portfolio pages) and in the admin via TanStack Query
+  (`src/components/admin/*`). These compose data and pass it down.
+- The public data layer resolves DB rows into view models (`resolveProject`) so
+  components never touch raw Supabase shapes.
+- Keep the boundary clean so data sources can change without rewriting the UI.
 
 Recommended structure (do not create unless needed by the plan):
 - src/components/ for pure presentational components
