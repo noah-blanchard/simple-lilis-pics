@@ -1,14 +1,11 @@
 import type { Locale } from "@/i18n/routing";
+import { PROJECT_SELECT, parseProject, parseProjects } from "@/lib/data/parse";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import {
   type ProjectWithRelations,
   type ResolvedProject,
   resolveProject,
 } from "@/types/db";
-
-// Same disambiguation as the API route: two FKs exist between projects and
-// project_photos (project_id + cover_photo_id), so we hint with !project_id.
-const PROJECT_SELECT = "*, project_photos!project_id(*), project_tags(tags(*))";
 
 async function fetchProjects(opts: {
   featuredOnly?: boolean;
@@ -26,7 +23,7 @@ async function fetchProjects(opts: {
 
   const { data, error } = await query;
   if (error) throw new Error(`Failed to load projects: ${error.message}`);
-  return (data ?? []) as unknown as ProjectWithRelations[];
+  return parseProjects(data);
 }
 
 /** Home page — featured projects (capped at 6), locale-resolved. */
@@ -60,5 +57,5 @@ export async function getProject(
 
   if (error) throw new Error(`Failed to load project: ${error.message}`);
   if (!data) return null;
-  return resolveProject(data as unknown as ProjectWithRelations, locale);
+  return resolveProject(parseProject(data), locale);
 }

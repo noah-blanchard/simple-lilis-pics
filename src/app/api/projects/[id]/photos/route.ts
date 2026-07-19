@@ -41,11 +41,11 @@ export const POST = withAuth<Ctx>(async ({ request, ctx }) => {
     .from("projects")
     .select("id")
     .eq("id", projectId)
-    .single();
+    .maybeSingle();
 
-  if (projectErr || !project) {
-    return apiError("NOT_FOUND", "Project not found", 404);
-  }
+  // Distinguish a genuine DB error from a legitimately-missing project.
+  if (projectErr) return apiError("DB_ERROR", projectErr.message, 500);
+  if (!project) return apiError("NOT_FOUND", "Project not found", 404);
 
   // ── 2) Validate the file ──────────────────────────────────────
   const rawFile = formData.get("file");

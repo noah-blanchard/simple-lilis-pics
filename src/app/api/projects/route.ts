@@ -9,14 +9,11 @@ import {
 } from "@/lib/api/schemas";
 import { validate } from "@/lib/api/validate";
 import { withAuth } from "@/lib/api/with-auth";
+import { PROJECT_SELECT, parseProjects } from "@/lib/data/parse";
 import { PHOTOS_BUCKET } from "@/lib/env";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { ProjectWithRelations } from "@/types/db";
-
-// Disambiguate: two FKs exist between projects↔project_photos (project_id and
-// cover_photo_id). Use the column hint so PostgREST picks the right direction.
-const PROJECT_SELECT = "*, project_photos!project_id(*), project_tags(tags(*))";
 
 /** GET /api/projects — public list, newest first.
  *  ?featured=true  filter to featured only
@@ -42,9 +39,7 @@ export async function GET(request: Request) {
   const { data, error } = await query;
   if (error) return apiError("DB_ERROR", error.message, 500);
 
-  return apiSuccess<ProjectWithRelations[]>(
-    (data ?? []) as unknown as ProjectWithRelations[],
-  );
+  return apiSuccess<ProjectWithRelations[]>(parseProjects(data));
 }
 
 /** POST /api/projects — authenticated multipart upload (1–4 photos).

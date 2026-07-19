@@ -22,6 +22,15 @@ if (!url || !key) {
   );
 }
 
+// Guard: this script CLEAN-SLATES all project tables using the service-role key
+// (RLS bypassed). Require an explicit --force flag so it can never wipe a live
+// database by accident.
+if (!process.argv.includes("--force")) {
+  throw new Error(
+    `Refusing to run: seed.ts deletes ALL projects, photos and tags in\n  ${url}\nRe-run with --force to confirm:\n  bun run seed --force`,
+  );
+}
+
 const supabase = createClient(url, key, { auth: { persistSession: false } });
 
 type Messages = {
