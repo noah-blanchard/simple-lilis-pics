@@ -7,23 +7,23 @@
 
 /* ----------------------------- LIGHT (default) ---------------------------- */
 :root {
-  --bg: #f5f6f8; /* page background        -> bg-ink            */
-  --fg: #10131a; /* primary text/foreground -> text-fg           */
-  --fg-rgb: 16 19 26; /* fg as RGB triplet (grain / watermark)        */
-  --panel: #eaedf1; /* surface level 1         -> bg-panel          */
-  --panel-2: #dee2e8; /* surface level 2         -> bg-panel2         */
-  --line: #cbd0d8; /* decorative dividers    -> border-line       */
-  --line-strong: #707a88; /* interactive borders (inputs) -> border-line-strong */
-  --muted: #5e6673; /* secondary text          -> text-muted        */
+  --bg: #f5f5f5; /* page background        -> bg-ink            */
+  --fg: #121212; /* primary text/foreground -> text-fg           */
+  --fg-rgb: 18 18 18; /* fg as RGB triplet (grain / watermark)        */
+  --panel: #eaeaea; /* surface level 1         -> bg-panel          */
+  --panel-2: #dedede; /* surface level 2         -> bg-panel2         */
+  --line: #cccccc; /* decorative dividers    -> border-line       */
+  --line-strong: #7a7a7a; /* interactive borders (inputs) -> border-line-strong */
+  --muted: #666666; /* secondary text          -> text-muted        */
   --accent: #1b7a55; /* brand accent (deep emerald) -> *-accent      */
-  --on-accent: #f5f6f8; /* text/icon over accent   -> text-on-accent    */
-  --inverse: #10131a; /* inverted chip surface   -> bg-inverse        */
-  --on-inverse: #f5f6f8; /* text over inverse chip  -> text-on-inverse   */
-  --scrim: rgba(16, 19, 26, 0.45); /* modal backdrop          -> bg-scrim         */
+  --on-accent: #f5f5f5; /* text/icon over accent   -> text-on-accent    */
+  --inverse: #121212; /* inverted chip surface   -> bg-inverse        */
+  --on-inverse: #f5f5f5; /* text over inverse chip  -> text-on-inverse   */
+  --scrim: rgba(18, 18, 18, 0.45); /* modal backdrop          -> bg-scrim         */
   --danger: #a81e1e; /* destructive/error state -> *-danger          */
-  --on-danger: #f5f6f8; /* text/icon over danger fill -> text-on-danger */
+  --on-danger: #f5f5f5; /* text/icon over danger fill -> text-on-danger */
   --warning: #92400e; /* warning/confirm state   -> *-warning         */
-  --on-warning: #f5f6f8; /* text/icon over warning fill -> text-on-warning */
+  --on-warning: #f5f5f5; /* text/icon over warning fill -> text-on-warning */
 }
 
 /* ------------------------------ Z-INDEX SCALE ----------------------------- */
@@ -40,21 +40,21 @@
 
 /* --------------------------------- DARK ----------------------------------- */
 .dark {
-  --bg: #0a0c10;
-  --fg: #e8eaee;
-  --fg-rgb: 232 234 238;
-  --panel: #10141a;
-  --panel-2: #171c24;
-  --line: #262c36;
-  --line-strong: #69737f;
-  --muted: #838da0;
+  --bg: #0c0c0c;
+  --fg: #eaeaea;
+  --fg-rgb: 234 234 234;
+  --panel: #161616;
+  --panel-2: #1e1e1e;
+  --line: #2e2e2e;
+  --line-strong: #737373;
+  --muted: #8f8f8f;
   --accent: #34b47f;
-  --on-accent: #0a0c10;
-  --inverse: #e8eaee;
-  --on-inverse: #0a0c10;
+  --on-accent: #0c0c0c;
+  --inverse: #eaeaea;
+  --on-inverse: #0c0c0c;
   --scrim: rgba(0, 0, 0, 0.65);
   --danger: #f0605a;
-  --on-danger: #0a0c10;
+  --on-danger: #0c0c0c;
   --warning: #f5a623;
-  --on-warning: #0a0c10;
+  --on-warning: #0c0c0c;
 }
