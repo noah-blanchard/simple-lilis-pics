@@ -2,6 +2,7 @@ import { apiError, apiSuccess } from "@/lib/api/response";
 import { tagCreateSchema } from "@/lib/api/schemas";
 import { validate } from "@/lib/api/validate";
 import { withAuth } from "@/lib/api/with-auth";
+import { slugify } from "@/lib/slugify";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { TagRow } from "@/types/db";
@@ -29,17 +30,20 @@ export const POST = withAuth(async ({ request }) => {
   const parsed = validate(tagCreateSchema, body);
   if (!parsed.ok) return parsed.response;
 
+  // Slug is derived from the English label, never chosen by the admin.
+  const slug = slugify(parsed.data.label_en) || `tag-${crypto.randomUUID().slice(0, 8)}`;
+
   const admin = createSupabaseAdminClient();
   const { data, error } = await admin
     .from("tags")
-    .insert(parsed.data)
+    .insert({ ...parsed.data, slug })
     .select("*")
     .single();
   if (error) {
     if (error.code === "23505") {
       return apiError(
-        "DUPLICATE_SLUG",
-        "A tag with this slug already exists",
+        "DUPLICATE_LABEL",
+        "A tag with this English label already exists",
         409,
       );
     }

@@ -28,16 +28,7 @@ export const PATCH = withAuth<Ctx>(async ({ request, ctx }) => {
     .eq("id", id)
     .select("*")
     .single();
-  if (error) {
-    if (error.code === "23505") {
-      return apiError(
-        "DUPLICATE_SLUG",
-        "A tag with this slug already exists",
-        409,
-      );
-    }
-    return apiError("DB_UPDATE_FAILED", error.message, 500);
-  }
+  if (error) return apiError("DB_UPDATE_FAILED", error.message, 500);
   return apiSuccess<TagRow>(data as TagRow);
 });
 

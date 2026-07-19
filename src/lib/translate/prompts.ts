@@ -27,7 +27,10 @@ function systemPrompt(from: string, to: string, kind: TranslateInput["kind"]) {
   const kindHint =
     kind === "title"
       ? " The text is a short project title; keep it concise and natural."
-      : " The text is a project description; keep paragraph breaks and meaning intact.";
+      : kind === "tag"
+        ? " The text is a short taxonomy tag/category label shown in a UI " +
+          "chip; keep it to 1-3 words, title case, no punctuation."
+        : " The text is a project description; keep paragraph breaks and meaning intact.";
 
   return base + kindHint;
 }

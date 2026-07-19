@@ -3,10 +3,6 @@ import { z } from "zod";
 /* ── Tags ── */
 
 export const tagCreateSchema = z.object({
-  slug: z
-    .string()
-    .min(1)
-    .regex(/^[a-z0-9-]+$/, "slug must be lowercase letters, digits or dashes"),
   label_fr: z.string().min(1, "label_fr is required"),
   label_en: z.string().min(1, "label_en is required"),
 });
@@ -25,7 +21,7 @@ export const translateSchema = z
     text: z.string().trim().min(1).max(2000),
     from: z.enum(["en", "fr"]),
     to: z.enum(["en", "fr"]),
-    kind: z.enum(["title", "description"]),
+    kind: z.enum(["title", "description", "tag"]),
   })
   .refine((v) => v.from !== v.to, { message: "from and to must differ" });
 

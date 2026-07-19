@@ -5,6 +5,7 @@ import { useState } from "react";
 import { apiFetch } from "@/lib/api/client";
 import type { TagRow } from "@/types/db";
 import { ConfirmDialog } from "./ConfirmDialog";
+import { TranslatableInput } from "./TranslatableInput";
 
 const miniField =
   "min-w-0 flex-1 rounded-lg border border-line bg-ink px-3 py-2 text-[13px] text-fg outline-none focus:border-accent";
@@ -69,20 +70,25 @@ function TagRowEditor({ tag }: { tag: TagRow }) {
 
   return (
     <div className="flex items-center gap-2 rounded-2xl border border-line bg-panel2 p-2">
-      <code className="w-20 shrink-0 px-1 text-[12px] text-fg/40">
-        {tag.slug}
-      </code>
-      <input
+      <TranslatableInput
         value={labelEn}
-        onChange={(e) => setLabelEn(e.target.value)}
+        onChange={setLabelEn}
         className={miniField}
-        aria-label={`${tag.slug} label EN`}
+        ariaLabel={`${tag.label_en} label EN`}
+        from="fr"
+        to="en"
+        kind="tag"
+        sourceValue={labelFr}
       />
-      <input
+      <TranslatableInput
         value={labelFr}
-        onChange={(e) => setLabelFr(e.target.value)}
+        onChange={setLabelFr}
         className={miniField}
-        aria-label={`${tag.slug} label FR`}
+        ariaLabel={`${tag.label_en} label FR`}
+        from="en"
+        to="fr"
+        kind="tag"
+        sourceValue={labelEn}
       />
       <button
         type="button"
@@ -115,7 +121,6 @@ function TagRowEditor({ tag }: { tag: TagRow }) {
 
 function AddTagRow() {
   const queryClient = useQueryClient();
-  const [slug, setSlug] = useState("");
   const [labelEn, setLabelEn] = useState("");
   const [labelFr, setLabelFr] = useState("");
 
@@ -124,41 +129,41 @@ function AddTagRow() {
       apiFetch("/api/tags", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slug, label_en: labelEn, label_fr: labelFr }),
+        body: JSON.stringify({ label_en: labelEn, label_fr: labelFr }),
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tags"] });
-      setSlug("");
       setLabelEn("");
       setLabelFr("");
     },
   });
 
-  const valid = slug.trim() && labelEn.trim() && labelFr.trim();
+  const valid = labelEn.trim() && labelFr.trim();
 
   return (
     <div>
       <div className="flex items-center gap-2">
-        <input
-          value={slug}
-          onChange={(e) => setSlug(e.target.value)}
-          placeholder="slug"
-          aria-label="New tag slug"
-          className={`${miniField} w-20 flex-none`}
-        />
-        <input
+        <TranslatableInput
           value={labelEn}
-          onChange={(e) => setLabelEn(e.target.value)}
+          onChange={setLabelEn}
           placeholder="Label EN"
-          aria-label="New tag label EN"
+          ariaLabel="New tag label EN"
           className={miniField}
+          from="fr"
+          to="en"
+          kind="tag"
+          sourceValue={labelFr}
         />
-        <input
+        <TranslatableInput
           value={labelFr}
-          onChange={(e) => setLabelFr(e.target.value)}
+          onChange={setLabelFr}
           placeholder="Label FR"
-          aria-label="New tag label FR"
+          ariaLabel="New tag label FR"
           className={miniField}
+          from="en"
+          to="fr"
+          kind="tag"
+          sourceValue={labelEn}
         />
         <button
           type="button"
