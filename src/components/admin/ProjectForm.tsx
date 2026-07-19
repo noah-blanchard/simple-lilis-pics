@@ -10,6 +10,7 @@ import { z } from "zod";
 import { PhotoListItem } from "@/components/admin/PhotoListItem";
 import { PhotoLightbox } from "@/components/admin/PhotoLightbox";
 import { TranslatableField } from "@/components/admin/TranslatableField";
+import { IconSparkle } from "@/components/Icons";
 import { PillButton } from "@/components/PillButton";
 import { apiFetch } from "@/lib/api/client";
 import {
@@ -17,6 +18,7 @@ import {
   MAX_FEATURED_PROJECTS,
   MAX_PROJECT_PHOTOS,
 } from "@/lib/api/schemas";
+import { useTranslate } from "@/lib/translate/use-translate";
 import {
   type Orientation,
   type ProjectWithRelations,
@@ -159,6 +161,56 @@ export function ProjectForm({
     "description_en",
     "description_fr",
   ]);
+
+  // ── Bulk translate: fill one language, then translate title + description
+  // to the other side in one click (separate mutation instance from the
+  // per-field TranslatableFields, so it never shares their loading state). ──
+  const bulkTranslate = useTranslate();
+  const [bulkDirection, setBulkDirection] = useState<"en-fr" | "fr-en" | null>(
+    null,
+  );
+  const [bulkError, setBulkError] = useState<string | null>(null);
+
+  const runBulkTranslate = async (direction: "en-fr" | "fr-en") => {
+    const from = direction === "en-fr" ? "en" : "fr";
+    const to = direction === "en-fr" ? "fr" : "en";
+    const titleSource = (direction === "en-fr" ? titleEn : titleFr).trim();
+    const descSource = (direction === "en-fr" ? descEn : descFr).trim();
+    if (!titleSource && !descSource) return;
+
+    setBulkDirection(direction);
+    setBulkError(null);
+    try {
+      if (titleSource) {
+        const { translation } = await bulkTranslate.mutateAsync({
+          text: titleSource,
+          from,
+          to,
+          kind: "title",
+        });
+        setValue(direction === "en-fr" ? "title_fr" : "title_en", translation, {
+          shouldDirty: true,
+        });
+      }
+      if (descSource) {
+        const { translation } = await bulkTranslate.mutateAsync({
+          text: descSource,
+          from,
+          to,
+          kind: "description",
+        });
+        setValue(
+          direction === "en-fr" ? "description_fr" : "description_en",
+          translation,
+          { shouldDirty: true },
+        );
+      }
+    } catch (err) {
+      setBulkError(err instanceof Error ? err.message : "Translation failed");
+    } finally {
+      setBulkDirection(null);
+    }
+  };
 
   // Revoke object URLs on unmount.
   useEffect(() => {
@@ -481,6 +533,39 @@ export function ProjectForm({
   // ── Fields (right) ──
   const fieldsBody = (
     <>
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-line bg-panel2 px-4 py-3">
+        <span className="text-[12px] text-fg/50">
+          Fill one language, then translate the title + description at once.
+        </span>
+        <div className="flex shrink-0 gap-2">
+          <button
+            type="button"
+            disabled={
+              bulkDirection !== null || (!titleEn.trim() && !descEn.trim())
+            }
+            onClick={() => runBulkTranslate("en-fr")}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-line px-3 py-1.5 text-[12px] text-fg/70 transition-colors hover:border-accent hover:text-accent disabled:cursor-not-allowed disabled:opacity-30"
+          >
+            <IconSparkle className="h-3.5 w-3.5" />
+            {bulkDirection === "en-fr" ? "Translating…" : "All EN → FR"}
+          </button>
+          <button
+            type="button"
+            disabled={
+              bulkDirection !== null || (!titleFr.trim() && !descFr.trim())
+            }
+            onClick={() => runBulkTranslate("fr-en")}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-line px-3 py-1.5 text-[12px] text-fg/70 transition-colors hover:border-accent hover:text-accent disabled:cursor-not-allowed disabled:opacity-30"
+          >
+            <IconSparkle className="h-3.5 w-3.5" />
+            {bulkDirection === "fr-en" ? "Translating…" : "All FR → EN"}
+          </button>
+        </div>
+        {bulkError && (
+          <p className="w-full text-[12px] text-red-400">{bulkError}</p>
+        )}
+      </div>
+
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         <TranslatableField
           id="title_en"
