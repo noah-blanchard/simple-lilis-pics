@@ -3,6 +3,7 @@ import { HoverLink } from "@/components/HoverLink";
 import { PillButton } from "@/components/PillButton";
 import { Reveal } from "@/components/Reveal";
 import { RoundedImage } from "@/components/RoundedImage";
+import { rawList } from "@/lib/messages";
 
 const FOOTER_IMG_1 =
   "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=900&q=80&auto=format&fit=crop";
@@ -11,8 +12,8 @@ const FOOTER_IMG_2 =
 
 export const Footer = () => {
   const t = useTranslations("footer");
-  const sitemap = t.raw("sitemap") as string[];
-  const social = t.raw("social") as string[];
+  const sitemap = rawList(t, "sitemap");
+  const social = rawList(t, "social");
 
   return (
     <footer className="relative overflow-hidden px-6 pt-24 pb-10 md:px-12 md:pt-32">

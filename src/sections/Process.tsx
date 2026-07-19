@@ -7,6 +7,7 @@ import { ProcessCard } from "@/components/ProcessCard";
 import { ProcessRow } from "@/components/ProcessRow";
 import { SectionHeader } from "@/components/SectionHeader";
 import { defaultProcessStep, processSteps } from "@/data/process";
+import { rawList } from "@/lib/messages";
 import type { ProcessStep } from "@/types";
 
 // Collapsed-header height in px. Also the sticky `top` stagger, so a covered
@@ -20,7 +21,7 @@ export const Process = () => {
     ...s,
     title: t(`steps.${s.n}.title`),
     body: t(`steps.${s.n}.body`),
-    bullets: t.raw(`steps.${s.n}.bullets`) as string[],
+    bullets: rawList(t, `steps.${s.n}.bullets`),
   }));
 
   // Desktop: scroll progress across the stacked cards drives the depth cues.

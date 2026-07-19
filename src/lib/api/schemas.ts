@@ -110,4 +110,3 @@ export const projectUpdateSchema = z.object({
 
 export type ProjectCreateInput = z.infer<typeof projectCreateSchema>;
 export type ProjectUpdateInput = z.infer<typeof projectUpdateSchema>;
-export type ProjectPhotoMetaInput = z.infer<typeof projectPhotoMetaSchema>;

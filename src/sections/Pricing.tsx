@@ -3,6 +3,7 @@ import { PriceCard } from "@/components/PriceCard";
 import { Reveal } from "@/components/Reveal";
 import { TagLabel } from "@/components/TagLabel";
 import { plans } from "@/data/plans";
+import { rawList } from "@/lib/messages";
 import type { Plan } from "@/types";
 
 export const Pricing = () => {
@@ -13,7 +14,7 @@ export const Pricing = () => {
     name: t(`plans.${p.id}.name`),
     blurb: t(`plans.${p.id}.blurb`),
     unit: t(`plans.${p.id}.unit`),
-    includes: t.raw(`plans.${p.id}.includes`) as string[],
+    includes: rawList(t, `plans.${p.id}.includes`),
   }));
 
   return (

@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { navItems } from "@/data/nav";
 import { Link } from "@/i18n/navigation";
+import { rawList } from "@/lib/messages";
 import { HoverLink } from "./HoverLink";
 import { IconArrow } from "./Icons";
 import { LocaleSwitcher } from "./LocaleSwitcher";
@@ -45,7 +46,7 @@ export const MenuOverlay = ({ open, onClose }: MenuOverlayProps) => {
     };
   }, [open, onClose]);
 
-  const socials = tFooter.raw("social") as string[];
+  const socials = rawList(tFooter, "social");
 
   // Smooth-scroll to a section after closing the overlay.
   const goToAnchor = (target: string) => {
