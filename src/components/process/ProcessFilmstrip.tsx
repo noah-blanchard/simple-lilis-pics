@@ -56,12 +56,21 @@ export const ProcessFilmstrip = ({ steps }: ProcessFilmstripProps) => {
             />
           ))}
 
-          {/* Glowing node riding the scroll position. */}
-          <motion.span
+          {/* Glowing node riding the scroll position. Driven via `y` (a
+              transform, GPU-compositable) rather than `top` (a layout
+              property) — animating `top` forces layout+paint on every
+              scroll tick, which is cheap enough to hide on Windows' lower-
+              frequency wheel events but visibly stutters on macOS, where
+              trackpad momentum scrolling fires far more often. The wrapper
+              is full-height so the "0%"-"100%" motion value still resolves
+              against the whole rail, matching the old `top` behavior. */}
+          <motion.div
             aria-hidden
-            className="absolute left-1/2 block h-2.5 w-2.5 rounded-full bg-accent shadow-[0_0_10px_2px_var(--accent)] ring-4 ring-ink"
-            style={{ top: nodeTop, x: "-50%", y: "-50%" }}
-          />
+            className="absolute top-0 left-1/2 h-full"
+            style={{ y: nodeTop }}
+          >
+            <span className="-translate-x-1/2 -translate-y-1/2 absolute top-0 block h-2.5 w-2.5 rounded-full bg-accent shadow-[0_0_10px_2px_var(--accent)] ring-4 ring-ink" />
+          </motion.div>
         </div>
 
         {steps.map((step, index) => (
