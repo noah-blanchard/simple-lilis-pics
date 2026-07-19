@@ -16,7 +16,7 @@ export const Footer = () => {
   const social = rawList(t, "social");
 
   return (
-    <footer className="relative overflow-hidden px-6 pt-24 pb-10 md:px-12 md:pt-32">
+    <footer className="relative mx-auto max-w-[1440px] overflow-hidden px-6 pt-24 pb-10 md:px-12 md:pt-32">
       {/* big CTA */}
       <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-12">
         <Reveal className="lg:col-span-7">

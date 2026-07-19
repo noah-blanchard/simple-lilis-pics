@@ -20,25 +20,28 @@ export const Testimonials = () => {
 
   return (
     <section className="overflow-hidden py-24 md:py-32">
-      <SectionHeader
-        tag={t("tag")}
-        titleBase={t("titleBase")}
-        titleAccent={t("titleAccent")}
-      />
+      <div className="mx-auto max-w-[1440px] px-6 md:px-12">
+        <SectionHeader
+          tag={t("tag")}
+          titleBase={t("titleBase")}
+          titleAccent={t("titleAccent")}
+        />
 
-      {/* Mobile: manual swipe carousel (layout unchanged). */}
-      <Reveal delay={0.1} className="md:hidden">
-        <div className="no-scrollbar mt-14 flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-4">
-          {items.map((review) => (
-            <div key={review.id} className="snap-start">
-              <ReviewCard review={review} />
-            </div>
-          ))}
-          <div className="w-6 shrink-0" />
-        </div>
-      </Reveal>
+        {/* Mobile: manual swipe carousel (layout unchanged). */}
+        <Reveal delay={0.1} className="md:hidden">
+          <div className="no-scrollbar -mx-6 mt-14 flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-4">
+            {items.map((review) => (
+              <div key={review.id} className="snap-start">
+                <ReviewCard review={review} />
+              </div>
+            ))}
+            <div className="w-6 shrink-0" />
+          </div>
+        </Reveal>
+      </div>
 
-      {/* Desktop: auto infinite marquee, pauses on hover. */}
+      {/* Desktop: auto infinite marquee, pauses on hover. Full-bleed (no
+          container cap) so it scrolls edge-to-edge regardless of page width. */}
       <Reveal delay={0.1} className="mt-14 hidden md:block">
         <InfiniteRow
           items={items}

@@ -17,28 +17,31 @@ export const Specialty = () => {
   }));
 
   return (
-    <section className="px-6 py-24 md:px-12 md:py-32">
-      <SectionHeader
-        tag={t("tag")}
-        titleBase={t("titleBase")}
-        titleAccent={t("titleAccent")}
-      />
+    <section className="py-24 md:py-32">
+      <div className="mx-auto max-w-[1440px] px-6 md:px-12">
+        <SectionHeader
+          tag={t("tag")}
+          titleBase={t("titleBase")}
+          titleAccent={t("titleAccent")}
+        />
 
-      {/* Mobile: static 2-col grid (layout unchanged). */}
-      <div className="mt-16 grid grid-cols-2 gap-5 md:hidden">
-        {items.map((item) => (
-          <SpecialtyCard key={item.id} specialty={item} />
-        ))}
+        {/* Mobile: static 2-col grid (layout unchanged). */}
+        <div className="mt-16 grid grid-cols-2 gap-5 md:hidden">
+          {items.map((item) => (
+            <SpecialtyCard key={item.id} specialty={item} />
+          ))}
+        </div>
       </div>
 
-      {/* Desktop: two infinite carousel rows, scrolling in opposite directions. */}
+      {/* Desktop: two infinite carousel rows, scrolling in opposite directions.
+          Left full-bleed (no container cap) so the marquee scrolls edge-to-edge. */}
       <div className="mt-16 hidden flex-col gap-5 md:flex">
         <InfiniteRow
           items={items.slice(0, 4)}
           direction="left"
           repeat={4}
           renderItem={(item) => (
-            <div className="w-[300px]">
+            <div className="w-[220px] md:w-[260px] lg:w-[300px] xl:w-[340px]">
               <SpecialtyCard specialty={item} />
             </div>
           )}
@@ -48,7 +51,7 @@ export const Specialty = () => {
           direction="right"
           repeat={4}
           renderItem={(item) => (
-            <div className="w-[300px]">
+            <div className="w-[220px] md:w-[260px] lg:w-[300px] xl:w-[340px]">
               <SpecialtyCard specialty={item} />
             </div>
           )}

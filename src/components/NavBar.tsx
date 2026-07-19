@@ -19,7 +19,7 @@ export const NavBar = () => {
         initial={{ opacity: 0, y: -16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.9, ease: EASE, delay: 0.15 }}
-        className="relative z-[var(--z-nav)] flex items-center justify-between px-6 pt-8 md:px-12"
+        className="relative z-[var(--z-nav)] mx-auto flex max-w-[1440px] items-center justify-between px-6 pt-8 md:px-12"
       >
         {/* Brand mark (logotype — not translated) */}
         <a href="#" className="font-semibold text-[22px] italic tracking-tight">

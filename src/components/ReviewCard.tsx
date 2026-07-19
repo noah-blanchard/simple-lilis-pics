@@ -33,7 +33,7 @@ export const ReviewCard = ({ review }: ReviewCardProps) => (
     animate="rest"
     variants={cardVariants}
     transition={transition}
-    className="relative flex w-[300px] shrink-0 flex-col justify-between rounded-card bg-panel p-7 md:w-[380px] md:p-8"
+    className="relative flex w-[300px] shrink-0 flex-col justify-between rounded-card bg-panel p-7 md:w-[300px] md:p-8 lg:w-[340px] xl:w-[380px]"
   >
     {/* hover surface (panel → panel-2) */}
     <motion.span

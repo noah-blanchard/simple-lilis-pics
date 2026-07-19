@@ -50,7 +50,7 @@ export const Hero = () => {
       <NavBar />
 
       {/* Hero content */}
-      <div className="relative z-10 flex min-h-[calc(100svh-100px)] flex-col items-center justify-center px-6 text-center md:px-12">
+      <div className="relative z-10 mx-auto flex min-h-[calc(100svh-100px)] max-w-[1440px] flex-col items-center justify-center px-6 text-center md:px-12">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

@@ -16,7 +16,10 @@ export const Contact = () => {
   };
 
   return (
-    <section id="contact" className="px-6 py-24 md:px-12 md:py-32">
+    <section
+      id="contact"
+      className="mx-auto max-w-[1440px] px-6 py-24 md:px-12 md:py-32"
+    >
       <SectionHeader
         tag={t("tag")}
         titleBase={t("titleBase")}

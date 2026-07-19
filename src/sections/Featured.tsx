@@ -15,7 +15,7 @@ export const Featured = async () => {
   const items = await getFeaturedProjects(locale);
 
   return (
-    <section className="px-6 py-24 md:px-12 md:py-32">
+    <section className="mx-auto max-w-[1440px] px-6 py-24 md:px-12 md:py-32">
       <Reveal>
         <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
           <div>
