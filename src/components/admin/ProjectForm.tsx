@@ -3,9 +3,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import imageCompression from "browser-image-compression";
-import { useCallback, useEffect, useState } from "react";
+import { Reorder, useDragControls } from "motion/react";
+import { type ReactNode, useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { PhotoListItem } from "@/components/admin/PhotoListItem";
+import { PhotoLightbox } from "@/components/admin/PhotoLightbox";
 import { TranslatableField } from "@/components/admin/TranslatableField";
 import { PillButton } from "@/components/PillButton";
 import { apiFetch } from "@/lib/api/client";
@@ -48,12 +51,12 @@ interface LocalPhoto {
   orientation: Orientation;
 }
 
-/** An existing (edit-mode) photo. */
+/** An existing (edit-mode) photo. Display order is the array order — position
+ *  is only ever derived from the array index, at submit time. */
 interface EditPhoto {
   id: string;
   img: string;
   orientation: Orientation;
-  position: number;
 }
 
 /** Detect orientation from a file's natural dimensions. */
@@ -100,12 +103,16 @@ export function ProjectForm({
             id: p.id,
             img: resolveImageUrl(p.image_path),
             orientation: p.orientation,
-            position: p.position,
           }))
       : [],
   );
 
-  const [coverIndex, setCoverIndex] = useState(0); // create mode
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  // Cover selection: keyed by a stable per-photo identifier (not array index,
+  // which would drift after a reorder). `null` means "default to the first
+  // photo" — resolved to a concrete index/id only at submit time.
+  const [coverKey, setCoverKey] = useState<string | null>(null); // create mode: previewUrl
   const [coverPhotoId, setCoverPhotoId] = useState<string | null>(
     project?.cover_photo_id ?? null,
   ); // edit mode
@@ -187,12 +194,12 @@ export function ProjectForm({
   };
 
   const removeNewPhoto = (i: number) => {
+    const removed = newPhotos[i];
     setNewPhotos((prev) => {
       URL.revokeObjectURL(prev[i].previewUrl);
-      const next = prev.filter((_, idx) => idx !== i);
-      return next;
+      return prev.filter((_, idx) => idx !== i);
     });
-    setCoverIndex((ci) => (ci === i ? 0 : ci > i ? ci - 1 : ci));
+    setCoverKey((ck) => (ck === removed.previewUrl ? null : ck));
   };
 
   const setNewOrientation = (i: number, orientation: Orientation) =>
@@ -267,7 +274,10 @@ export function ProjectForm({
 
         // 3) Set cover photo
         if (photoIds.length > 0) {
-          const coverIdx = Math.min(coverIndex, photoIds.length - 1);
+          const coverIdx = Math.max(
+            0,
+            newPhotos.findIndex((p) => p.previewUrl === coverKey),
+          );
           await apiFetch(`/api/projects/${projectId}`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
@@ -291,7 +301,7 @@ export function ProjectForm({
       newPhotos,
       selectedTags,
       featured,
-      coverIndex,
+      coverKey,
       isEdit,
       queryClient,
       onSuccess,
@@ -313,9 +323,9 @@ export function ProjectForm({
             featured,
             tag_ids: selectedTags,
             cover_photo_id: coverPhotoId ?? undefined,
-            photos: editPhotos.map((p) => ({
+            photos: editPhotos.map((p, i) => ({
               id: p.id,
-              position: p.position,
+              position: i,
               orientation: p.orientation,
             })),
           }),
@@ -333,7 +343,11 @@ export function ProjectForm({
         fd.append("description_fr", values.description_fr);
       if (values.project_date) fd.append("project_date", values.project_date);
       fd.append("featured", String(featured));
-      fd.append("cover_index", String(coverIndex));
+      const coverIdx = Math.max(
+        0,
+        newPhotos.findIndex((p) => p.previewUrl === coverKey),
+      );
+      fd.append("cover_index", String(coverIdx));
       for (const id of selectedTags) fd.append("tag_ids", id);
 
       setStatus("Compressing…");
@@ -376,136 +390,90 @@ export function ProjectForm({
       ? "Uploading…"
       : (status ?? "Create project");
 
-  // ── Orientation toggle (shared) ──
-  const orientationToggle = (
-    current: Orientation,
-    onSet: (o: Orientation) => void,
-  ) => (
-    <div className="flex overflow-hidden rounded-lg border border-line text-[11px]">
-      {(["landscape", "portrait"] as Orientation[]).map((o) => (
-        <button
-          key={o}
-          type="button"
-          onClick={() => onSet(o)}
-          className={`px-2 py-1 capitalize transition-colors ${
-            current === o
-              ? "bg-inverse text-on-inverse"
-              : "text-fg/60 hover:text-fg"
-          }`}
-        >
-          {o === "landscape" ? "▭" : "▯"} {o}
-        </button>
-      ))}
-    </div>
-  );
-
-  const coverBadge = (active: boolean, onSelect: () => void) => (
-    <button
-      type="button"
-      onClick={onSelect}
-      className={`rounded-lg border px-2 py-1 text-[11px] transition-colors ${
-        active
-          ? "border-accent bg-accent text-on-accent"
-          : "border-line text-fg/60 hover:border-fg/40"
-      }`}
-    >
-      {active ? "★ Cover" : "☆ Cover"}
-    </button>
-  );
+  // Photos to page through in the lightbox — whichever list is active.
+  const lightboxPhotos = isEdit
+    ? editPhotos.map((p) => ({ key: p.id, src: p.img }))
+    : newPhotos.map((p) => ({ key: p.previewUrl, src: p.previewUrl }));
 
   // ── Photos panel (left) ──
   const photosPanel = (
     <div className="flex h-full flex-col gap-3">
-      <div className="min-h-0 flex-1 space-y-3 overflow-y-auto pr-1">
-        {isEdit
-          ? editPhotos.map((p) => (
-              <div
-                key={p.id}
-                className="flex gap-3 rounded-2xl border border-line bg-panel2 p-2.5"
-              >
-                <div
-                  className={`relative shrink-0 overflow-hidden rounded-lg bg-ink ${
-                    p.orientation === "portrait" ? "h-24 w-13.5" : "h-24 w-40"
-                  }`}
-                >
-                  {/* biome-ignore lint/performance/noImgElement: stored remote thumb */}
-                  <img
-                    src={p.img}
-                    alt=""
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-                <div className="flex min-w-0 flex-col justify-center gap-2">
-                  {orientationToggle(p.orientation, (o) =>
-                    setEditOrientation(p.id, o),
-                  )}
-                  {coverBadge(coverPhotoId === p.id, () =>
-                    setCoverPhotoId(p.id),
-                  )}
-                </div>
-              </div>
-            ))
-          : newPhotos.map((p, i) => (
-              <div
-                key={p.previewUrl}
-                className="flex gap-3 rounded-2xl border border-line bg-panel2 p-2.5"
-              >
-                <div
-                  className={`relative shrink-0 overflow-hidden rounded-lg bg-ink ${
-                    p.orientation === "portrait" ? "h-24 w-13.5" : "h-24 w-40"
-                  }`}
-                >
-                  {/* biome-ignore lint/performance/noImgElement: local blob preview */}
-                  <img
-                    src={p.previewUrl}
-                    alt=""
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-                <div className="flex min-w-0 flex-1 flex-col justify-center gap-2">
-                  {orientationToggle(p.orientation, (o) =>
-                    setNewOrientation(i, o),
-                  )}
-                  <div className="flex items-center gap-2">
-                    {coverBadge(coverIndex === i, () => setCoverIndex(i))}
-                    <button
-                      type="button"
-                      onClick={() => removeNewPhoto(i)}
-                      className="ml-auto rounded-lg border border-line px-2 py-1 text-[11px] text-fg/60 transition-colors hover:border-red-500 hover:text-red-400"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
+      {isEdit ? (
+        <Reorder.Group
+          as="div"
+          axis="y"
+          values={editPhotos}
+          onReorder={setEditPhotos}
+          className="min-h-0 flex-1 space-y-3 overflow-y-auto pr-1"
+        >
+          {editPhotos.map((p, i) => (
+            <DraggablePhotoItem key={p.id} value={p}>
+              {(onDragHandlePointerDown) => (
+                <PhotoListItem
+                  src={p.img}
+                  orientation={p.orientation}
+                  isCover={coverPhotoId === p.id}
+                  onSetOrientation={(o) => setEditOrientation(p.id, o)}
+                  onSetCover={() => setCoverPhotoId(p.id)}
+                  onOpenFullscreen={() => setLightboxIndex(i)}
+                  onDragHandlePointerDown={onDragHandlePointerDown}
+                />
+              )}
+            </DraggablePhotoItem>
+          ))}
+        </Reorder.Group>
+      ) : (
+        <Reorder.Group
+          as="div"
+          axis="y"
+          values={newPhotos}
+          onReorder={setNewPhotos}
+          className="min-h-0 flex-1 space-y-3 overflow-y-auto pr-1"
+        >
+          {newPhotos.map((p, i) => (
+            <DraggablePhotoItem key={p.previewUrl} value={p}>
+              {(onDragHandlePointerDown) => (
+                <PhotoListItem
+                  src={p.previewUrl}
+                  orientation={p.orientation}
+                  isCover={coverKey ? coverKey === p.previewUrl : i === 0}
+                  onSetOrientation={(o) => setNewOrientation(i, o)}
+                  onSetCover={() => setCoverKey(p.previewUrl)}
+                  onRemove={() => removeNewPhoto(i)}
+                  onOpenFullscreen={() => setLightboxIndex(i)}
+                  onDragHandlePointerDown={onDragHandlePointerDown}
+                />
+              )}
+            </DraggablePhotoItem>
+          ))}
 
-        {/* Add-more dropzone (create only, < 4) */}
-        {!isEdit && newPhotos.length < MAX_PROJECT_PHOTOS && (
-          <label
-            htmlFor="project-files"
-            className="flex min-h-22 cursor-pointer items-center justify-center rounded-2xl border border-line border-dashed bg-panel2 px-4 text-center transition-colors hover:border-accent"
-          >
-            <div>
-              <p className="text-[14px] text-fg/70">
-                Click to add {newPhotos.length === 0 ? "photos" : "more"} (
-                {newPhotos.length}/{MAX_PROJECT_PHOTOS})
-              </p>
-              <p className="mt-1 text-[12px] text-fg/40">
-                1–4 photos · orientation auto-detected
-              </p>
-            </div>
-            <input
-              id="project-files"
-              type="file"
-              multiple
-              accept={ACCEPTED_IMAGE_TYPES.join(",")}
-              onChange={onFilesChange}
-              className="hidden"
-            />
-          </label>
-        )}
-      </div>
+          {/* Add-more dropzone (< 4) — plain trailing child, not draggable */}
+          {newPhotos.length < MAX_PROJECT_PHOTOS && (
+            <label
+              htmlFor="project-files"
+              className="flex min-h-22 cursor-pointer items-center justify-center rounded-2xl border border-line border-dashed bg-panel2 px-4 text-center transition-colors hover:border-accent"
+            >
+              <div>
+                <p className="text-[14px] text-fg/70">
+                  Click to add {newPhotos.length === 0 ? "photos" : "more"} (
+                  {newPhotos.length}/{MAX_PROJECT_PHOTOS})
+                </p>
+                <p className="mt-1 text-[12px] text-fg/40">
+                  1–4 photos · orientation auto-detected
+                </p>
+              </div>
+              <input
+                id="project-files"
+                type="file"
+                multiple
+                accept={ACCEPTED_IMAGE_TYPES.join(",")}
+                onChange={onFilesChange}
+                className="hidden"
+              />
+            </label>
+          )}
+        </Reorder.Group>
+      )}
       {fileError && <p className="text-[13px] text-red-400">{fileError}</p>}
     </div>
   );
@@ -694,53 +662,88 @@ export function ProjectForm({
   );
 
   return (
-    <form
-      onSubmit={onSubmit}
-      noValidate
-      className="flex h-full flex-col gap-6 md:flex-row"
-    >
-      {uploadMode === "sequential" ? (
-        <div className="flex w-full flex-col items-center justify-center gap-5 py-12">
-          {seqProgress ? (
-            <>
-              {/* Progress bar */}
-              <div className="h-2 w-full max-w-sm overflow-hidden rounded-full bg-line">
-                <div
-                  className="h-full rounded-full bg-accent transition-all duration-300"
-                  style={{
-                    width: `${(seqProgress.current / seqProgress.total) * 100}%`,
-                  }}
-                />
-              </div>
-              <p className="text-[15px] text-fg/70">
-                Uploading photo {seqProgress.current} of {seqProgress.total}
-              </p>
-              {seqError && <p className="text-[13px] text-fg/50">{seqError}</p>}
-            </>
-          ) : seqError ? (
-            <>
-              <p className="text-[14px] text-red-400">{seqError}</p>
-              <PillButton
-                type="button"
-                variant="light"
-                onClick={handleSubmit(startSequentialUpload)}
-              >
-                ⟳ Retry sequential upload
-              </PillButton>
-            </>
-          ) : null}
-        </div>
-      ) : (
-        <>
-          <div className="md:w-[42%] md:shrink-0">{photosPanel}</div>
-          <div className="flex min-w-0 flex-1 flex-col">
-            <div className="min-h-0 flex-1 space-y-6 overflow-y-auto pr-1">
-              {fieldsBody}
-            </div>
-            {footer}
+    <>
+      <form
+        onSubmit={onSubmit}
+        noValidate
+        className="flex h-full flex-col gap-6 md:flex-row"
+      >
+        {uploadMode === "sequential" ? (
+          <div className="flex w-full flex-col items-center justify-center gap-5 py-12">
+            {seqProgress ? (
+              <>
+                {/* Progress bar */}
+                <div className="h-2 w-full max-w-sm overflow-hidden rounded-full bg-line">
+                  <div
+                    className="h-full rounded-full bg-accent transition-all duration-300"
+                    style={{
+                      width: `${(seqProgress.current / seqProgress.total) * 100}%`,
+                    }}
+                  />
+                </div>
+                <p className="text-[15px] text-fg/70">
+                  Uploading photo {seqProgress.current} of {seqProgress.total}
+                </p>
+                {seqError && (
+                  <p className="text-[13px] text-fg/50">{seqError}</p>
+                )}
+              </>
+            ) : seqError ? (
+              <>
+                <p className="text-[14px] text-red-400">{seqError}</p>
+                <PillButton
+                  type="button"
+                  variant="light"
+                  onClick={handleSubmit(startSequentialUpload)}
+                >
+                  ⟳ Retry sequential upload
+                </PillButton>
+              </>
+            ) : null}
           </div>
-        </>
-      )}
-    </form>
+        ) : (
+          <>
+            <div className="md:w-[42%] md:shrink-0">{photosPanel}</div>
+            <div className="flex min-w-0 flex-1 flex-col">
+              <div className="min-h-0 flex-1 space-y-6 overflow-y-auto pr-1">
+                {fieldsBody}
+              </div>
+              {footer}
+            </div>
+          </>
+        )}
+      </form>
+
+      <PhotoLightbox
+        open={lightboxIndex !== null}
+        photos={lightboxPhotos}
+        index={lightboxIndex ?? 0}
+        onIndexChange={setLightboxIndex}
+        onClose={() => setLightboxIndex(null)}
+      />
+    </>
+  );
+}
+
+/** Wraps one Reorder.Item + its own useDragControls instance, so drag can be
+ *  started only from a handle (not the whole card) without violating the
+ *  rules of hooks inside a .map(). Keeps PhotoListItem itself motion-free. */
+function DraggablePhotoItem<T>({
+  value,
+  children,
+}: {
+  value: T;
+  children: (onDragHandlePointerDown: (e: React.PointerEvent) => void) => ReactNode;
+}) {
+  const dragControls = useDragControls();
+  return (
+    <Reorder.Item
+      value={value}
+      as="div"
+      dragListener={false}
+      dragControls={dragControls}
+    >
+      {children((e) => dragControls.start(e))}
+    </Reorder.Item>
   );
 }
