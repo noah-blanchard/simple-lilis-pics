@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import {
-  Cormorant_Garamond,
+  Fraunces,
+  Outfit,
   JetBrains_Mono,
-  Lexend_Deca,
 } from "next/font/google";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
@@ -14,15 +14,15 @@ import { themeInitScript } from "@/components/theme/theme-script";
 import { routing } from "@/i18n/routing";
 import "../globals.css";
 
-const playfairDisplay = Cormorant_Garamond({
+const fraunces = Fraunces({
   variable: "--font-display",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
-  style: ["normal", "italic"],
+  style: ["normal"],
   display: "swap",
 });
 
-const inter = Lexend_Deca({
+const outfit = Outfit({
   variable: "--font-sans-body",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
@@ -93,7 +93,7 @@ export default async function LocaleLayout({
   return (
     <html
       lang={locale}
-      className={`${playfairDisplay.variable} ${inter.variable} ${jetBrainsMono.variable}`}
+      className={`${fraunces.variable} ${outfit.variable} ${jetBrainsMono.variable}`}
       suppressHydrationWarning
     >
       <body className="bg-ink font-sans text-fg antialiased">
