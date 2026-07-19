@@ -41,7 +41,7 @@ export const ACCEPTED_IMAGE_TYPES = [
 
 export const ORIENTATIONS = ["landscape", "portrait"] as const;
 export const MAX_PROJECT_PHOTOS = 4;
-export const MAX_FEATURED_PROJECTS = 6;
+export const MAX_FEATURED_PROJECTS = 8;
 
 /** Per-photo metadata sent alongside each uploaded file. */
 export const projectPhotoMetaSchema = z.object({

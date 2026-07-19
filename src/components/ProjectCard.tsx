@@ -40,7 +40,7 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => {
         <RoundedImage
           src={project.cover?.img ?? ""}
           alt={title}
-          ratio="aspect-[4/5]"
+          ratio="aspect-[9/16]"
           className="mb-5"
         >
           <motion.div

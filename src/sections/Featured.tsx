@@ -11,7 +11,7 @@ export const Featured = async () => {
   const t = await getTranslations("portfolio");
 
   // Home page shows only the curated featured photos (newest first, capped at
-  // 6); the full archive lives on the dedicated /portfolio bento page.
+  // 8); the full archive lives on the dedicated /portfolio bento page.
   const items = await getFeaturedProjects(locale);
 
   return (
@@ -37,7 +37,7 @@ export const Featured = async () => {
           </Link>
         </div>
       </Reveal>
-      <div className="grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {items.map((project, i) => (
           <ProjectCard key={project.id} project={project} index={i} />
         ))}

@@ -27,10 +27,10 @@ async function fetchProjects(opts: {
   return parseProjects(data);
 }
 
-/** Home page — featured projects (capped at 6), locale-resolved. */
+/** Home page — featured projects (capped at 8), locale-resolved. */
 export async function getFeaturedProjects(
   locale: Locale,
-  limit = 6,
+  limit = 8,
 ): Promise<ResolvedProject[]> {
   const rows = await fetchProjects({ featuredOnly: true, limit });
   return rows.map((row) => resolveProject(row, locale));
