@@ -77,9 +77,7 @@ export const ContactForm = ({ onSubmit }: ContactFormProps) => {
               transition={hoverColorTransition}
               {...register("name")}
             />
-            {errors.name && (
-              <p className={errorClass}>{errors.name.message}</p>
-            )}
+            {errors.name && <p className={errorClass}>{errors.name.message}</p>}
           </div>
           <div>
             <label htmlFor="contact-email" className={labelClass}>
@@ -126,7 +124,9 @@ export const ContactForm = ({ onSubmit }: ContactFormProps) => {
             {isSubmitting ? t("submitting") : t("submit")}
           </PillButton>
           {submitted && (
-            <output className="text-[14px] text-accent">{t("success")}</output>
+            <output className="inline-flex items-center rounded-full border border-accent-line bg-accent-soft px-3.5 py-1.5 font-medium text-[13px] text-accent-strong">
+              {t("success")}
+            </output>
           )}
         </div>
       </form>

@@ -4,14 +4,18 @@
    file to retune colors. Each token is bound to a Tailwind utility via
    `@theme inline` in globals.css (e.g. `--bg` -> `bg-ink`, `--fg` -> `text-fg`).
 
-   Design intent — "quiet luxury":
+   Design intent — "warm gallery":
    - Grays are strictly TRUE-NEUTRAL (R=G=B). A tint reads as that color once it
      covers the whole screen, so the canvas stays achromatic and lets the
-     photography carry the color.
-   - A single evenly-stepped neutral ramp (bg → panel → panel-2 → line) gives the
-     surfaces a calm tonal rhythm instead of muddy, uneven jumps.
-   - One jewel accent — a deep emerald — tuned so white-on-accent clears AAA and
-     accent-on-canvas clears AA for text. Contrast is intentional, not incidental.
+     photography (and the one warm accent) carry the color.
+   - One evenly-stepped neutral ramp (bg → panel → panel-2 → line) gives surfaces
+     a calm tonal rhythm instead of muddy, uneven jumps.
+   - A single warm signature — COGNAC / BRASS — deployed with a real tonal scale:
+       accent         solid fills, decorative marks, colored display text
+       accent-strong  hover / pressed, and links that want extra contrast
+       accent-soft    tinted chip / badge surfaces (small elements only)
+       accent-line    warm hairline that pairs with accent-soft
+     Contrast is intentional: white-on-accent and accent-on-canvas both clear AA.
    ========================================================================== */
 
 :root {
@@ -24,22 +28,25 @@
   --line: #dbdbdb; /* decorative hairlines    -> border-line       */
   --line-strong: #868686; /* interactive borders (inputs) -> border-line-strong */
   --muted: #5c5c5c; /* secondary text          -> text-muted        */
-  --fg: #141414; /* primary text/foreground -> text-fg           */
-  --fg-rgb: 20 20 20; /* fg as RGB triplet (grain / watermark)        */
+  --fg: #171717; /* primary text/foreground -> text-fg           */
+  --fg-rgb: 23 23 23; /* fg as RGB triplet (grain / watermark)        */
 
-  /* -- Brand accent (deep emerald) ----------------------------------------- */
-  --accent: #0f6b49; /* brand accent            -> *-accent          */
-  --on-accent: #ffffff; /* text/icon over accent   -> text-on-accent    */
+  /* -- Brand signature (cognac / brass) — tonal scale ---------------------- */
+  --accent: #9a5b1e; /* DEFAULT fills / marks / text -> *-accent        */
+  --accent-strong: #77440f; /* hover, pressed, high-contrast links -> *-accent-strong */
+  --accent-soft: #f4e9dc; /* tinted chip/badge surface   -> bg-accent-soft  */
+  --accent-line: #e8d3b6; /* warm hairline for soft chips -> border-accent-line */
+  --on-accent: #ffffff; /* text/icon over accent fill  -> text-on-accent   */
 
   /* -- Inverted chips / dark pills ----------------------------------------- */
-  --inverse: #141414; /* inverted chip surface   -> bg-inverse        */
+  --inverse: #171717; /* inverted chip surface   -> bg-inverse        */
   --on-inverse: #f6f6f6; /* text over inverse chip  -> text-on-inverse   */
 
   /* -- Overlays & status --------------------------------------------------- */
-  --scrim: rgba(20, 20, 20, 0.5); /* modal backdrop        -> bg-scrim         */
-  --danger: #b42318; /* destructive/error state -> *-danger          */
+  --scrim: rgba(23, 23, 23, 0.5); /* modal backdrop        -> bg-scrim         */
+  --danger: #b42318; /* destructive/error (clear red) -> *-danger        */
   --on-danger: #ffffff; /* text/icon over danger fill -> text-on-danger */
-  --warning: #92400e; /* warning/confirm state   -> *-warning         */
+  --warning: #c2410c; /* warning/confirm (burnt orange, distinct from brass) */
   --on-warning: #ffffff; /* text/icon over warning fill -> text-on-warning */
 }
 

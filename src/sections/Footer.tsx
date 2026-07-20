@@ -48,7 +48,7 @@ export const Footer = () => {
             <a
               key={label}
               href="#"
-              className="block text-[15px] text-fg/80 uppercase tracking-wide hover:text-accent"
+              className="block text-[15px] text-fg/80 uppercase tracking-wide hover:text-accent-strong"
             >
               {label}
             </a>

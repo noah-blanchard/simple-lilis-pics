@@ -44,7 +44,7 @@ export const About = () => {
           <HoverLink
             href="#"
             className="mt-8 inline-flex items-center gap-2 text-fg"
-            whileHover={{ color: "var(--accent)" }}
+            whileHover={{ color: "var(--accent-strong)" }}
           >
             <span className="font-medium">{t("readMore")}</span>
             <span aria-hidden>→</span>

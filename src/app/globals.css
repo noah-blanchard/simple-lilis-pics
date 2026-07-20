@@ -11,6 +11,9 @@
   --color-line: var(--line);
   --color-muted: var(--muted);
   --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-line: var(--accent-line);
   --color-on-accent: var(--on-accent);
   --color-inverse: var(--inverse);
   --color-on-inverse: var(--on-inverse);
