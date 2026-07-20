@@ -23,7 +23,11 @@
     "titleLine1": "**Beauty** Knows",
     "titleLine2": "No **Limits**",
     "intro": "You don't need to know how to pose. You only need to be yourself. I'll take care of the rest.",
-    "cta": "Say hello"
+    "cta": "Say hello",
+    "carousel": {
+      "alt": "Portrait photography by Lili, image {n} of {total}",
+      "goTo": "Go to photo {n}"
+    }
   },
   "about": {
     "tag": "ABOUT ME",

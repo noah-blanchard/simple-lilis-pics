@@ -23,7 +23,11 @@
     "titleLine1": "La **beauté**",
     "titleLine2": "n'a pas de **limites**",
     "intro": "Vous n'avez pas besoin de savoir comment poser. Vous n'avez qu'à être vous-même. Je m'occupe du reste.",
-    "cta": "Me dire bonjour"
+    "cta": "Me dire bonjour",
+    "carousel": {
+      "alt": "Photographie de portrait par Lili, image {n} sur {total}",
+      "goTo": "Aller à la photo {n}"
+    }
   },
   "about": {
     "tag": "À PROPOS DE MOI",
