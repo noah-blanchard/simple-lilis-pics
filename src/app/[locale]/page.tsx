@@ -5,7 +5,6 @@ import { Contact } from "@/sections/Contact";
 import { Featured } from "@/sections/Featured";
 import { Footer } from "@/sections/Footer";
 import { Hero } from "@/sections/Hero";
-import { Pricing } from "@/sections/Pricing";
 import { Process } from "@/sections/Process";
 import { Specialty } from "@/sections/Specialty";
 import { Testimonials } from "@/sections/Testimonials";
@@ -30,7 +29,6 @@ function HomeSections() {
       <Specialty />
       <Featured />
       <Process />
-      {/* <Pricing /> */}
       <Testimonials />
       <Contact />
       <Footer />

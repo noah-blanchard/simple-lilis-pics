@@ -42,7 +42,7 @@ export const About = () => {
             {t("body")}
           </p>
           <HoverLink
-            href="#"
+            href="#contact"
             className="mt-8 inline-flex items-center gap-2 text-fg"
             whileHover={{ color: "var(--accent-strong)" }}
           >

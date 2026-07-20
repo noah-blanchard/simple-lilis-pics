@@ -3,8 +3,13 @@
 import { motion, useReducedMotion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { navItems } from "@/data/nav";
-import { Link } from "@/i18n/navigation";
+import { Link, usePathname } from "@/i18n/navigation";
 import { EASE } from "@/lib/motion";
+import {
+  isInPageAnchor,
+  resolveNavHref,
+  smoothScrollToAnchor,
+} from "@/lib/navTarget";
 import { IconArrow } from "./Icons";
 
 interface NavIndexListProps {
@@ -51,21 +56,8 @@ export const NavIndexList = ({
   const t = useTranslations("nav");
   const reduce = useReducedMotion();
   const cfg = sizeConfig[size];
-
-  // Smooth-scroll to a section. When hosted in an overlay, close it first and
-  // give the close animation a beat before scrolling; inline, scroll right away.
-  const goToAnchor = (target: string) => {
-    onNavigate?.();
-    const id = target.slice(1);
-    window.setTimeout(
-      () => {
-        document
-          .getElementById(id)
-          ?.scrollIntoView({ behavior: "smooth", block: "start" });
-      },
-      onNavigate ? 60 : 0,
-    );
-  };
+  const pathname = usePathname();
+  const isHome = pathname === "/";
 
   const listVariants = {
     hidden: {},
@@ -127,6 +119,9 @@ export const NavIndexList = ({
         );
 
         const linkClass = `group flex items-start ${cfg.row}`;
+        // Anchor items only resolve on the homepage; from any other page they
+        // become a real navigation to `/#id` instead of silently no-op-ing.
+        const isAnchor = isInPageAnchor(item, isHome);
 
         return (
           <motion.li
@@ -135,27 +130,12 @@ export const NavIndexList = ({
             variants={{ hidden: {}, visible: {} }}
           >
             <motion.div variants={itemVariants}>
-              {item.type === "route" ? (
-                <motion.div
-                  initial="rest"
-                  animate="rest"
-                  whileHover="hover"
-                  variants={{ rest: {}, hover: {} }}
-                >
-                  <Link
-                    href={item.target}
-                    onClick={onNavigate}
-                    className={linkClass}
-                  >
-                    {inner}
-                  </Link>
-                </motion.div>
-              ) : (
+              {isAnchor ? (
                 <motion.a
                   href={item.target}
                   onClick={(e) => {
                     e.preventDefault();
-                    goToAnchor(item.target);
+                    smoothScrollToAnchor(item.target, onNavigate);
                   }}
                   className={linkClass}
                   initial="rest"
@@ -165,6 +145,21 @@ export const NavIndexList = ({
                 >
                   {inner}
                 </motion.a>
+              ) : (
+                <motion.div
+                  initial="rest"
+                  animate="rest"
+                  whileHover="hover"
+                  variants={{ rest: {}, hover: {} }}
+                >
+                  <Link
+                    href={resolveNavHref(item, isHome)}
+                    onClick={onNavigate}
+                    className={linkClass}
+                  >
+                    {inner}
+                  </Link>
+                </motion.div>
               )}
             </motion.div>
           </motion.li>

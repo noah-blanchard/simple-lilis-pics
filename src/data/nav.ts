@@ -11,6 +11,5 @@ export const navItems: NavItem[] = [
   { key: "about", type: "anchor", target: "#about" },
   { key: "portfolio", type: "route", target: "/portfolio" },
   { key: "process", type: "anchor", target: "#process" },
-  { key: "pricing", type: "anchor", target: "#pricing" },
   { key: "contact", type: "anchor", target: "#contact" },
 ];

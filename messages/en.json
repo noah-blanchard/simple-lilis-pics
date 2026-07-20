@@ -12,7 +12,6 @@
       "about": "About me",
       "portfolio": "Portfolio",
       "process": "My way of working",
-      "pricing": "Rates",
       "contact": "Say hello"
     }
   },
@@ -233,14 +232,6 @@
     "ctaAccent": " to photograph what's true about you.",
     "getInTouch": "Say hello",
     "sitemapLabel": "SITEMAP",
-    "sitemap": [
-      "About",
-      "Portfolio",
-      "Journal",
-      "Say hello",
-      "Rates",
-      "Dashboard"
-    ],
     "copyright": "© 2026 Lili Marchetti. Site by Noah Blanchard.",
     "watermark": "LILIS·PICS"
   }

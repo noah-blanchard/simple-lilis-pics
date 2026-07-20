@@ -1,11 +1,11 @@
 import { useTranslations } from "next-intl";
 import { AccentUnderline } from "@/components/AccentUnderline";
+import { FooterContactCta } from "@/components/FooterContactCta";
+import { FooterSitemapLinks } from "@/components/FooterSitemapLinks";
 import { HoverLink } from "@/components/HoverLink";
-import { PillButton } from "@/components/PillButton";
 import { Reveal } from "@/components/Reveal";
 import { RoundedImage } from "@/components/RoundedImage";
 import { socials } from "@/data/socials";
-import { rawList } from "@/lib/messages";
 
 const FOOTER_IMG_1 =
   "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=900&q=80&auto=format&fit=crop";
@@ -15,7 +15,6 @@ const FOOTER_IMG_2 =
 export const Footer = () => {
   const t = useTranslations("footer");
   const tNav = useTranslations("nav");
-  const sitemap = rawList(t, "sitemap");
 
   return (
     <footer className="relative mx-auto max-w-[1440px] overflow-hidden px-6 pt-24 pb-10 md:px-12 md:pt-32">
@@ -33,9 +32,7 @@ export const Footer = () => {
           </h2>
         </Reveal>
         <Reveal delay={0.1} className="lg:col-span-5 lg:flex lg:justify-end">
-          <PillButton href="#contact" variant="light">
-            {t("getInTouch")}
-          </PillButton>
+          <FooterContactCta />
         </Reveal>
       </div>
 
@@ -45,15 +42,7 @@ export const Footer = () => {
           <div className="tag-mono mb-4 text-fg/35 uppercase">
             {t("sitemapLabel")}
           </div>
-          {sitemap.map((label) => (
-            <a
-              key={label}
-              href="#"
-              className="block text-[15px] text-fg/80 uppercase tracking-wide hover:text-accent-strong"
-            >
-              {label}
-            </a>
-          ))}
+          <FooterSitemapLinks />
         </div>
         <div className="grid grid-cols-2 gap-5 md:col-span-6">
           <RoundedImage
