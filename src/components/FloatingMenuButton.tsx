@@ -64,7 +64,7 @@ export const FloatingMenuButton = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: reduce ? 0 : -12 }}
             transition={{ duration: reduce ? 0.25 : 0.4, ease: EASE }}
-            className="fixed top-6 right-6 z-[var(--z-nav)] shadow-lg md:top-8 md:right-8"
+            className="fixed top-6 right-6 z-[var(--z-nav)] rounded-full shadow-lg md:top-8 md:right-8"
           >
             <MenuToggle
               variant="light"
