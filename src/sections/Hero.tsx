@@ -8,7 +8,6 @@ import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 import { Logo } from "@/components/Logo";
 import { NavIndexList } from "@/components/NavIndexList";
 import { PillButton } from "@/components/PillButton";
-import { TagLabel } from "@/components/TagLabel";
 import { socials } from "@/data/socials";
 import { EASE } from "@/lib/motion";
 
@@ -48,7 +47,7 @@ export const Hero = () => {
         transition={{ duration: 0.9, delay: 0.15, ease: EASE }}
         className="relative z-10 mx-auto flex w-full max-w-[1440px] items-center justify-between px-6 pt-6 md:px-12 md:pt-8"
       >
-        <Logo className="text-[22px]" />
+        <Logo />
         <LocaleSwitcher />
       </motion.div>
 
@@ -59,7 +58,7 @@ export const Hero = () => {
         <div className="flex flex-col md:col-span-5">
           {/* Top — byline/location, headline, intro */}
           <div className="flex flex-col gap-5">
-            <motion.div
+            {/* <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.9, delay: 0.3, ease: EASE }}
@@ -67,7 +66,7 @@ export const Hero = () => {
             >
               <TagLabel>{t("byline")}</TagLabel>
               <TagLabel>{t("location")}</TagLabel>
-            </motion.div>
+            </motion.div> */}
 
             <motion.h1
               initial={{ opacity: 0, y: 16 }}

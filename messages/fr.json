@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "Lilis Pics — Lili Marchetti, photographe",
-    "description": "Portraits, rue et les petits instants du quotidien, par Lili Marchetti, photographe indépendante à Montréal."
+    "title": "Lilis Pics, photographe",
+    "description": "Portraits, rue et les petits instants du quotidien, par Lili, photographe indépendante à Montréal."
   },
   "nav": {
     "menu": "MENU",
@@ -17,7 +17,7 @@
   },
   "hero": {
     "kicker": "Photographie par Lili",
-    "byline": "LILI MARCHETTI",
+    "byline": "LILI",
     "location": "MONTRÉAL, QUÉBEC",
     "titleLine1": "La **beauté**",
     "titleLine2": "n'a pas de **limites**",
@@ -232,7 +232,7 @@
     "ctaAccent": " photographier ce qui est vrai chez vous.",
     "getInTouch": "Me dire bonjour",
     "sitemapLabel": "PLAN DU SITE",
-    "copyright": "© 2026 Lili Marchetti. Site réalisé par Noah Blanchard.",
+    "copyright": "© 2026 Lilis Pics. Site réalisé par Noah Blanchard.",
     "watermark": "LILIS·PICS"
   }
 }

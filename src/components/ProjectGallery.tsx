@@ -181,7 +181,7 @@ export function ProjectGallery({ project }: ProjectGalleryProps) {
 
           {/* ── Top bar (overlay) ── */}
           <header className="pointer-events-none absolute inset-x-0 top-0 flex items-center justify-between px-6 py-5 md:px-10">
-            <Logo className="pointer-events-auto text-[20px]" />
+            <Logo className="pointer-events-auto h-8" />
 
             <div className="pointer-events-auto flex items-center gap-3">
               {count > 1 && (

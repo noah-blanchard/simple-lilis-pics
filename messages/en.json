@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "Lilis Pics — Lili Marchetti, photographer",
-    "description": "Portraits, street and the quiet in-between, by Lili Marchetti — an independent photographer based in Montréal."
+    "title": "Lilis Pics",
+    "description": "Portraits, street and the quiet in-between, by Lili — an independent photographer based in Montréal."
   },
   "nav": {
     "dashboard": "🔒 Dashboard",
@@ -17,7 +17,7 @@
   },
   "hero": {
     "kicker": "Photography by Lili",
-    "byline": "LILI MARCHETTI",
+    "byline": "LILI",
     "location": "MONTREAL, CANADA",
     "titleLine1": "**Beauty** Knows",
     "titleLine2": "No **Limits**",
@@ -232,7 +232,7 @@
     "ctaAccent": " to photograph what's true about you.",
     "getInTouch": "Say hello",
     "sitemapLabel": "SITEMAP",
-    "copyright": "© 2026 Lili Marchetti. Site by Noah Blanchard.",
+    "copyright": "© 2026 Lilis Pics. Site by Noah Blanchard.",
     "watermark": "LILIS·PICS"
   }
 }

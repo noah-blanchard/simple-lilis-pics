@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { AccentUnderline } from "@/components/AccentUnderline";
 import { BentoCard } from "@/components/BentoCard";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
+import { Logo } from "@/components/Logo";
 import { navTextControl } from "@/components/nav/navControl";
 import { Reveal } from "@/components/Reveal";
 import { TagLabel } from "@/components/TagLabel";
@@ -48,14 +49,7 @@ export const PortfolioBento = ({ items }: PortfolioBentoProps) => {
         transition={{ duration: 0.9, ease: EASE, delay: 0.1 }}
         className="mx-auto flex max-w-[1440px] items-center justify-between px-6 pt-8 md:px-12"
       >
-        <Link
-          href="/"
-          className="font-semibold text-[22px] italic tracking-tight"
-        >
-          <span>Lilis</span>
-          <span className="text-accent">.</span>
-          <span>Pics</span>
-        </Link>
+        <Logo />
         <div className="flex items-center gap-3">
           <LocaleSwitcher />
           <MotionLink

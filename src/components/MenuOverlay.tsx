@@ -8,6 +8,7 @@ import { socials } from "@/data/socials";
 import { EASE } from "@/lib/motion";
 import { HoverLink } from "./HoverLink";
 import { LocaleSwitcher } from "./LocaleSwitcher";
+import { Logo } from "./Logo";
 import { MenuToggle } from "./MenuToggle";
 import { NavIndexList } from "./NavIndexList";
 
@@ -69,11 +70,7 @@ export const MenuOverlay = ({ open, onClose }: MenuOverlayProps) => {
         >
           {/* Top bar — logo + a toggle that closes the overlay. */}
           <div className="flex items-center justify-between px-6 pt-8 md:px-12">
-            <span className="font-semibold text-[22px] italic tracking-tight">
-              <span>Lilis</span>
-              <span className="text-accent">.</span>
-              <span>Pics</span>
-            </span>
+            <Logo />
             <MenuToggle
               open
               onToggle={onClose}
