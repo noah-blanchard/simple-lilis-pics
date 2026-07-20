@@ -1,15 +1,15 @@
 "use client";
 
 import { motion } from "motion/react";
-import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { HeroCarousel } from "@/components/HeroCarousel";
+import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 import { NavBar } from "@/components/NavBar";
+import { NavIndexList } from "@/components/NavIndexList";
 import { PillButton } from "@/components/PillButton";
 import { TagLabel } from "@/components/TagLabel";
+import { Link } from "@/i18n/navigation";
 import { EASE } from "@/lib/motion";
-
-const HERO_IMG =
-  "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=2000&q=80&auto=format&fit=crop";
 
 // Splits a translated line on `**word**` markers and renders the marked
 // portion in accent color. Word position differs by language (e.g. the
@@ -32,78 +32,90 @@ export const Hero = () => {
   const t = useTranslations("hero");
 
   return (
-    <section className="relative min-h-[100svh] w-full overflow-hidden">
-      {/* Background image */}
-      <div className="absolute inset-0">
-        <Image
-          src={HERO_IMG}
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
-        />
-        <div className="absolute inset-0 bg-linear-to-b from-ink/70 via-ink/30 to-ink/90" />
-      </div>
+    <section id="hero" className="relative w-full overflow-hidden">
       <div className="grain pointer-events-none absolute inset-0 z-[var(--z-base)]" />
 
-      <NavBar />
-
-      {/* Hero content */}
-      <div className="relative z-10 mx-auto flex min-h-[calc(100svh-100px)] max-w-[1440px] flex-col items-center justify-center px-6 text-center md:px-12">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.9, delay: 0.45, ease: EASE }}
-          className="absolute top-[42%] left-6 hidden md:left-12 md:block"
-        >
-          <TagLabel>{t("byline")}</TagLabel>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.9, delay: 0.45, ease: EASE }}
-          className="absolute top-[42%] right-6 hidden md:right-12 md:block"
-        >
-          <TagLabel>{t("location")}</TagLabel>
-        </motion.div>
-
-        <motion.h1
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.15, ease: EASE }}
-          className="display-xl max-w-[1100px] text-[44px] uppercase sm:text-6xl md:text-8xl lg:text-[120px]"
-          style={{ textWrap: "balance" }}
-        >
-          <span className="block">{renderAccentLine(t("titleLine1"))}</span>
-          <span className="block">{renderAccentLine(t("titleLine2"))}</span>
-        </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.45, ease: EASE }}
-          className="mt-8 max-w-[640px] text-[15px] text-fg/75 leading-relaxed md:text-[17px]"
-        >
-          {t("intro")}
-        </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.6, ease: EASE }}
-          className="mt-10"
-        >
-          <PillButton href="#contact" variant="light">
-            {t("cta")}
-          </PillButton>
-        </motion.div>
+      {/* Mobile-only top bar (logo, locale, menu trigger) — temporary until
+          FloatingMenuButton takes over site-wide nav in the next step. */}
+      <div className="md:hidden">
+        <NavBar />
       </div>
 
-      {/* mobile-only meta row */}
-      <div className="-mt-4 relative z-10 flex justify-between px-6 pb-8 md:hidden">
-        <TagLabel>{t("byline")}</TagLabel>
-        <TagLabel>{t("location")}</TagLabel>
+      <div className="relative z-10 mx-auto grid max-w-[1440px] grid-cols-1 gap-x-12 gap-y-10 px-6 pt-6 pb-16 md:min-h-[100svh] md:grid-cols-12 md:items-center md:px-12 md:py-10">
+        {/* Left column — brand, nav, headline, CTA */}
+        <div className="flex flex-col md:col-span-5">
+          <motion.div
+            initial={{ opacity: 0, y: -16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.15, ease: EASE }}
+            className="hidden items-center justify-between md:flex"
+          >
+            <Link
+              href="/"
+              className="font-semibold text-[22px] italic tracking-tight"
+            >
+              <span>Lilis</span>
+              <span className="text-accent">.</span>
+              <span>Pics</span>
+            </Link>
+            <LocaleSwitcher />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.9, delay: 0.3, ease: EASE }}
+            className="mt-6 flex items-center gap-6 md:mt-10"
+          >
+            <TagLabel>{t("byline")}</TagLabel>
+            <TagLabel>{t("location")}</TagLabel>
+          </motion.div>
+
+          <div className="mt-6 hidden md:block">
+            <NavIndexList size="md" standalone delayChildren={0.45} />
+          </div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.55, ease: EASE }}
+            className="display-xl mt-8 max-w-[560px] text-[40px] uppercase leading-[0.95] sm:text-6xl md:mt-10 md:text-[52px] lg:text-[64px]"
+            style={{ textWrap: "balance" }}
+          >
+            <span className="block">{renderAccentLine(t("titleLine1"))}</span>
+            <span className="block">{renderAccentLine(t("titleLine2"))}</span>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.7, ease: EASE }}
+            className="mt-6 max-w-[440px] text-[15px] text-fg/75 leading-relaxed md:text-[17px]"
+          >
+            {t("intro")}
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.85, ease: EASE }}
+            className="mt-8"
+          >
+            <PillButton href="#contact" variant="light">
+              {t("cta")}
+            </PillButton>
+          </motion.div>
+        </div>
+
+        {/* Right column — big autoplay carousel */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, delay: 0.3, ease: EASE }}
+          className="md:col-span-7"
+        >
+          <HeroCarousel />
+        </motion.div>
       </div>
     </section>
   );
