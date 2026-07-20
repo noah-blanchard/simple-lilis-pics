@@ -208,7 +208,7 @@
   "contact": {
     "tag": "ME DIRE BONJOUR",
     "titleBase": "Créons quelque chose",
-    "titleAccent": "de beau ensemble.",
+    "titleAccent": "de beau.",
     "description": "Un portrait, un mariage, une marque ou quelque chose d'entièrement unique. Parlez-moi de votre vision, et je vous répondrai dans les 24 heures.",
     "name": { "label": "Nom", "placeholder": "Votre nom" },
     "email": { "label": "E-mail", "placeholder": "vous@email.com" },
@@ -228,8 +228,8 @@
     }
   },
   "footer": {
-    "ctaBase": "Je suis Lili, et j'adorerais",
-    "ctaAccent": " photographier ce qui est vrai chez vous.",
+    "ctaBase": "Photographions ensemble",
+    "ctaAccent": " ce qui est vrai chez vous.",
     "getInTouch": "Me dire bonjour",
     "sitemapLabel": "PLAN DU SITE",
     "copyright": "© 2026 Lilis Pics. Site réalisé par Noah Blanchard.",

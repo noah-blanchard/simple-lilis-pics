@@ -44,7 +44,7 @@ export const Footer = () => {
           </div>
           <FooterSitemapLinks />
         </div>
-        <div className="grid grid-cols-2 gap-5 md:col-span-6">
+        {/* <div className="grid grid-cols-2 gap-5 md:col-span-6">
           <RoundedImage
             src={FOOTER_IMG_1}
             ratio="aspect-[4/5]"
@@ -55,7 +55,7 @@ export const Footer = () => {
             ratio="aspect-[4/5]"
             sizes="(max-width: 768px) 50vw, 25vw"
           />
-        </div>
+        </div> */}
       </div>
 
       {/* bottom bar */}
@@ -89,12 +89,12 @@ export const Footer = () => {
         </div>
       </div>
 
-      {/* watermark text */}
+      {/* watermark text
       <div className="pointer-events-none mt-16 select-none overflow-hidden md:mt-24">
         <div className="wm-text whitespace-nowrap text-center text-[20vw] md:text-[18vw]">
           {t("watermark")}
         </div>
-      </div>
+      </div> */}
     </footer>
   );
 };

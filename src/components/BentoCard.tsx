@@ -48,14 +48,6 @@ export const BentoCard = ({
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           priority={priority}
         >
-          {/* Gradient scrim — visible at rest, deepens on hover */}
-          <motion.div
-            className="absolute inset-0 bg-linear-to-t from-ink/85 via-ink/20 to-transparent"
-            variants={{ rest: { opacity: 0.7 }, hover: { opacity: 1 } }}
-            initial={false}
-            transition={hoverRevealTransition}
-          />
-
           {/* Arrow drops in top-right on hover */}
           <motion.div
             className="absolute top-4 right-4"

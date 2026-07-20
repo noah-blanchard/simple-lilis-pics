@@ -208,7 +208,7 @@
   "contact": {
     "tag": "SAY HELLO",
     "titleBase": "Let's create something",
-    "titleAccent": "beautiful together.",
+    "titleAccent": "beautiful.",
     "description": "A portrait, a wedding, a brand, or something completely unique. Tell me about your vision, and I'll get back to you within 24 hours.",
     "name": { "label": "Name", "placeholder": "Your name" },
     "email": { "label": "Email", "placeholder": "you@email.com" },
@@ -228,8 +228,8 @@
     }
   },
   "footer": {
-    "ctaBase": "I'm Lili, and I'd love",
-    "ctaAccent": " to photograph what's true about you.",
+    "ctaBase": "Let's photograph",
+    "ctaAccent": "what's true about you.",
     "getInTouch": "Say hello",
     "sitemapLabel": "SITEMAP",
     "copyright": "© 2026 Lilis Pics. Site by Noah Blanchard.",

@@ -149,10 +149,6 @@ export function ProjectGallery({ project }: ProjectGalleryProps) {
           transition={{ duration: 0.25, ease: EASE }}
           inert={!showChrome}
         >
-          {/* ── Edge scrims for overlay legibility (don't block gestures) ── */}
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-linear-to-b from-ink/70 to-transparent" />
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-56 bg-linear-to-t from-ink/80 to-transparent" />
-
           {/* ── Prev / Next arrows ── */}
           {count > 1 && (
             <>

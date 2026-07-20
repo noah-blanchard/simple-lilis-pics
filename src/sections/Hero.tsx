@@ -72,7 +72,7 @@ export const Hero = () => {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.45, ease: EASE }}
-              className="display-xl max-w-[560px] text-[34px] uppercase leading-[0.95] sm:text-5xl md:text-[38px] lg:text-[46px]"
+              className="display-xl max-w-[560px] text-[38px] uppercase leading-[1.1] sm:text-[52px] md:text-[42px] lg:text-[52px]"
               style={{ textWrap: "balance" }}
             >
               <span className="block">{renderAccentLine(t("titleLine1"))}</span>

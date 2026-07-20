@@ -45,12 +45,6 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => {
           className="mb-5"
         >
           <motion.div
-            className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-ink/30"
-            variants={{ rest: { opacity: 0 }, hover: { opacity: 1 } }}
-            initial={false}
-            transition={hoverRevealTransition}
-          />
-          <motion.div
             className="absolute top-5 right-5"
             variants={{
               rest: { opacity: 0, y: reduce ? 0 : -8 },
