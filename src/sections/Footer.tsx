@@ -14,6 +14,7 @@ const FOOTER_IMG_2 =
 
 export const Footer = () => {
   const t = useTranslations("footer");
+  const tNav = useTranslations("nav");
   const sitemap = rawList(t, "sitemap");
 
   return (
@@ -86,6 +87,16 @@ export const Footer = () => {
               {s.label}
             </HoverLink>
           ))}
+          <HoverLink
+            href="/admin"
+            className="rounded-full bg-panel px-5 py-2.5 text-[13px] text-fg/80"
+            whileHover={{
+              backgroundColor: "var(--inverse)",
+              color: "var(--on-inverse)",
+            }}
+          >
+            {tNav("dashboard")}
+          </HoverLink>
         </div>
       </div>
 
