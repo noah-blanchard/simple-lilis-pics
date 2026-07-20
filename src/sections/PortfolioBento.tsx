@@ -8,7 +8,6 @@ import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 import { navTextControl } from "@/components/nav/navControl";
 import { Reveal } from "@/components/Reveal";
 import { TagLabel } from "@/components/TagLabel";
-import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { Link } from "@/i18n/navigation";
 import { packColumns, useColumnCount } from "@/lib/bento";
 import { EASE, hoverColorTransition } from "@/lib/motion";
@@ -28,7 +27,6 @@ interface PortfolioBentoProps {
 
 export const PortfolioBento = ({ items }: PortfolioBentoProps) => {
   const t = useTranslations("portfolio");
-  const tNav = useTranslations("nav");
   const cols = useColumnCount();
   const columns = packColumns(items, cols);
 
@@ -60,10 +58,6 @@ export const PortfolioBento = ({ items }: PortfolioBentoProps) => {
         </Link>
         <div className="flex items-center gap-3">
           <LocaleSwitcher />
-          <ThemeToggle
-            toLightLabel={tNav("theme.toLight")}
-            toDarkLabel={tNav("theme.toDark")}
-          />
           <MotionLink
             href="/"
             className={navTextControl}

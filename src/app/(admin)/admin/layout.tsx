@@ -2,7 +2,6 @@ import type { ReactNode } from "react";
 import { QueryProvider } from "@/components/admin/QueryProvider";
 import { SignOutButton } from "@/components/admin/SignOutButton";
 import { PillButton } from "@/components/PillButton";
-import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 /** Admin shell — header + sign-out, wrapped in the TanStack Query provider.
  *  Sits inside the (admin) root layout which supplies <html>/<body>. */
@@ -27,10 +26,6 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
               <span aria-hidden>← </span>
               <span>Back to site</span>
             </PillButton>
-            <ThemeToggle
-              toLightLabel="Switch to light theme"
-              toDarkLabel="Switch to dark theme"
-            />
             <SignOutButton />
           </div>
         </header>

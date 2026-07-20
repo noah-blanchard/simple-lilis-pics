@@ -23,18 +23,17 @@ interface PillButtonProps {
 const base =
   "relative inline-flex cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-full font-medium";
 
-// `sm` matches the LocaleSwitcher / ThemeToggle control height (~36px) so the
+// `sm` matches the LocaleSwitcher control height (~36px) so the
 // nav cluster lines up; `md` is the default page CTA size.
 const sizeClass: Record<PillSize, string> = {
   sm: "px-4 py-2 text-[12px]",
   md: "px-7 py-4 text-[15px]",
 };
 
-// All colors are Tailwind utility classes so they flip with the `.dark` class
-// on <html>. motion only animates transforms (the fill wipe + text roll) — it
-// never owns a theme-dependent color, which is what caused the white-on-white
-// bug (motion drops `var()` color values and propagated child variants don't
-// re-resolve on theme change).
+// All colors are Tailwind utility classes bound to the theme tokens. motion only
+// animates transforms (the fill wipe + text roll) — it never owns a color, which
+// is what caused an earlier white-on-white bug (motion drops `var()` color values
+// and propagated child variants don't re-resolve them).
 interface VariantConfig {
   bg: string; // static base background class
   fill: string; // class for the colour that wipes in on hover

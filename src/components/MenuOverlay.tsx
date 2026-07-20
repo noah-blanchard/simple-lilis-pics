@@ -11,7 +11,6 @@ import { HoverLink } from "./HoverLink";
 import { IconArrow } from "./Icons";
 import { LocaleSwitcher } from "./LocaleSwitcher";
 import { MenuToggle } from "./MenuToggle";
-import { ThemeToggle } from "./theme/ThemeToggle";
 
 interface MenuOverlayProps {
   open: boolean;
@@ -229,10 +228,6 @@ export const MenuOverlay = ({ open, onClose }: MenuOverlayProps) => {
                 {t("email")}
               </HoverLink>
               <LocaleSwitcher />
-              <ThemeToggle
-                toLightLabel={t("theme.toLight")}
-                toDarkLabel={t("theme.toDark")}
-              />
               <HoverLink href="/admin" className="text-[14px] text-fg/65">
                 {t("dashboard")}
               </HoverLink>

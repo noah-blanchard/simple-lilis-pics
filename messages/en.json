@@ -8,10 +8,6 @@
     "menu": "MENU",
     "close": "CLOSE",
     "email": "hello@lilispics.com",
-    "theme": {
-      "toLight": "Switch to light theme",
-      "toDark": "Switch to dark theme"
-    },
     "items": {
       "about": "About me",
       "portfolio": "Portfolio",

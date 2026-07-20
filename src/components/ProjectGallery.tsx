@@ -7,7 +7,6 @@ import { useCallback, useEffect, useState } from "react";
 import { GalleryIntro } from "@/components/GalleryIntro";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 import { TagLabel } from "@/components/TagLabel";
-import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { ZoomableImage } from "@/components/ZoomableImage";
 import { Link, useRouter } from "@/i18n/navigation";
 import { EASE, hoverColorTransition } from "@/lib/motion";
@@ -26,7 +25,6 @@ interface ProjectGalleryProps {
 
 export function ProjectGallery({ project }: ProjectGalleryProps) {
   const t = useTranslations("portfolio");
-  const tNav = useTranslations("nav");
   const prefersReduced = useReducedMotion();
   const router = useRouter();
   const photos = project.photos;
@@ -199,10 +197,6 @@ export function ProjectGallery({ project }: ProjectGalleryProps) {
                 </span>
               )}
               <LocaleSwitcher />
-              <ThemeToggle
-                toLightLabel={tNav("theme.toLight")}
-                toDarkLabel={tNav("theme.toDark")}
-              />
               <PillButton
                 size="sm"
                 onClick={handleClose}

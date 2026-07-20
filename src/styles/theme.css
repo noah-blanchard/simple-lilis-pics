@@ -1,29 +1,46 @@
 /* ============================================================================
-   PALETTES — single source of truth for theming.
-   Edit ONLY this file to retune the Light / Dark color schemes.
-   Each token here is bound to a Tailwind utility via `@theme inline` in
-   globals.css (e.g. `--bg` -> `bg-ink`, `--fg` -> `text-fg`, ...).
+   PALETTE — single source of truth for theming.
+   This site ships a single, refined LIGHT theme (no dark mode). Edit ONLY this
+   file to retune colors. Each token is bound to a Tailwind utility via
+   `@theme inline` in globals.css (e.g. `--bg` -> `bg-ink`, `--fg` -> `text-fg`).
+
+   Design intent — "quiet luxury":
+   - Grays are strictly TRUE-NEUTRAL (R=G=B). A tint reads as that color once it
+     covers the whole screen, so the canvas stays achromatic and lets the
+     photography carry the color.
+   - A single evenly-stepped neutral ramp (bg → panel → panel-2 → line) gives the
+     surfaces a calm tonal rhythm instead of muddy, uneven jumps.
+   - One jewel accent — a deep emerald — tuned so white-on-accent clears AAA and
+     accent-on-canvas clears AA for text. Contrast is intentional, not incidental.
    ========================================================================== */
 
-/* ----------------------------- LIGHT (default) ---------------------------- */
 :root {
-  --bg: #f5f5f5; /* page background        -> bg-ink            */
-  --fg: #121212; /* primary text/foreground -> text-fg           */
-  --fg-rgb: 18 18 18; /* fg as RGB triplet (grain / watermark)        */
-  --panel: #eaeaea; /* surface level 1         -> bg-panel          */
-  --panel-2: #dedede; /* surface level 2         -> bg-panel2         */
-  --line: #cccccc; /* decorative dividers    -> border-line       */
-  --line-strong: #7a7a7a; /* interactive borders (inputs) -> border-line-strong */
-  --muted: #666666; /* secondary text          -> text-muted        */
-  --accent: #1b7a55; /* brand accent (deep emerald) -> *-accent      */
-  --on-accent: #f5f5f5; /* text/icon over accent   -> text-on-accent    */
-  --inverse: #121212; /* inverted chip surface   -> bg-inverse        */
-  --on-inverse: #f5f5f5; /* text over inverse chip  -> text-on-inverse   */
-  --scrim: rgba(18, 18, 18, 0.45); /* modal backdrop          -> bg-scrim         */
-  --danger: #a81e1e; /* destructive/error state -> *-danger          */
-  --on-danger: #f5f5f5; /* text/icon over danger fill -> text-on-danger */
+  color-scheme: light;
+
+  /* -- Neutral ramp (true neutral, evenly stepped) ------------------------- */
+  --bg: #f4f4f4; /* page canvas            -> bg-ink            */
+  --panel: #ededed; /* surface level 1         -> bg-panel          */
+  --panel-2: #e4e4e4; /* surface level 2         -> bg-panel2         */
+  --line: #dbdbdb; /* decorative hairlines    -> border-line       */
+  --line-strong: #868686; /* interactive borders (inputs) -> border-line-strong */
+  --muted: #5c5c5c; /* secondary text          -> text-muted        */
+  --fg: #141414; /* primary text/foreground -> text-fg           */
+  --fg-rgb: 20 20 20; /* fg as RGB triplet (grain / watermark)        */
+
+  /* -- Brand accent (deep emerald) ----------------------------------------- */
+  --accent: #0f6b49; /* brand accent            -> *-accent          */
+  --on-accent: #ffffff; /* text/icon over accent   -> text-on-accent    */
+
+  /* -- Inverted chips / dark pills ----------------------------------------- */
+  --inverse: #141414; /* inverted chip surface   -> bg-inverse        */
+  --on-inverse: #f6f6f6; /* text over inverse chip  -> text-on-inverse   */
+
+  /* -- Overlays & status --------------------------------------------------- */
+  --scrim: rgba(20, 20, 20, 0.5); /* modal backdrop        -> bg-scrim         */
+  --danger: #b42318; /* destructive/error state -> *-danger          */
+  --on-danger: #ffffff; /* text/icon over danger fill -> text-on-danger */
   --warning: #92400e; /* warning/confirm state   -> *-warning         */
-  --on-warning: #f5f5f5; /* text/icon over warning fill -> text-on-warning */
+  --on-warning: #ffffff; /* text/icon over warning fill -> text-on-warning */
 }
 
 /* ------------------------------ Z-INDEX SCALE ----------------------------- */
@@ -36,25 +53,4 @@
   --z-overlay: 50; /* full-screen overlays: gallery, modals */
   --z-overlay-top: 60; /* nested confirm dialog above a modal   */
   --z-menu: 100; /* fullscreen menu — top-most           */
-}
-
-/* --------------------------------- DARK ----------------------------------- */
-.dark {
-  --bg: #0c0c0c;
-  --fg: #eaeaea;
-  --fg-rgb: 234 234 234;
-  --panel: #161616;
-  --panel-2: #1e1e1e;
-  --line: #2e2e2e;
-  --line-strong: #737373;
-  --muted: #8f8f8f;
-  --accent: #34b47f;
-  --on-accent: #0c0c0c;
-  --inverse: #eaeaea;
-  --on-inverse: #0c0c0c;
-  --scrim: rgba(0, 0, 0, 0.65);
-  --danger: #f0605a;
-  --on-danger: #0c0c0c;
-  --warning: #f5a623;
-  --on-warning: #0c0c0c;
 }
