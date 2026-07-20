@@ -9,6 +9,11 @@ interface HoverLinkProps {
   className?: string;
   /** Motion target applied on hover. Defaults to fading the text to full fg. */
   whileHover?: TargetAndTransition;
+  /** Anchor target (e.g. "_blank" for external social links). */
+  target?: string;
+  /** rel attribute; defaults to a safe value when target is "_blank". */
+  rel?: string;
+  "aria-label"?: string;
   children: ReactNode;
 }
 
@@ -19,6 +24,9 @@ export const HoverLink = ({
   href,
   className = "",
   whileHover = { color: "var(--fg)" },
+  target,
+  rel,
+  "aria-label": ariaLabel,
   children,
 }: HoverLinkProps) => (
   <motion.a
@@ -26,6 +34,9 @@ export const HoverLink = ({
     className={className}
     whileHover={whileHover}
     transition={hoverColorTransition}
+    target={target}
+    rel={rel ?? (target === "_blank" ? "noopener noreferrer" : undefined)}
+    aria-label={ariaLabel}
   >
     {children}
   </motion.a>

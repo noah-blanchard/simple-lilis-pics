@@ -5,8 +5,8 @@ import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { navItems } from "@/data/nav";
+import { socials } from "@/data/socials";
 import { Link } from "@/i18n/navigation";
-import { rawList } from "@/lib/messages";
 import { HoverLink } from "./HoverLink";
 import { IconArrow } from "./Icons";
 import { LocaleSwitcher } from "./LocaleSwitcher";
@@ -21,7 +21,6 @@ import { EASE } from "@/lib/motion";
 
 export const MenuOverlay = ({ open, onClose }: MenuOverlayProps) => {
   const t = useTranslations("nav");
-  const tFooter = useTranslations("footer");
   const reduce = useReducedMotion();
   const firstLinkRef = useRef<HTMLAnchorElement>(null);
 
@@ -44,8 +43,6 @@ export const MenuOverlay = ({ open, onClose }: MenuOverlayProps) => {
       document.removeEventListener("keydown", onKey);
     };
   }, [open, onClose]);
-
-  const socials = rawList(tFooter, "social");
 
   // Smooth-scroll to a section after closing the overlay.
   const goToAnchor = (target: string) => {
@@ -210,13 +207,14 @@ export const MenuOverlay = ({ open, onClose }: MenuOverlayProps) => {
             className="flex flex-col gap-5 border-fg/10 border-t px-6 py-8 md:flex-row md:items-center md:justify-between md:px-12"
           >
             <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
-              {socials.map((name) => (
+              {socials.map((s) => (
                 <HoverLink
-                  key={name}
-                  href="#"
+                  key={s.label}
+                  href={s.href}
+                  target="_blank"
                   className="text-[14px] text-fg/65"
                 >
-                  {name}
+                  {s.label}
                 </HoverLink>
               ))}
             </div>

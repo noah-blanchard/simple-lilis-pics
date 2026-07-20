@@ -4,6 +4,7 @@ import { HoverLink } from "@/components/HoverLink";
 import { PillButton } from "@/components/PillButton";
 import { Reveal } from "@/components/Reveal";
 import { RoundedImage } from "@/components/RoundedImage";
+import { socials } from "@/data/socials";
 import { rawList } from "@/lib/messages";
 
 const FOOTER_IMG_1 =
@@ -14,7 +15,6 @@ const FOOTER_IMG_2 =
 export const Footer = () => {
   const t = useTranslations("footer");
   const sitemap = rawList(t, "sitemap");
-  const social = rawList(t, "social");
 
   return (
     <footer className="relative mx-auto max-w-[1440px] overflow-hidden px-6 pt-24 pb-10 md:px-12 md:pt-32">
@@ -25,7 +25,7 @@ export const Footer = () => {
             className="display text-3xl tracking-tight md:text-5xl lg:text-[56px]"
             style={{ textWrap: "balance" }}
           >
-            <span className="text-fg">{t("ctaBase")}</span>
+            <span className="text-fg">{t("ctaBase")}</span>{" "}
             <AccentUnderline className="text-accent italic">
               {t("ctaAccent")}
             </AccentUnderline>
@@ -72,17 +72,18 @@ export const Footer = () => {
       <div className="mt-16 flex flex-col items-start justify-between gap-6 border-line border-t pt-8 md:flex-row md:items-center">
         <div className="text-[14px] text-fg/55">{t("copyright")}</div>
         <div className="flex gap-3">
-          {social.map((label) => (
+          {socials.map((s) => (
             <HoverLink
-              key={label}
-              href="#"
+              key={s.label}
+              href={s.href}
+              target="_blank"
               className="rounded-full bg-panel px-5 py-2.5 text-[13px] text-fg/80"
               whileHover={{
                 backgroundColor: "var(--inverse)",
                 color: "var(--on-inverse)",
               }}
             >
-              {label}
+              {s.label}
             </HoverLink>
           ))}
         </div>
