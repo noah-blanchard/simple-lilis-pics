@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
+import { AccentUnderline } from "@/components/AccentUnderline";
 import { BentoCard } from "@/components/BentoCard";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 import { navTextControl } from "@/components/nav/navControl";
@@ -85,7 +86,9 @@ export const PortfolioBento = ({ items }: PortfolioBentoProps) => {
                 style={{ textWrap: "balance" }}
               >
                 <span>{t("allTitleBase")}</span>
-                <span className="text-accent">{t("allTitleAccent")}</span>
+                <AccentUnderline className="text-accent italic">
+                  {t("allTitleAccent")}
+                </AccentUnderline>
               </h2>
             </div>
             <span className="tag-mono text-fg/45 uppercase">

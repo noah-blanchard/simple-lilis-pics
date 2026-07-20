@@ -1,3 +1,4 @@
+import { AccentUnderline } from "./AccentUnderline";
 import { Reveal } from "./Reveal";
 import { TagLabel } from "./TagLabel";
 
@@ -28,7 +29,9 @@ export const SectionHeader = ({
         style={{ textWrap: "balance" }}
       >
         <span className="block">{titleBase}</span>
-        <span className="block text-accent">{titleAccent}</span>
+        <AccentUnderline block className="text-accent italic">
+          {titleAccent}
+        </AccentUnderline>
       </h2>
     </Reveal>
   </div>

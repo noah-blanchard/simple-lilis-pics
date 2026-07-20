@@ -9,6 +9,7 @@ import { z } from "zod";
 import { hoverColorTransition } from "@/lib/motion";
 import { FIELD_CLASS, FIELD_FOCUS } from "@/lib/ui";
 import type { ContactFormValues } from "@/types";
+import { NeonRotatingBorder } from "./NeonRotatingBorder";
 import { PillButton } from "./PillButton";
 
 interface ContactFormProps {
@@ -58,75 +59,77 @@ export const ContactForm = ({ onSubmit }: ContactFormProps) => {
   const errorClass = "mt-2 text-[13px] text-danger";
 
   return (
-    <form
-      onSubmit={submit}
-      noValidate
-      className="rounded-card bg-panel p-7 md:p-10"
-    >
-      <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-        <div>
-          <label htmlFor="contact-name" className={labelClass}>
-            {t("name.label")}
+    <NeonRotatingBorder>
+      <form onSubmit={submit} noValidate className="p-7 md:p-10">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+          <div>
+            <label htmlFor="contact-name" className={labelClass}>
+              {t("name.label")}
+            </label>
+            <motion.input
+              id="contact-name"
+              type="text"
+              autoComplete="name"
+              placeholder={t("name.placeholder")}
+              aria-invalid={errors.name ? "true" : "false"}
+              className={fieldClass}
+              whileFocus={focusBorder}
+              transition={hoverColorTransition}
+              {...register("name")}
+            />
+            {errors.name && (
+              <p className={errorClass}>{errors.name.message}</p>
+            )}
+          </div>
+          <div>
+            <label htmlFor="contact-email" className={labelClass}>
+              {t("email.label")}
+            </label>
+            <motion.input
+              id="contact-email"
+              type="email"
+              autoComplete="email"
+              placeholder={t("email.placeholder")}
+              aria-invalid={errors.email ? "true" : "false"}
+              className={fieldClass}
+              whileFocus={focusBorder}
+              transition={hoverColorTransition}
+              {...register("email")}
+            />
+            {errors.email && (
+              <p className={errorClass}>{errors.email.message}</p>
+            )}
+          </div>
+        </div>
+
+        <div className="mt-5">
+          <label htmlFor="contact-message" className={labelClass}>
+            {t("message.label")}
           </label>
-          <motion.input
-            id="contact-name"
-            type="text"
-            autoComplete="name"
-            placeholder={t("name.placeholder")}
-            aria-invalid={errors.name ? "true" : "false"}
-            className={fieldClass}
+          <motion.textarea
+            id="contact-message"
+            rows={5}
+            placeholder={t("message.placeholder")}
+            aria-invalid={errors.message ? "true" : "false"}
+            className={`${fieldClass} resize-none`}
             whileFocus={focusBorder}
             transition={hoverColorTransition}
-            {...register("name")}
+            {...register("message")}
           />
-          {errors.name && <p className={errorClass}>{errors.name.message}</p>}
+          {errors.message && (
+            <p className={errorClass}>{errors.message.message}</p>
+          )}
         </div>
-        <div>
-          <label htmlFor="contact-email" className={labelClass}>
-            {t("email.label")}
-          </label>
-          <motion.input
-            id="contact-email"
-            type="email"
-            autoComplete="email"
-            placeholder={t("email.placeholder")}
-            aria-invalid={errors.email ? "true" : "false"}
-            className={fieldClass}
-            whileFocus={focusBorder}
-            transition={hoverColorTransition}
-            {...register("email")}
-          />
-          {errors.email && <p className={errorClass}>{errors.email.message}</p>}
+
+        <div className="mt-7 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+          <PillButton type="submit" variant="light" disabled={isSubmitting}>
+            {isSubmitting ? t("submitting") : t("submit")}
+          </PillButton>
+          {submitted && (
+            <output className="text-[14px] text-accent">{t("success")}</output>
+          )}
         </div>
-      </div>
-
-      <div className="mt-5">
-        <label htmlFor="contact-message" className={labelClass}>
-          {t("message.label")}
-        </label>
-        <motion.textarea
-          id="contact-message"
-          rows={5}
-          placeholder={t("message.placeholder")}
-          aria-invalid={errors.message ? "true" : "false"}
-          className={`${fieldClass} resize-none`}
-          whileFocus={focusBorder}
-          transition={hoverColorTransition}
-          {...register("message")}
-        />
-        {errors.message && (
-          <p className={errorClass}>{errors.message.message}</p>
-        )}
-      </div>
-
-      <div className="mt-7 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-        <PillButton type="submit" variant="light" disabled={isSubmitting}>
-          {isSubmitting ? t("submitting") : t("submit")}
-        </PillButton>
-        {submitted && (
-          <output className="text-[14px] text-accent">{t("success")}</output>
-        )}
-      </div>
-    </form>
+      </form>
+    </NeonRotatingBorder>
   );
 };

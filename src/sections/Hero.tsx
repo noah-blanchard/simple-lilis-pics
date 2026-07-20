@@ -20,7 +20,7 @@ const renderAccentLine = (text: string) =>
   text.split(/\*\*(.+?)\*\*/g).map((part, i) =>
     i % 2 === 1 ? (
       // biome-ignore lint/suspicious/noArrayIndexKey: static translation text, order never changes
-      <span key={i} className="text-accent">
+      <span key={i} className="text-accent italic">
         {part}
       </span>
     ) : (

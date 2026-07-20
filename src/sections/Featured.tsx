@@ -1,4 +1,5 @@
 import { getLocale, getTranslations } from "next-intl/server";
+import { AccentUnderline } from "@/components/AccentUnderline";
 import { ProjectCard } from "@/components/ProjectCard";
 import { Reveal } from "@/components/Reveal";
 import { TagLabel } from "@/components/TagLabel";
@@ -25,7 +26,9 @@ export const Featured = async () => {
               style={{ textWrap: "balance" }}
             >
               <span>{t("titleBase")}</span>
-              <span className="text-accent">{t("titleAccent")}</span>
+              <AccentUnderline className="text-accent italic">
+                {t("titleAccent")}
+              </AccentUnderline>
             </h2>
           </div>
           <Link

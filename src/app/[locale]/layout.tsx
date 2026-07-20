@@ -1,9 +1,5 @@
 import type { Metadata } from "next";
-import {
-  Fraunces,
-  Outfit,
-  JetBrains_Mono,
-} from "next/font/google";
+import { JetBrains_Mono, Outfit, PT_Serif_Caption } from "next/font/google";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -14,11 +10,11 @@ import { themeInitScript } from "@/components/theme/theme-script";
 import { routing } from "@/i18n/routing";
 import "../globals.css";
 
-const fraunces = Fraunces({
+const ptSerifCaption = PT_Serif_Caption({
   variable: "--font-display",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  style: ["normal"],
+  weight: ["400"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
@@ -93,7 +89,7 @@ export default async function LocaleLayout({
   return (
     <html
       lang={locale}
-      className={`${fraunces.variable} ${outfit.variable} ${jetBrainsMono.variable}`}
+      className={`${ptSerifCaption.variable} ${outfit.variable} ${jetBrainsMono.variable}`}
       suppressHydrationWarning
     >
       <body className="bg-ink font-sans text-fg antialiased">

@@ -1,4 +1,5 @@
 import { useTranslations } from "next-intl";
+import { AccentUnderline } from "@/components/AccentUnderline";
 import { HoverLink } from "@/components/HoverLink";
 import { PillButton } from "@/components/PillButton";
 import { Reveal } from "@/components/Reveal";
@@ -25,7 +26,9 @@ export const Footer = () => {
             style={{ textWrap: "balance" }}
           >
             <span className="text-fg">{t("ctaBase")}</span>
-            <span className="text-accent">{t("ctaAccent")}</span>
+            <AccentUnderline className="text-accent italic">
+              {t("ctaAccent")}
+            </AccentUnderline>
           </h2>
         </Reveal>
         <Reveal delay={0.1} className="lg:col-span-5 lg:flex lg:justify-end">
