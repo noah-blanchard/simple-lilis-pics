@@ -86,36 +86,31 @@ export const Hero = () => {
             {t("intro")}
           </motion.p>
 
+          <div className="hidden md:block">
+            <NavIndexList size="md" standalone delayChildren={0.65} />
+          </div>
+
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.65, ease: EASE }}
+            transition={{ duration: 1, delay: 1.05, ease: EASE }}
+            className="flex flex-wrap items-center gap-x-6 gap-y-3"
           >
             <PillButton href="#contact" variant="light">
               {t("cta")}
             </PillButton>
-          </motion.div>
-
-          <div className="hidden md:block">
-            <NavIndexList size="md" standalone delayChildren={0.8} />
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.9, delay: 1.1, ease: EASE }}
-            className="flex flex-wrap items-center gap-x-5 gap-y-2"
-          >
-            {socials.map((s) => (
-              <HoverLink
-                key={s.label}
-                href={s.href}
-                target="_blank"
-                className="text-[13px] text-fg/60"
-              >
-                {s.label}
-              </HoverLink>
-            ))}
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+              {socials.map((s) => (
+                <HoverLink
+                  key={s.label}
+                  href={s.href}
+                  target="_blank"
+                  className="text-[13px] text-fg/60"
+                >
+                  {s.label}
+                </HoverLink>
+              ))}
+            </div>
           </motion.div>
         </div>
 
