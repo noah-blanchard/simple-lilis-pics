@@ -67,7 +67,7 @@ export const MenuOverlay = ({ open, onClose }: MenuOverlayProps) => {
           exit="hidden"
           transition={{ duration: reduce ? 0.25 : 0.6, ease: EASE }}
         >
-          {/* Top bar — mirrors the NavBar layout; the pill here closes. */}
+          {/* Top bar — logo + a toggle that closes the overlay. */}
           <div className="flex items-center justify-between px-6 pt-8 md:px-12">
             <span className="font-semibold text-[22px] italic tracking-tight">
               <span>Lilis</span>

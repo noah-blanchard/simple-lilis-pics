@@ -6,9 +6,10 @@ import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
 import { GalleryIntro } from "@/components/GalleryIntro";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
+import { Logo } from "@/components/Logo";
 import { TagLabel } from "@/components/TagLabel";
 import { ZoomableImage } from "@/components/ZoomableImage";
-import { Link, useRouter } from "@/i18n/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { EASE, hoverColorTransition } from "@/lib/motion";
 import type { ResolvedProject } from "@/types/db";
 import { IconArrow } from "./Icons";
@@ -180,14 +181,7 @@ export function ProjectGallery({ project }: ProjectGalleryProps) {
 
           {/* ── Top bar (overlay) ── */}
           <header className="pointer-events-none absolute inset-x-0 top-0 flex items-center justify-between px-6 py-5 md:px-10">
-            <Link
-              href="/"
-              className="pointer-events-auto font-semibold text-[20px] italic tracking-tight"
-            >
-              <span>Lilis</span>
-              <span className="text-accent">.</span>
-              <span>Pics</span>
-            </Link>
+            <Logo className="pointer-events-auto text-[20px]" />
 
             <div className="pointer-events-auto flex items-center gap-3">
               {count > 1 && (

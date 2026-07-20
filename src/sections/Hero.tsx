@@ -4,11 +4,10 @@ import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { HeroCarousel } from "@/components/HeroCarousel";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
-import { NavBar } from "@/components/NavBar";
+import { Logo } from "@/components/Logo";
 import { NavIndexList } from "@/components/NavIndexList";
 import { PillButton } from "@/components/PillButton";
 import { TagLabel } from "@/components/TagLabel";
-import { Link } from "@/i18n/navigation";
 import { EASE } from "@/lib/motion";
 
 // Splits a translated line on `**word**` markers and renders the marked
@@ -35,12 +34,6 @@ export const Hero = () => {
     <section id="hero" className="relative w-full overflow-hidden">
       <div className="grain pointer-events-none absolute inset-0 z-[var(--z-base)]" />
 
-      {/* Mobile-only top bar (logo, locale, menu trigger) — temporary until
-          FloatingMenuButton takes over site-wide nav in the next step. */}
-      <div className="md:hidden">
-        <NavBar />
-      </div>
-
       <div className="relative z-10 mx-auto grid max-w-[1440px] grid-cols-1 gap-x-12 gap-y-10 px-6 pt-6 pb-16 md:min-h-[100svh] md:grid-cols-12 md:items-center md:px-12 md:py-10">
         {/* Left column — brand, nav, headline, CTA */}
         <div className="flex flex-col md:col-span-5">
@@ -48,16 +41,9 @@ export const Hero = () => {
             initial={{ opacity: 0, y: -16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.15, ease: EASE }}
-            className="hidden items-center justify-between md:flex"
+            className="flex items-center justify-between"
           >
-            <Link
-              href="/"
-              className="font-semibold text-[22px] italic tracking-tight"
-            >
-              <span>Lilis</span>
-              <span className="text-accent">.</span>
-              <span>Pics</span>
-            </Link>
+            <Logo className="text-[22px]" />
             <LocaleSwitcher />
           </motion.div>
 

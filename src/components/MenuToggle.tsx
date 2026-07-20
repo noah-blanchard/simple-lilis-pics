@@ -1,5 +1,6 @@
 "use client";
 
+import type { PillVariant } from "@/types";
 import { MenuIcon } from "./MenuIcon";
 import { PillButton } from "./PillButton";
 
@@ -8,6 +9,7 @@ interface MenuToggleProps {
   onToggle: () => void;
   openLabel: string;
   closeLabel: string;
+  variant?: PillVariant;
 }
 
 // The MENU/CLOSE pill. Reuses PillButton so the hover slot-roll and styling stay
@@ -17,9 +19,10 @@ export const MenuToggle = ({
   onToggle,
   openLabel,
   closeLabel,
+  variant = "ghost",
 }: MenuToggleProps) => (
   <PillButton
-    variant="ghost"
+    variant={variant}
     size="sm"
     onClick={onToggle}
     ariaExpanded={open}

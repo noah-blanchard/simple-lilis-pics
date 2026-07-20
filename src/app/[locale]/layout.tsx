@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { ReactNode } from "react";
+import { FloatingMenuButton } from "@/components/FloatingMenuButton";
 import { routing } from "@/i18n/routing";
 import "../globals.css";
 
@@ -89,7 +90,10 @@ export default async function LocaleLayout({
       className={`${ptSerifCaption.variable} ${outfit.variable} ${jetBrainsMono.variable}`}
     >
       <body className="bg-ink font-sans text-fg antialiased">
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider>
+          {children}
+          <FloatingMenuButton />
+        </NextIntlClientProvider>
       </body>
     </html>
   );
