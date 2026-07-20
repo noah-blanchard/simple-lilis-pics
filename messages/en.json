@@ -37,8 +37,8 @@
   },
   "specialty": {
     "tag": "WHAT I SHOOT",
-    "titleBase": "A few things",
-    "titleAccent": "I love to photograph.",
+    "titleBase": "What I love to",
+    "titleAccent": "photograph.",
     "items": {
       "landscape": {
         "title": "Landscapes",
