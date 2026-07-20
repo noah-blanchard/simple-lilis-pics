@@ -63,11 +63,15 @@ export const HeroCarousel = ({ className = "" }: HeroCarouselProps) => {
 
   return (
     <motion.div
-      className={className}
+      className={`flex flex-col ${className}`}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      <div className="relative aspect-[4/5] w-full overflow-hidden rounded-card bg-panel md:aspect-[3/4]">
+      {/* Width-driven aspect ratio on mobile; on desktop this instead fills
+          whatever height the flex column has left (md:h-0 + md:flex-1), so
+          the image always leaves room for the pagination row below it and
+          never overflows the viewport-constrained Hero. */}
+      <div className="relative aspect-[4/5] w-full overflow-hidden rounded-card bg-panel md:aspect-auto md:h-0 md:min-h-0 md:flex-1">
         <AnimatePresence custom={direction} mode="popLayout" initial={false}>
           <motion.div
             key={index}
@@ -91,7 +95,7 @@ export const HeroCarousel = ({ className = "" }: HeroCarouselProps) => {
         </AnimatePresence>
       </div>
 
-      <div className="mt-5 flex items-center gap-5">
+      <div className="mt-4 flex shrink-0 items-center gap-5">
         {SLIDES.map((_, i) => (
           <button
             // biome-ignore lint/suspicious/noArrayIndexKey: static slide list, order never changes

@@ -3,11 +3,13 @@
 import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { HeroCarousel } from "@/components/HeroCarousel";
+import { HoverLink } from "@/components/HoverLink";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 import { Logo } from "@/components/Logo";
 import { NavIndexList } from "@/components/NavIndexList";
 import { PillButton } from "@/components/PillButton";
 import { TagLabel } from "@/components/TagLabel";
+import { socials } from "@/data/socials";
 import { EASE } from "@/lib/motion";
 
 // Splits a translated line on `**word**` markers and renders the marked
@@ -31,41 +33,44 @@ export const Hero = () => {
   const t = useTranslations("hero");
 
   return (
-    <section id="hero" className="relative w-full overflow-hidden">
+    <section
+      id="hero"
+      className="relative w-full overflow-hidden md:flex md:h-[100svh] md:flex-col"
+    >
       <div className="grain pointer-events-none absolute inset-0 z-[var(--z-base)]" />
 
-      <div className="relative z-10 mx-auto grid max-w-[1440px] grid-cols-1 gap-x-12 gap-y-10 px-6 pt-6 pb-16 md:min-h-[100svh] md:grid-cols-12 md:items-center md:px-12 md:py-10">
-        {/* Left column — brand, nav, headline, CTA */}
-        <div className="flex flex-col md:col-span-5">
-          <motion.div
-            initial={{ opacity: 0, y: -16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.15, ease: EASE }}
-            className="flex items-center justify-between"
-          >
-            <Logo className="text-[22px]" />
-            <LocaleSwitcher />
-          </motion.div>
+      {/* Top row — logo + locale, full width, pinned above everything else
+          (the locale switcher lands directly above the carousel's top-right
+          corner since both rows share the same max-width + side padding). */}
+      <motion.div
+        initial={{ opacity: 0, y: -16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.9, delay: 0.15, ease: EASE }}
+        className="relative z-10 mx-auto flex w-full max-w-[1440px] items-center justify-between px-6 pt-6 md:px-12 md:pt-8"
+      >
+        <Logo className="text-[22px]" />
+        <LocaleSwitcher />
+      </motion.div>
 
+      {/* Main content — fills whatever height remains under the top row. */}
+      <div className="relative z-10 mx-auto grid w-full max-w-[1440px] grid-cols-1 gap-x-12 gap-y-8 px-6 pt-8 pb-10 md:min-h-0 md:flex-1 md:grid-cols-12 md:px-12 md:pt-6 md:pb-8">
+        {/* Left column — headline first, nav below it */}
+        <div className="flex flex-col justify-center gap-5 md:col-span-5">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.9, delay: 0.3, ease: EASE }}
-            className="mt-6 flex items-center gap-6 md:mt-10"
+            className="flex items-center gap-6"
           >
             <TagLabel>{t("byline")}</TagLabel>
             <TagLabel>{t("location")}</TagLabel>
           </motion.div>
 
-          <div className="mt-6 hidden md:block">
-            <NavIndexList size="md" standalone delayChildren={0.45} />
-          </div>
-
           <motion.h1
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.55, ease: EASE }}
-            className="display-xl mt-8 max-w-[560px] text-[40px] uppercase leading-[0.95] sm:text-6xl md:mt-10 md:text-[52px] lg:text-[64px]"
+            transition={{ duration: 1, delay: 0.45, ease: EASE }}
+            className="display-xl max-w-[560px] text-[34px] uppercase leading-[0.95] sm:text-5xl md:text-[38px] lg:text-[46px]"
             style={{ textWrap: "balance" }}
           >
             <span className="block">{renderAccentLine(t("titleLine1"))}</span>
@@ -75,8 +80,8 @@ export const Hero = () => {
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.7, ease: EASE }}
-            className="mt-6 max-w-[440px] text-[15px] text-fg/75 leading-relaxed md:text-[17px]"
+            transition={{ duration: 1, delay: 0.55, ease: EASE }}
+            className="max-w-[420px] text-[14px] text-fg/75 leading-relaxed md:text-[15px]"
           >
             {t("intro")}
           </motion.p>
@@ -84,23 +89,45 @@ export const Hero = () => {
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.85, ease: EASE }}
-            className="mt-8"
+            transition={{ duration: 1, delay: 0.65, ease: EASE }}
           >
             <PillButton href="#contact" variant="light">
               {t("cta")}
             </PillButton>
           </motion.div>
+
+          <div className="hidden md:block">
+            <NavIndexList size="md" standalone delayChildren={0.8} />
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.9, delay: 1.1, ease: EASE }}
+            className="flex flex-wrap items-center gap-x-5 gap-y-2"
+          >
+            {socials.map((s) => (
+              <HoverLink
+                key={s.label}
+                href={s.href}
+                target="_blank"
+                className="text-[13px] text-fg/60"
+              >
+                {s.label}
+              </HoverLink>
+            ))}
+          </motion.div>
         </div>
 
-        {/* Right column — big autoplay carousel */}
+        {/* Right column — big autoplay carousel, fills the row's full height
+            on desktop so the image + pagination never overflow past view. */}
         <motion.div
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, delay: 0.3, ease: EASE }}
-          className="md:col-span-7"
+          className="md:col-span-7 md:h-full"
         >
-          <HeroCarousel />
+          <HeroCarousel className="md:h-full" />
         </motion.div>
       </div>
     </section>
