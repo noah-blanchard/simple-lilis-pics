@@ -54,47 +54,53 @@ export const Hero = () => {
 
       {/* Main content — fills whatever height remains under the top row. */}
       <div className="relative z-10 mx-auto grid w-full max-w-[1440px] grid-cols-1 gap-x-12 gap-y-8 px-6 pt-8 pb-10 md:min-h-0 md:flex-1 md:grid-cols-12 md:px-12 md:pt-6 md:pb-8">
-        {/* Left column — headline first, nav below it */}
-        <div className="flex flex-col justify-center gap-5 md:col-span-5">
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.9, delay: 0.3, ease: EASE }}
-            className="flex items-center gap-6"
-          >
-            <TagLabel>{t("byline")}</TagLabel>
-            <TagLabel>{t("location")}</TagLabel>
-          </motion.div>
+        {/* Left column — headline pinned to the top, nav rail centered in the
+            middle, CTA + socials pinned to the bottom. */}
+        <div className="flex flex-col md:col-span-5">
+          {/* Top — byline/location, headline, intro */}
+          <div className="flex flex-col gap-5">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.9, delay: 0.3, ease: EASE }}
+              className="flex items-center gap-6"
+            >
+              <TagLabel>{t("byline")}</TagLabel>
+              <TagLabel>{t("location")}</TagLabel>
+            </motion.div>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.45, ease: EASE }}
-            className="display-xl max-w-[560px] text-[34px] uppercase leading-[0.95] sm:text-5xl md:text-[38px] lg:text-[46px]"
-            style={{ textWrap: "balance" }}
-          >
-            <span className="block">{renderAccentLine(t("titleLine1"))}</span>
-            <span className="block">{renderAccentLine(t("titleLine2"))}</span>
-          </motion.h1>
+            <motion.h1
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.45, ease: EASE }}
+              className="display-xl max-w-[560px] text-[34px] uppercase leading-[0.95] sm:text-5xl md:text-[38px] lg:text-[46px]"
+              style={{ textWrap: "balance" }}
+            >
+              <span className="block">{renderAccentLine(t("titleLine1"))}</span>
+              <span className="block">{renderAccentLine(t("titleLine2"))}</span>
+            </motion.h1>
 
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.55, ease: EASE }}
-            className="max-w-[420px] text-[14px] text-fg/75 leading-relaxed md:text-[15px]"
-          >
-            {t("intro")}
-          </motion.p>
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.55, ease: EASE }}
+              className="max-w-[420px] text-[14px] text-fg/75 leading-relaxed md:text-[15px]"
+            >
+              {t("intro")}
+            </motion.p>
+          </div>
 
-          <div className="hidden md:block">
+          {/* Middle — nav rail, vertically centered in the remaining space */}
+          <div className="hidden md:flex md:flex-1 md:items-center">
             <NavIndexList size="md" standalone delayChildren={0.65} />
           </div>
 
+          {/* Bottom — CTA + socials */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 1.05, ease: EASE }}
-            className="flex flex-wrap items-center gap-x-6 gap-y-3"
+            className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 md:mt-0"
           >
             <PillButton href="#contact" variant="light">
               {t("cta")}

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono, Outfit, PT_Serif_Caption } from "next/font/google";
+import { JetBrains_Mono, Outfit, Playfair_Display } from "next/font/google";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -8,7 +8,7 @@ import { FloatingMenuButton } from "@/components/FloatingMenuButton";
 import { routing } from "@/i18n/routing";
 import "../globals.css";
 
-const ptSerifCaption = PT_Serif_Caption({
+const playfairDisplay = Playfair_Display({
   variable: "--font-display",
   subsets: ["latin"],
   weight: ["400"],
@@ -87,7 +87,7 @@ export default async function LocaleLayout({
   return (
     <html
       lang={locale}
-      className={`${ptSerifCaption.variable} ${outfit.variable} ${jetBrainsMono.variable}`}
+      className={`${playfairDisplay.variable} ${outfit.variable} ${jetBrainsMono.variable}`}
     >
       <body className="bg-ink font-sans text-fg antialiased">
         <NextIntlClientProvider>
