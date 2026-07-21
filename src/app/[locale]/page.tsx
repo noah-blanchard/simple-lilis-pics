@@ -29,7 +29,7 @@ function HomeSections() {
       <Specialty />
       <Featured />
       <Process />
-      <Testimonials />
+      {/* <Testimonials /> */}
       <Contact />
       <Footer />
     </main>

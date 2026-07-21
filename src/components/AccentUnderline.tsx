@@ -73,10 +73,13 @@ export const AccentUnderline = ({
       custom={delay}
     >
       {words.flatMap((word, wi) => [
+        // biome-ignore lint/suspicious/noArrayIndexKey: words/letters come from a fixed prop string — order never changes.
         wi > 0 ? <span key={`sp-${wi}`}> </span> : null,
+        // biome-ignore lint/suspicious/noArrayIndexKey: words/letters come from a fixed prop string — order never changes.
         <span key={`w-${wi}`} className="inline-block">
           {Array.from(word).map((ch, ci) => (
             <motion.span
+              // biome-ignore lint/suspicious/noArrayIndexKey: words/letters come from a fixed prop string — order never changes.
               key={`${wi}-${ci}`}
               variants={letter}
               className="inline-block"

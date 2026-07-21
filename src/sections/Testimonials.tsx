@@ -19,7 +19,7 @@ export const Testimonials = () => {
   }));
 
   return (
-    <section className="overflow-hidden section-y">
+    <section className="section-y overflow-hidden">
       <div className="container-site">
         <SectionHeader
           titleBase={t("titleBase")}

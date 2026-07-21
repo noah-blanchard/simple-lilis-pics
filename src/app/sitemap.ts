@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
-import { getAllProjects } from "@/lib/data/projects";
 import { routing } from "@/i18n/routing";
+import { getAllProjects } from "@/lib/data/projects";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 

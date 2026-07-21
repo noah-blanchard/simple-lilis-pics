@@ -11,13 +11,7 @@ import {
   type Variants,
 } from "motion/react";
 import Image from "next/image";
-import {
-  type KeyboardEvent,
-  type MouseEvent,
-  type ReactNode,
-  useRef,
-  useState,
-} from "react";
+import { type MouseEvent, type ReactNode, useRef, useState } from "react";
 import { EASE, zoomTransition } from "@/lib/motion";
 import type { Specialty } from "@/types";
 import { CatIcon } from "./Icons";
@@ -35,10 +29,6 @@ interface SpecialtyCardProps {
 const transition = { duration: 0.3, ease: EASE } as const;
 const tiltSpring = { stiffness: 150, damping: 18, mass: 0.5 } as const;
 
-const cardVariants: Variants = {
-  rest: { scale: 1, rotate: 0 },
-  hover: { scale: 1.04, rotate: -1.5 },
-};
 const liftVariants: Variants = {
   rest: { scale: 1 },
   hover: { scale: 1.02 },
@@ -101,26 +91,17 @@ const MobileCard = ({
   const [revealed, setRevealed] = useState(false);
   const toggle = () => setRevealed((v) => !v);
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      toggle();
-    }
-  };
-
   return (
-    <motion.div
+    <motion.button
+      type="button"
       initial="rest"
       animate={revealed ? "hover" : "rest"}
       whileTap={{ scale: 0.97 }}
       variants={liftVariants}
       transition={transition}
       onClick={toggle}
-      onKeyDown={handleKeyDown}
-      role="button"
-      tabIndex={0}
       aria-pressed={revealed}
-      className="relative aspect-[4/5] w-full cursor-pointer select-none overflow-hidden rounded-card bg-panel"
+      className="relative aspect-[4/5] w-full cursor-pointer select-none overflow-hidden rounded-card bg-panel text-left"
     >
       {/* rest content (fades out on reveal) */}
       <motion.div variants={fadeOut} transition={transition}>
@@ -148,7 +129,7 @@ const MobileCard = ({
       <motion.div aria-hidden variants={fadeIn} transition={transition}>
         {layer("text-on-accent", "text-on-accent")}
       </motion.div>
-    </motion.div>
+    </motion.button>
   );
 };
 

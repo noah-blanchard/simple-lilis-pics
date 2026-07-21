@@ -4,13 +4,7 @@ import { FooterContactCta } from "@/components/FooterContactCta";
 import { FooterSitemapLinks } from "@/components/FooterSitemapLinks";
 import { HoverLink } from "@/components/HoverLink";
 import { Reveal } from "@/components/Reveal";
-import { RoundedImage } from "@/components/RoundedImage";
 import { socials } from "@/data/socials";
-
-const FOOTER_IMG_1 =
-  "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=900&q=80&auto=format&fit=crop";
-const FOOTER_IMG_2 =
-  "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=900&q=80&auto=format&fit=crop";
 
 export const Footer = () => {
   const t = useTranslations("footer");
