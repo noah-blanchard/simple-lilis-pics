@@ -9,7 +9,9 @@ interface LogoProps {
 
 // Brand mark. Shared by the Hero, ProjectGallery's top bar, the nav overlay,
 // and the site-wide FloatingMenuButton context so it can't drift between them.
-export const Logo = ({ className = "h-30" }: LogoProps) => (
+export const Logo = ({
+  className = "h-[clamp(4rem,10vw,9.5rem)]",
+}: LogoProps) => (
   <Link href="/" className="inline-flex items-center">
     <Image
       src="/logo.webp"

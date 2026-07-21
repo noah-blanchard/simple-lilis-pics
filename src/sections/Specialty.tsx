@@ -41,7 +41,7 @@ export const Specialty = () => {
           direction="left"
           repeat={4}
           renderItem={(item) => (
-            <div className="w-[220px] md:w-[260px] lg:w-[300px] xl:w-[340px]">
+            <div className="w-[220px] md:w-[260px] lg:w-[300px] xl:w-[340px] 2xl:w-[380px]">
               <SpecialtyCard specialty={item} />
             </div>
           )}
@@ -51,7 +51,7 @@ export const Specialty = () => {
           direction="right"
           repeat={4}
           renderItem={(item) => (
-            <div className="w-[220px] md:w-[260px] lg:w-[300px] xl:w-[340px]">
+            <div className="w-[220px] md:w-[260px] lg:w-[300px] xl:w-[340px] 2xl:w-[380px]">
               <SpecialtyCard specialty={item} />
             </div>
           )}

@@ -28,7 +28,7 @@ export const ProcessFilmstrip = ({ steps }: ProcessFilmstripProps) => {
   return (
     <div
       ref={sectionRef}
-      className="mx-auto mt-10 hidden max-w-[1120px] grid-cols-12 gap-x-12 md:grid"
+      className="mx-auto mt-10 hidden max-w-[1120px] grid-cols-12 gap-x-12 md:grid 2xl:max-w-[1360px]"
     >
       {/* Left — sticky develop stage, vertically centered in the viewport. */}
       <div className="col-span-6">

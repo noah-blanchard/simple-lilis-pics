@@ -35,7 +35,7 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => {
         delay: (index % 3) * 0.1,
         ease: EASE,
       }}
-      className="mx-auto w-full max-w-[420px]"
+      className="mx-auto w-full max-w-[560px]"
     >
       <Link href={`/portfolio/${project.id}`} className="block">
         <RoundedImage

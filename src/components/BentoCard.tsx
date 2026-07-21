@@ -38,7 +38,7 @@ export const BentoCard = ({
         delay: (index % 6) * 0.06,
         ease: EASE,
       }}
-      className="mx-auto w-full max-w-[480px]"
+      className="mx-auto w-full max-w-[640px]"
     >
       <Link href={`/portfolio/${project.id}`} className="block">
         <RoundedImage
