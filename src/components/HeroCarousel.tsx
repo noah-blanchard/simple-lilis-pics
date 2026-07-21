@@ -6,14 +6,14 @@ import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
 import { EASE } from "@/lib/motion";
 
-// Curated, hardcoded editorial/portrait placeholders — deliberately decoupled
-// from live project data. Swap these for real photography whenever ready.
+// Curated editorial/portrait photography, optimized for web (WebP, resized
+// to the carousel's max display width).
 const SLIDES = [
-  "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=1600&q=80&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=1600&q=80&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=1600&q=80&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1541823709867-1b206113eafd?w=1600&q=80&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=1600&q=80&auto=format&fit=crop",
+  "/hero-carousel/01.webp",
+  "/hero-carousel/02.webp",
+  "/hero-carousel/03.webp",
+  "/hero-carousel/04.webp",
+  "/hero-carousel/05.webp",
 ];
 
 const AUTOPLAY_MS = 5500;
@@ -67,11 +67,14 @@ export const HeroCarousel = ({ className = "" }: HeroCarouselProps) => {
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      {/* Width-driven aspect ratio on mobile; on desktop this instead fills
-          whatever height the flex column has left (md:h-0 + md:flex-1), so
-          the image always leaves room for the pagination row below it and
-          never overflows the viewport-constrained Hero. */}
-      <div className="relative aspect-[4/5] w-full overflow-hidden rounded-card bg-panel md:aspect-auto md:h-0 md:min-h-0 md:flex-1">
+      {/* aspect-[2/3] mirrors the source photos' own portrait ratio (roughly
+          9:16, softened toward a cleaner fraction). On mobile it's width-
+          driven and full-bleed; on desktop the height instead fills
+          whatever the flex column has left (md:h-0 + md:flex-1) and width
+          is derived from the ratio via md:self-end, which keeps the box
+          from stretching to the full grid column and pins the now-thinner
+          carousel to the right edge. */}
+      <div className="relative aspect-[2/3] w-full overflow-hidden rounded-card bg-panel md:h-0 md:min-h-0 md:w-auto md:flex-1 md:self-end">
         <AnimatePresence custom={direction} mode="popLayout" initial={false}>
           <motion.div
             key={index}
@@ -88,14 +91,14 @@ export const HeroCarousel = ({ className = "" }: HeroCarouselProps) => {
               alt={t("carousel.alt", { n: index + 1, total: count })}
               fill
               priority={index === 0}
-              sizes="(max-width: 768px) 100vw, 55vw"
+              sizes="(max-width: 768px) 100vw, 35vw"
               className="object-cover"
             />
           </motion.div>
         </AnimatePresence>
       </div>
 
-      <div className="mt-4 flex shrink-0 items-center gap-5">
+      <div className="mt-4 flex shrink-0 items-center gap-5 md:justify-end">
         {SLIDES.map((_, i) => (
           <button
             // biome-ignore lint/suspicious/noArrayIndexKey: static slide list, order never changes

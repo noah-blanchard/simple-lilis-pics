@@ -101,8 +101,7 @@ export function TranslatableInput({
 
       {phase === "confirm" && (
         <p className="mt-1 text-[11px] text-warning">
-          Overwrite {LANGUAGE_LABELS[to]}? Click the sparkle again to
-          confirm.
+          Overwrite {LANGUAGE_LABELS[to]}? Click the sparkle again to confirm.
         </p>
       )}
 

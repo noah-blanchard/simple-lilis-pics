@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, type Variants, useReducedMotion } from "motion/react";
+import { motion, useReducedMotion, type Variants } from "motion/react";
 import { EASE } from "@/lib/motion";
 
 interface AccentUnderlineProps {

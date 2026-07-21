@@ -47,7 +47,7 @@ export function PhotoLightbox({
   const paginate = useCallback(
     (dir: number) => {
       if (count <= 1) return;
-      onIndexChange(((index + dir) % count + count) % count);
+      onIndexChange((((index + dir) % count) + count) % count);
     },
     [count, index, onIndexChange],
   );

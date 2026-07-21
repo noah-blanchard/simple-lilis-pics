@@ -7,8 +7,8 @@ import { Reorder, useDragControls } from "motion/react";
 import { type ReactNode, useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { PhotoListItem } from "@/components/admin/PhotoListItem";
 import { PhotoLightbox } from "@/components/admin/PhotoLightbox";
+import { PhotoListItem } from "@/components/admin/PhotoListItem";
 import { TranslatableField } from "@/components/admin/TranslatableField";
 import { IconSparkle } from "@/components/Icons";
 import { PillButton } from "@/components/PillButton";
@@ -818,7 +818,9 @@ function DraggablePhotoItem<T>({
   children,
 }: {
   value: T;
-  children: (onDragHandlePointerDown: (e: React.PointerEvent) => void) => ReactNode;
+  children: (
+    onDragHandlePointerDown: (e: React.PointerEvent) => void,
+  ) => ReactNode;
 }) {
   const dragControls = useDragControls();
   return (

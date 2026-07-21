@@ -31,7 +31,8 @@ export const POST = withAuth(async ({ request }) => {
   if (!parsed.ok) return parsed.response;
 
   // Slug is derived from the English label, never chosen by the admin.
-  const slug = slugify(parsed.data.label_en) || `tag-${crypto.randomUUID().slice(0, 8)}`;
+  const slug =
+    slugify(parsed.data.label_en) || `tag-${crypto.randomUUID().slice(0, 8)}`;
 
   const admin = createSupabaseAdminClient();
   const { data, error } = await admin
