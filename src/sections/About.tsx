@@ -10,13 +10,13 @@ export const About = () => {
   const t = useTranslations("about");
 
   return (
-    <section id="about" className="container-site py-24 md:py-32">
+    <section id="about" className="container-site section-y">
       <SectionHeader
         tag={t("tag")}
         titleBase={t("titleBase")}
         titleAccent={t("titleAccent")}
       />
-      <div className="mt-16 grid grid-cols-1 items-stretch gap-6 md:grid-cols-12">
+      <div className="mt-16 grid grid-cols-1 items-stretch gap-6 md:grid-cols-12 2xl:mt-24">
         <Reveal className="md:col-span-8">
           <RoundedImage
             ratio="aspect-[16/9]"

@@ -17,7 +17,7 @@ export const Specialty = () => {
   }));
 
   return (
-    <section className="py-24 md:py-32">
+    <section className="section-y">
       <div className="container-site">
         <SectionHeader
           tag={t("tag")}

@@ -17,7 +17,7 @@ export const Process = () => {
   }));
 
   return (
-    <section id="process" className="container-site py-24 md:py-32">
+    <section id="process" className="container-site section-y">
       <SectionHeader
         tag={t("tag")}
         titleBase={t("titleBase")}

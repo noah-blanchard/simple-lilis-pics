@@ -19,7 +19,7 @@ export const Testimonials = () => {
   }));
 
   return (
-    <section className="overflow-hidden py-24 md:py-32">
+    <section className="overflow-hidden section-y">
       <div className="container-site">
         <SectionHeader
           tag={t("tag")}
@@ -42,7 +42,7 @@ export const Testimonials = () => {
 
       {/* Desktop: auto infinite marquee, pauses on hover. Full-bleed (no
           container cap) so it scrolls edge-to-edge regardless of page width. */}
-      <Reveal delay={0.1} className="mt-14 hidden md:block">
+      <Reveal delay={0.1} className="mt-14 hidden md:block 2xl:mt-20">
         <InfiniteRow
           items={items}
           direction="left"

@@ -17,7 +17,7 @@ export const Footer = () => {
   const tNav = useTranslations("nav");
 
   return (
-    <footer className="container-site relative overflow-hidden pt-24 pb-10 md:pt-32">
+    <footer className="container-site relative overflow-hidden pt-24 pb-10 md:pt-32 2xl:pt-40">
       {/* big CTA */}
       <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-12">
         <Reveal className="lg:col-span-7">

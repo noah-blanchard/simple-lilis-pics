@@ -64,7 +64,7 @@ export const PortfolioBento = ({ items }: PortfolioBentoProps) => {
         </div>
       </motion.header>
 
-      <section className="container-site py-20 md:py-28">
+      <section className="container-site py-20 md:py-28 2xl:py-36">
         <Reveal>
           <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
             <div>

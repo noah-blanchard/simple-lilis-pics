@@ -16,7 +16,7 @@ export const Contact = () => {
   };
 
   return (
-    <section id="contact" className="container-site py-24 md:py-32">
+    <section id="contact" className="container-site section-y">
       <SectionHeader
         tag={t("tag")}
         titleBase={t("titleBase")}

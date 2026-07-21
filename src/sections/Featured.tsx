@@ -16,9 +16,9 @@ export const Featured = async () => {
   const items = await getFeaturedProjects(locale);
 
   return (
-    <section className="mx-auto max-w-[1440px] px-6 py-24 md:px-12 md:py-32">
+    <section className="container-site section-y">
       <Reveal>
-        <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
+        <div className="mb-12 flex flex-wrap items-end justify-between gap-6 2xl:mb-16">
           <div>
             <TagLabel>{t("tag")}</TagLabel>
             <h2
@@ -40,7 +40,7 @@ export const Featured = async () => {
           </Link>
         </div>
       </Reveal>
-      <div className="grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:gap-y-16">
         {items.map((project, i) => (
           <ProjectCard key={project.id} project={project} index={i} />
         ))}
