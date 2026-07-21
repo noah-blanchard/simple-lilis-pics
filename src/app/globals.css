@@ -34,6 +34,50 @@
   --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
 }
 
+/* Fluid display type — each token's lower bound equals the current desktop
+   size, so ≤1440 is unchanged; growth is applied via the `min-[1440px]:`
+   variant on top of the existing responsive text steps. Generates the
+   `text-h1-fluid`, `text-h2-fluid`, … utilities. */
+@theme {
+  --text-h1-fluid: clamp(52px, 0.83vw + 40px, 72px);
+  --text-h2-fluid: clamp(68px, 1.33vw + 48.8px, 100px);
+  --text-h2b-fluid: clamp(60px, 1.17vw + 43.2px, 88px);
+  --text-h2f-fluid: clamp(56px, 0.83vw + 44px, 76px);
+  --text-body-fluid: clamp(16px, 0.35vw + 11px, 19px);
+}
+
+/* Site content width + horizontal gutter, centralized in one utility.
+   Caps at 1920px with fluid `mx-auto` side margins on 2K/4K; the 1440 floor
+   means viewports up to ~1600px are pixel-identical to the old
+   `max-w-[1440px]`. Single knob for large-screen width: the 1920 constant. */
+:root {
+  --container-max: clamp(1440px, 90vw, 1920px);
+}
+
+@utility container-site {
+  margin-inline: auto;
+  width: 100%;
+  max-width: var(--container-max);
+  padding-inline: 1.5rem; /* 24px = px-6 */
+  @media (min-width: 768px) {
+    padding-inline: 3rem; /* 48px = md:px-12 */
+  }
+  @media (min-width: 1536px) {
+    padding-inline: clamp(3rem, 3.5vw, 4.5rem); /* 48→72, engages only above 2xl */
+  }
+}
+
+/* Section vertical rhythm — mirrors `py-24 md:py-32` and grows only above 2xl. */
+@utility section-y {
+  padding-block: 6rem; /* 96px = py-24 */
+  @media (min-width: 768px) {
+    padding-block: 8rem; /* 128px = md:py-32 */
+  }
+  @media (min-width: 1536px) {
+    padding-block: clamp(8rem, 6vw, 12rem); /* 128→192 */
+  }
+}
+
 html,
 body {
   background: var(--bg);
@@ -79,6 +123,12 @@ body {
   font-size: 12px;
   letter-spacing: 0.06em;
   color: var(--muted);
+}
+/* Nudge the fixed 12px label up on large screens only (base unchanged ≤1536). */
+@media (min-width: 1536px) {
+  .tag-mono {
+    font-size: clamp(12px, 0.55vw + 3.6px, 15px);
+  }
 }
 
 /* hide scrollbar on horizontal carousels */
