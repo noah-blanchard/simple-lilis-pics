@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { socials } from "@/data/socials";
@@ -9,6 +10,7 @@ import { EASE } from "@/lib/motion";
 import { HoverLink } from "./HoverLink";
 import { LocaleSwitcher } from "./LocaleSwitcher";
 import { Logo } from "./Logo";
+import { MenuDecor } from "./MenuDecor";
 import { MenuToggle } from "./MenuToggle";
 import { NavIndexList } from "./NavIndexList";
 
@@ -79,12 +81,24 @@ export const MenuOverlay = ({ open, onClose }: MenuOverlayProps) => {
             />
           </div>
 
-          {/* Links */}
-          <NavIndexList
-            onNavigate={onClose}
-            size="lg"
-            className="flex-1 justify-center px-6 md:px-12"
-          />
+          {/* Links + decorative illustrations — nav pinned to the top-left.
+              Mobile gets a single static film-strip image (no interaction);
+              desktop swaps in a scattered, independently-tiltable trio via
+              MenuDecor, trailing the nav in its own share of the row. */}
+          <div className="flex flex-1 flex-col items-start justify-between gap-6 overflow-y-auto px-6 py-6 md:flex-row md:items-center md:px-12 md:py-0">
+            <NavIndexList onNavigate={onClose} size="lg" className="shrink-0" />
+            <div className="flex w-full flex-1 items-center justify-center md:h-full">
+              <Image
+                src="/illustrations/decorative-film-strip-transparent.png"
+                alt=""
+                aria-hidden="true"
+                width={1086}
+                height={1448}
+                className="pointer-events-none h-64 w-auto opacity-90 sm:h-72 md:hidden"
+              />
+              <MenuDecor />
+            </div>
+          </div>
 
           {/* Meta row */}
           <motion.div
