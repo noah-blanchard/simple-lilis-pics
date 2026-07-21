@@ -22,7 +22,7 @@ export const Footer = () => {
       <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-12">
         <Reveal className="lg:col-span-7">
           <h2
-            className="display text-3xl tracking-tight md:text-5xl lg:text-[56px]"
+            className="display text-3xl tracking-tight md:text-5xl lg:text-[56px] min-[1440px]:text-h2f-fluid"
             style={{ textWrap: "balance" }}
           >
             <span className="text-fg">{t("ctaBase")}</span>{" "}

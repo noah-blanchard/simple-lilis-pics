@@ -25,7 +25,7 @@ export const SectionHeader = ({
     </Reveal>
     <Reveal delay={0.08}>
       <h2
-        className="display mx-auto max-w-5xl text-4xl tracking-tight sm:text-5xl md:text-6xl lg:text-[68px]"
+        className="display mx-auto max-w-5xl text-4xl tracking-tight sm:text-5xl md:text-6xl lg:text-[68px] min-[1440px]:text-h2-fluid"
         style={{ textWrap: "balance" }}
       >
         <span className="block">{titleBase}</span>

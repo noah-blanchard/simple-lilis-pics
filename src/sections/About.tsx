@@ -25,7 +25,7 @@ export const About = () => {
           />
         </Reveal>
         <Reveal delay={0.1} className="flex flex-col justify-end md:col-span-4">
-          <p className="max-w-[420px] text-[15px] text-fg/75 leading-relaxed md:text-[16px]">
+          <p className="max-w-[420px] text-[15px] text-fg/75 leading-relaxed md:text-[16px] min-[1440px]:text-body-fluid">
             {t("body")}
           </p>
           <HoverLink

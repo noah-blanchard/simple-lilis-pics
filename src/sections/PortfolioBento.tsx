@@ -70,7 +70,7 @@ export const PortfolioBento = ({ items }: PortfolioBentoProps) => {
             <div>
               <TagLabel>{t("allTag")}</TagLabel>
               <h2
-                className="display mt-3 text-4xl md:text-6xl"
+                className="display mt-3 text-4xl md:text-6xl min-[1440px]:text-h2b-fluid"
                 style={{ textWrap: "balance" }}
               >
                 <span>{t("allTitleBase")}</span>{" "}

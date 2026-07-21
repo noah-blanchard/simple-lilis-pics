@@ -70,7 +70,7 @@ export const Hero = () => {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.45, ease: EASE }}
-              className="display-xl max-w-[560px] text-[38px] uppercase leading-[1.1] sm:text-[52px] md:text-[42px] lg:text-[52px]"
+              className="display-xl max-w-[560px] text-[38px] uppercase leading-[1.1] sm:text-[52px] md:text-[42px] lg:text-[52px] min-[1440px]:text-h1-fluid"
               style={{ textWrap: "balance" }}
             >
               <span className="block">{renderAccentLine(t("titleLine1"))}</span>
@@ -81,7 +81,7 @@ export const Hero = () => {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.55, ease: EASE }}
-              className="max-w-[420px] text-[14px] text-fg/75 leading-relaxed md:text-[15px]"
+              className="max-w-[420px] text-[14px] text-fg/75 leading-relaxed md:text-[15px] min-[1440px]:text-body-fluid"
             >
               {t("intro")}
             </motion.p>

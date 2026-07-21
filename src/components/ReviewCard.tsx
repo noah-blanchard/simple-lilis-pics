@@ -63,7 +63,7 @@ export const ReviewCard = ({ review }: ReviewCardProps) => (
       </motion.span>
     </span>
 
-    <p className="relative z-10 text-[15px] text-fg/85 leading-relaxed md:text-[16px]">
+    <p className="relative z-10 text-[15px] text-fg/85 leading-relaxed md:text-[16px] min-[1440px]:text-body-fluid">
       &ldquo;{review.quote}&rdquo;
     </p>
     <div className="relative z-10 mt-8 flex items-center gap-4 border-line border-t pt-6">

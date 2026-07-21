@@ -23,7 +23,7 @@ export const Contact = () => {
         titleAccent={t("titleAccent")}
       />
       <Reveal delay={0.1} className="mx-auto mt-12 max-w-[820px]">
-        <p className="mb-8 text-center text-[15px] text-fg/65 leading-relaxed">
+        <p className="mb-8 text-center text-[15px] text-fg/65 leading-relaxed min-[1440px]:text-body-fluid">
           {t("description")}
         </p>
         <ContactForm onSubmit={handleSubmit} />
