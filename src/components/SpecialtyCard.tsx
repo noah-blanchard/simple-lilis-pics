@@ -11,7 +11,13 @@ import {
   type Variants,
 } from "motion/react";
 import Image from "next/image";
-import { type MouseEvent, type ReactNode, useRef } from "react";
+import {
+  type KeyboardEvent,
+  type MouseEvent,
+  type ReactNode,
+  useRef,
+  useState,
+} from "react";
 import { EASE, zoomTransition } from "@/lib/motion";
 import type { Specialty } from "@/types";
 import { CatIcon } from "./Icons";
@@ -46,19 +52,27 @@ const fadeOut: Variants = { rest: { opacity: 1 }, hover: { opacity: 0 } };
 const FULL_COVER_RADIUS = 150;
 
 export const SpecialtyCard = ({ specialty, tilt }: SpecialtyCardProps) => {
-  // One content layer; rendered twice with different colour classes.
+  // One content layer; rendered twice with different colour classes. Sizes are
+  // unprefixed (mobile, where this only renders below `md`) vs `md:` (desktop
+  // tilt cards, which only render at `md`+) — the two breakpoints never
+  // overlap, so shrinking mobile here can't touch the desktop tilt-card sizing.
   const layer = (textClass: string, descClass: string) => (
-    <div className="absolute inset-0 flex flex-col justify-between p-7 text-left">
+    <div className="absolute inset-0 flex flex-col justify-between p-4 text-left md:p-7">
       <div className="flex justify-end">
-        <CatIcon kind={specialty.id} className={`h-9 w-9 ${textClass}`} />
+        <CatIcon
+          kind={specialty.id}
+          className={`h-7 w-7 md:h-9 md:w-9 ${textClass}`}
+        />
       </div>
       <div>
         <div
-          className={`mb-2 font-semibold text-2xl tracking-tight md:text-[28px] ${textClass}`}
+          className={`mb-1 font-semibold text-lg tracking-tight md:mb-2 md:text-[28px] ${textClass}`}
         >
           {specialty.title}
         </div>
-        <p className={`text-[13px] leading-snug ${descClass}`}>
+        <p
+          className={`line-clamp-3 text-xs leading-snug md:text-[13px] ${descClass}`}
+        >
           {specialty.desc}
         </p>
       </div>
@@ -69,29 +83,68 @@ export const SpecialtyCard = ({ specialty, tilt }: SpecialtyCardProps) => {
     return <TiltCard specialty={specialty}>{layer}</TiltCard>;
   }
 
+  return <MobileCard specialty={specialty}>{layer}</MobileCard>;
+};
+
+interface SpecialtyCardShellProps {
+  specialty: Specialty;
+  children: (textClass: string, descClass: string) => ReactNode;
+}
+
+// Touch devices have no hover, so the mobile grid card reveals its photo on
+// tap instead — same fade-in used by the desktop tilt card's photo layer,
+// just toggled by press rather than driven by the cursor.
+const MobileCard = ({
+  specialty,
+  children: layer,
+}: SpecialtyCardShellProps) => {
+  const [revealed, setRevealed] = useState(false);
+  const toggle = () => setRevealed((v) => !v);
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      toggle();
+    }
+  };
+
   return (
     <motion.div
       initial="rest"
-      whileHover="hover"
-      animate="rest"
-      variants={cardVariants}
+      animate={revealed ? "hover" : "rest"}
+      whileTap={{ scale: 0.97 }}
+      variants={liftVariants}
       transition={transition}
-      className="relative aspect-square w-full overflow-hidden rounded-card bg-panel"
+      onClick={toggle}
+      onKeyDown={handleKeyDown}
+      role="button"
+      tabIndex={0}
+      aria-pressed={revealed}
+      className="relative aspect-[4/5] w-full cursor-pointer select-none overflow-hidden rounded-card bg-panel"
     >
-      {/* accent surface on hover */}
-      <motion.span
-        aria-hidden
-        variants={fadeIn}
-        transition={transition}
-        className="absolute inset-0 bg-accent"
-      />
-
-      {/* rest content (fades out) */}
+      {/* rest content (fades out on reveal) */}
       <motion.div variants={fadeOut} transition={transition}>
         {layer("text-fg", "text-muted")}
       </motion.div>
 
-      {/* hover content (fades in) — hidden from AT to avoid duplicate reading */}
+      {/* photo, fades in on reveal */}
+      <motion.div
+        aria-hidden
+        variants={fadeIn}
+        transition={transition}
+        className="absolute inset-0"
+      >
+        <Image
+          src={specialty.image}
+          alt=""
+          fill
+          sizes="50vw"
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-scrim" />
+      </motion.div>
+
+      {/* on-photo text, fades in with the photo */}
       <motion.div aria-hidden variants={fadeIn} transition={transition}>
         {layer("text-on-accent", "text-on-accent")}
       </motion.div>
@@ -99,17 +152,12 @@ export const SpecialtyCard = ({ specialty, tilt }: SpecialtyCardProps) => {
   );
 };
 
-interface TiltCardProps {
-  specialty: Specialty;
-  children: (textClass: string, descClass: string) => ReactNode;
-}
-
 // Mouse-reactive 3D tilt: the corner nearest the cursor presses inward, the
 // opposite corner lifts. A photo wipes in (clip-path circle) from wherever
 // the cursor entered, replacing the flat accent surface — the same clipPath
 // value drives both the photo and the on-accent text layer, so they arrive
 // in sync (a wipe standing in for the flat card's opacity cross-fade).
-const TiltCard = ({ specialty, children: layer }: TiltCardProps) => {
+const TiltCard = ({ specialty, children: layer }: SpecialtyCardShellProps) => {
   const reduce = useReducedMotion();
   const cardRef = useRef<HTMLDivElement>(null);
 

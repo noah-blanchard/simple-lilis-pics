@@ -61,13 +61,13 @@ export const Footer = () => {
       {/* bottom bar */}
       <div className="mt-16 flex flex-col items-start justify-between gap-6 border-line border-t pt-8 md:flex-row md:items-center">
         <div className="text-[14px] text-fg/55">{t("copyright")}</div>
-        <div className="flex gap-3">
+        <div className="grid w-full grid-cols-2 gap-3 sm:flex sm:w-auto sm:flex-wrap">
           {socials.map((s) => (
             <HoverLink
               key={s.label}
               href={s.href}
               target="_blank"
-              className="rounded-full bg-panel px-5 py-2.5 text-[13px] text-fg/80"
+              className="rounded-full bg-panel px-5 py-2.5 text-center text-[13px] text-fg/80"
               whileHover={{
                 backgroundColor: "var(--inverse)",
                 color: "var(--on-inverse)",
@@ -78,7 +78,7 @@ export const Footer = () => {
           ))}
           <HoverLink
             href="/admin"
-            className="rounded-full bg-panel px-5 py-2.5 text-[13px] text-fg/80"
+            className="rounded-full bg-panel px-5 py-2.5 text-center text-[13px] text-fg/80"
             whileHover={{
               backgroundColor: "var(--inverse)",
               color: "var(--on-inverse)",
