@@ -9,11 +9,11 @@ import { EASE } from "@/lib/motion";
 // Curated editorial/portrait photography, optimized for web (WebP, resized
 // to the carousel's max display width).
 const SLIDES = [
-  "/hero-carousel/01.webp",
-  "/hero-carousel/02.webp",
-  "/hero-carousel/03.webp",
-  "/hero-carousel/04.webp",
-  "/hero-carousel/05.webp",
+  "/hero-carousel/portrait-photo-01.webp",
+  "/hero-carousel/portrait-photo-02.webp",
+  "/hero-carousel/portrait-photo-03.webp",
+  "/hero-carousel/portrait-photo-04.webp",
+  "/hero-carousel/portrait-photo-05.webp",
 ];
 
 const AUTOPLAY_MS = 5500;
