@@ -42,7 +42,7 @@ export const Specialty = () => {
           repeat={4}
           renderItem={(item) => (
             <div className="w-[220px] md:w-[260px] lg:w-[300px] xl:w-[340px] 2xl:w-[380px]">
-              <SpecialtyCard specialty={item} />
+              <SpecialtyCard specialty={item} tilt />
             </div>
           )}
         />
@@ -52,7 +52,7 @@ export const Specialty = () => {
           repeat={4}
           renderItem={(item) => (
             <div className="w-[220px] md:w-[260px] lg:w-[300px] xl:w-[340px] 2xl:w-[380px]">
-              <SpecialtyCard specialty={item} />
+              <SpecialtyCard specialty={item} tilt />
             </div>
           )}
         />

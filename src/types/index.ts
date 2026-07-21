@@ -17,6 +17,7 @@ export type PillVariant = "light" | "dark" | "accent" | "ghost" | "danger";
 /* ── Specialty ── */
 export interface SpecialtyMeta {
   id: IconKind;
+  image: string;
 }
 export interface Specialty extends SpecialtyMeta {
   title: string;
