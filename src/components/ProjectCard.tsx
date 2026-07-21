@@ -32,7 +32,7 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => {
       viewport={{ once: true, margin: "-50px" }}
       transition={{
         duration: 0.8,
-        delay: (index % 3) * 0.1,
+        delay: (index % 4) * 0.1,
         ease: EASE,
       }}
       className="mx-auto w-full max-w-[560px]"

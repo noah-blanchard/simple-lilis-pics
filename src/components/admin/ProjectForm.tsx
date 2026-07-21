@@ -81,7 +81,7 @@ function detectOrientation(file: File): Promise<Orientation> {
 interface ProjectFormProps {
   /** When provided, edits this project. Image add/remove is not supported in edit. */
   project?: ProjectWithRelations;
-  /** Total featured projects in the dashboard (for the max-6 cap UI). */
+  /** Total featured projects in the dashboard (for the max-featured cap UI). */
   featuredCount: number;
   onSuccess?: () => void;
   onManageTags?: () => void;
