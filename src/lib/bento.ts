@@ -26,20 +26,31 @@ export function packColumns<
   return columns;
 }
 
-/** Responsive column count for the portfolio bento grid (1 / 2 / 3). */
+// Ordered widest-first. The 4th/5th tiers keep portrait covers from growing
+// too tall as the container widens on 2K/4K — extra columns hold each tile at
+// a viewable width instead of ballooning its height.
+const BENTO_BREAKPOINTS = [
+  { query: "(min-width: 2200px)", cols: 5 },
+  { query: "(min-width: 1600px)", cols: 4 },
+  { query: "(min-width: 1024px)", cols: 3 },
+  { query: "(min-width: 640px)", cols: 2 },
+] as const;
+
+/** Responsive column count for the portfolio bento grid (1 / 2 / 3 / 4 / 5). */
 export function useColumnCount(): number {
   const [cols, setCols] = useState(1);
 
   useEffect(() => {
+    const mqls = BENTO_BREAKPOINTS.map((b) => window.matchMedia(b.query));
     const update = () => {
-      if (window.matchMedia("(min-width: 1024px)").matches) setCols(3);
-      else if (window.matchMedia("(min-width: 640px)").matches) setCols(2);
-      else setCols(1);
+      const i = mqls.findIndex((mql) => mql.matches);
+      setCols(i === -1 ? 1 : BENTO_BREAKPOINTS[i].cols);
     };
     update();
-    const mq = window.matchMedia("(min-width: 640px)");
-    mq.addEventListener("change", update);
-    return () => mq.removeEventListener("change", update);
+    for (const mql of mqls) mql.addEventListener("change", update);
+    return () => {
+      for (const mql of mqls) mql.removeEventListener("change", update);
+    };
   }, []);
 
   return cols;
