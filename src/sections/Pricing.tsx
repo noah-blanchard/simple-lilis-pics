@@ -18,10 +18,7 @@ export const Pricing = () => {
   }));
 
   return (
-    <section
-      id="pricing"
-      className="mx-auto max-w-[1440px] px-6 py-24 md:px-12 md:py-32"
-    >
+    <section id="pricing" className="container-site py-24 md:py-32">
       <div className="mb-14 grid grid-cols-1 items-end gap-10 lg:grid-cols-12 lg:gap-16">
         <Reveal className="lg:col-span-5">
           <TagLabel>{t("tag")}</TagLabel>

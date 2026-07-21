@@ -17,10 +17,7 @@ export const Process = () => {
   }));
 
   return (
-    <section
-      id="process"
-      className="mx-auto max-w-[1440px] px-6 py-24 md:px-12 md:py-32"
-    >
+    <section id="process" className="container-site py-24 md:py-32">
       <SectionHeader
         tag={t("tag")}
         titleBase={t("titleBase")}

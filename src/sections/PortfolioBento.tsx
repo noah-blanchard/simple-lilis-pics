@@ -47,7 +47,7 @@ export const PortfolioBento = ({ items }: PortfolioBentoProps) => {
         initial={{ opacity: 0, y: -16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.9, ease: EASE, delay: 0.1 }}
-        className="mx-auto flex max-w-[1440px] items-center justify-between px-6 pt-8 md:px-12"
+        className="container-site flex items-center justify-between pt-8"
       >
         <Logo />
         <div className="flex items-center gap-3">
@@ -64,7 +64,7 @@ export const PortfolioBento = ({ items }: PortfolioBentoProps) => {
         </div>
       </motion.header>
 
-      <section className="mx-auto max-w-[1440px] px-6 py-20 md:px-12 md:py-28">
+      <section className="container-site py-20 md:py-28">
         <Reveal>
           <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
             <div>

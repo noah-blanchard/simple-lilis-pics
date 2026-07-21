@@ -18,7 +18,7 @@ export const Specialty = () => {
 
   return (
     <section className="py-24 md:py-32">
-      <div className="mx-auto max-w-[1440px] px-6 md:px-12">
+      <div className="container-site">
         <SectionHeader
           tag={t("tag")}
           titleBase={t("titleBase")}

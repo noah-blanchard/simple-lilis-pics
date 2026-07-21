@@ -43,14 +43,14 @@ export const Hero = () => {
         initial={{ opacity: 0, y: -16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.9, delay: 0.15, ease: EASE }}
-        className="relative z-10 mx-auto flex w-full max-w-[1440px] items-center justify-between px-6 pt-6 md:px-12 md:pt-8"
+        className="container-site relative z-10 flex items-center justify-between pt-6 md:pt-8"
       >
         <Logo />
         <LocaleSwitcher />
       </motion.div>
 
       {/* Main content — fills whatever height remains under the top row. */}
-      <div className="relative z-10 mx-auto grid w-full max-w-[1440px] grid-cols-1 gap-x-12 gap-y-8 px-6 pt-8 pb-10 md:min-h-0 md:flex-1 md:grid-cols-12 md:px-12 md:pt-6 md:pb-8">
+      <div className="container-site relative z-10 grid grid-cols-1 gap-x-12 gap-y-8 pt-8 pb-10 md:min-h-0 md:flex-1 md:grid-cols-12 md:pt-6 md:pb-8">
         {/* Left column — headline pinned to the top, nav rail centered in the
             middle, CTA + socials pinned to the bottom. */}
         <div className="flex flex-col md:col-span-5">
