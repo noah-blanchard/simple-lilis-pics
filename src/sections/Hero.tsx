@@ -36,8 +36,6 @@ export const Hero = () => {
       id="hero"
       className="relative w-full overflow-hidden md:flex md:h-[100svh] md:flex-col"
     >
-      <div className="grain pointer-events-none absolute inset-0 z-[var(--z-base)]" />
-
       {/* Top row — logo + locale, full width, pinned above everything else
           (the locale switcher lands directly above the carousel's top-right
           corner since both rows share the same max-width + side padding). */}
