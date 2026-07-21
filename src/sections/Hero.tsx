@@ -46,7 +46,9 @@ export const Hero = () => {
         className="container-site relative z-10 flex items-center justify-between pt-6 md:pt-8"
       >
         <Logo />
-        <LocaleSwitcher />
+        <div className="hidden md:block">
+          <LocaleSwitcher />
+        </div>
       </motion.div>
 
       {/* Main content — fills whatever height remains under the top row. */}

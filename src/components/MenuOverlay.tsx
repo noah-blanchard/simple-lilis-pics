@@ -61,7 +61,7 @@ export const MenuOverlay = ({ open, onClose }: MenuOverlayProps) => {
           role="dialog"
           aria-modal="true"
           aria-label={t("menu")}
-          className="grain fixed inset-0 z-[var(--z-menu)] flex flex-col bg-ink text-fg"
+          className="fixed inset-0 z-[var(--z-menu)] flex flex-col bg-ink text-fg"
           variants={overlayVariants}
           initial="hidden"
           animate="visible"

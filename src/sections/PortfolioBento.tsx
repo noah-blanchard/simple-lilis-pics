@@ -50,7 +50,9 @@ export const PortfolioBento = ({ items }: PortfolioBentoProps) => {
       >
         <Logo />
         <div className="flex items-center gap-3">
-          <LocaleSwitcher />
+          <div className="hidden md:block">
+            <LocaleSwitcher />
+          </div>
           <MotionLink
             href="/"
             className={navTextControl}

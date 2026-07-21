@@ -28,11 +28,11 @@ interface NavIndexListProps {
 
 const sizeConfig = {
   lg: {
-    gap: "gap-2 md:gap-4",
-    row: "gap-4 md:gap-6 py-1",
-    number: "w-9 pt-3 md:pt-5",
-    label: "text-5xl sm:text-6xl md:text-7xl",
-    arrow: "h-7 w-7 md:h-9 md:w-9",
+    gap: "gap-1 md:gap-3",
+    row: "gap-2 md:gap-5 py-1",
+    number: "w-6 pt-1.5 md:w-7 md:pt-3",
+    label: "text-3xl sm:text-4xl md:text-5xl",
+    arrow: "h-5 w-5 md:h-7 md:w-7",
   },
   md: {
     gap: "gap-1.5 md:gap-2.5",

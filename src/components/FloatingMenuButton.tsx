@@ -24,13 +24,11 @@ const useIsDesktop = () => {
   return isDesktop;
 };
 
-// Site-wide floating nav trigger, mounted once at the locale layout level so
-// it's present on every route — the Hero was previously the only place that
-// hosted any navigation at all. On the homepage it stays hidden (desktop
-// only) while the Hero is in view, since the Hero already shows the nav
-// index inline there, and fades in once scrolled past. On every other route,
-// and on mobile everywhere (the Hero has no inline nav rail there), it's
-// always visible.
+// Homepage-only floating nav trigger. On mobile (no inline nav rail) it's
+// always visible; on desktop it stays hidden while the Hero is in view,
+// since the Hero already shows the nav index inline there, and fades in
+// once scrolled past. Every other route has its own header/back-link and
+// doesn't host this button at all.
 export const FloatingMenuButton = () => {
   const t = useTranslations("nav");
   const reduce = useReducedMotion();
@@ -53,7 +51,9 @@ export const FloatingMenuButton = () => {
     return () => observer.disconnect();
   }, [isHome]);
 
-  const visible = !isHome || !isDesktop || !heroInView;
+  if (!isHome) return null;
+
+  const visible = !isDesktop || !heroInView;
 
   return (
     <>
