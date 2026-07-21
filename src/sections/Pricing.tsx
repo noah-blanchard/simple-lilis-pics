@@ -1,7 +1,6 @@
 import { useTranslations } from "next-intl";
 import { PriceCard } from "@/components/PriceCard";
 import { Reveal } from "@/components/Reveal";
-import { TagLabel } from "@/components/TagLabel";
 import { plans } from "@/data/plans";
 import { rawList } from "@/lib/messages";
 import type { Plan } from "@/types";
@@ -21,9 +20,8 @@ export const Pricing = () => {
     <section id="pricing" className="container-site section-y">
       <div className="mb-14 grid grid-cols-1 items-end gap-10 lg:grid-cols-12 lg:gap-16">
         <Reveal className="lg:col-span-5">
-          <TagLabel>{t("tag")}</TagLabel>
           <h2
-            className="display mt-4 text-4xl md:text-5xl lg:text-6xl"
+            className="display text-4xl md:text-5xl lg:text-6xl"
             style={{ textWrap: "balance" }}
           >
             {t("title")}

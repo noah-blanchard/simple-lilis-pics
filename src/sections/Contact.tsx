@@ -18,7 +18,6 @@ export const Contact = () => {
   return (
     <section id="contact" className="container-site section-y">
       <SectionHeader
-        tag={t("tag")}
         titleBase={t("titleBase")}
         titleAccent={t("titleAccent")}
       />

@@ -8,7 +8,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { NeonRotatingBorder } from "@/components/NeonRotatingBorder";
 import { PillButton } from "@/components/PillButton";
-import { TagLabel } from "@/components/TagLabel";
 import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
 
 const schema = z.object({
@@ -88,13 +87,9 @@ export default function LoginPage() {
           )}
 
           <motion.div variants={container} initial="hidden" animate="show">
-            <motion.div variants={item}>
-              <TagLabel className="text-accent">private area</TagLabel>
-            </motion.div>
-
             <motion.h1
               variants={item}
-              className="mt-3 font-semibold text-[28px] tracking-tight"
+              className="font-semibold text-[28px] tracking-tight"
             >
               <span>Lilis</span>
               <motion.span

@@ -2,7 +2,6 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { AccentUnderline } from "@/components/AccentUnderline";
 import { ProjectCard } from "@/components/ProjectCard";
 import { Reveal } from "@/components/Reveal";
-import { TagLabel } from "@/components/TagLabel";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { getFeaturedProjects } from "@/lib/data/projects";
@@ -20,9 +19,8 @@ export const Featured = async () => {
       <Reveal>
         <div className="mb-12 flex flex-wrap items-end justify-between gap-6 2xl:mb-16">
           <div>
-            <TagLabel>{t("tag")}</TagLabel>
             <h2
-              className="display mt-3 text-4xl md:text-6xl min-[1440px]:text-h2b-fluid"
+              className="display text-4xl md:text-6xl min-[1440px]:text-h2b-fluid"
               style={{ textWrap: "balance" }}
             >
               <span>{t("titleBase")}</span>{" "}

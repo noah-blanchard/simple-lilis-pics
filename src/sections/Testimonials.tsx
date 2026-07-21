@@ -22,7 +22,6 @@ export const Testimonials = () => {
     <section className="overflow-hidden section-y">
       <div className="container-site">
         <SectionHeader
-          tag={t("tag")}
           titleBase={t("titleBase")}
           titleAccent={t("titleAccent")}
         />

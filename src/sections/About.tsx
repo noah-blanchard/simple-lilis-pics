@@ -12,7 +12,6 @@ export const About = () => {
   return (
     <section id="about" className="container-site section-y">
       <SectionHeader
-        tag={t("tag")}
         titleBase={t("titleBase")}
         titleAccent={t("titleAccent")}
       />

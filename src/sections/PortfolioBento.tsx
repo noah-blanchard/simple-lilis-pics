@@ -8,7 +8,6 @@ import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 import { Logo } from "@/components/Logo";
 import { navTextControl } from "@/components/nav/navControl";
 import { Reveal } from "@/components/Reveal";
-import { TagLabel } from "@/components/TagLabel";
 import { Link } from "@/i18n/navigation";
 import { packColumns, useColumnCount } from "@/lib/bento";
 import { EASE, hoverColorTransition } from "@/lib/motion";
@@ -68,9 +67,8 @@ export const PortfolioBento = ({ items }: PortfolioBentoProps) => {
         <Reveal>
           <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
             <div>
-              <TagLabel>{t("allTag")}</TagLabel>
               <h2
-                className="display mt-3 text-4xl md:text-6xl min-[1440px]:text-h2b-fluid"
+                className="display text-4xl md:text-6xl min-[1440px]:text-h2b-fluid"
                 style={{ textWrap: "balance" }}
               >
                 <span>{t("allTitleBase")}</span>{" "}

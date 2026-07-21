@@ -19,7 +19,6 @@ export const Process = () => {
   return (
     <section id="process" className="container-site section-y">
       <SectionHeader
-        tag={t("tag")}
         titleBase={t("titleBase")}
         titleAccent={t("titleAccent")}
       />

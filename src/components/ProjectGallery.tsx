@@ -7,7 +7,6 @@ import { useCallback, useEffect, useState } from "react";
 import { GalleryIntro } from "@/components/GalleryIntro";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 import { Logo } from "@/components/Logo";
-import { TagLabel } from "@/components/TagLabel";
 import { ZoomableImage } from "@/components/ZoomableImage";
 import { useRouter } from "@/i18n/navigation";
 import { EASE, hoverColorTransition } from "@/lib/motion";
@@ -202,11 +201,6 @@ export function ProjectGallery({ project }: ProjectGalleryProps) {
           <footer className="pointer-events-none absolute inset-x-0 bottom-0 px-6 pt-4 pb-6 md:px-10 md:pb-8">
             <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-3">
               <div className="min-w-0">
-                {project.tags && (
-                  <TagLabel className="mb-2 block text-fg/60">
-                    {project.tags}
-                  </TagLabel>
-                )}
                 <h1 className="display font-semibold text-2xl text-fg tracking-tight md:text-4xl">
                   {title}
                 </h1>
