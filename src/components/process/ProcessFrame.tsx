@@ -13,8 +13,8 @@ interface ProcessFrameProps {
 }
 
 // Mobile presentation: the filmstrip unrolled. Each step is a frame threaded
-// on a hairline rail (a strip of film). The image develops in on scroll —
-// blur → sharp — echoing the desktop stage. No pinning; phones scrub sticky
+// on a hairline rail (a strip of film). The image reveals in on scroll —
+// blur → sharp, echoing the desktop stage. No pinning; phones scrub sticky
 // layouts poorly, so this just reveals top-to-bottom.
 export const ProcessFrame = ({ step, connect }: ProcessFrameProps) => {
   const reduce = useReducedMotion();
@@ -41,7 +41,7 @@ export const ProcessFrame = ({ step, connect }: ProcessFrameProps) => {
       </div>
 
       <motion.div
-        className="relative mt-5 aspect-[4/5] w-full overflow-hidden rounded-card bg-panel"
+        className="relative mt-5 aspect-[4/5] w-full overflow-hidden rounded-card"
         initial={
           reduce
             ? { opacity: 0 }
@@ -62,23 +62,6 @@ export const ProcessFrame = ({ step, connect }: ProcessFrameProps) => {
           sizes="100vw"
           className="object-cover"
         />
-
-        {/* Film grain — matches the desktop stage's darkroom texture. */}
-        <span className="grain pointer-events-none absolute inset-0 opacity-70" />
-
-        {/* Develop sweep — a band of light passes once as the frame lands. */}
-        {!reduce && (
-          <span className="pointer-events-none absolute inset-0 overflow-hidden">
-            <motion.span
-              className="absolute inset-y-0 block w-1/2 bg-linear-to-r from-transparent via-white/25 to-transparent"
-              style={{ skewX: -12 }}
-              initial={{ x: "-160%" }}
-              whileInView={{ x: "260%" }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 1, ease: EASE, delay: 0.25 }}
-            />
-          </span>
-        )}
       </motion.div>
 
       <div className="mt-6">
