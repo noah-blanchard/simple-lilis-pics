@@ -22,15 +22,17 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const supabase = await createSupabaseServerClient();
 
-  let query = supabase
-    .from("projects")
-    .select(PROJECT_SELECT)
+  let query = supabase.from("projects").select(PROJECT_SELECT);
+
+  if (searchParams.get("featured") === "true") {
+    query = query
+      .eq("featured", true)
+      .order("featured_order", { ascending: true, nullsFirst: false });
+  }
+  query = query
     .order("project_date", { ascending: false, nullsFirst: false })
     .order("created_at", { ascending: false });
 
-  if (searchParams.get("featured") === "true") {
-    query = query.eq("featured", true);
-  }
   const limit = Number(searchParams.get("limit"));
   if (Number.isFinite(limit) && limit > 0) {
     query = query.limit(limit);

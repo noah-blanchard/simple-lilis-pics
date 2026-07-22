@@ -39,6 +39,7 @@ export interface ProjectRow {
   description_en: string | null;
   project_date: string | null; // "YYYY-MM-DD" | null
   featured: boolean;
+  featured_order: number | null; // manual position among featured projects
   cover_photo_id: string | null;
   created_at: string;
 }

@@ -106,3 +106,11 @@ export const projectUpdateSchema = z.object({
 
 export type ProjectCreateInput = z.infer<typeof projectCreateSchema>;
 export type ProjectUpdateInput = z.infer<typeof projectUpdateSchema>;
+
+/** Body for PATCH /api/projects/reorder — the full featured id list, in the
+ *  new display order. */
+export const featuredReorderSchema = z.object({
+  order: z.array(z.string().uuid()).min(1).max(MAX_FEATURED_PROJECTS),
+});
+
+export type FeaturedReorderInput = z.infer<typeof featuredReorderSchema>;

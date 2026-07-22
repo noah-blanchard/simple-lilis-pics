@@ -13,13 +13,17 @@ async function fetchProjects(opts: {
   limit?: number;
 }): Promise<ProjectWithRelations[]> {
   const supabase = await createSupabaseServerClient();
-  let query = supabase
-    .from("projects")
-    .select(PROJECT_SELECT)
+  let query = supabase.from("projects").select(PROJECT_SELECT);
+
+  if (opts.featuredOnly) {
+    query = query
+      .eq("featured", true)
+      .order("featured_order", { ascending: true, nullsFirst: false });
+  }
+  query = query
     .order("project_date", { ascending: false, nullsFirst: false })
     .order("created_at", { ascending: false });
 
-  if (opts.featuredOnly) query = query.eq("featured", true);
   if (opts.limit) query = query.limit(opts.limit);
 
   const { data, error } = await query;
