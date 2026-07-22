@@ -54,7 +54,7 @@ export const Hero = () => {
 
       {/* Main content — fills whatever height remains under the top row. */}
       <div className="container-site relative z-10 grid grid-cols-1 gap-x-12 gap-y-8 pt-8 pb-10 md:min-h-0 md:flex-1 md:grid-cols-12 md:pt-6 md:pb-8">
-        <HeroDecor />
+        {/* <HeroDecor /> */}
 
         {/* Left column — headline pinned to the top, nav rail centered in the
             middle, CTA + socials pinned to the bottom. */}
