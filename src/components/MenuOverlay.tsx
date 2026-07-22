@@ -1,8 +1,8 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useTranslations } from "next-intl";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { socials } from "@/data/socials";

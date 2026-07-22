@@ -1,6 +1,11 @@
 "use client";
 
-import { motion, useMotionValue, useReducedMotion, useSpring } from "motion/react";
+import {
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+} from "motion/react";
 import Image from "next/image";
 import type { MouseEvent as ReactMouseEvent } from "react";
 import { EASE } from "@/lib/motion";

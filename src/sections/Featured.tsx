@@ -1,6 +1,6 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { AccentUnderline } from "@/components/AccentUnderline";
-import { ProjectCard } from "@/components/ProjectCard";
+import { FeaturedGrid } from "@/components/FeaturedGrid";
 import { Reveal } from "@/components/Reveal";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
@@ -38,11 +38,7 @@ export const Featured = async () => {
           </Link>
         </div>
       </Reveal>
-      <div className="grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:gap-y-16">
-        {items.map((project, i) => (
-          <ProjectCard key={project.id} project={project} index={i} />
-        ))}
-      </div>
+      <FeaturedGrid items={items} />
     </section>
   );
 };

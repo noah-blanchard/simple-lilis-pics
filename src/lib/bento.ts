@@ -26,32 +26,47 @@ export function packColumns<
   return columns;
 }
 
+interface ColumnBreakpoint {
+  query: string;
+  cols: number;
+}
+
 // Ordered widest-first. The 4th/5th tiers keep portrait covers from growing
 // too tall as the container widens on 2K/4K — extra columns hold each tile at
 // a viewable width instead of ballooning its height.
-const BENTO_BREAKPOINTS = [
+export const BENTO_BREAKPOINTS: readonly ColumnBreakpoint[] = [
   { query: "(min-width: 2200px)", cols: 5 },
   { query: "(min-width: 1600px)", cols: 4 },
   { query: "(min-width: 1024px)", cols: 3 },
   { query: "(min-width: 640px)", cols: 2 },
 ] as const;
 
-/** Responsive column count for the portfolio bento grid (1 / 2 / 3 / 4 / 5). */
-export function useColumnCount(): number {
+// Capped at 3 columns (vs. the portfolio grid's 5) so home-page featured
+// tiles read bigger and more spacious.
+export const FEATURED_BREAKPOINTS: readonly ColumnBreakpoint[] = [
+  { query: "(min-width: 1280px)", cols: 3 },
+  { query: "(min-width: 640px)", cols: 2 },
+] as const;
+
+/** Responsive column count driven by a breakpoint tier list (widest-first).
+ *  Defaults to the portfolio bento grid's 5-tier (1 / 2 / 3 / 4 / 5) set. */
+export function useColumnCount(
+  breakpoints: readonly ColumnBreakpoint[] = BENTO_BREAKPOINTS,
+): number {
   const [cols, setCols] = useState(1);
 
   useEffect(() => {
-    const mqls = BENTO_BREAKPOINTS.map((b) => window.matchMedia(b.query));
+    const mqls = breakpoints.map((b) => window.matchMedia(b.query));
     const update = () => {
       const i = mqls.findIndex((mql) => mql.matches);
-      setCols(i === -1 ? 1 : BENTO_BREAKPOINTS[i].cols);
+      setCols(i === -1 ? 1 : breakpoints[i].cols);
     };
     update();
     for (const mql of mqls) mql.addEventListener("change", update);
     return () => {
       for (const mql of mqls) mql.removeEventListener("change", update);
     };
-  }, []);
+  }, [breakpoints]);
 
   return cols;
 }
