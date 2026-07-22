@@ -16,6 +16,9 @@ interface RoundedImageProps {
   priority?: boolean;
   zoom?: boolean;
   children?: ReactNode;
+  /** Opt into a Motion shared-layout transition (e.g. morphing into a modal
+   *  backdrop that renders another element with the same layoutId). */
+  layoutId?: string;
 }
 
 // Rounded, cover-fit image with optional hover-zoom and overlay children.
@@ -32,12 +35,14 @@ export const RoundedImage = ({
   priority = false,
   zoom = true,
   children,
+  layoutId,
 }: RoundedImageProps) => {
   const reduce = useReducedMotion();
   const enableZoom = zoom && !reduce;
 
   return (
     <motion.div
+      layoutId={layoutId}
       className={`group relative overflow-hidden rounded-card bg-panel ${ratio} ${className}`}
       initial="rest"
       animate="rest"

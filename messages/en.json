@@ -33,7 +33,14 @@
     "titleBase": "More than photographs,",
     "titleAccent": "Memories you can feel.",
     "body": "Hi, I’m Lili, a photographer based in Montreal. Inspired by cinematic storytelling, I create timeless images filled with genuine emotion. My priority is making every session feel relaxed, comfortable and natural, because the best memories are made when you’re simply yourself.",
-    "readMore": "More about me"
+    "readMore": "More about me",
+    "bio": [
+      "Hi, I’m Lili.",
+      "Photography is more than a profession to me, it’s something I genuinely love. I find myself constantly noticing the way light falls, the atmosphere of a place, or the little moments that often pass by unnoticed. Those details are what inspire me every time I pick up my camera.",
+      "I enjoy taking the time to find the right composition, guide people naturally, and carefully color grade every image until it feels just right. It’s a craft I’m always learning from, and one I’m constantly trying to improve, because I believe there’s always something new to discover.",
+      "More than anything, I want every session to feel relaxed and enjoyable. My hope is that years from now, you’ll look back at these photographs and remember not only how you looked, but how you felt in that moment.",
+      "Every gallery I deliver reflects the time, care, and passion I put into my work."
+    ]
   },
   "specialty": {
     "tag": "WHAT I SHOOT",

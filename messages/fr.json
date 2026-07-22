@@ -33,7 +33,14 @@
     "titleBase": "Plus que des photographies,",
     "titleAccent": "des souvenirs qu'on ressent.",
     "body": "Bonjour, je suis Lili, photographe basée à Montréal. Inspirée par la narration cinématographique, je crée des images intemporelles remplies d'émotion authentique. Ma priorité est de rendre chaque séance détendue, confortable et naturelle, car les plus beaux souvenirs se créent quand on est simplement soi-même.",
-    "readMore": "En savoir plus sur moi"
+    "readMore": "En savoir plus sur moi",
+    "bio": [
+      "Bonjour, je suis Lili.",
+      "La photographie est bien plus qu'un métier pour moi, c'est une véritable passion. Je remarque sans cesse la façon dont la lumière tombe, l'atmosphère d'un lieu, ou les petits instants qui passent souvent inaperçus. Ce sont ces détails qui m'inspirent chaque fois que je prends mon appareil.",
+      "J'aime prendre le temps de trouver le bon cadrage, guider les gens naturellement, et étalonner chaque image avec soin jusqu'à ce qu'elle soit juste. C'est un art que j'apprends sans cesse et que je cherche toujours à améliorer, car je crois qu'il y a toujours quelque chose de nouveau à découvrir.",
+      "Plus que tout, je veux que chaque séance soit détendue et agréable. J'espère que, dans plusieurs années, vous regarderez ces photographies et vous vous souviendrez non seulement de votre allure, mais aussi de ce que vous avez ressenti à cet instant.",
+      "Chaque galerie que je livre reflète le temps, le soin et la passion que je mets dans mon travail."
+    ]
   },
   "specialty": {
     "tag": "CE QUE JE SHOOTE",
