@@ -213,7 +213,9 @@
     },
     "submit": "Send",
     "submitting": "Sending…",
+    "successTitle": "Message sent",
     "success": "Thank you — I've got your message. I'll write back within two days.",
+    "sendAnother": "Send another",
     "errors": {
       "nameRequired": "I'd love to know your name.",
       "emailRequired": "An email helps me write back.",

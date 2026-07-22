@@ -3,7 +3,6 @@
 import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { HeroCarousel } from "@/components/HeroCarousel";
-import { HeroDecor } from "@/components/HeroDecor";
 import { HoverLink } from "@/components/HoverLink";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 import { Logo } from "@/components/Logo";

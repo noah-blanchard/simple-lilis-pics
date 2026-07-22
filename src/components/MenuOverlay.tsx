@@ -10,7 +10,6 @@ import { EASE } from "@/lib/motion";
 import { HoverLink } from "./HoverLink";
 import { LocaleSwitcher } from "./LocaleSwitcher";
 import { Logo } from "./Logo";
-import { MenuDecor } from "./MenuDecor";
 import { MenuToggle } from "./MenuToggle";
 import { NavIndexList } from "./NavIndexList";
 

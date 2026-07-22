@@ -213,7 +213,9 @@
     },
     "submit": "Envoyer",
     "submitting": "Envoi…",
+    "successTitle": "Message envoyé",
     "success": "Merci — j'ai bien reçu votre message. Je vous réponds sous deux jours.",
+    "sendAnother": "En envoyer un autre",
     "errors": {
       "nameRequired": "J'aimerais bien connaître votre prénom.",
       "emailRequired": "Un e-mail pour que je vous réponde.",

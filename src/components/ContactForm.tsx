@@ -1,14 +1,15 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { hoverColorTransition } from "@/lib/motion";
+import { EASE, hoverColorTransition } from "@/lib/motion";
 import { FIELD_CLASS, FIELD_FOCUS } from "@/lib/ui";
 import type { ContactFormValues } from "@/types";
+import { ContactSuccess } from "./ContactSuccess";
 import { NeonRotatingBorder } from "./NeonRotatingBorder";
 import { PillButton } from "./PillButton";
 
@@ -60,103 +61,134 @@ export const ContactForm = ({ onSubmit }: ContactFormProps) => {
     }
   });
 
+  const handleReset = () => {
+    setSubmitted(false);
+    setSubmitError(false);
+  };
+
   const fieldClass = FIELD_CLASS;
   const focusBorder = FIELD_FOCUS;
   const labelClass = "tag-mono mb-2 block uppercase";
   const errorClass = "mt-2 text-[13px] text-danger";
 
   return (
-    <NeonRotatingBorder>
-      <form onSubmit={submit} noValidate className="p-7 md:p-10">
-        {/* Honeypot — invisible to sighted users and screen readers alike;
+    <AnimatePresence mode="wait" initial={false}>
+      {submitted ? (
+        <motion.div
+          key="success"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3, ease: EASE }}
+        >
+          <ContactSuccess
+            title={t("successTitle")}
+            message={t("success")}
+            resetLabel={t("sendAnother")}
+            onReset={handleReset}
+          />
+        </motion.div>
+      ) : (
+        <motion.div
+          key="form"
+          exit={{ opacity: 0, scale: 0.92 }}
+          transition={{ duration: 0.4, ease: EASE }}
+        >
+          <NeonRotatingBorder>
+            <form onSubmit={submit} noValidate className="p-7 md:p-10">
+              {/* Honeypot — invisible to sighted users and screen readers alike;
             bots that auto-fill every field trip it. Server rejects silently.
             `sr-only` (not an off-screen offset) so it can't grow the page's
             scrollable area. */}
-        <div aria-hidden="true" className="sr-only">
-          <label htmlFor="contact-company">Company</label>
-          <input
-            id="contact-company"
-            type="text"
-            tabIndex={-1}
-            autoComplete="off"
-            {...register("company")}
-          />
-        </div>
+              <div aria-hidden="true" className="sr-only">
+                <label htmlFor="contact-company">Company</label>
+                <input
+                  id="contact-company"
+                  type="text"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  {...register("company")}
+                />
+              </div>
 
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-          <div>
-            <label htmlFor="contact-name" className={labelClass}>
-              {t("name.label")}
-            </label>
-            <motion.input
-              id="contact-name"
-              type="text"
-              autoComplete="name"
-              placeholder={t("name.placeholder")}
-              aria-invalid={errors.name ? "true" : "false"}
-              className={fieldClass}
-              whileFocus={focusBorder}
-              transition={hoverColorTransition}
-              {...register("name")}
-            />
-            {errors.name && <p className={errorClass}>{errors.name.message}</p>}
-          </div>
-          <div>
-            <label htmlFor="contact-email" className={labelClass}>
-              {t("email.label")}
-            </label>
-            <motion.input
-              id="contact-email"
-              type="email"
-              autoComplete="email"
-              placeholder={t("email.placeholder")}
-              aria-invalid={errors.email ? "true" : "false"}
-              className={fieldClass}
-              whileFocus={focusBorder}
-              transition={hoverColorTransition}
-              {...register("email")}
-            />
-            {errors.email && (
-              <p className={errorClass}>{errors.email.message}</p>
-            )}
-          </div>
-        </div>
+              <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+                <div>
+                  <label htmlFor="contact-name" className={labelClass}>
+                    {t("name.label")}
+                  </label>
+                  <motion.input
+                    id="contact-name"
+                    type="text"
+                    autoComplete="name"
+                    placeholder={t("name.placeholder")}
+                    aria-invalid={errors.name ? "true" : "false"}
+                    className={fieldClass}
+                    whileFocus={focusBorder}
+                    transition={hoverColorTransition}
+                    {...register("name")}
+                  />
+                  {errors.name && (
+                    <p className={errorClass}>{errors.name.message}</p>
+                  )}
+                </div>
+                <div>
+                  <label htmlFor="contact-email" className={labelClass}>
+                    {t("email.label")}
+                  </label>
+                  <motion.input
+                    id="contact-email"
+                    type="email"
+                    autoComplete="email"
+                    placeholder={t("email.placeholder")}
+                    aria-invalid={errors.email ? "true" : "false"}
+                    className={fieldClass}
+                    whileFocus={focusBorder}
+                    transition={hoverColorTransition}
+                    {...register("email")}
+                  />
+                  {errors.email && (
+                    <p className={errorClass}>{errors.email.message}</p>
+                  )}
+                </div>
+              </div>
 
-        <div className="mt-5">
-          <label htmlFor="contact-message" className={labelClass}>
-            {t("message.label")}
-          </label>
-          <motion.textarea
-            id="contact-message"
-            rows={5}
-            placeholder={t("message.placeholder")}
-            aria-invalid={errors.message ? "true" : "false"}
-            className={`${fieldClass} resize-none`}
-            whileFocus={focusBorder}
-            transition={hoverColorTransition}
-            {...register("message")}
-          />
-          {errors.message && (
-            <p className={errorClass}>{errors.message.message}</p>
-          )}
-        </div>
+              <div className="mt-5">
+                <label htmlFor="contact-message" className={labelClass}>
+                  {t("message.label")}
+                </label>
+                <motion.textarea
+                  id="contact-message"
+                  rows={5}
+                  placeholder={t("message.placeholder")}
+                  aria-invalid={errors.message ? "true" : "false"}
+                  className={`${fieldClass} resize-none`}
+                  whileFocus={focusBorder}
+                  transition={hoverColorTransition}
+                  {...register("message")}
+                />
+                {errors.message && (
+                  <p className={errorClass}>{errors.message.message}</p>
+                )}
+              </div>
 
-        <div className="mt-7 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-          <PillButton type="submit" variant="light" disabled={isSubmitting}>
-            {isSubmitting ? t("submitting") : t("submit")}
-          </PillButton>
-          {submitted && (
-            <output className="inline-flex items-center rounded-full border border-accent-line bg-accent-soft px-3.5 py-1.5 font-medium text-[13px] text-accent-strong">
-              {t("success")}
-            </output>
-          )}
-          {submitError && (
-            <p role="alert" className={errorClass}>
-              {t("errors.submitFailed")}
-            </p>
-          )}
-        </div>
-      </form>
-    </NeonRotatingBorder>
+              <div className="mt-7 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+                <PillButton
+                  type="submit"
+                  variant="light"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? t("submitting") : t("submit")}
+                </PillButton>
+                {submitError && (
+                  <p role="alert" className={errorClass}>
+                    {t("errors.submitFailed")}
+                  </p>
+                )}
+              </div>
+            </form>
+          </NeonRotatingBorder>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };

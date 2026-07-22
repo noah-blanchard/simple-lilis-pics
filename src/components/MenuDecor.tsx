@@ -51,7 +51,7 @@ export const MenuDecor = () => (
       <div
         key={piece.src}
         style={{ top: piece.top, left: piece.left }}
-        className={`absolute -translate-x-1/2 -translate-y-1/2 ${piece.widthClass}`}
+        className={`-translate-x-1/2 -translate-y-1/2 absolute ${piece.widthClass}`}
       >
         <TiltImage src={piece.src} rotate={piece.rotate} delay={piece.delay} />
       </div>
