@@ -219,7 +219,8 @@
       "emailRequired": "Un e-mail pour que je vous réponde.",
       "emailInvalid": "Cet e-mail ne ressemble pas tout à fait à un e-mail.",
       "messageRequired": "Quelques mots sur votre projet, s'il vous plaît.",
-      "messageMin": "Dites-m'en un peu plus (au moins 10 caractères)."
+      "messageMin": "Dites-m'en un peu plus (au moins 10 caractères).",
+      "submitFailed": "Un problème est survenu lors de l'envoi. Réessayez, ou écrivez-moi directement à hello@lilispics.com."
     }
   },
   "footer": {

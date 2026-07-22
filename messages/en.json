@@ -219,7 +219,8 @@
       "emailRequired": "An email helps me write back.",
       "emailInvalid": "That email doesn't look quite right.",
       "messageRequired": "A few words about your project, please.",
-      "messageMin": "Tell me a little more (at least 10 characters)."
+      "messageMin": "Tell me a little more (at least 10 characters).",
+      "submitFailed": "Something went wrong sending your message. Please try again, or email me directly at hello@lilispics.com."
     }
   },
   "footer": {

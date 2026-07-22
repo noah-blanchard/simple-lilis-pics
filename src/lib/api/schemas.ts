@@ -114,3 +114,16 @@ export const featuredReorderSchema = z.object({
 });
 
 export type FeaturedReorderInput = z.infer<typeof featuredReorderSchema>;
+
+/* ── Contact form ── */
+
+/** Payload for POST /api/contact. `company` is a honeypot: real visitors
+ *  never see or fill it, so a non-empty value marks the submission as a bot. */
+export const contactSchema = z.object({
+  name: z.string().trim().min(1).max(200),
+  email: z.string().trim().email().max(320),
+  message: z.string().trim().min(10).max(5000),
+  company: z.string().max(200).optional().default(""),
+});
+
+export type ContactInput = z.infer<typeof contactSchema>;

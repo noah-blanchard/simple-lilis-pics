@@ -20,6 +20,7 @@ interface ContactFormProps {
 export const ContactForm = ({ onSubmit }: ContactFormProps) => {
   const t = useTranslations("contact");
   const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
 
   const schema = useMemo(
     () =>
@@ -33,6 +34,7 @@ export const ContactForm = ({ onSubmit }: ContactFormProps) => {
           .string()
           .min(1, t("errors.messageRequired"))
           .min(10, t("errors.messageMin")),
+        company: z.string().optional(),
       }),
     [t],
   );
@@ -44,13 +46,18 @@ export const ContactForm = ({ onSubmit }: ContactFormProps) => {
     formState: { errors, isSubmitting },
   } = useForm<ContactFormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { name: "", email: "", message: "" },
+    defaultValues: { name: "", email: "", message: "", company: "" },
   });
 
   const submit = handleSubmit(async (values) => {
-    await onSubmit(values);
-    setSubmitted(true);
-    reset();
+    setSubmitError(false);
+    try {
+      await onSubmit(values);
+      setSubmitted(true);
+      reset();
+    } catch {
+      setSubmitError(true);
+    }
   });
 
   const fieldClass = FIELD_CLASS;
@@ -61,6 +68,21 @@ export const ContactForm = ({ onSubmit }: ContactFormProps) => {
   return (
     <NeonRotatingBorder>
       <form onSubmit={submit} noValidate className="p-7 md:p-10">
+        {/* Honeypot — invisible to sighted users and screen readers alike;
+            bots that auto-fill every field trip it. Server rejects silently.
+            `sr-only` (not an off-screen offset) so it can't grow the page's
+            scrollable area. */}
+        <div aria-hidden="true" className="sr-only">
+          <label htmlFor="contact-company">Company</label>
+          <input
+            id="contact-company"
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+            {...register("company")}
+          />
+        </div>
+
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
           <div>
             <label htmlFor="contact-name" className={labelClass}>
@@ -127,6 +149,11 @@ export const ContactForm = ({ onSubmit }: ContactFormProps) => {
             <output className="inline-flex items-center rounded-full border border-accent-line bg-accent-soft px-3.5 py-1.5 font-medium text-[13px] text-accent-strong">
               {t("success")}
             </output>
+          )}
+          {submitError && (
+            <p role="alert" className={errorClass}>
+              {t("errors.submitFailed")}
+            </p>
           )}
         </div>
       </form>

@@ -60,4 +60,6 @@ export interface ContactFormValues {
   name: string;
   email: string;
   message: string;
+  /** Honeypot — real users never see or fill this field. Non-empty means bot. */
+  company?: string;
 }

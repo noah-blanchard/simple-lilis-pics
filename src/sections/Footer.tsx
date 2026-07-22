@@ -37,6 +37,12 @@ export const Footer = () => {
             {t("sitemapLabel")}
           </div>
           <FooterSitemapLinks />
+          <HoverLink
+            href={`mailto:${tNav("email")}`}
+            className="block pt-2 text-[15px] text-fg/80 tracking-wide"
+          >
+            {tNav("email")}
+          </HoverLink>
         </div>
         {/* <div className="grid grid-cols-2 gap-5 md:col-span-6">
           <RoundedImage

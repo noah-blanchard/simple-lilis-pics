@@ -11,6 +11,14 @@ export interface TagRow {
   created_at: string;
 }
 
+export interface ContactMessageRow {
+  id: string;
+  name: string;
+  email: string;
+  message: string;
+  created_at: string;
+}
+
 export type Orientation = "landscape" | "portrait";
 
 /** Build the public URL of a stored image. Legacy rows already hold a full
