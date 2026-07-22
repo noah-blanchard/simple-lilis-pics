@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "motion/react";
+import { motion, useScroll } from "motion/react";
 import { useRef, useState } from "react";
 import type { ProcessStep } from "@/types";
 import { ProcessStage } from "./ProcessStage";
@@ -13,8 +13,8 @@ interface ProcessFilmstripProps {
 // Desktop presentation (md+): two-column scrollytelling. The left column holds
 // a sticky "develop" stage; the right column is a tall list of steps. As each
 // step crosses the viewport center it becomes active, swapping the stage image
-// and lighting its own entry. A progress rail fills alongside, with a glowing
-// node that rides the scroll position past a tick for each step.
+// and lighting its own entry. A progress rail fills alongside, with a tick at
+// each step.
 export const ProcessFilmstrip = ({ steps }: ProcessFilmstripProps) => {
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -23,7 +23,6 @@ export const ProcessFilmstrip = ({ steps }: ProcessFilmstripProps) => {
     target: sectionRef,
     offset: ["start start", "end end"],
   });
-  const nodeTop = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
   return (
     <div
@@ -55,22 +54,6 @@ export const ProcessFilmstrip = ({ steps }: ProcessFilmstripProps) => {
               style={{ top: `${((index + 0.5) / steps.length) * 100}%` }}
             />
           ))}
-
-          {/* Glowing node riding the scroll position. Driven via `y` (a
-              transform, GPU-compositable) rather than `top` (a layout
-              property) — animating `top` forces layout+paint on every
-              scroll tick, which is cheap enough to hide on Windows' lower-
-              frequency wheel events but visibly stutters on macOS, where
-              trackpad momentum scrolling fires far more often. The wrapper
-              is full-height so the "0%"-"100%" motion value still resolves
-              against the whole rail, matching the old `top` behavior. */}
-          <motion.div
-            aria-hidden
-            className="absolute top-0 left-1/2 h-full"
-            style={{ y: nodeTop }}
-          >
-            <span className="-translate-x-1/2 -translate-y-1/2 absolute top-0 block h-2.5 w-2.5 rounded-full bg-accent shadow-[0_0_10px_2px_var(--accent)] ring-4 ring-ink" />
-          </motion.div>
         </div>
 
         {steps.map((step, index) => (
