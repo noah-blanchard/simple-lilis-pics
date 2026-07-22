@@ -2,6 +2,7 @@
 
 import { motion, useScroll } from "motion/react";
 import { useRef, useState } from "react";
+import { EASE } from "@/lib/motion";
 import type { ProcessStep } from "@/types";
 import { ProcessStage } from "./ProcessStage";
 import { ProcessStepItem } from "./ProcessStepItem";
@@ -45,13 +46,20 @@ export const ProcessFilmstrip = ({ steps }: ProcessFilmstripProps) => {
             style={{ scaleY: scrollYProgress }}
           />
 
-          {/* A tick sits at each step's vertical center. */}
+          {/* A tick sits at each step's vertical center, lighting up (dim →
+              accent) once the fill above has reached it. */}
           {steps.map((step, index) => (
-            <span
+            <motion.span
               key={step.n}
               aria-hidden
-              className="-translate-x-1/2 absolute left-1/2 h-1.5 w-1.5 rounded-full bg-line ring-2 ring-ink"
+              className="-translate-x-1/2 absolute left-1/2 h-1.5 w-1.5 rounded-full ring-2 ring-ink"
               style={{ top: `${((index + 0.5) / steps.length) * 100}%` }}
+              initial={false}
+              animate={{
+                backgroundColor:
+                  index <= activeIndex ? "var(--accent)" : "var(--line)",
+              }}
+              transition={{ duration: 0.4, ease: EASE }}
             />
           ))}
         </div>
