@@ -96,7 +96,7 @@ export const MenuOverlay = ({ open, onClose }: MenuOverlayProps) => {
                 height={1448}
                 className="pointer-events-none h-64 w-auto opacity-90 sm:h-72 md:hidden"
               />
-              <MenuDecor />
+              {/* <MenuDecor /> */}
             </div>
           </div>
 
