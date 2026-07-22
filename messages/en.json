@@ -55,10 +55,6 @@
         "title": "Streets",
         "desc": "People in the middle of their own lives, caught between two steps."
       },
-      "product": {
-        "title": "Still life",
-        "desc": "Small objects, warm tables, the poetry of something well-made."
-      },
       "portrait": {
         "title": "Portraits",
         "desc": "A face, a mood, a single afternoon. I notice the small things you'd forget."
@@ -67,17 +63,9 @@
         "title": "Editorials",
         "desc": "Quiet, considered stories — usually just me, a person and the light we found that day."
       },
-      "macro": {
-        "title": "Macro",
-        "desc": "A petal, a strand, a single drop. The world at the scale of almost-not-there."
-      },
       "event": {
         "title": "Events",
         "desc": "Weddings, birthdays, small parties, big nights. I stay close, I don't intrude, and I leave with the moments you would have missed."
-      },
-      "wildlife": {
-        "title": "Animals",
-        "desc": "Patient, slow, on their terms. A lot of waiting, a little luck."
       }
     }
   },

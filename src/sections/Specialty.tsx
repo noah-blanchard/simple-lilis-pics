@@ -36,7 +36,7 @@ export const Specialty = () => {
           Left full-bleed (no container cap) so the marquee scrolls edge-to-edge. */}
       <div className="mt-16 hidden flex-col gap-5 md:flex">
         <InfiniteRow
-          items={items.slice(0, 4)}
+          items={items.slice(0, Math.ceil(items.length / 2))}
           direction="left"
           repeat={4}
           renderItem={(item) => (
@@ -46,7 +46,7 @@ export const Specialty = () => {
           )}
         />
         <InfiniteRow
-          items={items.slice(4)}
+          items={items.slice(Math.ceil(items.length / 2))}
           direction="right"
           repeat={4}
           renderItem={(item) => (

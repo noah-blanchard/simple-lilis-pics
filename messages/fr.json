@@ -55,10 +55,6 @@
         "title": "Rue",
         "desc": "Des gens au milieu de leur propre vie, saisis entre deux pas."
       },
-      "product": {
-        "title": "Nature morte",
-        "desc": "De petits objets, des tables chaudes, la poésie d'une chose bien faite."
-      },
       "portrait": {
         "title": "Portraits",
         "desc": "Un visage, un mood, un après-midi. Je remarque les petits détails que vous oublieriez."
@@ -67,17 +63,9 @@
         "title": "Éditoriaux",
         "desc": "Des histoires calmes et réfléchies — souvent juste moi, une personne, et la lumière trouvée ce jour-là."
       },
-      "macro": {
-        "title": "Macro",
-        "desc": "Un pétale, un fil, une goutte. Le monde à l'échelle du presque-rien."
-      },
       "event": {
         "title": "Événements",
         "desc": "Mariages, anniversaires, petites fêtes, grandes soirées. Je reste proche, je ne m'impose pas, et je repars avec les moments que vous auriez ratés."
-      },
-      "wildlife": {
-        "title": "Animaux",
-        "desc": "Patiente, lente, à leur rythme. Beaucoup d'attente, un peu de chance."
       }
     }
   },

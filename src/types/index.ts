@@ -5,12 +5,9 @@
 export type IconKind =
   | "landscape"
   | "street"
-  | "product"
   | "portrait"
   | "fashion"
-  | "macro"
-  | "event"
-  | "wildlife";
+  | "event";
 
 export type PillVariant = "light" | "dark" | "accent" | "ghost" | "danger";
 
