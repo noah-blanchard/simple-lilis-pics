@@ -13,12 +13,16 @@ interface BentoCardProps {
   project: ResolvedProject;
   index: number;
   priority?: boolean;
+  /** Fill the parent (a bento grid cell that already owns the aspect ratio)
+   *  instead of imposing the card's own orientation-based aspect + max-width. */
+  fill?: boolean;
 }
 
 export const BentoCard = ({
   project,
   index,
   priority = false,
+  fill = false,
 }: BentoCardProps) => {
   const t = useTranslations("portfolio");
   const reduce = useReducedMotion();
@@ -38,13 +42,17 @@ export const BentoCard = ({
         delay: (index % 6) * 0.06,
         ease: EASE,
       }}
-      className="mx-auto w-full max-w-[640px]"
+      className={fill ? "h-full w-full" : "mx-auto w-full max-w-[640px]"}
     >
-      <Link href={`/portfolio/${project.id}`} className="block">
+      <Link
+        href={`/portfolio/${project.id}`}
+        className={fill ? "block h-full" : "block"}
+      >
         <RoundedImage
           src={project.cover?.img ?? ""}
           alt={title}
-          ratio={ratio}
+          ratio={fill ? "" : ratio}
+          className={fill ? "h-full" : ""}
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           priority={priority}
         >

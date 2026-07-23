@@ -107,10 +107,22 @@ export const projectUpdateSchema = z.object({
 export type ProjectCreateInput = z.infer<typeof projectCreateSchema>;
 export type ProjectUpdateInput = z.infer<typeof projectUpdateSchema>;
 
-/** Body for PATCH /api/projects/reorder — the full featured id list, in the
- *  new display order. */
+/** Column span a featured tile may occupy in the bento grid (base columns). */
+export const MAX_FEATURED_COL_SPAN = 8;
+
+/** Body for PATCH /api/projects/reorder — the full featured list in the new
+ *  display order (array index becomes `featured_order`), each entry carrying
+ *  the tile's `col_span` for the bento layout. */
 export const featuredReorderSchema = z.object({
-  order: z.array(z.string().uuid()).min(1).max(MAX_FEATURED_PROJECTS),
+  items: z
+    .array(
+      z.object({
+        id: z.string().uuid(),
+        col_span: z.number().int().min(1).max(MAX_FEATURED_COL_SPAN),
+      }),
+    )
+    .min(1)
+    .max(MAX_FEATURED_PROJECTS),
 });
 
 export type FeaturedReorderInput = z.infer<typeof featuredReorderSchema>;

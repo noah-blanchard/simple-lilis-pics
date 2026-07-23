@@ -1,6 +1,6 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { AccentUnderline } from "@/components/AccentUnderline";
-import { FeaturedGrid } from "@/components/FeaturedGrid";
+import { FeaturedBentoGrid } from "@/components/FeaturedBentoGrid";
 import { Reveal } from "@/components/Reveal";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
@@ -38,7 +38,7 @@ export const Featured = async () => {
           </Link>
         </div>
       </Reveal>
-      <FeaturedGrid items={items} />
+      <FeaturedBentoGrid items={items} />
     </section>
   );
 };

@@ -34,6 +34,7 @@ const projectWithRelations = z.object({
   project_date: z.string().nullable(),
   featured: z.boolean(),
   featured_order: z.number().nullable(),
+  featured_col_span: z.number().default(2),
   cover_photo_id: z.string().nullable(),
   created_at: z.string(),
   project_photos: z.array(projectPhotoRow),

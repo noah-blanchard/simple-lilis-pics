@@ -48,6 +48,7 @@ export interface ProjectRow {
   project_date: string | null; // "YYYY-MM-DD" | null
   featured: boolean;
   featured_order: number | null; // manual position among featured projects
+  featured_col_span: number; // 1..8 base columns — tile width in the featured bento grid
   cover_photo_id: string | null;
   created_at: string;
 }
@@ -75,6 +76,7 @@ export interface ResolvedProject {
   year: string; // derived from project_date; "" when null
   date: string | null; // ISO date or null
   featured: boolean;
+  featuredColSpan: number; // 1..8 base columns — tile width in the featured bento grid
   tags: string; // comma-joined locale labels
   cover: ResolvedProjectPhoto | null; // chosen cover, or first photo, or null
   photos: ResolvedProjectPhoto[]; // ordered by position
@@ -108,6 +110,7 @@ export function resolveProject(
     year: row.project_date?.slice(0, 4) ?? "",
     date: row.project_date,
     featured: row.featured,
+    featuredColSpan: row.featured_col_span ?? 2,
     tags: tagLabels.join(", "),
     cover,
     photos,

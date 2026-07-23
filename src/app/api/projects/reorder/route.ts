@@ -4,9 +4,10 @@ import { validate } from "@/lib/api/validate";
 import { withAuth } from "@/lib/api/with-auth";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 
-/** PATCH /api/projects/reorder — set the manual display order of the
- *  featured projects. Body: `{ order: string[] }`, the full featured id
- *  list in the new order (index becomes `featured_order`). */
+/** PATCH /api/projects/reorder — set the manual display order and bento tile
+ *  size of the featured projects. Body: `{ items: { id, col_span }[] }`, the
+ *  full featured list in the new order (index becomes `featured_order`,
+ *  `col_span` becomes `featured_col_span`). */
 export const PATCH = withAuth(async ({ request }) => {
   let body: unknown;
   try {
@@ -17,7 +18,7 @@ export const PATCH = withAuth(async ({ request }) => {
 
   const parsed = validate(featuredReorderSchema, body);
   if (!parsed.ok) return parsed.response;
-  const { order } = parsed.data;
+  const { items } = parsed.data;
 
   const admin = createSupabaseAdminClient();
 
@@ -28,22 +29,22 @@ export const PATCH = withAuth(async ({ request }) => {
   if (featuredErr) return apiError("DB_ERROR", featuredErr.message, 500);
 
   const featuredIds = new Set((featuredRows ?? []).map((r) => r.id as string));
-  const unknownId = order.find((id) => !featuredIds.has(id));
-  if (unknownId) {
+  const unknown = items.find((item) => !featuredIds.has(item.id));
+  if (unknown) {
     return apiError(
       "INVALID_ORDER",
-      `${unknownId} is not a currently-featured project`,
+      `${unknown.id} is not a currently-featured project`,
       422,
     );
   }
 
-  for (const [index, id] of order.entries()) {
+  for (const [index, item] of items.entries()) {
     const { error: updateErr } = await admin
       .from("projects")
-      .update({ featured_order: index })
-      .eq("id", id);
+      .update({ featured_order: index, featured_col_span: item.col_span })
+      .eq("id", item.id);
     if (updateErr) return apiError("DB_UPDATE_FAILED", updateErr.message, 500);
   }
 
-  return apiSuccess({ order });
+  return apiSuccess({ order: items.map((item) => item.id) });
 });

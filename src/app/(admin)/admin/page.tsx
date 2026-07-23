@@ -53,7 +53,7 @@ export default function AdminDashboard() {
         </div>
         <div className="flex items-center gap-3">
           <PillButton variant="ghost" size="sm" href="/admin/featured">
-            Reorder featured →
+            Featured layout →
           </PillButton>
           <PillButton
             variant="ghost"
