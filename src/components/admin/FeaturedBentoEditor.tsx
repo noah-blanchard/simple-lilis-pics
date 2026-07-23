@@ -2,16 +2,17 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { motion } from "motion/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PillButton } from "@/components/PillButton";
 import { apiFetch } from "@/lib/api/client";
 import {
+  aspectFor,
   type BentoTile,
   clampColSpan,
-  packBento,
+  packingEfficiency,
+  packSkyline,
   presetLabel,
   presetsForOrientation,
-  rowSpanFor,
   useBentoMetrics,
 } from "@/lib/bento";
 import {
@@ -27,6 +28,20 @@ const COLS = 8;
 
 /** Default size for a freshly-featured project: "S" (2 base columns). */
 const DEFAULT_COL_SPAN = 2;
+
+/** Gap between tiles in the editor canvas, in px. */
+const GAP = 10;
+
+/** Pointer travel (px) before a press becomes a drag rather than a click. */
+const DRAG_THRESHOLD = 4;
+
+// Weighted size pools for Shuffle — mostly S/M with the occasional larger or XS
+// tile, so results vary run to run but stay tasteful.
+const LANDSCAPE_POOL = [2, 2, 2, 4, 4, 6, 1, 8];
+const PORTRAIT_POOL = [2, 2, 4, 1];
+
+/** Minimum packing efficiency a Shuffle result must reach before it's accepted. */
+const MIN_SHUFFLE_EFFICIENCY = 0.65;
 
 interface EditorTile extends BentoTile {
   title: string;
@@ -60,25 +75,71 @@ function arrayMove<T>(arr: T[], from: number, to: number): T[] {
   return next;
 }
 
-/** Size + order the tiles from their landscape/portrait mix: landscapes get a
- *  periodic medium for rhythm, portraits stay slim, then everything is ordered
- *  tallest-first so the first-fit packer fills columns tightly. */
+/** Relative tile height (in column-width units) — used to order tallest-first
+ *  so the skyline packer fills columns tightly. */
+function heightUnits(tile: EditorTile): number {
+  return tile.colSpan / aspectFor(tile.orientation);
+}
+
+/** Deterministic, tightly-packed arrangement (the stable default): landscapes
+ *  get a periodic medium for rhythm, portraits stay slim, then everything is
+ *  ordered tallest-first so the packer leaves minimal gaps. Same result each run. */
 function autoArrange(tiles: EditorTile[]): EditorTile[] {
   const items = tiles.map((t) => ({ ...t }));
   let landscapeIndex = 0;
   for (const t of items) {
     if (t.orientation === "portrait") {
-      t.colSpan = 2; // slim column (2 wide × 8 tall)
+      t.colSpan = 2; // slim column
     } else {
-      t.colSpan = landscapeIndex % 3 === 0 ? 4 : 2; // periodic M, else S
+      t.colSpan = landscapeIndex % 3 === 0 ? 4 : 2; // periodic medium, else small
       landscapeIndex++;
     }
   }
-  return items.sort(
-    (a, b) =>
-      rowSpanFor(b.orientation, b.colSpan) -
-      rowSpanFor(a.orientation, a.colSpan),
-  );
+  return items.sort((a, b) => heightUnits(b) - heightUnits(a));
+}
+
+/** One random candidate: random weighted sizes + a shuffled order. */
+function randomLayout(tiles: EditorTile[]): EditorTile[] {
+  const items = tiles.map((t) => ({ ...t }));
+  for (const t of items) {
+    const pool = t.orientation === "portrait" ? PORTRAIT_POOL : LANDSCAPE_POOL;
+    t.colSpan = pool[Math.floor(Math.random() * pool.length)];
+  }
+  for (let i = items.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [items[i], items[j]] = [items[j], items[i]];
+  }
+  return items;
+}
+
+/** Random, varied layout that still packs reasonably: try several candidates and
+ *  take the first clearing the efficiency bar, else the tightest one tried. */
+function shuffleLayout(tiles: EditorTile[]): EditorTile[] {
+  let best = tiles;
+  let bestEfficiency = -1;
+  for (let attempt = 0; attempt < 40; attempt++) {
+    const candidate = randomLayout(tiles);
+    const efficiency = packingEfficiency(candidate, COLS);
+    if (efficiency >= MIN_SHUFFLE_EFFICIENCY) return candidate;
+    if (efficiency > bestEfficiency) {
+      bestEfficiency = efficiency;
+      best = candidate;
+    }
+  }
+  return best;
+}
+
+interface DragState {
+  id: string;
+  offsetX: number;
+  offsetY: number;
+  startX: number;
+  startY: number;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  active: boolean;
 }
 
 export function FeaturedBentoEditor() {
@@ -89,26 +150,26 @@ export function FeaturedBentoEditor() {
   });
 
   const [tiles, setTiles] = useState<EditorTile[]>([]);
-  const [draggingId, setDraggingId] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [drag, setDrag] = useState<DragState | null>(null);
 
-  // Seed the local (editable) tiles once, the first time data arrives — not on
-  // every background refetch, so an in-progress edit is never reset.
+  // Seed the local (editable) tiles once, the first time data arrives.
   const initialized = useRef(false);
   if (!initialized.current && projects) {
     initialized.current = true;
-    const seeded = projects
-      .filter((p) => p.featured)
-      .sort(
-        (a, b) =>
-          (a.featured_order ?? Infinity) - (b.featured_order ?? Infinity),
-      )
-      .map(toTile);
-    setTiles(seeded);
+    setTiles(
+      projects
+        .filter((p) => p.featured)
+        .sort(
+          (a, b) =>
+            (a.featured_order ?? Infinity) - (b.featured_order ?? Infinity),
+        )
+        .map(toTile),
+    );
   }
 
   const { setRef, elRef, metrics } = useBentoMetrics(COLS);
-  const { placed } = packBento(tiles, COLS);
+  const layout = metrics ? packSkyline(tiles, COLS, metrics.width, GAP) : null;
 
   const save = useMutation({
     mutationFn: () =>
@@ -132,28 +193,27 @@ export function FeaturedBentoEditor() {
     save.reset();
   };
 
-  // Map the live pointer position to a target index and reorder mid-drag; the
-  // packer re-runs and non-dragged tiles animate to their new slots (layout).
-  const handleDrag = (id: string, e: PointerEvent) => {
+  const runShuffle = () => {
+    setTiles((prev) => shuffleLayout(prev));
+    save.reset();
+  };
+
+  // Reorder the list from the live pointer position (kept in a ref so the window
+  // listeners, bound once per drag, always call the freshest closure).
+  const reorderRef = useRef<(id: string, e: PointerEvent) => void>(() => {});
+  reorderRef.current = (id, e) => {
     const grid = elRef.current;
-    if (!grid || !metrics) return;
+    if (!grid || !layout) return;
     const rect = grid.getBoundingClientRect();
-    const colStride = metrics.colWidth + metrics.colGap;
-    const rowStride = metrics.rowUnit + metrics.rowGap;
-    if (colStride <= 0 || rowStride <= 0) return;
+    const px = e.clientX - rect.left;
+    const py = e.clientY - rect.top;
 
-    const col = Math.min(
-      COLS - 1,
-      Math.max(0, Math.floor((e.clientX - rect.left) / colStride)),
-    );
-    const row = Math.max(0, Math.floor((e.clientY - rect.top) / rowStride));
-
-    const occupant = placed.find(
-      (t) =>
-        col >= t.colStart &&
-        col < t.colStart + t.colSpan &&
-        row >= t.rowStart &&
-        row < t.rowStart + t.rowSpan,
+    const occupant = layout.rects.find(
+      (r) =>
+        px >= r.left &&
+        px < r.left + r.width &&
+        py >= r.top &&
+        py < r.top + r.height,
     );
 
     const from = tiles.findIndex((t) => t.id === id);
@@ -167,8 +227,56 @@ export function FeaturedBentoEditor() {
     save.reset();
   };
 
+  const dragId = drag?.id ?? null;
+  useEffect(() => {
+    if (!dragId) return;
+    const onMove = (e: PointerEvent) => {
+      setDrag((prev) =>
+        prev
+          ? {
+              ...prev,
+              x: e.clientX,
+              y: e.clientY,
+              active:
+                prev.active ||
+                Math.hypot(e.clientX - prev.startX, e.clientY - prev.startY) >
+                  DRAG_THRESHOLD,
+            }
+          : prev,
+      );
+      reorderRef.current(dragId, e);
+    };
+    const onUp = () => setDrag(null);
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+    window.addEventListener("pointercancel", onUp);
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      window.removeEventListener("pointercancel", onUp);
+    };
+  }, [dragId]);
+
+  const startDrag = (id: string, e: React.PointerEvent<HTMLElement>) => {
+    setSelectedId(id);
+    const rect = e.currentTarget.getBoundingClientRect();
+    setDrag({
+      id,
+      offsetX: e.clientX - rect.left,
+      offsetY: e.clientY - rect.top,
+      startX: e.clientX,
+      startY: e.clientY,
+      x: e.clientX,
+      y: e.clientY,
+      w: rect.width,
+      h: rect.height,
+      active: false,
+    });
+  };
+
   const byId = new Map(tiles.map((t) => [t.id, t]));
   const selected = selectedId ? byId.get(selectedId) : undefined;
+  const draggingTile = drag?.active ? byId.get(drag.id) : undefined;
 
   return (
     <div>
@@ -178,29 +286,28 @@ export function FeaturedBentoEditor() {
             Featured layout
           </h1>
           <p className="mt-1 text-[14px] text-fg/55">
-            Drag tiles to rearrange, click one to resize — the grid packs itself
-            and always keeps each photo&apos;s aspect ratio. This is the desktop
-            layout; it collapses on smaller screens.
+            Drag tiles to rearrange, click one to resize. Every tile keeps its
+            exact aspect ratio — landscape 16:9, portrait 9:16 — at any size.
           </p>
         </div>
-        <div className="flex items-center gap-2">
-          <PillButton
-            variant="ghost"
-            size="sm"
-            disabled={tiles.length === 0}
-            onClick={runAutoArrange}
-          >
-            Auto arrange
-          </PillButton>
-          <PillButton
-            variant="light"
-            size="sm"
-            disabled={save.isPending || tiles.length === 0}
-            onClick={() => save.mutate()}
-          >
-            {save.isPending ? "Saving…" : "Save layout"}
-          </PillButton>
-        </div>
+        {tiles.length > 0 && (
+          <div className="flex items-center gap-2">
+            <PillButton variant="ghost" size="sm" onClick={runShuffle}>
+              Shuffle
+            </PillButton>
+            <PillButton variant="ghost" size="sm" onClick={runAutoArrange}>
+              Auto arrange
+            </PillButton>
+            <PillButton
+              variant="light"
+              size="sm"
+              disabled={save.isPending}
+              onClick={() => save.mutate()}
+            >
+              {save.isPending ? "Saving…" : "Save layout"}
+            </PillButton>
+          </div>
+        )}
       </div>
 
       {save.isError && (
@@ -256,42 +363,54 @@ export function FeaturedBentoEditor() {
             )}
           </div>
 
-          <div className="overflow-x-auto pb-2">
-            <div
-              ref={setRef}
-              className="grid min-w-[560px] max-w-[1000px] gap-2 md:gap-3"
-              style={{
-                gridTemplateColumns: `repeat(${COLS}, minmax(0, 1fr))`,
-                gridAutoRows: metrics ? `${metrics.rowUnit}px` : undefined,
-              }}
-            >
-              {placed.map((p) => {
-                const tile = byId.get(p.id);
-                if (!tile) return null;
-                return (
-                  <TileCard
-                    key={tile.id}
-                    tile={tile}
-                    colStart={p.colStart}
-                    colSpan={p.colSpan}
-                    rowStart={p.rowStart}
-                    rowSpan={p.rowSpan}
-                    measured={metrics !== null}
-                    dragging={draggingId === tile.id}
-                    selected={selectedId === tile.id}
-                    onSelect={() => setSelectedId(tile.id)}
-                    onDragStart={() => {
-                      setDraggingId(tile.id);
-                      setSelectedId(tile.id);
-                    }}
-                    onDragMove={(e) => handleDrag(tile.id, e)}
-                    onDragEnd={() => setDraggingId(null)}
-                  />
-                );
-              })}
-            </div>
+          <div
+            ref={setRef}
+            className="relative w-full max-w-[1000px]"
+            style={{
+              height: layout ? layout.height : undefined,
+              minHeight: 200,
+            }}
+          >
+            {layout?.rects.map((r) => {
+              const tile = byId.get(r.id);
+              if (!tile) return null;
+              return (
+                <TileCard
+                  key={tile.id}
+                  tile={tile}
+                  left={r.left}
+                  top={r.top}
+                  width={r.width}
+                  height={r.height}
+                  selected={selectedId === tile.id}
+                  lifted={drag?.active === true && drag.id === tile.id}
+                  onPointerDown={(e) => startDrag(tile.id, e)}
+                />
+              );
+            })}
           </div>
         </>
+      )}
+
+      {/* Floating drag image — follows the pointer, decoupled from the layout so
+          the packed tiles animate underneath without any transform conflict. */}
+      {drag?.active && draggingTile && (
+        <div
+          className="pointer-events-none fixed z-[100] overflow-hidden rounded-xl border-2 border-accent shadow-2xl"
+          style={{
+            left: drag.x - drag.offsetX,
+            top: drag.y - drag.offsetY,
+            width: drag.w,
+            height: drag.h,
+          }}
+        >
+          {/* biome-ignore lint/performance/noImgElement: stored remote thumb */}
+          <img
+            src={draggingTile.src}
+            alt=""
+            className="h-full w-full object-cover"
+          />
+        </div>
       )}
     </div>
   );
@@ -299,60 +418,40 @@ export function FeaturedBentoEditor() {
 
 interface TileCardProps {
   tile: EditorTile;
-  colStart: number;
-  colSpan: number;
-  rowStart: number;
-  rowSpan: number;
-  measured: boolean;
-  dragging: boolean;
+  left: number;
+  top: number;
+  width: number;
+  height: number;
   selected: boolean;
-  onSelect: () => void;
-  onDragStart: () => void;
-  onDragMove: (e: PointerEvent) => void;
-  onDragEnd: () => void;
+  lifted: boolean;
+  onPointerDown: (e: React.PointerEvent<HTMLElement>) => void;
 }
 
-/** One draggable, selectable bento tile. The whole tile is the drag surface;
- *  `layout` FLIP-animates it to its packed slot whenever the layout changes. */
+/** One absolutely-positioned bento tile. `layout` FLIP-animates it to its packed
+ *  spot as the order/sizes change. It is never itself dragged (the floating
+ *  overlay handles that), so there is no drag/layout conflict. */
 function TileCard({
   tile,
-  colStart,
-  colSpan,
-  rowStart,
-  rowSpan,
-  measured,
-  dragging,
+  left,
+  top,
+  width,
+  height,
   selected,
-  onSelect,
-  onDragStart,
-  onDragMove,
-  onDragEnd,
+  lifted,
+  onPointerDown,
 }: TileCardProps) {
   return (
     <motion.div
       layout
-      drag
-      dragSnapToOrigin
-      dragElastic={0.12}
-      dragMomentum={false}
-      whileDrag={{ scale: 1.03 }}
-      onDragStart={onDragStart}
-      onDrag={(e) => onDragMove(e as PointerEvent)}
-      onDragEnd={onDragEnd}
-      onTap={onSelect}
+      onPointerDown={onPointerDown}
       transition={{ type: "spring", stiffness: 620, damping: 46 }}
-      style={{
-        gridColumn: `${colStart + 1} / span ${colSpan}`,
-        gridRow: `${rowStart + 1} / span ${rowSpan}`,
-        zIndex: dragging ? 50 : selected ? 20 : 1,
-        aspectRatio: measured ? undefined : `${2 * colSpan} / ${rowSpan}`,
-      }}
-      className={`group relative cursor-grab touch-none select-none overflow-hidden rounded-xl border-2 bg-panel2 active:cursor-grabbing ${
-        selected
-          ? "border-accent shadow-xl"
-          : dragging
-            ? "border-accent/70 shadow-2xl"
-            : "border-transparent hover:border-fg/20"
+      style={{ left, top, width, height, position: "absolute" }}
+      className={`group cursor-grab touch-none select-none overflow-hidden rounded-xl border-2 bg-panel2 active:cursor-grabbing ${
+        lifted
+          ? "border-accent border-dashed opacity-40"
+          : selected
+            ? "border-accent shadow-xl"
+            : "border-transparent hover:border-fg/25"
       }`}
     >
       {/* biome-ignore lint/performance/noImgElement: stored remote thumb */}
@@ -360,24 +459,13 @@ function TileCard({
         src={tile.src}
         alt=""
         draggable={false}
-        className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+        className="pointer-events-none h-full w-full object-cover"
       />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-scrim/85 via-transparent to-transparent" />
 
-      {/* Current size badge (top-left) */}
+      {/* Size badge (top-left) — the only chrome, for the editor's benefit */}
       <span className="pointer-events-none absolute top-1.5 left-1.5 rounded-md bg-inverse/70 px-1.5 py-0.5 font-medium text-[10px] text-on-inverse/90 backdrop-blur-sm">
-        {presetLabel(tile.orientation, colSpan)}
+        {presetLabel(tile.orientation, tile.colSpan)}
       </span>
-
-      {/* Title (bottom) */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 p-2">
-        <p className="truncate font-medium text-[12px] text-on-inverse leading-tight">
-          {tile.title}
-        </p>
-        {tile.year && (
-          <p className="text-[10px] text-on-inverse/70">{tile.year}</p>
-        )}
-      </div>
     </motion.div>
   );
 }

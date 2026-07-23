@@ -3,13 +3,13 @@
 import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { AccentUnderline } from "@/components/AccentUnderline";
-import { BentoCard } from "@/components/BentoCard";
+import { BentoImageGrid } from "@/components/BentoImageGrid";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 import { Logo } from "@/components/Logo";
 import { navTextControl } from "@/components/nav/navControl";
 import { Reveal } from "@/components/Reveal";
 import { Link } from "@/i18n/navigation";
-import { packColumns, useColumnCount } from "@/lib/bento";
+import { BENTO_BREAKPOINTS } from "@/lib/bento";
 import { EASE, hoverColorTransition } from "@/lib/motion";
 import { Footer } from "@/sections/Footer";
 import type { ResolvedProject } from "@/types/db";
@@ -27,17 +27,6 @@ interface PortfolioBentoProps {
 
 export const PortfolioBento = ({ items }: PortfolioBentoProps) => {
   const t = useTranslations("portfolio");
-  const cols = useColumnCount();
-  const columns = packColumns(items, cols);
-
-  // Flat index per item for stagger delay (stable across re-renders).
-  const flatIndex = new Map<string, number>();
-  let i = 0;
-  for (const col of columns) {
-    for (const item of col) {
-      flatIndex.set(item.id, i++);
-    }
-  }
 
   return (
     <main className="min-h-screen bg-ink text-fg">
@@ -85,24 +74,15 @@ export const PortfolioBento = ({ items }: PortfolioBentoProps) => {
           </div>
         </Reveal>
 
-        {/* Aspect-matched masonry: equal-width columns, covers at true ratio */}
-        <div className="flex gap-4 md:gap-5">
-          {columns.map((col) => (
-            <div
-              key={col[0]?.id ?? "empty"}
-              className="flex min-w-0 flex-1 flex-col gap-4 md:gap-5"
-            >
-              {col.map((project) => (
-                <BentoCard
-                  key={project.id}
-                  project={project}
-                  index={flatIndex.get(project.id) ?? 0}
-                  priority={(flatIndex.get(project.id) ?? 99) < 3}
-                />
-              ))}
-            </div>
-          ))}
-        </div>
+        {/* Exact-aspect bento: landscapes span 2 columns, portraits 1 */}
+        <BentoImageGrid
+          items={items}
+          breakpoints={BENTO_BREAKPOINTS}
+          gap={20}
+          colSpanFor={(p) =>
+            (p.cover?.orientation ?? "landscape") === "landscape" ? 2 : 1
+          }
+        />
       </section>
 
       <Footer />

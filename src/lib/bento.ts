@@ -8,32 +8,7 @@ import {
 } from "react";
 import type { Orientation } from "@/types/db";
 
-// Portrait covers are ~1.78× taller than landscape for the same column width;
-// used to estimate column heights for the packing algorithm.
-const PORTRAIT_RATIO = 16 / 9; // height = width × ratio
-const LANDSCAPE_RATIO = 9 / 16;
-
-/** Distribute items across N columns using a shortest-column-first algorithm.
- *  Preserves reading order within each column and avoids CSS `columns` (which
- *  breaks tab order and motion stagger). */
-export function packColumns<
-  T extends { cover: { orientation: Orientation } | null },
->(items: T[], cols: number): T[][] {
-  const columns: T[][] = Array.from({ length: cols }, () => []);
-  const heights: number[] = new Array(cols).fill(0);
-
-  for (const item of items) {
-    const shortest = heights.indexOf(Math.min(...heights));
-    columns[shortest].push(item);
-    const ratio =
-      item.cover?.orientation === "portrait" ? PORTRAIT_RATIO : LANDSCAPE_RATIO;
-    heights[shortest] += ratio;
-  }
-
-  return columns;
-}
-
-interface ColumnBreakpoint {
+export interface ColumnBreakpoint {
   query: string;
   cols: number;
 }
@@ -45,13 +20,6 @@ export const BENTO_BREAKPOINTS: readonly ColumnBreakpoint[] = [
   { query: "(min-width: 2200px)", cols: 5 },
   { query: "(min-width: 1600px)", cols: 4 },
   { query: "(min-width: 1024px)", cols: 3 },
-  { query: "(min-width: 640px)", cols: 2 },
-] as const;
-
-// Capped at 3 columns (vs. the portfolio grid's 5) so home-page featured
-// tiles read bigger and more spacious.
-export const FEATURED_BREAKPOINTS: readonly ColumnBreakpoint[] = [
-  { query: "(min-width: 1280px)", cols: 3 },
   { query: "(min-width: 640px)", cols: 2 },
 ] as const;
 
@@ -91,11 +59,9 @@ export function useColumnCount(
 /* ── Span-based bento (home featured grid + admin editor) ──
  *
  * The grid runs at double resolution: `colSpan` is measured in BASE columns
- * (8 across on desktop). The row unit is HALF a base column, and aspect is
- * locked to the cover photo's orientation, so `colSpan` is the only free
- * variable and `rowSpan` is derived — which keeps every tile's aspect exact:
- *   • landscape (2:1)  → rowSpan = colSpan
- *   • portrait  (1:2)  → rowSpan = 4 · colSpan
+ * (8 across on desktop). A tile's height is derived as width ÷ its exact aspect
+ * (landscape 16:9, portrait 9:16), so the ratio is locked to orientation and can
+ * never drift with size — `colSpan` is the only free variable.
  */
 
 export interface SizePreset {
@@ -139,12 +105,6 @@ function maxColSpanFor(orientation: Orientation): number {
   return presets[presets.length - 1].span;
 }
 
-/** Row span derived from orientation + (clamped) column span. Preserves the
- *  2:1 / 1:2 aspect against a row unit of half a base column. */
-export function rowSpanFor(orientation: Orientation, colSpan: number): number {
-  return orientation === "portrait" ? colSpan * 4 : colSpan;
-}
-
 /** Clamp a requested column span to the orientation's max and the grid width. */
 export function clampColSpan(
   orientation: Orientation,
@@ -161,77 +121,83 @@ export interface BentoTile {
   colSpan: number; // requested (desktop preset); clamped during packing
 }
 
-export interface PlacedTile {
+/** Exact tile aspect (width ÷ height), locked to orientation. Landscape is
+ *  ALWAYS 16:9, portrait is ALWAYS 9:16 — no other value is ever produced. */
+export function aspectFor(orientation: Orientation): number {
+  return orientation === "portrait" ? 9 / 16 : 16 / 9;
+}
+
+export interface PlacedRect {
   id: string;
-  colStart: number; // 0-based
-  rowStart: number; // 0-based
-  colSpan: number; // clamped to the active column count
-  rowSpan: number;
+  left: number; // px
+  top: number; // px
+  width: number; // px
+  height: number; // px = width / aspect (so aspect is always exact)
 }
 
-export interface BentoLayout {
-  placed: PlacedTile[]; // same order as the input tiles
-  columns: number;
-  totalRows: number;
+export interface SkylineLayout {
+  rects: PlacedRect[]; // same order as the input tiles
+  height: number; // total px height of the packed area
 }
 
-/** Deterministic first-fit packer: for each tile in order, drop it into the
- *  first free colSpan×rowSpan block scanning top→bottom, left→right. The exact
- *  same function drives the editor preview and the live grid, so they match. */
-export function packBento(tiles: BentoTile[], columns: number): BentoLayout {
+/** Skyline (shelf) packer over `columns` equal columns of a `containerWidth`-px
+ *  row. Each tile's height is derived as width ÷ exact aspect, so landscape tiles
+ *  are always 16:9 and portrait tiles always 9:16 regardless of size — the height
+ *  is never tied to a shared row unit, so it can't drift. Tiles drop into the
+ *  lowest available slot across their column span, keeping the layout tight. */
+export function packSkyline(
+  tiles: BentoTile[],
+  columns: number,
+  containerWidth: number,
+  gap: number,
+): SkylineLayout {
   const cols = Math.max(1, columns);
-  const occupied: boolean[][] = [];
-  const ensureRow = (r: number) => {
-    while (occupied.length <= r) occupied.push(new Array(cols).fill(false));
-  };
-  const fits = (row: number, col: number, cs: number, rs: number): boolean => {
-    if (col + cs > cols) return false;
-    for (let r = row; r < row + rs; r++) {
-      ensureRow(r);
-      for (let c = col; c < col + cs; c++) if (occupied[r][c]) return false;
-    }
-    return true;
-  };
-  const mark = (row: number, col: number, cs: number, rs: number) => {
-    for (let r = row; r < row + rs; r++) {
-      ensureRow(r);
-      for (let c = col; c < col + cs; c++) occupied[r][c] = true;
-    }
-  };
+  // colStride includes one gap, so `cols` columns span the full width exactly.
+  const colStride = (containerWidth + gap) / cols;
+  const heights = new Array(cols).fill(0);
+  const rects: PlacedRect[] = [];
 
-  const placed: PlacedTile[] = [];
   for (const tile of tiles) {
-    const colSpan = clampColSpan(tile.orientation, tile.colSpan, cols);
-    const rowSpan = rowSpanFor(tile.orientation, colSpan);
-    let row = 0;
-    let done = false;
-    while (!done) {
-      for (let col = 0; col + colSpan <= cols; col++) {
-        if (fits(row, col, colSpan, rowSpan)) {
-          mark(row, col, colSpan, rowSpan);
-          placed.push({
-            id: tile.id,
-            colStart: col,
-            rowStart: row,
-            colSpan,
-            rowSpan,
-          });
-          done = true;
-          break;
-        }
+    const span = clampColSpan(tile.orientation, tile.colSpan, cols);
+    const width = Math.max(0, span * colStride - gap);
+    const height = width / aspectFor(tile.orientation);
+
+    // Find the column offset whose spanned columns have the lowest top edge.
+    let bestCol = 0;
+    let bestTop = Infinity;
+    for (let start = 0; start + span <= cols; start++) {
+      let top = 0;
+      for (let k = start; k < start + span; k++)
+        top = Math.max(top, heights[k]);
+      if (top < bestTop) {
+        bestTop = top;
+        bestCol = start;
       }
-      if (!done) row++;
     }
+
+    const left = bestCol * colStride;
+    rects.push({ id: tile.id, left, top: bestTop, width, height });
+    const nextTop = bestTop + height + gap;
+    for (let k = bestCol; k < bestCol + span; k++) heights[k] = nextTop;
   }
 
-  return { placed, columns: cols, totalRows: occupied.length };
+  const total = heights.length ? Math.max(...heights) : 0;
+  return { rects, height: Math.max(0, total - gap) };
+}
+
+/** Fraction of the packed bounding box actually covered by tiles (0..1). Uses a
+ *  unit-space, gap-free skyline, so it measures how tightly a layout packs
+ *  regardless of pixel width — handy for scoring random "shuffle" candidates. */
+export function packingEfficiency(tiles: BentoTile[], columns: number): number {
+  const layout = packSkyline(tiles, columns, columns, 0);
+  if (layout.height <= 0) return 0;
+  let area = 0;
+  for (const r of layout.rects) area += r.width * r.height;
+  return area / (columns * layout.height);
 }
 
 export interface BentoMetrics {
-  colWidth: number; // resolved pixel width of one column track
-  rowUnit: number; // = colWidth / 2 (grid-auto-rows height)
-  colGap: number;
-  rowGap: number;
+  width: number; // container content width in px
 }
 
 export interface BentoMetricsState {
@@ -243,10 +209,9 @@ export interface BentoMetricsState {
   metrics: BentoMetrics | null;
 }
 
-/** Measure a CSS-grid element's resolved column track + gaps so the caller can
- *  set `grid-auto-rows` to half a column width and map pointer coords to cells.
- *  Reads the computed `grid-template-columns` (already px), so it is agnostic to
- *  the responsive Tailwind gap classes. Re-measures on resize and column change. */
+/** Measure a container's content width so the caller can lay tiles out in px.
+ *  Uses a callback ref + ResizeObserver, so it measures the instant the node
+ *  mounts (robust to the grid rendering after async data arrives) and on resize. */
 export function useBentoMetrics(columns: number): BentoMetricsState {
   const elRef = useRef<HTMLDivElement | null>(null);
   const observerRef = useRef<ResizeObserver | null>(null);
@@ -255,21 +220,9 @@ export function useBentoMetrics(columns: number): BentoMetricsState {
   const measure = useCallback(() => {
     const el = elRef.current;
     if (!el) return;
-    const cs = getComputedStyle(el);
-    const firstTrack = Number.parseFloat(
-      cs.gridTemplateColumns.split(" ").filter(Boolean)[0] ?? "",
-    );
-    if (!Number.isFinite(firstTrack) || firstTrack <= 0) return;
-    const colGap = Number.parseFloat(cs.columnGap) || 0;
-    const rowGap = Number.parseFloat(cs.rowGap) || 0;
-    setMetrics((prev) =>
-      prev &&
-      prev.colWidth === firstTrack &&
-      prev.colGap === colGap &&
-      prev.rowGap === rowGap
-        ? prev
-        : { colWidth: firstTrack, rowUnit: firstTrack / 2, colGap, rowGap },
-    );
+    const width = el.clientWidth;
+    if (!Number.isFinite(width) || width <= 0) return;
+    setMetrics((prev) => (prev && prev.width === width ? prev : { width }));
   }, []);
 
   const setRef = useCallback(
@@ -287,9 +240,9 @@ export function useBentoMetrics(columns: number): BentoMetricsState {
     [measure],
   );
 
-  // Re-measure when the column count changes: the track width changes without a
-  // container resize, so the ResizeObserver alone wouldn't catch it. `columns`
-  // is a deliberate trigger even though it isn't read in the effect body.
+  // Re-measure when the column count changes (a media-query change can alter the
+  // effective width without a container resize). `columns` is a deliberate
+  // trigger even though it isn't read in the effect body.
   // biome-ignore lint/correctness/useExhaustiveDependencies: intentional re-measure trigger
   useLayoutEffect(() => {
     measure();
