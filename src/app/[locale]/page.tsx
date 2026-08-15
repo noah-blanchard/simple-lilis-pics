@@ -7,7 +7,7 @@ import { Footer } from "@/sections/Footer";
 import { Hero } from "@/sections/Hero";
 import { Process } from "@/sections/Process";
 import { Specialty } from "@/sections/Specialty";
-// import { Testimonials } from "@/sections/Testimonials";
+import { Testimonials } from "@/sections/Testimonials";
 
 export default function Home({
   params,
@@ -29,7 +29,7 @@ function HomeSections() {
       <Specialty />
       <Featured />
       <Process />
-      {/* <Testimonials /> */}
+      <Testimonials />
       <Contact />
       <Footer />
     </main>
