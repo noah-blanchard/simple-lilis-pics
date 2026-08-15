@@ -132,6 +132,100 @@ export const IconMoon = ({ className = "" }: IconProps) => (
   </svg>
 );
 
+/* admin section icons — same 24px line style as above, sized by className */
+export const IconGrid = ({ className = "" }: IconProps) => (
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.6"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <rect x="3" y="3" width="7.5" height="7.5" rx="1.5" />
+    <rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5" />
+    <rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5" />
+    <rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5" />
+  </svg>
+);
+
+/** Bento/featured layout — uneven tiles, to read differently from IconGrid. */
+export const IconLayout = ({ className = "" }: IconProps) => (
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.6"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <rect x="3" y="3" width="11" height="11" rx="1.5" />
+    <rect x="17" y="3" width="4" height="11" rx="1.5" />
+    <rect x="3" y="17" width="4" height="4" rx="1.5" />
+    <rect x="10" y="17" width="11" height="4" rx="1.5" />
+  </svg>
+);
+
+export const IconStar = ({ className = "" }: IconProps) => (
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.6"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M12 3.5l2.6 5.7 6.2.7-4.6 4.2 1.2 6.1L12 17.2 6.6 20.2l1.2-6.1L3.2 9.9l6.2-.7z" />
+  </svg>
+);
+
+export const IconMail = ({ className = "" }: IconProps) => (
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.6"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <rect x="3" y="5" width="18" height="14" rx="2.5" />
+    <path d="M3.5 7.5l7.3 5a2 2 0 0 0 2.4 0l7.3-5" />
+  </svg>
+);
+
+export const IconDots = ({ className = "" }: IconProps) => (
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    aria-hidden="true"
+  >
+    <circle cx="5" cy="12" r="1.6" />
+    <circle cx="12" cy="12" r="1.6" />
+    <circle cx="19" cy="12" r="1.6" />
+  </svg>
+);
+
+export const IconChevronLeft = ({ className = "" }: IconProps) => (
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.6"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M14.5 5.5 8 12l6.5 6.5" />
+  </svg>
+);
+
 /* category icons (line, monoweight) */
 export const CatIcon = ({
   kind,

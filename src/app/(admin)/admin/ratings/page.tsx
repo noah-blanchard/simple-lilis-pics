@@ -67,8 +67,11 @@ export default function AdminRatingsPage() {
     <div>
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="font-semibold text-[26px] tracking-tight">Ratings</h1>
-          <p className="mt-1 text-[14px] text-fg/55">
+          {/* On mobile the section title already lives in the top bar. */}
+          <h1 className="hidden font-semibold text-[26px] tracking-tight lg:block">
+            Ratings
+          </h1>
+          <p className="text-[14px] text-fg/55 lg:mt-1">
             {ratings
               ? `${ratings.length} rating${ratings.length === 1 ? "" : "s"} · ${approvedWithNote}/${MIN_PUBLIC_TESTIMONIALS} approved with a note`
               : "Loading…"}
