@@ -19,7 +19,9 @@ export function FeaturedStat() {
   return (
     <HubStat
       value={`${featured} / ${MAX_FEATURED_PROJECTS} slots`}
-      note={featured === 0 ? "Nothing on the home page yet" : "On the home page"}
+      note={
+        featured === 0 ? "Nothing on the home page yet" : "On the home page"
+      }
       attention={featured === 0}
     />
   );

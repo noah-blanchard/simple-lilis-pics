@@ -77,7 +77,12 @@ export default function AdminRatingsPage() {
               : "Loading…"}
           </p>
         </div>
-        <PillButton variant="light" size="sm" onClick={() => setQrOpen(true)}>
+        <PillButton
+          variant="light"
+          size="sm"
+          onClick={() => setQrOpen(true)}
+          className="min-h-11 w-full sm:min-h-0 sm:w-auto"
+        >
           Generate QR
         </PillButton>
       </div>
@@ -128,7 +133,7 @@ export default function AdminRatingsPage() {
               <span className="text-[14px] text-fg/60">
                 {rating.name ?? "Anonymous"}
               </span>
-              <div className="flex items-center gap-2">
+              <div className="flex w-full items-center gap-2 sm:w-auto">
                 <PillButton
                   variant={rating.approved ? "accent" : "ghost"}
                   size="sm"
@@ -139,6 +144,7 @@ export default function AdminRatingsPage() {
                       approved: !rating.approved,
                     })
                   }
+                  className="min-h-11 flex-1 sm:min-h-0 sm:flex-none"
                 >
                   {rating.approved ? "Published" : "Publish"}
                 </PillButton>
@@ -146,6 +152,7 @@ export default function AdminRatingsPage() {
                   variant="ghost"
                   size="sm"
                   onClick={() => setDeleting(rating)}
+                  className="min-h-11 flex-1 sm:min-h-0 sm:flex-none"
                 >
                   Delete
                 </PillButton>
