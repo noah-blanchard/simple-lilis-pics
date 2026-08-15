@@ -3,8 +3,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { useState } from "react";
+import { AdminDialog } from "@/components/admin/AdminDialog";
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
-import { Modal } from "@/components/admin/Modal";
 import { PhotoSkeletonGrid } from "@/components/admin/PhotoSkeletonGrid";
 import { ProjectForm } from "@/components/admin/ProjectForm";
 import { TagsManager } from "@/components/admin/TagsManager";
@@ -76,7 +76,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Create */}
-      <Modal
+      <AdminDialog
         open={uploadOpen}
         onClose={closeUpload}
         title="New project"
@@ -84,16 +84,17 @@ export default function AdminDashboard() {
         aside={<TagsManager />}
         asideOpen={tagPanelOpen}
         asideTitle="Tags"
+        onAsideClose={() => setTagPanelOpen(false)}
       >
         <ProjectForm
           featuredCount={featuredCount}
           onSuccess={closeUpload}
           onManageTags={() => setTagPanelOpen((o) => !o)}
         />
-      </Modal>
+      </AdminDialog>
 
       {/* Edit */}
-      <Modal
+      <AdminDialog
         open={!!editing}
         onClose={closeEdit}
         title="Edit project"
@@ -101,6 +102,7 @@ export default function AdminDashboard() {
         aside={<TagsManager />}
         asideOpen={tagPanelOpen}
         asideTitle="Tags"
+        onAsideClose={() => setTagPanelOpen(false)}
       >
         {editing && (
           <ProjectForm
@@ -111,16 +113,16 @@ export default function AdminDashboard() {
             onManageTags={() => setTagPanelOpen((o) => !o)}
           />
         )}
-      </Modal>
+      </AdminDialog>
 
       {/* Standalone tags manager */}
-      <Modal
+      <AdminDialog
         open={tagsOpen}
         onClose={() => setTagsOpen(false)}
         title="Manage tags"
       >
         <TagsManager />
-      </Modal>
+      </AdminDialog>
 
       {isLoading && <PhotoSkeletonGrid />}
 

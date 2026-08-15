@@ -53,7 +53,8 @@ function TagRowEditor({ tag }: { tag: TagRow }) {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tags"] });
-      queryClient.invalidateQueries({ queryKey: ["photos"] });
+      // Projects embed their tag labels, so they go stale on rename/delete.
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
     },
   });
 
@@ -61,7 +62,8 @@ function TagRowEditor({ tag }: { tag: TagRow }) {
     mutationFn: () => apiFetch(`/api/tags/${tag.id}`, { method: "DELETE" }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tags"] });
-      queryClient.invalidateQueries({ queryKey: ["photos"] });
+      // Projects embed their tag labels, so they go stale on rename/delete.
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
       setConfirmOpen(false);
     },
   });
