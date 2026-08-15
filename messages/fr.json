@@ -172,33 +172,7 @@
     "titleAccent": "m'envoie en retour.",
     "previous": "Précédent",
     "next": "Suivant",
-    "reviews": {
-      "cody": {
-        "name": "Cody Fisher",
-        "role": "Fondateur de BlueAI",
-        "quote": "Je suis encore un peu sous le choc de la beauté des photos. Lili a un don pour vous faire oublier l'appareil."
-      },
-      "savannah": {
-        "name": "Savannah Nguyen",
-        "role": "Fondatrice d'Ayobisa",
-        "quote": "Dès le premier message, tout a coulé de source. Lili a écouté, proposé des coins que je n'aurais jamais trouvés, et le shooting ressemblait à une balade avec une amie."
-      },
-      "wade": {
-        "name": "Wade Warren",
-        "role": "Fondateur de Lagoon",
-        "quote": "J'ai réservé Lili pour nos photos de finissants et je ne regrette vraiment pas. Elle a dirigé le tout en douceur, et les photos nous ressemblent parfaitement."
-      },
-      "floyd": {
-        "name": "Floyd Miles",
-        "role": "Fondateur d'Ocean",
-        "quote": "Lili a rendu notre séance de grossesse vraiment spéciale. Les photos sont douces et tendres — exactement ce que nous espérions."
-      },
-      "jenny": {
-        "name": "Jenny Wilson",
-        "role": "Directrice artistique",
-        "quote": "J'avais besoin de quelqu'un capable d'aller vite sans perdre le rendu que j'avais en tête. Lili a été cette personne — et les photos étaient bonnes dès la première sélection."
-      }
-    }
+    "anonymous": "Anonyme"
   },
   "contact": {
     "tag": "ME DIRE BONJOUR",
@@ -223,6 +197,59 @@
       "messageRequired": "Quelques mots sur votre projet, s'il vous plaît.",
       "messageMin": "Dites-m'en un peu plus (au moins 10 caractères).",
       "submitFailed": "Un problème est survenu lors de l'envoi. Réessayez, ou écrivez-moi directement à hello@lilispics.com."
+    }
+  },
+  "rate": {
+    "title": "Alors, c'était comment ?",
+    "subtitle": "Un tap suffit largement.",
+    "stars": {
+      "label": "Notez l'expérience sur cinq",
+      "starLabel": "{count} sur 5",
+      "captions": {
+        "1": "Désolée, c'est raté.",
+        "2": "Noté — je ferai mieux.",
+        "3": "Contente que vous vous soyez arrêté.",
+        "4": "Ça fait vraiment plaisir.",
+        "5": "Vous illuminez ma journée."
+      }
+    },
+    "addNote": "Ajouter un mot",
+    "hideNote": "Laisser tomber",
+    "note": {
+      "label": "Un mot sur la séance",
+      "placeholder": "Facultatif — vous l'avez vécu comment ?"
+    },
+    "name": {
+      "label": "Votre nom",
+      "placeholder": "Facultatif — restez anonyme si vous préférez"
+    },
+    "submit": "Envoyer",
+    "submitting": "Envoi…",
+    "errors": {
+      "starsRequired": "Choisissez d'abord une étoile.",
+      "submitFailed": "Ça n'est pas parti. On réessaie ?"
+    },
+    "expired": {
+      "title": "Ce lien a fait son temps.",
+      "body": "Chaque code ne sert qu'une fois, et seulement pendant une journée. Si vous vouliez noter notre séance, demandez-m'en un nouveau — sinon, venez faire un tour.",
+      "cta": "Voir le site"
+    },
+    "success": {
+      "title": "Merci.",
+      "body": "Vraiment. Les inconnus qui disent oui à un portrait, c'est ce qui fait tenir tout ça.",
+      "cta": "Je vous ai laissé quelque chose"
+    },
+    "letter": {
+      "label": "Un mot de Lili",
+      "hint": "Touchez pour ouvrir",
+      "close": "Fermer",
+      "greeting": "Merci de vous être arrêté.",
+      "body": "Vous avez laissé une inconnue braquer un appareil sur vous, puis vous avez pris le temps de dire ce que vous en aviez pensé. C'est précieux. Voici {percent} % sur une vraie séance si l'envie vous prend — rien ne presse, ça n'expire pas.",
+      "signature": "Lili",
+      "promoLabel": "Votre code",
+      "promoCopy": "Touchez pour copier",
+      "promoCopied": "Copié",
+      "enter": "Découvrir le travail"
     }
   },
   "footer": {
