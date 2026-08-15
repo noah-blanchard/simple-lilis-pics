@@ -165,6 +165,12 @@ export const ratingUpdateSchema = z.object({
   approved: z.boolean(),
 });
 
+/** Read/unread intent for a contact message — the timestamp is set server-side. */
+export const contactUpdateSchema = z.object({
+  read: z.boolean(),
+});
+
 export type RatingTokenCreateInput = z.infer<typeof ratingTokenCreateSchema>;
 export type RatingSubmitInput = z.infer<typeof ratingSubmitSchema>;
 export type RatingUpdateInput = z.infer<typeof ratingUpdateSchema>;
+export type ContactUpdateInput = z.infer<typeof contactUpdateSchema>;

@@ -1,8 +1,9 @@
 import type { ComponentType } from "react";
 import { FeaturedStat } from "@/components/admin/hub/FeaturedStat";
+import { MessagesStat } from "@/components/admin/hub/MessagesStat";
 import { ProjectsStat } from "@/components/admin/hub/ProjectsStat";
 import { RatingsStat } from "@/components/admin/hub/RatingsStat";
-import { IconGrid, IconLayout, IconStar } from "@/components/Icons";
+import { IconGrid, IconLayout, IconMail, IconStar } from "@/components/Icons";
 
 export interface AdminSection {
   /** Stable id — also the React key in every consumer. */
@@ -58,7 +59,15 @@ export const ADMIN_SECTIONS: AdminSection[] = [
     primary: true,
     Stat: RatingsStat,
   },
-  // "messages" is registered in step 6, alongside its route.
+  {
+    key: "messages",
+    href: "/admin/messages",
+    label: "Messages",
+    title: "Messages",
+    description: "Enquiries from the contact form.",
+    Icon: IconMail,
+    Stat: MessagesStat,
+  },
 ];
 
 export const ADMIN_HOME = "/admin";
