@@ -1,13 +1,15 @@
 "use client";
 
 import { motion, type Variants } from "motion/react";
-import Image from "next/image";
+import { StarIcon } from "@/components/rate/StarIcon";
 import { EASE } from "@/lib/motion";
-import type { Review } from "@/types";
+import type { ResolvedRating } from "@/types/db";
 import { IconQuote } from "./Icons";
 
 interface ReviewCardProps {
-  review: Review;
+  review: ResolvedRating;
+  /** Localized label for a rating left without a name. */
+  anonymousLabel: string;
 }
 
 // Hover-driven via motion/react variant propagation (no CSS hover/transitions).
@@ -26,7 +28,9 @@ const cardVariants: Variants = {
 const fadeIn: Variants = { rest: { opacity: 0 }, hover: { opacity: 1 } };
 const fadeOut: Variants = { rest: { opacity: 1 }, hover: { opacity: 0 } };
 
-export const ReviewCard = ({ review }: ReviewCardProps) => (
+const STARS = [1, 2, 3, 4, 5];
+
+export const ReviewCard = ({ review, anonymousLabel }: ReviewCardProps) => (
   <motion.div
     initial="rest"
     whileHover="hover"
@@ -64,19 +68,34 @@ export const ReviewCard = ({ review }: ReviewCardProps) => (
     </span>
 
     <p className="relative z-10 text-[15px] text-fg/85 leading-relaxed md:text-[16px] min-[1440px]:text-body-fluid">
-      &ldquo;{review.quote}&rdquo;
+      &ldquo;{review.note}&rdquo;
     </p>
+
     <div className="relative z-10 mt-8 flex items-center gap-4 border-line border-t pt-6">
-      <Image
-        src={review.avatar}
-        alt={review.name}
-        width={48}
-        height={48}
-        className="h-12 w-12 rounded-full object-cover"
-      />
-      <div>
-        <div className="font-semibold">{review.name}</div>
-        <div className="text-[13px] text-fg/55">{review.role}</div>
+      {/* Monogram in place of a photo — these come from strangers on the
+          street, so there is no avatar to show and inventing one would be a
+          lie about who left the review. */}
+      <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-accent-soft font-medium text-[16px] text-accent">
+        {review.initials ?? <StarIcon className="h-5 w-5 text-accent" filled />}
+      </span>
+      <div className="min-w-0">
+        <div className="truncate font-semibold">
+          {review.name ?? anonymousLabel}
+        </div>
+        <span
+          className="mt-1 flex gap-0.5"
+          role="img"
+          aria-label={`${review.stars} / 5`}
+        >
+          {STARS.map((star) => (
+            <span
+              key={star}
+              className={star <= review.stars ? "text-accent" : "text-line"}
+            >
+              <StarIcon className="h-3.5 w-3.5" filled={star <= review.stars} />
+            </span>
+          ))}
+        </span>
       </div>
     </div>
   </motion.div>

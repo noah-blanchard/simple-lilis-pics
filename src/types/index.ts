@@ -44,16 +44,8 @@ export interface Plan extends PlanMeta {
   includes: string[];
 }
 
-/* ── Testimonial ── */
-export interface ReviewMeta {
-  id: string;
-  avatar: string;
-}
-export interface Review extends ReviewMeta {
-  name: string;
-  role: string;
-  quote: string;
-}
+/* ── Testimonial ──
+   Testimonials are real ratings now: see `ResolvedRating` in @/types/db. */
 
 /* ── Contact form ── */
 export interface ContactFormValues {

@@ -172,33 +172,7 @@
     "titleAccent": "have sent back.",
     "previous": "Previous",
     "next": "Next",
-    "reviews": {
-      "cody": {
-        "name": "Cody Fisher",
-        "role": "Founder of BlueAI",
-        "quote": "I'm still a little in awe of how the photos turned out. Lili has a way of making you forget the camera is even there."
-      },
-      "savannah": {
-        "name": "Savannah Nguyen",
-        "role": "Founder of Ayobisa",
-        "quote": "From the first message, everything felt easy. Lili listened, suggested spots I would never have found, and the shoot itself felt like a walk with a friend."
-      },
-      "wade": {
-        "name": "Wade Warren",
-        "role": "Founder of Lagoon",
-        "quote": "Booked Lili for our grad portraits and I'm so glad I did. She quietly directed the whole thing, and we ended up with photos that feel very us."
-      },
-      "floyd": {
-        "name": "Floyd Miles",
-        "role": "Founder of Ocean",
-        "quote": "Lili made our maternity shoot feel so special. The photos are quiet and tender — exactly what we hoped for."
-      },
-      "jenny": {
-        "name": "Jenny Wilson",
-        "role": "Creative Director",
-        "quote": "I needed someone who could move quickly without losing the look I had in mind. Lili was that — and the photos landed on the first round."
-      }
-    }
+    "anonymous": "Anonymous"
   },
   "contact": {
     "tag": "SAY HELLO",
@@ -223,6 +197,59 @@
       "messageRequired": "A few words about your project, please.",
       "messageMin": "Tell me a little more (at least 10 characters).",
       "submitFailed": "Something went wrong sending your message. Please try again, or email me directly at hello@lilispics.com."
+    }
+  },
+  "rate": {
+    "title": "How was it?",
+    "subtitle": "One tap is plenty.",
+    "stars": {
+      "label": "Rate the experience out of five",
+      "starLabel": "{count} out of 5",
+      "captions": {
+        "1": "Sorry it missed.",
+        "2": "Noted — I'll do better.",
+        "3": "Glad you stopped.",
+        "4": "That's lovely to hear.",
+        "5": "You've made my day."
+      }
+    },
+    "addNote": "Add a word",
+    "hideNote": "Never mind",
+    "note": {
+      "label": "A word about it",
+      "placeholder": "Optional — how did it feel?"
+    },
+    "name": {
+      "label": "Your name",
+      "placeholder": "Optional — stay anonymous if you like"
+    },
+    "submit": "Send it",
+    "submitting": "Sending…",
+    "errors": {
+      "starsRequired": "Pick a star first.",
+      "submitFailed": "That didn't go through. Try once more?"
+    },
+    "expired": {
+      "title": "This link is done.",
+      "body": "Each code works once, and only for a day. If you meant to rate our session, ask me for a fresh one — otherwise, come have a look around.",
+      "cta": "Visit the site"
+    },
+    "success": {
+      "title": "Thank you.",
+      "body": "Really. Strangers who say yes to a portrait are the reason this whole thing works.",
+      "cta": "I left you something"
+    },
+    "letter": {
+      "label": "A note from Lili",
+      "hint": "Tap to open",
+      "close": "Close",
+      "greeting": "Thank you for stopping.",
+      "body": "You let a stranger point a camera at you, and then you took the time to say how it went. That's not nothing. Here's {percent}% off if you ever want a proper shoot — no rush, it doesn't run out.",
+      "signature": "Lili",
+      "promoLabel": "Your code",
+      "promoCopy": "Tap to copy",
+      "promoCopied": "Copied",
+      "enter": "See the work"
     }
   },
   "footer": {
