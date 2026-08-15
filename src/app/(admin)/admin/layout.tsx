@@ -22,6 +22,9 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             </span>
           </a>
           <div className="flex items-center gap-3">
+            <PillButton href="/admin/ratings" size="sm" variant="ghost">
+              Ratings
+            </PillButton>
             <PillButton href="/" size="sm" variant="accent">
               <span aria-hidden>← </span>
               <span>Back to site</span>
