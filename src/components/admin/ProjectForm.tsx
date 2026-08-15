@@ -755,11 +755,7 @@ export function ProjectForm({
 
   return (
     <>
-      <form
-        onSubmit={onSubmit}
-        noValidate
-        className="flex h-full flex-col"
-      >
+      <form onSubmit={onSubmit} noValidate className="flex h-full flex-col">
         {uploadMode === "sequential" ? (
           <div className="flex w-full flex-col items-center justify-center gap-5 py-12">
             {seqProgress ? (
