@@ -19,6 +19,27 @@ export interface ContactMessageRow {
   created_at: string;
 }
 
+/** One QR/NFC code Lili generates in the field. Single-use + short-lived. */
+export interface RatingTokenRow {
+  id: string;
+  token: string;
+  locale: Locale;
+  created_at: string;
+  expires_at: string;
+  used_at: string | null;
+}
+
+export interface RatingRow {
+  id: string;
+  token_id: string | null;
+  stars: number;
+  note: string | null;
+  name: string | null;
+  locale: Locale;
+  approved: boolean;
+  created_at: string;
+}
+
 export type Orientation = "landscape" | "portrait";
 
 /** Build the public URL of a stored image. Legacy rows already hold a full
@@ -80,6 +101,40 @@ export interface ResolvedProject {
   tags: string; // comma-joined locale labels
   cover: ResolvedProjectPhoto | null; // chosen cover, or first photo, or null
   photos: ResolvedProjectPhoto[]; // ordered by position
+}
+
+/** A rating as the public testimonials render it. `name` stays nullable so the
+ *  component can substitute its own localized "Anonymous" label rather than
+ *  this mapper needing a translator. */
+export interface ResolvedRating {
+  id: string;
+  stars: number;
+  note: string;
+  name: string | null;
+  /** 1–2 uppercase letters for the monogram avatar; null when anonymous. */
+  initials: string | null;
+  date: string; // ISO timestamp
+}
+
+export function resolveRating(row: RatingRow): ResolvedRating {
+  const name = row.name?.trim() || null;
+
+  const initials =
+    name
+      ?.split(/\s+/)
+      .slice(0, 2)
+      .map((part) => part[0])
+      .join("")
+      .toUpperCase() || null;
+
+  return {
+    id: row.id,
+    stars: row.stars,
+    note: row.note ?? "",
+    name,
+    initials,
+    date: row.created_at,
+  };
 }
 
 export function resolveProject(

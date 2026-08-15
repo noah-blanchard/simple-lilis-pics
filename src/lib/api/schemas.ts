@@ -139,3 +139,32 @@ export const contactSchema = z.object({
 });
 
 export type ContactInput = z.infer<typeof contactSchema>;
+
+/* ── Experience ratings (hidden QR/NFC flow) ── */
+
+/** Body for POST /api/rating-tokens — Lili picks the language of the QR she is
+ *  about to show, since the stranger's phone must not guess it. */
+export const ratingTokenCreateSchema = z.object({
+  locale: z.enum(["en", "fr"]),
+});
+
+/** Body for POST /api/ratings. Only `stars` is required — the whole point of
+ *  the page is that a rating takes one tap. `company` is the same honeypot
+ *  trick as the contact form. */
+export const ratingSubmitSchema = z.object({
+  token: z.string().trim().min(6).max(32),
+  stars: z.number().int().min(1).max(5),
+  note: z.string().trim().max(1000).optional(),
+  name: z.string().trim().max(80).optional(),
+  company: z.string().max(200).optional().default(""),
+});
+
+/** Body for PATCH /api/ratings/[id] — the admin approving a rating for the
+ *  public testimonials. */
+export const ratingUpdateSchema = z.object({
+  approved: z.boolean(),
+});
+
+export type RatingTokenCreateInput = z.infer<typeof ratingTokenCreateSchema>;
+export type RatingSubmitInput = z.infer<typeof ratingSubmitSchema>;
+export type RatingUpdateInput = z.infer<typeof ratingUpdateSchema>;
