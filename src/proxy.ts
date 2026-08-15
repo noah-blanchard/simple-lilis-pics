@@ -55,6 +55,14 @@ async function handleAdminAuth(request: NextRequest): Promise<NextResponse> {
 export default function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // The hidden rating flow carries its locale as a path segment (/rate/fr/…)
+  // rather than a next-intl prefix, so a scanned QR always opens in the
+  // language Lili picked. Let it through untouched — next-intl would otherwise
+  // read "rate" as an unknown locale and redirect to /en/rate/….
+  if (pathname.startsWith("/rate")) {
+    return NextResponse.next();
+  }
+
   if (pathname.startsWith("/admin") || pathname === "/login") {
     return handleAdminAuth(request);
   }
