@@ -2,8 +2,8 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import { AdminDialog } from "@/components/admin/AdminDialog";
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
-import { Modal } from "@/components/admin/Modal";
 import { RatingQrDialog } from "@/components/admin/RatingQrDialog";
 import { PillButton } from "@/components/PillButton";
 import { StarIcon } from "@/components/rate/StarIcon";
@@ -67,14 +67,22 @@ export default function AdminRatingsPage() {
     <div>
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="font-semibold text-[26px] tracking-tight">Ratings</h1>
-          <p className="mt-1 text-[14px] text-fg/55">
+          {/* On mobile the section title already lives in the top bar. */}
+          <h1 className="hidden font-semibold text-[26px] tracking-tight lg:block">
+            Ratings
+          </h1>
+          <p className="text-[14px] text-fg/55 lg:mt-1">
             {ratings
               ? `${ratings.length} rating${ratings.length === 1 ? "" : "s"} · ${approvedWithNote}/${MIN_PUBLIC_TESTIMONIALS} approved with a note`
               : "Loading…"}
           </p>
         </div>
-        <PillButton variant="light" size="sm" onClick={() => setQrOpen(true)}>
+        <PillButton
+          variant="light"
+          size="sm"
+          onClick={() => setQrOpen(true)}
+          className="min-h-11 w-full sm:min-h-0 sm:w-auto"
+        >
           Generate QR
         </PillButton>
       </div>
@@ -125,7 +133,7 @@ export default function AdminRatingsPage() {
               <span className="text-[14px] text-fg/60">
                 {rating.name ?? "Anonymous"}
               </span>
-              <div className="flex items-center gap-2">
+              <div className="flex w-full items-center gap-2 sm:w-auto">
                 <PillButton
                   variant={rating.approved ? "accent" : "ghost"}
                   size="sm"
@@ -136,6 +144,7 @@ export default function AdminRatingsPage() {
                       approved: !rating.approved,
                     })
                   }
+                  className="min-h-11 flex-1 sm:min-h-0 sm:flex-none"
                 >
                   {rating.approved ? "Published" : "Publish"}
                 </PillButton>
@@ -143,6 +152,7 @@ export default function AdminRatingsPage() {
                   variant="ghost"
                   size="sm"
                   onClick={() => setDeleting(rating)}
+                  className="min-h-11 flex-1 sm:min-h-0 sm:flex-none"
                 >
                   Delete
                 </PillButton>
@@ -152,14 +162,14 @@ export default function AdminRatingsPage() {
         ))}
       </ul>
 
-      <Modal
+      <AdminDialog
         open={qrOpen}
         onClose={() => setQrOpen(false)}
         title="Rating QR code"
         baseWidthRem={26}
       >
         <RatingQrDialog open={qrOpen} />
-      </Modal>
+      </AdminDialog>
 
       <ConfirmDialog
         open={deleting !== null}

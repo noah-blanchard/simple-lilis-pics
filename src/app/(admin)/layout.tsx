@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import {
   Cormorant_Garamond,
   JetBrains_Mono,
@@ -7,7 +7,7 @@ import {
 import type { ReactNode } from "react";
 import "../globals.css";
 
-const playfairDisplay = Cormorant_Garamond({
+const cormorantGaramond = Cormorant_Garamond({
   variable: "--font-display",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
@@ -15,7 +15,7 @@ const playfairDisplay = Cormorant_Garamond({
   display: "swap",
 });
 
-const inter = Lexend_Deca({
+const lexendDeca = Lexend_Deca({
   variable: "--font-sans-body",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
@@ -35,13 +35,21 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+// `viewportFit: "cover"` is what makes env(safe-area-inset-*) resolve to real
+// values on notched iPhones — the mobile tab bar pads itself with it.
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
+
 /** Root layout for the non-localized admin area (/login, /admin). Provides its
  *  own <html>/<body> since the marketing layout lives under [locale]. */
 export default function AdminRootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
-      className={`${playfairDisplay.variable} ${inter.variable} ${jetBrainsMono.variable}`}
+      className={`${cormorantGaramond.variable} ${lexendDeca.variable} ${jetBrainsMono.variable}`}
     >
       <body className="bg-ink font-sans text-fg antialiased">{children}</body>
     </html>

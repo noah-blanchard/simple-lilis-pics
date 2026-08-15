@@ -17,6 +17,8 @@ export interface ContactMessageRow {
   email: string;
   message: string;
   created_at: string;
+  /** When the admin first opened it; null while unread. */
+  read_at: string | null;
 }
 
 /** One QR/NFC code Lili generates in the field. Single-use + short-lived. */

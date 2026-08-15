@@ -447,16 +447,16 @@ export function ProjectForm({
     ? editPhotos.map((p) => ({ key: p.id, src: p.img }))
     : newPhotos.map((p) => ({ key: p.previewUrl, src: p.previewUrl }));
 
-  // ── Photos panel (left) ──
+  // ── Photos panel (left on md+, first in the single mobile scroll) ──
   const photosPanel = (
-    <div className="flex h-full flex-col gap-3">
+    <div className="flex flex-col gap-3 md:h-full">
       {isEdit ? (
         <Reorder.Group
           as="div"
           axis="y"
           values={editPhotos}
           onReorder={setEditPhotos}
-          className="min-h-0 flex-1 space-y-3 overflow-y-auto pr-1"
+          className="space-y-3 md:min-h-0 md:flex-1 md:overflow-y-auto md:pr-1"
         >
           {editPhotos.map((p, i) => (
             <DraggablePhotoItem key={p.id} value={p}>
@@ -480,7 +480,7 @@ export function ProjectForm({
           axis="y"
           values={newPhotos}
           onReorder={setNewPhotos}
-          className="min-h-0 flex-1 space-y-3 overflow-y-auto pr-1"
+          className="space-y-3 md:min-h-0 md:flex-1 md:overflow-y-auto md:pr-1"
         >
           {newPhotos.map((p, i) => (
             <DraggablePhotoItem key={p.previewUrl} value={p}>
@@ -713,8 +713,10 @@ export function ProjectForm({
     </>
   );
 
+  // Sticks to the bottom of the mobile scroll region so the primary action
+  // stays reachable without scrolling past every field first.
   const footer = (
-    <div className="shrink-0 pt-5">
+    <div className="sticky bottom-0 shrink-0 bg-panel pt-5 pb-1 md:static md:bg-transparent md:pb-0">
       {mutation.isError && !is413Error && (
         <p className="mb-4 rounded-xl border border-danger/30 bg-danger/10 px-4 py-3 text-[14px] text-danger">
           {(mutation.error as Error).message}
@@ -739,7 +741,12 @@ export function ProjectForm({
       )}
 
       {!is413Error && (
-        <PillButton type="submit" variant="light" disabled={busy}>
+        <PillButton
+          type="submit"
+          variant="light"
+          disabled={busy}
+          className="w-full md:w-auto"
+        >
           {submitLabel}
         </PillButton>
       )}
@@ -748,11 +755,7 @@ export function ProjectForm({
 
   return (
     <>
-      <form
-        onSubmit={onSubmit}
-        noValidate
-        className="flex h-full flex-col gap-6 md:flex-row"
-      >
+      <form onSubmit={onSubmit} noValidate className="flex h-full flex-col">
         {uploadMode === "sequential" ? (
           <div className="flex w-full flex-col items-center justify-center gap-5 py-12">
             {seqProgress ? (
@@ -787,15 +790,17 @@ export function ProjectForm({
             ) : null}
           </div>
         ) : (
-          <>
+          /* One scroll region on mobile (photos, then fields, then actions);
+             two independently scrolling panes from md up. */
+          <div className="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto md:flex-row md:overflow-visible">
             <div className="md:w-[42%] md:shrink-0">{photosPanel}</div>
             <div className="flex min-w-0 flex-1 flex-col">
-              <div className="min-h-0 flex-1 space-y-6 overflow-y-auto pr-1">
+              <div className="space-y-6 md:min-h-0 md:flex-1 md:overflow-y-auto md:pr-1">
                 {fieldsBody}
               </div>
               {footer}
             </div>
-          </>
+          </div>
         )}
       </form>
 

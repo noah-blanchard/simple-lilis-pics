@@ -3,6 +3,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
+import { FeaturedMobileView } from "@/components/admin/featured/FeaturedMobileView";
 import { PillButton } from "@/components/PillButton";
 import { apiFetch } from "@/lib/api/client";
 import {
@@ -43,7 +44,7 @@ const PORTRAIT_POOL = [2, 2, 4, 1];
 /** Minimum packing efficiency a Shuffle result must reach before it's accepted. */
 const MIN_SHUFFLE_EFFICIENCY = 0.65;
 
-interface EditorTile extends BentoTile {
+export interface EditorTile extends BentoTile {
   title: string;
   year: string;
   src: string;
@@ -282,16 +283,20 @@ export function FeaturedBentoEditor() {
     <div>
       <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="font-semibold text-[26px] tracking-tight">
+          {/* On mobile the section title already lives in the top bar. */}
+          <h1 className="hidden font-semibold text-[26px] tracking-tight lg:block">
             Featured layout
           </h1>
-          <p className="mt-1 text-[14px] text-fg/55">
-            Drag tiles to rearrange, click one to resize. Every tile keeps its
-            exact aspect ratio — landscape 16:9, portrait 9:16 — at any size.
+          <p className="text-[14px] text-fg/55 lg:mt-1">
+            <span className="hidden lg:inline">
+              Drag tiles to rearrange, click one to resize. Every tile keeps its
+              exact aspect ratio — landscape 16:9, portrait 9:16 — at any size.
+            </span>
+            <span className="lg:hidden">A preview of the home page bento.</span>
           </p>
         </div>
         {tiles.length > 0 && (
-          <div className="flex items-center gap-2">
+          <div className="hidden items-center gap-2 lg:flex">
             <PillButton variant="ghost" size="sm" onClick={runShuffle}>
               Shuffle
             </PillButton>
@@ -327,7 +332,19 @@ export function FeaturedBentoEditor() {
       )}
 
       {tiles.length > 0 && (
-        <>
+        <FeaturedMobileView
+          tiles={tiles}
+          columns={COLS}
+          onShuffle={runShuffle}
+          onSave={() => save.mutate()}
+          saving={save.isPending}
+        />
+      )}
+
+      {/* Desktop editor: the drag canvas is pinned to the 8-column desktop
+          grid, since col_span is by definition the desktop value. */}
+      {tiles.length > 0 && (
+        <div className="hidden lg:block">
           {/* Size toolbar for the selected tile */}
           <div className="mb-4 flex min-h-9 flex-wrap items-center gap-2 rounded-xl border border-line bg-panel2 px-3 py-2">
             {selected ? (
@@ -389,7 +406,7 @@ export function FeaturedBentoEditor() {
               );
             })}
           </div>
-        </>
+        </div>
       )}
 
       {/* Floating drag image — follows the pointer, decoupled from the layout so

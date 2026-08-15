@@ -56,14 +56,21 @@ export function ConfirmDialog({
             {message && (
               <p className="mt-2 text-[14px] text-fg/55">{message}</p>
             )}
-            <div className="mt-7 flex items-center justify-end gap-3">
-              <PillButton variant="ghost" onClick={onClose}>
+            {/* Stacked and full-width on phones (destructive action last, so
+                it is not the one under the thumb by default). */}
+            <div className="mt-7 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-end">
+              <PillButton
+                variant="ghost"
+                onClick={onClose}
+                className="w-full sm:w-auto"
+              >
                 {cancelLabel}
               </PillButton>
               <PillButton
                 variant="danger"
                 onClick={onConfirm}
                 disabled={loading}
+                className="w-full sm:w-auto"
               >
                 {loading ? "Deleting…" : confirmLabel}
               </PillButton>
