@@ -1,6 +1,10 @@
 import type { Locale } from "@/i18n/routing";
 import { PHOTOS_BUCKET, SUPABASE_URL } from "@/lib/env";
-import type { LinkIconKey, LinkOpenBehavior } from "@/lib/links/constants";
+import type {
+  LinkIconKey,
+  LinkOpenBehavior,
+  SocialIconKey,
+} from "@/lib/links/constants";
 
 /* ── Shared ── */
 
@@ -69,6 +73,18 @@ export interface LinksPageSettingsRow {
   updated_at: string;
 }
 
+export interface SocialLinkRow {
+  id: string;
+  label_en: string | null;
+  label_fr: string | null;
+  url: string;
+  icon_key: SocialIconKey;
+  position: number;
+  published: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface ResolvedLinksPageSettings {
   bannerImageUrl: string | null;
   bannerFocalX: number;
@@ -84,9 +100,19 @@ export interface LinkClickStat {
   last_clicked_at: string | null;
 }
 
+export interface SocialLinkClickStat {
+  social_link_id: string;
+  total: number;
+  current_period: number;
+  previous_period: number;
+  last_clicked_at: string | null;
+}
+
 export interface AdminLinksSnapshot {
   links: LinkRow[];
   stats: LinkClickStat[];
+  socials: SocialLinkRow[];
+  socialStats: SocialLinkClickStat[];
   settings: LinksPageSettingsRow;
 }
 
@@ -174,6 +200,14 @@ export interface ResolvedLink {
   iconKey: LinkIconKey | null;
   position: number;
   openBehavior: LinkOpenBehavior;
+}
+
+export interface ResolvedSocialLink {
+  id: string;
+  label: string;
+  url: string;
+  iconKey: SocialIconKey;
+  position: number;
 }
 
 export function resolveRating(row: RatingRow): ResolvedRating {

@@ -1,14 +1,23 @@
 import { unstable_cache } from "next/cache";
 import { z } from "zod";
 import type { Locale } from "@/i18n/routing";
-import { linkDestinationSchema } from "@/lib/api/schemas";
-import { LINK_ICON_KEYS, LINK_OPEN_BEHAVIORS } from "@/lib/links/constants";
+import {
+  linkDestinationSchema,
+  socialDestinationSchema,
+} from "@/lib/api/schemas";
+import {
+  LINK_ICON_KEYS,
+  LINK_OPEN_BEHAVIORS,
+  SOCIAL_ICON_KEYS,
+} from "@/lib/links/constants";
 import { createSupabasePublicClient } from "@/lib/supabase/public";
 import type {
   LinkRow,
   LinksPageSettingsRow,
   ResolvedLink,
   ResolvedLinksPageSettings,
+  ResolvedSocialLink,
+  SocialLinkRow,
 } from "@/types/db";
 import { resolveImageUrl } from "@/types/db";
 
@@ -38,6 +47,18 @@ const pageSettingsRowSchema = z.object({
   updated_at: z.string(),
 });
 
+const publicSocialLinkRowSchema = z.object({
+  id: z.string().uuid(),
+  label_en: z.string().nullable(),
+  label_fr: z.string().nullable(),
+  url: socialDestinationSchema,
+  icon_key: z.enum(SOCIAL_ICON_KEYS),
+  position: z.number().int().nonnegative(),
+  published: z.literal(true),
+  created_at: z.string(),
+  updated_at: z.string(),
+});
+
 function parsePublishedLinks(data: unknown): LinkRow[] {
   const rows = z.array(z.unknown()).safeParse(data ?? []);
   if (!rows.success) {
@@ -55,15 +76,43 @@ function parsePublishedLinks(data: unknown): LinkRow[] {
   });
 }
 
+function parsePublishedSocials(data: unknown): SocialLinkRow[] {
+  const rows = z.array(z.unknown()).safeParse(data ?? []);
+  if (!rows.success) {
+    console.error("[data] social links response is not an array");
+    return [];
+  }
+
+  return rows.data.flatMap((row) => {
+    const parsed = publicSocialLinkRowSchema.safeParse(row);
+    if (!parsed.success) {
+      console.error(
+        "[data] invalid public social link omitted:",
+        parsed.error.issues,
+      );
+      return [];
+    }
+    return [parsed.data as SocialLinkRow];
+  });
+}
+
 const getCachedLinksPageRows = unstable_cache(
   async (): Promise<{
     links: LinkRow[];
+    socials: SocialLinkRow[];
     settings: LinksPageSettingsRow;
   }> => {
     const supabase = createSupabasePublicClient();
-    const [linksResult, settingsResult] = await Promise.all([
+    const [linksResult, socialsResult, settingsResult] = await Promise.all([
       supabase
         .from("links")
+        .select("*")
+        .eq("published", true)
+        .order("position", { ascending: true })
+        .order("created_at", { ascending: true })
+        .order("id", { ascending: true }),
+      supabase
+        .from("social_links")
         .select("*")
         .eq("published", true)
         .order("position", { ascending: true })
@@ -78,9 +127,14 @@ const getCachedLinksPageRows = unstable_cache(
       throw new Error(
         `Failed to load links page settings: ${settingsResult.error.message}`,
       );
+    if (socialsResult.error)
+      throw new Error(
+        `Failed to load social links: ${socialsResult.error.message}`,
+      );
     const settings = pageSettingsRowSchema.parse(settingsResult.data);
     return {
       links: parsePublishedLinks(linksResult.data),
+      socials: parsePublishedSocials(socialsResult.data),
       settings: settings as LinksPageSettingsRow,
     };
   },
@@ -116,6 +170,23 @@ export function resolveLink(row: LinkRow, locale: Locale): ResolvedLink {
   };
 }
 
+export function resolveSocialLink(
+  row: SocialLinkRow,
+  locale: Locale,
+): ResolvedSocialLink {
+  const label =
+    locale === "fr"
+      ? row.label_fr?.trim() || row.label_en?.trim() || ""
+      : row.label_en?.trim() || row.label_fr?.trim() || "";
+  return {
+    id: row.id,
+    label,
+    url: row.url,
+    iconKey: row.icon_key,
+    position: row.position,
+  };
+}
+
 export async function getPublishedLinks(
   locale: Locale,
 ): Promise<ResolvedLink[]> {
@@ -125,15 +196,17 @@ export async function getPublishedLinks(
 
 export async function getPublicLinksPage(locale: Locale): Promise<{
   links: ResolvedLink[];
+  socials: ResolvedSocialLink[];
   settings: ResolvedLinksPageSettings;
 }> {
-  const { links, settings } = await getCachedLinksPageRows();
+  const { links, socials, settings } = await getCachedLinksPageRows();
   const tagline =
     locale === "fr"
       ? settings.tagline_fr?.trim() || settings.tagline_en?.trim() || null
       : settings.tagline_en?.trim() || settings.tagline_fr?.trim() || null;
   return {
     links: links.map((row) => resolveLink(row, locale)),
+    socials: socials.map((row) => resolveSocialLink(row, locale)),
     settings: {
       bannerImageUrl: settings.banner_image_path
         ? resolveImageUrl(settings.banner_image_path)

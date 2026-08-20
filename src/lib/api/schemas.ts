@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { LINK_ICON_KEYS, LINK_OPEN_BEHAVIORS } from "@/lib/links/constants";
+import {
+  LINK_ICON_KEYS,
+  LINK_OPEN_BEHAVIORS,
+  SOCIAL_ICON_KEYS,
+} from "@/lib/links/constants";
 
 /* ── Tags ── */
 
@@ -280,6 +284,52 @@ export const linkEditorItemSchema = z
     }
   });
 
+export const socialDestinationSchema = linkDestinationSchema.superRefine(
+  (value, ctx) => {
+    if (value.startsWith("/") && !value.startsWith("//")) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Social destinations must use HTTPS or mailto",
+      });
+    }
+  },
+);
+
+export const socialEditorItemSchema = z
+  .object({
+    client_id: z.string().min(1).max(100),
+    id: z.string().uuid().nullable(),
+    label_en: nullableTrimmedText(120),
+    label_fr: nullableTrimmedText(120),
+    url: socialDestinationSchema,
+    icon_key: z.enum(SOCIAL_ICON_KEYS),
+    published: z.boolean(),
+    updated_at: z.string().datetime({ offset: true }).nullable(),
+  })
+  .superRefine((value, ctx) => {
+    if (!value.label_en && !value.label_fr) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["label_en"],
+        message: "At least one localized social label is required",
+      });
+    }
+    if (value.id && !value.updated_at) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["updated_at"],
+        message: "Existing social links require updated_at",
+      });
+    }
+    if (!value.id && value.updated_at) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["updated_at"],
+        message: "New social links cannot have updated_at",
+      });
+    }
+  });
+
 export const linksEditorSaveSchema = z
   .object({
     expected_items: z.array(
@@ -289,6 +339,13 @@ export const linksEditorSaveSchema = z
       }),
     ),
     items: z.array(linkEditorItemSchema).max(100),
+    expected_social_items: z.array(
+      z.object({
+        id: z.string().uuid(),
+        updated_at: z.string().datetime({ offset: true }),
+      }),
+    ),
+    social_items: z.array(socialEditorItemSchema).max(100),
     expected_settings_updated_at: z.string().datetime({ offset: true }),
     settings: z.object({
       banner_focal_x: z.number().int().min(0).max(100),
@@ -304,6 +361,13 @@ export const linksEditorSaveSchema = z
       item.id ? [item.id] : [],
     );
     const clientIds = value.items.map((item) => item.client_id);
+    const expectedSocialIds = value.expected_social_items.map(
+      (item) => item.id,
+    );
+    const existingSocialIds = value.social_items.flatMap((item) =>
+      item.id ? [item.id] : [],
+    );
+    const socialClientIds = value.social_items.map((item) => item.client_id);
 
     if (new Set(expectedIds).size !== expectedIds.length) {
       ctx.addIssue({
@@ -333,7 +397,36 @@ export const linksEditorSaveSchema = z
         message: "Unknown existing link id",
       });
     }
+    if (new Set(expectedSocialIds).size !== expectedSocialIds.length) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["expected_social_items"],
+        message: "Duplicate expected social id",
+      });
+    }
+    if (new Set(existingSocialIds).size !== existingSocialIds.length) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["social_items"],
+        message: "Duplicate social link id",
+      });
+    }
+    if (new Set(socialClientIds).size !== socialClientIds.length) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["social_items"],
+        message: "Duplicate social client id",
+      });
+    }
+    if (existingSocialIds.some((id) => !expectedSocialIds.includes(id))) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["social_items"],
+        message: "Unknown existing social link id",
+      });
+    }
   });
 
 export type LinkEditorItemInput = z.infer<typeof linkEditorItemSchema>;
+export type SocialEditorItemInput = z.infer<typeof socialEditorItemSchema>;
 export type LinksEditorSaveInput = z.infer<typeof linksEditorSaveSchema>;

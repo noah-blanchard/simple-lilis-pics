@@ -14,13 +14,21 @@ import type {
   LinkClickStat,
   LinkRow,
   LinksPageSettingsRow,
+  SocialLinkClickStat,
+  SocialLinkRow,
 } from "@/types/db";
 
 async function readSnapshot(): Promise<
   { ok: true; data: AdminLinksSnapshot } | { ok: false; response: Response }
 > {
   const admin = createSupabaseAdminClient();
-  const [linksResult, statsResult, settingsResult] = await Promise.all([
+  const [
+    linksResult,
+    statsResult,
+    socialsResult,
+    socialStatsResult,
+    settingsResult,
+  ] = await Promise.all([
     admin
       .from("links")
       .select("*")
@@ -28,6 +36,13 @@ async function readSnapshot(): Promise<
       .order("created_at", { ascending: true })
       .order("id", { ascending: true }),
     admin.rpc("get_link_click_stats"),
+    admin
+      .from("social_links")
+      .select("*")
+      .order("position", { ascending: true })
+      .order("created_at", { ascending: true })
+      .order("id", { ascending: true }),
+    admin.rpc("get_social_link_click_stats"),
     admin.from("links_page_settings").select("*").eq("id", 1).single(),
   ]);
 
@@ -53,12 +68,34 @@ async function readSnapshot(): Promise<
       ),
     };
   }
+  if (socialsResult.error) {
+    return {
+      ok: false,
+      response: apiError(
+        "DB_SOCIAL_SELECT_FAILED",
+        socialsResult.error.message,
+        500,
+      ),
+    };
+  }
+  if (socialStatsResult.error) {
+    return {
+      ok: false,
+      response: apiError(
+        "DB_SOCIAL_STATS_FAILED",
+        socialStatsResult.error.message,
+        500,
+      ),
+    };
+  }
 
   return {
     ok: true,
     data: {
       links: (linksResult.data ?? []) as LinkRow[],
       stats: (statsResult.data ?? []) as LinkClickStat[],
+      socials: (socialsResult.data ?? []) as SocialLinkRow[],
+      socialStats: (socialStatsResult.data ?? []) as SocialLinkClickStat[],
       settings: settingsResult.data as LinksPageSettingsRow,
     },
   };
@@ -116,6 +153,10 @@ export const PUT = withAuth(async ({ request }) => {
     ...item,
     position,
   }));
+  const socialItems = parsed.data.social_items.map((item, position) => ({
+    ...item,
+    position,
+  }));
   const admin = createSupabaseAdminClient();
   const { data: currentSettings, error: currentSettingsError } = await admin
     .from("links_page_settings")
@@ -148,6 +189,8 @@ export const PUT = withAuth(async ({ request }) => {
   const { error } = await admin.rpc("save_links_editor", {
     p_expected_items: parsed.data.expected_items,
     p_items: items,
+    p_expected_social_items: parsed.data.expected_social_items,
+    p_social_items: socialItems,
     p_expected_settings_updated_at: parsed.data.expected_settings_updated_at,
     p_settings: {
       ...parsed.data.settings,

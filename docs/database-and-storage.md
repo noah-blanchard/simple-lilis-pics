@@ -102,7 +102,7 @@ Deleting a project cascades its photo and tag-link rows. The API separately remo
 - Authenticated users have table write policies for CMS data.
 - Contact messages have authenticated read access only and no public insert/update/delete policy.
 - Only approved ratings are publicly readable; authenticated users can moderate ratings and manage tokens.
-- Anonymous users can read published links and the singleton page settings only. Click tables have no public policies; the same-origin API writes through a restricted service-role function.
+- Anonymous users can read published regular links, published links-page social icons, and the singleton page settings only. Click tables have no public policies; the same-origin APIs write through restricted service-role functions.
 - The public contact route inserts with the server-only service-role client.
 - Storage objects in the configured bucket are publicly readable; authenticated policies permit object writes.
 

@@ -155,27 +155,38 @@ Use `src/lib/api/client.ts` inside the application so error envelopes become use
 
 ## Links
 
-`GET /api/links` returns `{ links, stats, settings }`. Links and the singleton
-settings include their `updated_at` versions. Statistics contain lifetime
-total, current and previous seven-day counts, and the last click timestamp.
+`GET /api/links` returns
+`{ links, stats, socials, socialStats, settings }`. Links, social links, and the
+singleton settings include their `updated_at` versions. Both statistics arrays
+contain lifetime totals, current and previous seven-day counts, and the last
+click timestamp.
 
 `PUT /api/links` consumes multipart form data. Its `snapshot` field contains
-the original `{id, updated_at}` list, complete ordered editor list, original
-settings timestamp, focal coordinates, localized phrases, and `banner_action`
-(`keep`, `replace`, or `remove`). A `replace` request also includes `banner`, a
-JPEG, PNG, WebP, or AVIF file no larger than 5 MiB. Array order becomes the
-persisted zero-based position.
+the original `{id, updated_at}` lists for regular and social links, both
+complete ordered editor lists, original settings timestamp, focal coordinates,
+localized phrases, and `banner_action` (`keep`, `replace`, or `remove`). A
+`replace` request also includes `banner`, a JPEG, PNG, WebP, or AVIF file no
+larger than 5 MiB. Each array order becomes its collection's persisted
+zero-based position.
 
-The database save reconciles links and settings in one transaction. If either
-version changed, it returns HTTP 409 `EDIT_CONFLICT` without partial database
-updates. A failed transaction removes a newly uploaded banner; a successful
-replacement removes the old Storage object afterward.
+The database save reconciles regular links, social links, and settings in one
+transaction. If any version changed, it returns HTTP 409 `EDIT_CONFLICT`
+without partial database updates. A failed transaction removes a newly
+uploaded banner; a successful replacement removes the old Storage object
+afterward.
 
 Destinations are limited to HTTPS URLs, locale-neutral internal paths beginning
 with `/`, and simple `mailto:` addresses. At least one EN/FR name is required;
 optional blank text is stored as null.
 
+Social destinations accept HTTPS and simple `mailto:` addresses, require a
+registered icon key and at least one EN/FR tooltip label, and do not accept
+internal paths.
+
 `POST /api/links/[id]/click` requires a same-origin browser request. It accepts
 only published links, records the event and increments the lifetime counter,
 then returns HTTP 202. Public anchors navigate directly to their destinations
 and never wait for this response.
+
+`POST /api/links/socials/[id]/click` provides the same behavior for published
+social links.

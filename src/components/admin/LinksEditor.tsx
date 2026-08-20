@@ -20,9 +20,11 @@ import { apiFetch } from "@/lib/api/client";
 import {
   type LinkEditorItemInput,
   linksEditorSaveSchema,
+  type SocialEditorItemInput,
 } from "@/lib/api/schemas";
 import { publicFontVariables } from "@/lib/fonts";
 import { LINK_ICON_REGISTRY } from "@/lib/links/icons";
+import { getSocialIcon, SOCIAL_ICON_REGISTRY } from "@/lib/links/social-icons";
 import { useIsDesktop } from "@/lib/use-media-query";
 import type {
   AdminLinksSnapshot,
@@ -30,13 +32,17 @@ import type {
   LinkRow,
   LinksPageSettingsRow,
   ResolvedLink,
+  ResolvedSocialLink,
+  SocialLinkClickStat,
+  SocialLinkRow,
 } from "@/types/db";
 import { resolveImageUrl } from "@/types/db";
 import { PillButton } from "../PillButton";
 
 type EditorLink = LinkEditorItemInput;
+type EditorSocial = SocialEditorItemInput;
 type BannerAction = "keep" | "replace" | "remove";
-type InspectorMode = "page" | "link";
+type InspectorMode = "page" | "social" | "link";
 type PageDraft = Pick<
   LinksPageSettingsRow,
   "banner_focal_x" | "banner_focal_y" | "tagline_en" | "tagline_fr"
@@ -62,6 +68,19 @@ function toEditorLink(row: LinkRow): EditorLink {
     icon_key: row.icon_key,
     published: row.published,
     open_behavior: row.open_behavior,
+    updated_at: row.updated_at,
+  };
+}
+
+function toEditorSocial(row: SocialLinkRow): EditorSocial {
+  return {
+    client_id: row.id,
+    id: row.id,
+    label_en: row.label_en,
+    label_fr: row.label_fr,
+    url: row.url,
+    icon_key: row.icon_key,
+    published: row.published,
     updated_at: row.updated_at,
   };
 }
@@ -99,6 +118,27 @@ function resolveDraft(
   };
 }
 
+function resolveSocialDraft(
+  item: EditorSocial,
+  locale: Locale,
+  position: number,
+): ResolvedSocialLink {
+  const definition = SOCIAL_ICON_REGISTRY.find(
+    ({ key }) => key === item.icon_key,
+  );
+  const label =
+    locale === "fr"
+      ? item.label_fr || item.label_en || definition?.label || "Réseau social"
+      : item.label_en || item.label_fr || definition?.label || "Social profile";
+  return {
+    id: item.client_id,
+    label,
+    url: item.url,
+    iconKey: item.icon_key,
+    position,
+  };
+}
+
 function makeDraft(): EditorLink {
   return {
     client_id: crypto.randomUUID(),
@@ -115,7 +155,22 @@ function makeDraft(): EditorLink {
   };
 }
 
-function variationLabel(stat?: LinkClickStat) {
+function makeSocialDraft(): EditorSocial {
+  return {
+    client_id: crypto.randomUUID(),
+    id: null,
+    label_en: "Instagram",
+    label_fr: "Instagram",
+    url: "https://",
+    icon_key: "instagram",
+    published: false,
+    updated_at: null,
+  };
+}
+
+function variationLabel(
+  stat?: Pick<LinkClickStat, "current_period" | "previous_period">,
+) {
   if (!stat) return "0%";
   const current = Number(stat.current_period);
   const previous = Number(stat.previous_period);
@@ -432,20 +487,247 @@ function LinkInspector({
   );
 }
 
+function SocialInspector({
+  items,
+  selectedId,
+  stat,
+  onSelect,
+  onReorder,
+  onChange,
+  onMove,
+  onDelete,
+}: {
+  items: EditorSocial[];
+  selectedId: string | null;
+  stat?: SocialLinkClickStat;
+  onSelect: (id: string) => void;
+  onReorder: (items: EditorSocial[]) => void;
+  onChange: (item: EditorSocial) => void;
+  onMove: (direction: -1 | 1) => void;
+  onDelete: () => void;
+}) {
+  const [iconSearch, setIconSearch] = useState("");
+  const selectedIndex = items.findIndex(
+    (item) => item.client_id === selectedId,
+  );
+  const selected = selectedIndex >= 0 ? items[selectedIndex] : null;
+  const matchingIcons = SOCIAL_ICON_REGISTRY.filter((definition) =>
+    `${definition.label} ${definition.key}`
+      .toLowerCase()
+      .includes(iconSearch.trim().toLowerCase()),
+  );
+  const set = <K extends keyof EditorSocial>(
+    key: K,
+    value: EditorSocial[K],
+  ) => {
+    if (selected) onChange({ ...selected, [key]: value });
+  };
+
+  return (
+    <div className="h-full space-y-5 overflow-y-auto pr-1 pb-4">
+      {items.length === 0 ? (
+        <p className="rounded-xl border border-line bg-ink px-3 py-4 text-center text-[12px] text-fg/50">
+          No social links yet. Use Add social to create one.
+        </p>
+      ) : (
+        <div>
+          <span className={labelClass}>Order</span>
+          <Reorder.Group
+            axis="y"
+            values={items}
+            onReorder={onReorder}
+            className="mt-2 space-y-2"
+          >
+            {items.map((item) => {
+              const Icon = getSocialIcon(item.icon_key);
+              const label =
+                item.label_en || item.label_fr || "Untitled social link";
+              return (
+                <Reorder.Item
+                  key={item.client_id}
+                  value={item}
+                  className="cursor-grab list-none active:cursor-grabbing"
+                >
+                  <button
+                    type="button"
+                    onClick={() => onSelect(item.client_id)}
+                    className={`flex min-h-11 w-full items-center gap-3 rounded-xl border px-3 text-left ${selectedId === item.client_id ? "border-accent bg-accent-soft" : "border-line bg-ink"}`}
+                  >
+                    <Icon aria-hidden className="h-4 w-4 shrink-0" />
+                    <span className="min-w-0 flex-1 truncate text-[12px]">
+                      {label}
+                    </span>
+                    {!item.published && (
+                      <span className="text-[9px] text-fg/40 uppercase">
+                        Draft
+                      </span>
+                    )}
+                    <span aria-hidden className="text-fg/30">
+                      ⋮
+                    </span>
+                  </button>
+                </Reorder.Item>
+              );
+            })}
+          </Reorder.Group>
+        </div>
+      )}
+
+      {selected && (
+        <>
+          <div className="grid grid-cols-3 gap-2 rounded-2xl bg-ink p-3 text-center">
+            <div>
+              <strong className="block text-[17px]">
+                {Number(stat?.total ?? 0)}
+              </strong>
+              <span className="text-[10px] text-fg/45">Total</span>
+            </div>
+            <div>
+              <strong className="block text-[17px]">
+                {Number(stat?.current_period ?? 0)}
+              </strong>
+              <span className="text-[10px] text-fg/45">Last 7 days</span>
+            </div>
+            <div>
+              <strong className="block text-[17px]">
+                {variationLabel(stat)}
+              </strong>
+              <span className="text-[10px] text-fg/45">Change</span>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <label className={labelClass}>
+              Tooltip / label (EN)
+              <input
+                value={selected.label_en ?? ""}
+                onChange={(event) =>
+                  set("label_en", event.target.value || null)
+                }
+                maxLength={120}
+                className={fieldClass}
+              />
+            </label>
+            <label className={labelClass}>
+              Tooltip / label (FR)
+              <input
+                value={selected.label_fr ?? ""}
+                onChange={(event) =>
+                  set("label_fr", event.target.value || null)
+                }
+                maxLength={120}
+                className={fieldClass}
+              />
+            </label>
+          </div>
+          <label className={labelClass}>
+            Social URL
+            <input
+              value={selected.url}
+              onChange={(event) => set("url", event.target.value)}
+              inputMode="url"
+              className={fieldClass}
+            />
+          </label>
+          <fieldset>
+            <legend className={labelClass}>Social icon</legend>
+            <input
+              value={iconSearch}
+              onChange={(event) => setIconSearch(event.target.value)}
+              placeholder="Search icons"
+              className={fieldClass}
+            />
+            <div className="mt-2 grid grid-cols-4 gap-2">
+              {matchingIcons.map(({ key, label, Icon }) => (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => set("icon_key", key)}
+                  aria-pressed={selected.icon_key === key}
+                  className={`flex min-h-14 flex-col items-center justify-center gap-1 rounded-xl border px-1 text-[9px] ${selected.icon_key === key ? "border-accent bg-accent-soft text-accent" : "border-line"}`}
+                >
+                  <Icon aria-hidden className="h-5 w-5" />
+                  <span className="max-w-full truncate">{label}</span>
+                </button>
+              ))}
+            </div>
+            {matchingIcons.length === 0 && (
+              <p className="mt-2 text-[11px] text-fg/45">
+                No matching social icon.
+              </p>
+            )}
+          </fieldset>
+          <label className={labelClass}>
+            Visibility
+            <select
+              value={selected.published ? "published" : "draft"}
+              onChange={(event) =>
+                set("published", event.target.value === "published")
+              }
+              className={fieldClass}
+            >
+              <option value="draft">Draft</option>
+              <option value="published">Published</option>
+            </select>
+          </label>
+          <div className="flex gap-2">
+            <PillButton
+              size="sm"
+              variant="ghost"
+              disabled={selectedIndex === 0}
+              onClick={() => onMove(-1)}
+              className="min-h-11 flex-1"
+            >
+              ↑ Move up
+            </PillButton>
+            <PillButton
+              size="sm"
+              variant="ghost"
+              disabled={selectedIndex === items.length - 1}
+              onClick={() => onMove(1)}
+              className="min-h-11 flex-1"
+            >
+              ↓ Move down
+            </PillButton>
+          </div>
+          <PillButton
+            size="sm"
+            variant="danger"
+            onClick={onDelete}
+            className="min-h-11 w-full"
+          >
+            Delete social link
+          </PillButton>
+          {stat?.last_clicked_at && (
+            <p className="text-[11px] text-fg/40">
+              Last click {new Date(stat.last_clicked_at).toLocaleString()}
+            </p>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
+
 export function LinksEditor() {
   const queryClient = useQueryClient();
   const isDesktop = useIsDesktop();
   const [items, setItems] = useState<EditorLink[]>([]);
   const [baseline, setBaseline] = useState<EditorLink[]>([]);
+  const [socialItems, setSocialItems] = useState<EditorSocial[]>([]);
+  const [socialBaseline, setSocialBaseline] = useState<EditorSocial[]>([]);
   const [settings, setSettings] = useState<PageDraft | null>(null);
   const [settingsBaseline, setSettingsBaseline] = useState<PageDraft | null>(
     null,
   );
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [selectedSocialId, setSelectedSocialId] = useState<string | null>(null);
   const [inspectorMode, setInspectorMode] = useState<InspectorMode>("page");
   const [locale, setLocale] = useState<Locale>("en");
   const [mobileInspector, setMobileInspector] = useState(false);
   const [deleting, setDeleting] = useState<EditorLink | null>(null);
+  const [deletingSocial, setDeletingSocial] = useState<EditorSocial | null>(
+    null,
+  );
   const [message, setMessage] = useState<string | null>(null);
   const [bannerFile, setBannerFile] = useState<File | null>(null);
   const [bannerPreview, setBannerPreview] = useState<string | null>(null);
@@ -460,12 +742,18 @@ export function LinksEditor() {
   useEffect(() => {
     if (!query.data) return;
     const next = query.data.links.map(toEditorLink);
+    const nextSocials = query.data.socials.map(toEditorSocial);
     const nextSettings = toPageDraft(query.data.settings);
     setItems(next);
     setBaseline(next);
+    setSocialItems(nextSocials);
+    setSocialBaseline(nextSocials);
     setSettings(nextSettings);
     setSettingsBaseline(nextSettings);
     setSelectedId((current) => current ?? next[0]?.client_id ?? null);
+    setSelectedSocialId(
+      (current) => current ?? nextSocials[0]?.client_id ?? null,
+    );
     setBannerFile(null);
     setBannerAction("keep");
     setBannerPreview((current) => {
@@ -486,6 +774,7 @@ export function LinksEditor() {
 
   const dirty =
     JSON.stringify(items) !== JSON.stringify(baseline) ||
+    JSON.stringify(socialItems) !== JSON.stringify(socialBaseline) ||
     JSON.stringify(settings) !== JSON.stringify(settingsBaseline) ||
     bannerAction !== "keep";
   useEffect(() => {
@@ -508,6 +797,12 @@ export function LinksEditor() {
             : [],
         ),
         items,
+        expected_social_items: socialBaseline.flatMap((item) =>
+          item.id && item.updated_at
+            ? [{ id: item.id, updated_at: item.updated_at }]
+            : [],
+        ),
+        social_items: socialItems,
         expected_settings_updated_at: query.data.settings.updated_at,
         settings,
         banner_action: bannerAction,
@@ -560,6 +855,7 @@ export function LinksEditor() {
     if (!query.data) return;
     if (bannerPreview?.startsWith("blob:")) URL.revokeObjectURL(bannerPreview);
     setItems(baseline);
+    setSocialItems(socialBaseline);
     setSettings(settingsBaseline);
     setBannerFile(null);
     setBannerAction("keep");
@@ -575,12 +871,27 @@ export function LinksEditor() {
     (item) => item.client_id === selectedId,
   );
   const selected = selectedIndex >= 0 ? items[selectedIndex] : null;
+  const selectedSocialIndex = socialItems.findIndex(
+    (item) => item.client_id === selectedSocialId,
+  );
+  const selectedSocial =
+    selectedSocialIndex >= 0 ? socialItems[selectedSocialIndex] : null;
   const stats = useMemo(
     () => new Map(query.data?.stats.map((stat) => [stat.link_id, stat])),
     [query.data?.stats],
   );
+  const socialStats = useMemo(
+    () =>
+      new Map(
+        query.data?.socialStats.map((stat) => [stat.social_link_id, stat]),
+      ),
+    [query.data?.socialStats],
+  );
   const previewLinks = items.map((item, index) =>
     resolveDraft(item, locale, index),
+  );
+  const previewSocials = socialItems.map((item, index) =>
+    resolveSocialDraft(item, locale, index),
   );
   const openInspector = (id: string) => {
     setSelectedId(id);
@@ -589,6 +900,10 @@ export function LinksEditor() {
   };
   const updateSelected = (next: EditorLink) =>
     setItems((current) =>
+      current.map((item) => (item.client_id === next.client_id ? next : item)),
+    );
+  const updateSelectedSocial = (next: EditorSocial) =>
+    setSocialItems((current) =>
       current.map((item) => (item.client_id === next.client_id ? next : item)),
     );
   const moveSelected = (direction: -1 | 1) => {
@@ -600,6 +915,20 @@ export function LinksEditor() {
     setItems(next);
     setMessage(
       `${selected.name_en ?? selected.name_fr ?? "Link"} moved to position ${target + 1}.`,
+    );
+  };
+  const moveSelectedSocial = (direction: -1 | 1) => {
+    if (!selectedSocial) return;
+    const target = selectedSocialIndex + direction;
+    if (target < 0 || target >= socialItems.length) return;
+    const next = [...socialItems];
+    [next[selectedSocialIndex], next[target]] = [
+      next[target],
+      next[selectedSocialIndex],
+    ];
+    setSocialItems(next);
+    setMessage(
+      `${selectedSocial.label_en ?? selectedSocial.label_fr ?? "Social link"} moved to position ${target + 1}.`,
     );
   };
 
@@ -625,6 +954,23 @@ export function LinksEditor() {
   ) : (
     <p className="text-[14px] text-fg/50">Select a link to edit it.</p>
   );
+  const socialInspector = (
+    <SocialInspector
+      items={socialItems}
+      selectedId={selectedSocialId}
+      stat={selectedSocial?.id ? socialStats.get(selectedSocial.id) : undefined}
+      onSelect={setSelectedSocialId}
+      onReorder={(next) => {
+        setSocialItems(next);
+        setMessage("Social order changed. Save to publish it.");
+      }}
+      onChange={updateSelectedSocial}
+      onMove={moveSelectedSocial}
+      onDelete={() => {
+        if (selectedSocial) setDeletingSocial(selectedSocial);
+      }}
+    />
+  );
   const pageInspector = (
     <PageInspector
       settings={settings}
@@ -641,7 +987,12 @@ export function LinksEditor() {
       }}
     />
   );
-  const inspector = inspectorMode === "page" ? pageInspector : linkInspector;
+  const inspector =
+    inspectorMode === "page"
+      ? pageInspector
+      : inspectorMode === "social"
+        ? socialInspector
+        : linkInspector;
   const tagline =
     locale === "fr"
       ? settings.tagline_fr || settings.tagline_en || defaultCopy.fr
@@ -667,6 +1018,20 @@ export function LinksEditor() {
             className="min-h-11 flex-1"
           >
             Discard
+          </PillButton>
+          <PillButton
+            size="sm"
+            variant="ghost"
+            onClick={() => {
+              const next = makeSocialDraft();
+              setSocialItems((current) => [...current, next]);
+              setSelectedSocialId(next.client_id);
+              setInspectorMode("social");
+              if (isDesktop === false) setMobileInspector(true);
+            }}
+            className="min-h-11 flex-1"
+          >
+            + Add social
           </PillButton>
           <PillButton
             size="sm"
@@ -755,10 +1120,12 @@ export function LinksEditor() {
             <LinksPageContent
               key={previewKey}
               links={previewLinks}
+              socials={previewSocials}
               locale={locale}
               description={tagline}
               emptyLabel="No links yet."
               linksLabel="Editor preview"
+              socialsLabel="Social links preview"
               opensNewTabLabel="opens in a new tab"
               backHomeLabel={
                 locale === "fr" ? "Retour à l’accueil" : "Back home"
@@ -770,6 +1137,15 @@ export function LinksEditor() {
               animateIntro
               selectedId={selectedId}
               onSelect={openInspector}
+              selectedSocialId={selectedSocialId}
+              draftSocialIds={socialItems
+                .filter((item) => !item.published)
+                .map((item) => item.client_id)}
+              onSelectSocial={(id) => {
+                setSelectedSocialId(id);
+                setInspectorMode("social");
+                if (isDesktop === false) setMobileInspector(true);
+              }}
               listContent={
                 items.length === 0 ? undefined : (
                   <nav aria-label="Editor preview">
@@ -827,13 +1203,20 @@ export function LinksEditor() {
           </button>
         </div>
         <aside className="sticky top-8 hidden max-h-[calc(100vh-4rem)] rounded-card border border-line bg-panel p-5 lg:block">
-          <div className="mb-5 grid grid-cols-2 rounded-full border border-line bg-ink p-1">
+          <div className="mb-5 grid grid-cols-3 rounded-full border border-line bg-ink p-1">
             <button
               type="button"
               onClick={() => setInspectorMode("page")}
               className={`rounded-full px-3 py-2 text-[12px] ${inspectorMode === "page" ? "bg-inverse text-on-inverse" : "text-fg/50"}`}
             >
               Page
+            </button>
+            <button
+              type="button"
+              onClick={() => setInspectorMode("social")}
+              className={`rounded-full px-3 py-2 text-[12px] ${inspectorMode === "social" ? "bg-inverse text-on-inverse" : "text-fg/50"}`}
+            >
+              Socials
             </button>
             <button
               type="button"
@@ -850,7 +1233,13 @@ export function LinksEditor() {
       <Sheet
         open={mobileInspector}
         onClose={() => setMobileInspector(false)}
-        title={inspectorMode === "page" ? "Page appearance" : "Link properties"}
+        title={
+          inspectorMode === "page"
+            ? "Page appearance"
+            : inspectorMode === "social"
+              ? "Social links"
+              : "Link properties"
+        }
       >
         {inspector}
       </Sheet>
@@ -866,6 +1255,23 @@ export function LinksEditor() {
           );
           setSelectedId(null);
           setDeleting(null);
+          setMobileInspector(false);
+        }}
+      />
+      <ConfirmDialog
+        open={!!deletingSocial}
+        title="Delete this social link?"
+        message="Saving will permanently delete this social link and all of its click statistics."
+        onClose={() => setDeletingSocial(null)}
+        onConfirm={() => {
+          if (!deletingSocial) return;
+          setSocialItems((current) =>
+            current.filter(
+              (item) => item.client_id !== deletingSocial.client_id,
+            ),
+          );
+          setSelectedSocialId(null);
+          setDeletingSocial(null);
           setMobileInspector(false);
         }}
       />

@@ -108,6 +108,12 @@ Open `/admin/links` to edit the public links page in a live mobile preview.
   motion. The public animation respects reduced-motion preferences.
 - Add a link, then edit its EN/FR name, optional subtitles, destination, icon,
   opening behavior, and publication state in the properties panel.
+- Add social icons independently of regular links. The **Socials** panel lets
+  you search the icon bank, set EN/FR tooltip labels, enter an HTTPS or email
+  destination, publish or draft the item, and drag or move it into order.
+- Social icons appear between the welcome phrase and regular link cards. This
+  collection belongs only to the links page and does not change the home page,
+  menu, or footer social profiles.
 - Click a preview card to select it. Drag cards to reorder them, or use Move up
   and Move down for keyboard and precise mobile operation.
 - Draft links remain visible in the editor with a Draft badge but never reach
@@ -116,10 +122,11 @@ Open `/admin/links` to edit the public links page in a live mobile preview.
   snapshot. Closing or reloading a dirty editor triggers a browser warning.
 - A conflict means another tab saved first. Reload the server version or keep
   the local draft; the editor never silently overwrites concurrent changes.
-- The selected link shows lifetime clicks, the last seven days, their change
+- The selected link or social icon shows lifetime clicks, the last seven days, their change
   from the preceding week, and the most recent click.
 
-Deleting a link is staged until Save and permanently removes its click history.
+Deleting a link or social icon is staged until Save and permanently removes its
+click history.
 Removing a banner is also staged until Save and reveals the built-in warm
 gradient fallback. The public page uses only published links in the exact saved
 order. Its EN and FR routes do not show a language switcher; the editor retains

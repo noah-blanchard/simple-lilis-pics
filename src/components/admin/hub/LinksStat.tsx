@@ -13,14 +13,17 @@ export function LinksStat() {
 
   if (isLoading || !data) return <HubStat loading value="" />;
   const published = data.links.filter((link) => link.published).length;
-  const clicks = data.stats.reduce(
+  const publishedSocials = data.socials.filter(
+    (social) => social.published,
+  ).length;
+  const clicks = [...data.stats, ...data.socialStats].reduce(
     (total, stat) => total + Number(stat.total),
     0,
   );
   return (
     <HubStat
-      value={`${data.links.length} link${data.links.length === 1 ? "" : "s"}`}
-      note={`${published} published · ${clicks} clicks`}
+      value={`${data.links.length} link${data.links.length === 1 ? "" : "s"} · ${data.socials.length} social${data.socials.length === 1 ? "" : "s"}`}
+      note={`${published + publishedSocials} published · ${clicks} clicks`}
     />
   );
 }

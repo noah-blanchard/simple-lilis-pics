@@ -55,10 +55,12 @@ Public components receive resolved `Project` values rather than raw Supabase rel
 
 The responsive admin uses Supabase browser auth, TanStack Query, React Hook Form, browser image compression, QR generation, and Motion reorder controls. Separate sections manage projects/tags, the featured bento layout, ratings, and contact messages.
 
-The Links section is a WYSIWYG editor: a local draft drives the shared public
-preview, Motion reorders the list and replays its welcome sequence, and one
-authenticated `PUT /api/links` reconciles the complete snapshot in a Postgres
-transaction. Timestamps detect stale editor tabs before any write is applied.
+The Links section is a WYSIWYG editor: local drafts drive the shared public
+preview, Motion reorders the regular-link and social-icon collections and
+replays the welcome sequence, and one authenticated `PUT /api/links` reconciles
+the complete snapshot in a Postgres transaction. Timestamps detect stale editor
+tabs before any write is applied. The social-icon collection is scoped to the
+links page; home, menu, and footer profiles remain static marketing data.
 
 ## Authentication and authorization
 

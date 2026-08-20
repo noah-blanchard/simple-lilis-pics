@@ -6,15 +6,18 @@ import type { ReactNode } from "react";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { EASE } from "@/lib/motion";
-import type { ResolvedLink } from "@/types/db";
+import type { ResolvedLink, ResolvedSocialLink } from "@/types/db";
 import { LinkCard } from "./LinkCard";
+import { SocialLinks } from "./SocialLinks";
 
 interface LinksPageContentProps {
   links: ResolvedLink[];
+  socials: ResolvedSocialLink[];
   locale: Locale;
   description: string;
   emptyLabel: string;
   linksLabel: string;
+  socialsLabel: string;
   opensNewTabLabel: string;
   backHomeLabel?: string;
   bannerImageUrl?: string | null;
@@ -25,14 +28,19 @@ interface LinksPageContentProps {
   selectedId?: string | null;
   onSelect?: (id: string) => void;
   listContent?: ReactNode;
+  selectedSocialId?: string | null;
+  draftSocialIds?: string[];
+  onSelectSocial?: (id: string) => void;
 }
 
 export function LinksPageContent({
   links,
+  socials,
   locale,
   description,
   emptyLabel,
   linksLabel,
+  socialsLabel,
   opensNewTabLabel,
   backHomeLabel = "Back to the portfolio",
   bannerImageUrl = null,
@@ -43,6 +51,9 @@ export function LinksPageContent({
   selectedId,
   onSelect,
   listContent,
+  selectedSocialId,
+  draftSocialIds,
+  onSelectSocial,
 }: LinksPageContentProps) {
   const reduce = useReducedMotion();
   const Root = mode === "public" ? "main" : "div";
@@ -122,13 +133,26 @@ export function LinksPageContent({
               delay: reduce ? 0 : 0.48,
               ease: EASE,
             }}
-            className="mb-7 text-center"
+            className={
+              socials.length > 0 ? "mb-4 text-center" : "mb-7 text-center"
+            }
           >
             <h1 className="display text-[34px] tracking-tight">Lilis Pics</h1>
             <p className="mx-auto mt-2 max-w-[340px] text-[14px] text-fg/60 leading-relaxed">
               {description}
             </p>
           </motion.header>
+
+          <SocialLinks
+            socials={socials}
+            label={socialsLabel}
+            opensNewTabLabel={opensNewTabLabel}
+            mode={mode}
+            animateIntro={animateIntro}
+            selectedId={selectedSocialId}
+            draftIds={draftSocialIds}
+            onSelect={onSelectSocial}
+          />
 
           {listContent ??
             (links.length === 0 ? (

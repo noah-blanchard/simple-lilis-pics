@@ -48,15 +48,19 @@ export default async function LinksPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: "links" });
-  const { links, settings } = await getPublicLinksPage(locale as Locale);
+  const { links, socials, settings } = await getPublicLinksPage(
+    locale as Locale,
+  );
 
   return (
     <LinksPageContent
       links={links}
+      socials={socials}
       locale={locale as Locale}
       description={settings.tagline ?? t("description")}
       emptyLabel={t("empty")}
       linksLabel={t("listLabel")}
+      socialsLabel={t("socialsLabel")}
       opensNewTabLabel={t("opensNewTab")}
       backHomeLabel={t("backHome")}
       bannerImageUrl={settings.bannerImageUrl}
