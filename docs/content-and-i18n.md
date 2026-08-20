@@ -6,7 +6,7 @@ The public site combines checked-in marketing content with runtime portfolio con
 
 - `messages/en.json` and `messages/fr.json` contain localized marketing copy.
 - `src/data/` contains typed lists and identifiers for navigation, specialties, plans, process steps, reviews, and social links.
-- Supabase stores project content, featured settings, contact messages, rating tokens, and moderated ratings.
+- Supabase stores project content, featured settings, public links, click statistics, contact messages, rating tokens, and moderated ratings.
 - `public/` contains checked-in static images and decorative assets.
 
 Do not move runtime CMS content into message files or fetch static marketing lists from Supabase without an explicit architecture change.
@@ -19,7 +19,7 @@ Do not move runtime CMS content into message files or fetch static marketing lis
 - Default locale: `en`.
 - Prefix strategy: `as-needed`.
 
-Therefore English uses `/`, `/portfolio`, and `/portfolio/[id]`, while French uses `/fr`, `/fr/portfolio`, and `/fr/portfolio/[id]`.
+Therefore English uses `/`, `/portfolio`, `/links`, and `/portfolio/[id]`, while French uses `/fr`, `/fr/portfolio`, `/fr/links`, and `/fr/portfolio/[id]`.
 
 `src/proxy.ts` sends public requests through next-intl. Admin routes remain English-only and outside localized routing.
 
@@ -33,9 +33,17 @@ Therefore English uses `/`, `/portfolio`, and `/portfolio/[id]`, while French us
 
 Tags and projects are not maintained in the message catalogs. Their bilingual fields are edited through the admin.
 
+Public link names and subtitles are runtime CMS content too. Static links-page
+metadata, introduction, empty/error copy, and accessibility labels live in the
+`links` namespace in both message catalogs.
+
 ## Runtime localization and fallback
 
 The public data resolver receives a locale and selects the matching project/title description and tag label. When localized project text is absent, it falls back to the other language and finally to a neutral project label. Photos and dates are shared across languages.
+
+The links resolver uses the same locale-first fallback for names and subtitles.
+Destinations, registered icons, positions, publication state, and opening
+behavior are shared across languages.
 
 Admin translation buttons can translate titles, descriptions, and tag labels in either direction. Translation is assistance, not publication workflow automation: review the output before saving.
 
@@ -56,6 +64,7 @@ Preserve meaningful filenames, image aspect ratios, and optimized formats. Runti
 Localized layouts and portfolio pages generate metadata. `src/app/sitemap.ts` creates:
 
 - Both locale variants of the home and portfolio pages.
+- Both locale variants of the links page.
 - Both locale variants of every project.
 - Language alternate links.
 

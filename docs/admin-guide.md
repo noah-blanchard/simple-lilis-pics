@@ -2,6 +2,8 @@
 
 The admin CMS is a private, responsive English-only tool under `/admin`. Its hub and navigation expose Projects, Featured, Ratings, and Messages.
 
+It also exposes a Links editor for the public `/links` and `/fr/links` page.
+
 ## Sign in
 
 1. Open `/login`.
@@ -93,6 +95,26 @@ Open `/admin/messages` for the private contact inbox. Messages are newest first 
 - Delete messages permanently after confirmation.
 
 Resend notifications are supplementary; the database inbox remains the durable source of truth.
+
+## Links editor
+
+Open `/admin/links` to edit the public links page in a live mobile preview.
+
+- Add a link, then edit its EN/FR name, optional subtitles, destination, icon,
+  opening behavior, and publication state in the properties panel.
+- Click a preview card to select it. Drag cards to reorder them, or use Move up
+  and Move down for keyboard and precise mobile operation.
+- Draft links remain visible in the editor with a Draft badge but never reach
+  the public page.
+- Save commits the complete draft atomically. Discard restores the last server
+  snapshot. Closing or reloading a dirty editor triggers a browser warning.
+- A conflict means another tab saved first. Reload the server version or keep
+  the local draft; the editor never silently overwrites concurrent changes.
+- The selected link shows lifetime clicks, the last seven days, their change
+  from the preceding week, and the most recent click.
+
+Deleting a link is staged until Save and permanently removes its click history.
+The public page uses only published links in the exact saved order.
 
 ## Operational checklist
 

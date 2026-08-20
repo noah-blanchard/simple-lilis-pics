@@ -34,6 +34,9 @@ Validation failures use HTTP 422 with `VALIDATION_ERROR` and issue details. Inva
 | POST | `/api/ratings` | Public/token | Submit one rating |
 | PATCH | `/api/ratings/[id]` | Required | Approve or unapprove a rating |
 | DELETE | `/api/ratings/[id]` | Required | Delete a rating |
+| GET | `/api/links` | Required | Load the links editor snapshot and statistics |
+| PUT | `/api/links` | Required | Atomically save the complete links editor snapshot |
+| POST | `/api/links/[id]/click` | Public/same-origin | Record a best-effort click on a published link |
 
 ## Projects
 
@@ -149,3 +152,24 @@ The public handler atomically claims an unused, unexpired token before inserting
 ## Client guidance
 
 Use `src/lib/api/client.ts` inside the application so error envelopes become useful exceptions. Do not call protected endpoints from untrusted automation with the service-role key; authenticate through Supabase and retain the session cookie.
+
+## Links
+
+`GET /api/links` returns `{ links, stats }`. Links include their `updated_at`
+version. Statistics contain lifetime total, current and previous seven-day
+counts, and the last click timestamp.
+
+`PUT /api/links` accepts the original `{id, updated_at}` list plus the complete
+ordered editor list. Array order becomes the persisted zero-based position.
+The save creates new rows, updates retained rows, and deletes omitted rows in
+one transaction. If the database no longer matches the original snapshot it
+returns HTTP 409 `EDIT_CONFLICT` without applying a partial update.
+
+Destinations are limited to HTTPS URLs, locale-neutral internal paths beginning
+with `/`, and simple `mailto:` addresses. At least one EN/FR name is required;
+optional blank text is stored as null.
+
+`POST /api/links/[id]/click` requires a same-origin browser request. It accepts
+only published links, records the event and increments the lifetime counter,
+then returns HTTP 202. Public anchors navigate directly to their destinations
+and never wait for this response.

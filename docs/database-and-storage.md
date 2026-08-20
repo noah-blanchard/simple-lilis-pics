@@ -15,6 +15,8 @@ Apply `supabase/migrations/` in numeric order. They are the schema history:
 | `0007_featured_col_span.sql` | Adds featured bento tile width, constrained to 1–8 |
 | `0008_ratings.sql` | Adds single-use 24-hour rating tokens and moderated ratings |
 | `0009_contact_message_read.sql` | Adds persistent contact read/unread state |
+| `0010_links.sql` | Adds localized public links, click events/totals, RLS, statistics, retention, and editor functions |
+| `0011_links_editor_lock.sql` | Serializes editor saves even when the links table is empty |
 
 The active schema does **not** include the `photos` or `photo_tags` tables created by migration 0001; migration 0003 drops them.
 
@@ -56,6 +58,23 @@ Short, unique EN/FR codes for QR links. Each expires after 24 hours and records 
 
 One rating per token with 1–5 stars, optional note/name, recorded locale, moderation flag, and timestamp. Deleting a token preserves its rating by setting `token_id` to null.
 
+### `links`
+
+Localized EN/FR names and optional subtitles, a validated destination, an
+optional registered icon key, zero-based display position, publication state,
+opening behavior, and creation/update timestamps. Public RLS exposes published
+rows only; authenticated users can manage the full set.
+
+### `link_click_events` and `link_click_totals`
+
+Each accepted click records only `link_id` and `clicked_at`. No IP address,
+user-agent, referrer, cookie, or visitor identifier is stored. Events support
+recent trends and are retained for 13 months; the separate counter preserves
+the lifetime total. Both cascade when their link is deleted.
+
+Run `select public.prune_link_click_events();` monthly from an authorized
+Supabase SQL session. The repository does not assume that `pg_cron` is enabled.
+
 ## Relationships
 
 ```text
@@ -75,6 +94,7 @@ Deleting a project cascades its photo and tag-link rows. The API separately remo
 - Authenticated users have table write policies for CMS data.
 - Contact messages have authenticated read access only and no public insert/update/delete policy.
 - Only approved ratings are publicly readable; authenticated users can moderate ratings and manage tokens.
+- Anonymous users can read published links only. Click tables have no public policies; the same-origin API writes through a restricted service-role function.
 - The public contact route inserts with the server-only service-role client.
 - Storage objects in the configured bucket are publicly readable; authenticated policies permit object writes.
 

@@ -1,12 +1,13 @@
 # Lilis Pics
 
-A bilingual photography portfolio and self-service content management system built with Next.js 16. The public experience combines a motion-led marketing page with a project archive, while the private admin area manages projects, galleries, tags, featured layouts, and EN/FR translations.
+A bilingual photography portfolio and self-service content management system built with Next.js 16. The public experience combines a motion-led marketing page, project archive, and lightweight links page, while the private admin manages the site through a responsive CMS.
 
 ## What the project includes
 
 - English and French public routes with localized metadata and sitemap entries.
 - A responsive portfolio archive and project galleries backed by Supabase.
 - A responsive admin hub for projects, tags, featured layouts, contact messages, and ratings.
+- A localized `/links` bio page with a visual drag-and-drop editor and privacy-conscious click statistics.
 - Browser-side image compression with a sequential upload fallback for large requests.
 - AI-assisted EN↔FR translation through OpenRouter.
 - Contact submissions stored in Postgres with best-effort Resend notifications.
@@ -73,12 +74,15 @@ For the complete setup, migration, and account instructions, read [Local develop
 | `/fr/portfolio` | French project archive |
 | `/portfolio/[id]` | English project gallery |
 | `/fr/portfolio/[id]` | French project gallery |
+| `/links` | English public links page |
+| `/fr/links` | French public links page |
 | `/login` | Admin sign-in |
 | `/admin` | Responsive administration hub |
 | `/admin/projects` | Project and tag management |
 | `/admin/featured` | Featured bento layout editor |
 | `/admin/ratings` | Rating links and testimonial moderation |
 | `/admin/messages` | Contact inquiry inbox |
+| `/admin/links` | WYSIWYG links editor and click statistics |
 | `/rate/[locale]/[token]` | Single-use visitor rating experience |
 | `/api/*` | Public and authenticated route handlers |
 | `/sitemap.xml` | Generated localized sitemap |
