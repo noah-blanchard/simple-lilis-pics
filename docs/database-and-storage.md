@@ -17,6 +17,7 @@ Apply `supabase/migrations/` in numeric order. They are the schema history:
 | `0009_contact_message_read.sql` | Adds persistent contact read/unread state |
 | `0010_links.sql` | Adds localized public links, click events/totals, RLS, statistics, retention, and editor functions |
 | `0011_links_editor_lock.sql` | Serializes editor saves even when the links table is empty |
+| `0012_links_page_settings.sql` | Adds the singleton links-page appearance settings and extends atomic editor saves |
 
 The active schema does **not** include the `photos` or `photo_tags` tables created by migration 0001; migration 0003 drops them.
 
@@ -65,6 +66,13 @@ optional registered icon key, zero-based display position, publication state,
 opening behavior, and creation/update timestamps. Public RLS exposes published
 rows only; authenticated users can manage the full set.
 
+### `links_page_settings`
+
+A singleton row (`id = 1`) stores the optional banner Storage key, its
+horizontal and vertical focal percentages, localized optional welcome phrases,
+and timestamps. Focal coordinates are constrained to 0–100 and phrases to 160
+characters. Anonymous clients can read the row; writes remain protected.
+
 ### `link_click_events` and `link_click_totals`
 
 Each accepted click records only `link_id` and `clicked_at`. No IP address,
@@ -94,7 +102,7 @@ Deleting a project cascades its photo and tag-link rows. The API separately remo
 - Authenticated users have table write policies for CMS data.
 - Contact messages have authenticated read access only and no public insert/update/delete policy.
 - Only approved ratings are publicly readable; authenticated users can moderate ratings and manage tokens.
-- Anonymous users can read published links only. Click tables have no public policies; the same-origin API writes through a restricted service-role function.
+- Anonymous users can read published links and the singleton page settings only. Click tables have no public policies; the same-origin API writes through a restricted service-role function.
 - The public contact route inserts with the server-only service-role client.
 - Storage objects in the configured bucket are publicly readable; authenticated policies permit object writes.
 
@@ -109,6 +117,11 @@ The maximum of eight featured projects is enforced in the admin UI, API handlers
 The default bucket is `photos` and may be overridden by `NEXT_PUBLIC_SUPABASE_BUCKET`. Uploaded records store only object keys. `resolveImageUrl` builds public URLs from the configured Supabase origin and bucket. Full `http(s)` URLs remain untouched for legacy/demo images.
 
 `next.config.ts` derives the allowed Supabase image hostname from `NEXT_PUBLIC_SUPABASE_URL` at build time. Changing Supabase projects requires rebuilding the application.
+
+Links-page banners use `links/banners/<uuid>.<extension>` in the same bucket.
+The admin previews a local object URL, uploads only on Save, and removes the
+previous object after a successful database transaction. Failed transactions
+remove the newly uploaded object.
 
 ## Operational safety
 

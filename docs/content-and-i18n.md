@@ -33,7 +33,7 @@ Therefore English uses `/`, `/portfolio`, `/links`, and `/portfolio/[id]`, while
 
 Tags and projects are not maintained in the message catalogs. Their bilingual fields are edited through the admin.
 
-Public link names and subtitles are runtime CMS content too. Static links-page
+Public link names, subtitles, localized welcome phrases, and the banner are runtime CMS content too. Static links-page
 metadata, introduction, empty/error copy, and accessibility labels live in the
 `links` namespace in both message catalogs.
 

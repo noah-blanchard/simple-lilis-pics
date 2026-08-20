@@ -100,6 +100,12 @@ Resend notifications are supplementary; the database inbox remains the durable s
 
 Open `/admin/links` to edit the public links page in a live mobile preview.
 
+- Use the **Page** tab to upload, replace, or remove the banner, drag its focal
+  target, adjust the keyboard-accessible focal sliders, and edit the EN/FR
+  welcome phrases. Images are compressed before upload and remain local until
+  Save.
+- Use **Replay intro** to preview the banner, avatar, identity, and link entrance
+  motion. The public animation respects reduced-motion preferences.
 - Add a link, then edit its EN/FR name, optional subtitles, destination, icon,
   opening behavior, and publication state in the properties panel.
 - Click a preview card to select it. Drag cards to reorder them, or use Move up
@@ -114,7 +120,10 @@ Open `/admin/links` to edit the public links page in a live mobile preview.
   from the preceding week, and the most recent click.
 
 Deleting a link is staged until Save and permanently removes its click history.
-The public page uses only published links in the exact saved order.
+Removing a banner is also staged until Save and reveals the built-in warm
+gradient fallback. The public page uses only published links in the exact saved
+order. Its EN and FR routes do not show a language switcher; the editor retains
+its locale preview control.
 
 ## Operational checklist
 

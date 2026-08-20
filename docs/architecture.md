@@ -4,9 +4,10 @@
 
 Lilis Pics is a Next.js App Router application with a localized public site, a non-localized authenticated admin CMS, a token-gated bilingual rating experience, and route handlers for public submissions/reads and authenticated mutations.
 
-The public site also includes a localized `/links` bio page. Its content is
-managed as an atomic snapshot in a visual admin editor; public rendering and
-the editor preview share the same presentational link components.
+The public site also includes a localized `/links` bio page. Its content and
+banner presentation are managed as an atomic snapshot in a visual admin
+editor; public rendering and the editor preview share the same presentational
+link components.
 
 ```text
 Public request
@@ -55,9 +56,9 @@ Public components receive resolved `Project` values rather than raw Supabase rel
 The responsive admin uses Supabase browser auth, TanStack Query, React Hook Form, browser image compression, QR generation, and Motion reorder controls. Separate sections manage projects/tags, the featured bento layout, ratings, and contact messages.
 
 The Links section is a WYSIWYG editor: a local draft drives the shared public
-preview, Motion reorders the list, and one authenticated `PUT /api/links`
-reconciles the complete snapshot in a Postgres transaction. Timestamps detect
-stale editor tabs before any write is applied.
+preview, Motion reorders the list and replays its welcome sequence, and one
+authenticated `PUT /api/links` reconciles the complete snapshot in a Postgres
+transaction. Timestamps detect stale editor tabs before any write is applied.
 
 ## Authentication and authorization
 

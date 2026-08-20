@@ -155,15 +155,21 @@ Use `src/lib/api/client.ts` inside the application so error envelopes become use
 
 ## Links
 
-`GET /api/links` returns `{ links, stats }`. Links include their `updated_at`
-version. Statistics contain lifetime total, current and previous seven-day
-counts, and the last click timestamp.
+`GET /api/links` returns `{ links, stats, settings }`. Links and the singleton
+settings include their `updated_at` versions. Statistics contain lifetime
+total, current and previous seven-day counts, and the last click timestamp.
 
-`PUT /api/links` accepts the original `{id, updated_at}` list plus the complete
-ordered editor list. Array order becomes the persisted zero-based position.
-The save creates new rows, updates retained rows, and deletes omitted rows in
-one transaction. If the database no longer matches the original snapshot it
-returns HTTP 409 `EDIT_CONFLICT` without applying a partial update.
+`PUT /api/links` consumes multipart form data. Its `snapshot` field contains
+the original `{id, updated_at}` list, complete ordered editor list, original
+settings timestamp, focal coordinates, localized phrases, and `banner_action`
+(`keep`, `replace`, or `remove`). A `replace` request also includes `banner`, a
+JPEG, PNG, WebP, or AVIF file no larger than 5 MiB. Array order becomes the
+persisted zero-based position.
+
+The database save reconciles links and settings in one transaction. If either
+version changed, it returns HTTP 409 `EDIT_CONFLICT` without partial database
+updates. A failed transaction removes a newly uploaded banner; a successful
+replacement removes the old Storage object afterward.
 
 Destinations are limited to HTTPS URLs, locale-neutral internal paths beginning
 with `/`, and simple `mailto:` addresses. At least one EN/FR name is required;
