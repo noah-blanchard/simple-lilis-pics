@@ -1,5 +1,6 @@
 import type { ComponentType } from "react";
 import { FeaturedStat } from "@/components/admin/hub/FeaturedStat";
+import { LinksStat } from "@/components/admin/hub/LinksStat";
 import { MessagesStat } from "@/components/admin/hub/MessagesStat";
 import { ProjectsStat } from "@/components/admin/hub/ProjectsStat";
 import { RatingsStat } from "@/components/admin/hub/RatingsStat";
@@ -58,6 +59,15 @@ export const ADMIN_SECTIONS: AdminSection[] = [
     Icon: IconStar,
     primary: true,
     Stat: RatingsStat,
+  },
+  {
+    key: "links",
+    href: "/admin/links",
+    label: "Links",
+    title: "Links editor",
+    description: "Build and measure the public links page.",
+    Icon: IconLayout,
+    Stat: LinksStat,
   },
   {
     key: "messages",
