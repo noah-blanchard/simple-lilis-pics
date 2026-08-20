@@ -66,6 +66,11 @@ export interface LinkClickStat {
   last_clicked_at: string | null;
 }
 
+export interface AdminLinksSnapshot {
+  links: LinkRow[];
+  stats: LinkClickStat[];
+}
+
 export type Orientation = "landscape" | "portrait";
 
 /** Build the public URL of a stored image. Legacy rows already hold a full
