@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 import { LinksPageContent } from "@/components/links/LinksPageContent";
 import type { Locale } from "@/i18n/routing";
-import { getPublishedLinks } from "@/lib/data/links";
+import { getPublicLinksPage } from "@/lib/data/links";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
@@ -14,6 +13,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "links" });
+  const { settings } = await getPublicLinksPage(locale as Locale);
   const path = locale === "fr" ? "/fr/links" : "/links";
   return {
     metadataBase: new URL(SITE_URL),
@@ -30,9 +30,10 @@ export async function generateMetadata({
       siteName: "Lilis Pics",
       locale,
       type: "website",
+      images: settings.bannerImageUrl ? [settings.bannerImageUrl] : undefined,
     },
     twitter: {
-      card: "summary",
+      card: settings.bannerImageUrl ? "summary_large_image" : "summary",
       title: t("metaTitle"),
       description: t("metaDescription"),
     },
@@ -47,17 +48,20 @@ export default async function LinksPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: "links" });
-  const links = await getPublishedLinks(locale as Locale);
+  const { links, settings } = await getPublicLinksPage(locale as Locale);
 
   return (
     <LinksPageContent
       links={links}
       locale={locale as Locale}
-      description={t("description")}
+      description={settings.tagline ?? t("description")}
       emptyLabel={t("empty")}
       linksLabel={t("listLabel")}
       opensNewTabLabel={t("opensNewTab")}
-      localeControl={<LocaleSwitcher />}
+      backHomeLabel={t("backHome")}
+      bannerImageUrl={settings.bannerImageUrl}
+      bannerFocalX={settings.bannerFocalX}
+      bannerFocalY={settings.bannerFocalY}
     />
   );
 }

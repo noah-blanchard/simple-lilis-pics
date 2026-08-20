@@ -74,10 +74,10 @@ export function LinkCard({
       </motion.span>
     </>
   );
-  const className = `flex min-h-16 w-full items-center gap-3 rounded-card border p-4 text-fg transition-colors ${
+  const className = `flex min-h-[72px] w-full items-center gap-3 rounded-[22px] border p-4 text-fg shadow-[0_10px_30px_rgb(23_23_23/0.06)] backdrop-blur-sm ${
     selected
-      ? "border-accent bg-panel2"
-      : "border-line bg-panel hover:bg-panel2"
+      ? "border-accent bg-white/90"
+      : "border-white/70 bg-white/70 hover:bg-white/90"
   }`;
 
   if (mode === "editor") {
