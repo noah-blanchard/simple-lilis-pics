@@ -254,7 +254,7 @@ export const linkEditorItemSchema = z
     icon_key: z.enum(LINK_ICON_KEYS).nullable(),
     published: z.boolean(),
     open_behavior: z.enum(LINK_OPEN_BEHAVIORS),
-    updated_at: z.string().datetime().nullable(),
+    updated_at: z.string().datetime({ offset: true }).nullable(),
   })
   .superRefine((value, ctx) => {
     if (!value.name_en && !value.name_fr) {
@@ -285,11 +285,11 @@ export const linksEditorSaveSchema = z
     expected_items: z.array(
       z.object({
         id: z.string().uuid(),
-        updated_at: z.string().datetime(),
+        updated_at: z.string().datetime({ offset: true }),
       }),
     ),
     items: z.array(linkEditorItemSchema).max(100),
-    expected_settings_updated_at: z.string().datetime(),
+    expected_settings_updated_at: z.string().datetime({ offset: true }),
     settings: z.object({
       banner_focal_x: z.number().int().min(0).max(100),
       banner_focal_y: z.number().int().min(0).max(100),
