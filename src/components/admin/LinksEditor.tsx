@@ -1009,13 +1009,13 @@ export function LinksEditor() {
             {dirty ? "Unsaved changes" : "All changes saved"}
           </p>
         </div>
-        <div className="flex w-full gap-2 sm:w-auto">
+        <div className="grid w-full grid-cols-2 gap-2 sm:flex sm:w-auto">
           <PillButton
             size="sm"
             variant="ghost"
             onClick={discard}
             disabled={!dirty}
-            className="min-h-11 flex-1"
+            className="min-h-11 whitespace-nowrap"
           >
             Discard
           </PillButton>
@@ -1029,9 +1029,9 @@ export function LinksEditor() {
               setInspectorMode("social");
               if (isDesktop === false) setMobileInspector(true);
             }}
-            className="min-h-11 flex-1"
+            className="min-h-11 whitespace-nowrap"
           >
-            + Add social
+            + Add social icon
           </PillButton>
           <PillButton
             size="sm"
@@ -1043,15 +1043,15 @@ export function LinksEditor() {
               setInspectorMode("link");
               if (isDesktop === false) setMobileInspector(true);
             }}
-            className="min-h-11 flex-1"
+            className="min-h-11 whitespace-nowrap"
           >
-            + Add link
+            + Add regular link
           </PillButton>
           <PillButton
             size="sm"
             onClick={() => save.mutate()}
             disabled={!dirty || save.isPending}
-            className="min-h-11 flex-1"
+            className="min-h-11 whitespace-nowrap"
           >
             {save.isPending ? "Saving…" : "Save"}
           </PillButton>
