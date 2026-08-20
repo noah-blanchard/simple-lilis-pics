@@ -1,5 +1,6 @@
 import type { Locale } from "@/i18n/routing";
 import { PHOTOS_BUCKET, SUPABASE_URL } from "@/lib/env";
+import type { LinkIconKey, LinkOpenBehavior } from "@/lib/links/constants";
 
 /* ── Shared ── */
 
@@ -40,6 +41,29 @@ export interface RatingRow {
   locale: Locale;
   approved: boolean;
   created_at: string;
+}
+
+export interface LinkRow {
+  id: string;
+  name_en: string | null;
+  name_fr: string | null;
+  subtitle_en: string | null;
+  subtitle_fr: string | null;
+  url: string;
+  icon_key: LinkIconKey | null;
+  position: number;
+  published: boolean;
+  open_behavior: LinkOpenBehavior;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface LinkClickStat {
+  link_id: string;
+  total: number;
+  current_period: number;
+  previous_period: number;
+  last_clicked_at: string | null;
 }
 
 export type Orientation = "landscape" | "portrait";
@@ -116,6 +140,16 @@ export interface ResolvedRating {
   /** 1–2 uppercase letters for the monogram avatar; null when anonymous. */
   initials: string | null;
   date: string; // ISO timestamp
+}
+
+export interface ResolvedLink {
+  id: string;
+  name: string;
+  subtitle: string | null;
+  url: string;
+  iconKey: LinkIconKey | null;
+  position: number;
+  openBehavior: LinkOpenBehavior;
 }
 
 export function resolveRating(row: RatingRow): ResolvedRating {

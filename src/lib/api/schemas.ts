@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { LINK_ICON_KEYS, LINK_OPEN_BEHAVIORS } from "@/lib/links/constants";
 
 /* ── Tags ── */
 
@@ -174,3 +175,157 @@ export type RatingTokenCreateInput = z.infer<typeof ratingTokenCreateSchema>;
 export type RatingSubmitInput = z.infer<typeof ratingSubmitSchema>;
 export type RatingUpdateInput = z.infer<typeof ratingUpdateSchema>;
 export type ContactUpdateInput = z.infer<typeof contactUpdateSchema>;
+
+/* ── Public links editor ── */
+
+const nullableTrimmedText = (max: number) =>
+  z
+    .string()
+    .trim()
+    .max(max)
+    .nullable()
+    .transform((value) => value || null);
+
+/** Only destinations that are useful to the portfolio and safe in an href. */
+export const linkDestinationSchema = z
+  .string()
+  .trim()
+  .min(1)
+  .max(2048)
+  .superRefine((value, ctx) => {
+    const hasControlCharacter = Array.from(value).some((character) => {
+      const code = character.charCodeAt(0);
+      return code < 32 || code === 127;
+    });
+    if (hasControlCharacter) {
+      ctx.addIssue({
+        code: "custom",
+        message: "URL contains control characters",
+      });
+      return;
+    }
+
+    if (value.startsWith("/")) {
+      if (value.startsWith("//")) {
+        ctx.addIssue({
+          code: "custom",
+          message: "Protocol-relative URLs are not allowed",
+        });
+      }
+      return;
+    }
+
+    if (value.startsWith("mailto:")) {
+      const address = value.slice("mailto:".length);
+      if (!z.string().email().safeParse(address).success) {
+        ctx.addIssue({ code: "custom", message: "Invalid email destination" });
+      }
+      return;
+    }
+
+    try {
+      const url = new URL(value);
+      if (url.protocol !== "https:") {
+        ctx.addIssue({
+          code: "custom",
+          message: "Only HTTPS URLs are allowed",
+        });
+      }
+      if (url.username || url.password) {
+        ctx.addIssue({
+          code: "custom",
+          message: "URL credentials are not allowed",
+        });
+      }
+    } catch {
+      ctx.addIssue({ code: "custom", message: "Invalid URL" });
+    }
+  });
+
+export const linkEditorItemSchema = z
+  .object({
+    client_id: z.string().min(1).max(100),
+    id: z.string().uuid().nullable(),
+    name_en: nullableTrimmedText(120),
+    name_fr: nullableTrimmedText(120),
+    subtitle_en: nullableTrimmedText(240),
+    subtitle_fr: nullableTrimmedText(240),
+    url: linkDestinationSchema,
+    icon_key: z.enum(LINK_ICON_KEYS).nullable(),
+    published: z.boolean(),
+    open_behavior: z.enum(LINK_OPEN_BEHAVIORS),
+    updated_at: z.string().datetime().nullable(),
+  })
+  .superRefine((value, ctx) => {
+    if (!value.name_en && !value.name_fr) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["name_en"],
+        message: "At least one localized name is required",
+      });
+    }
+    if (value.id && !value.updated_at) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["updated_at"],
+        message: "Existing links require updated_at",
+      });
+    }
+    if (!value.id && value.updated_at) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["updated_at"],
+        message: "New links cannot have updated_at",
+      });
+    }
+  });
+
+export const linksEditorSaveSchema = z
+  .object({
+    expected_items: z.array(
+      z.object({
+        id: z.string().uuid(),
+        updated_at: z.string().datetime(),
+      }),
+    ),
+    items: z.array(linkEditorItemSchema).max(100),
+  })
+  .superRefine((value, ctx) => {
+    const expectedIds = value.expected_items.map((item) => item.id);
+    const existingIds = value.items.flatMap((item) =>
+      item.id ? [item.id] : [],
+    );
+    const clientIds = value.items.map((item) => item.client_id);
+
+    if (new Set(expectedIds).size !== expectedIds.length) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["expected_items"],
+        message: "Duplicate expected id",
+      });
+    }
+    if (new Set(existingIds).size !== existingIds.length) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["items"],
+        message: "Duplicate link id",
+      });
+    }
+    if (new Set(clientIds).size !== clientIds.length) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["items"],
+        message: "Duplicate client id",
+      });
+    }
+    if (existingIds.some((id) => !expectedIds.includes(id))) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["items"],
+        message: "Unknown existing link id",
+      });
+    }
+  });
+
+export type LinkEditorItemInput = z.infer<typeof linkEditorItemSchema>;
+export type LinksEditorSaveInput = z.infer<typeof linksEditorSaveSchema>;

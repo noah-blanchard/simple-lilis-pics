@@ -226,6 +226,73 @@ export const IconChevronLeft = ({ className = "" }: IconProps) => (
   </svg>
 );
 
+export const IconInstagram = ({ className = "" }: IconProps) => (
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.6"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
+    <circle cx="12" cy="12" r="4" />
+    <circle cx="17.6" cy="6.6" r="0.8" fill="currentColor" stroke="none" />
+  </svg>
+);
+
+export const IconTikTok = ({ className = "" }: IconProps) => (
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.7"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M14 4v10.2a4.2 4.2 0 1 1-3.2-4.1" />
+    <path d="M14 4c.7 2.6 2.3 4.1 5 4.4" />
+  </svg>
+);
+
+export const IconDouyin = ({ className = "" }: IconProps) => (
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.6"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M14 4v10.2a4.2 4.2 0 1 1-3.2-4.1" />
+    <path d="M14 4c.7 2.6 2.3 4.1 5 4.4" />
+    <path d="M5 5h3M6.5 3.5v3" />
+  </svg>
+);
+
+export const IconCalendar = ({ className = "" }: IconProps) => (
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.6"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <rect x="3.5" y="5" width="17" height="15.5" rx="2.5" />
+    <path d="M7.5 3.5v3M16.5 3.5v3M3.5 9h17" />
+    <path d="M8 13h.01M12 13h.01M16 13h.01M8 17h.01M12 17h.01" />
+  </svg>
+);
+
 /* category icons (line, monoweight) */
 export const CatIcon = ({
   kind,
