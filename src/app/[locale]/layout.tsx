@@ -1,34 +1,12 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono, Outfit, Playfair_Display } from "next/font/google";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { ReactNode } from "react";
 import { FloatingMenuButton } from "@/components/FloatingMenuButton";
 import { routing } from "@/i18n/routing";
+import { publicFontVariables } from "@/lib/fonts";
 import "../globals.css";
-
-const playfairDisplay = Playfair_Display({
-  variable: "--font-display",
-  subsets: ["latin"],
-  weight: ["400"],
-  style: ["normal", "italic"],
-  display: "swap",
-});
-
-const outfit = Outfit({
-  variable: "--font-sans-body",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  display: "swap",
-});
-
-const jetBrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains-mono",
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  display: "swap",
-});
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
@@ -85,10 +63,7 @@ export default async function LocaleLayout({
   setRequestLocale(locale);
 
   return (
-    <html
-      lang={locale}
-      className={`${playfairDisplay.variable} ${outfit.variable} ${jetBrainsMono.variable}`}
-    >
+    <html lang={locale} className={publicFontVariables}>
       <body className="bg-ink font-sans text-fg antialiased">
         <NextIntlClientProvider>
           {children}

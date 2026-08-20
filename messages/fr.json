@@ -252,6 +252,18 @@
       "enter": "Découvrir le travail"
     }
   },
+  "links": {
+    "metaTitle": "Liens — Lilis Pics",
+    "metaDescription": "Retrouvez Lilis Pics sur le web et découvrez ses derniers liens photo.",
+    "description": "Photographie, travaux récents et les endroits où me retrouver.",
+    "listLabel": "Liens de Lilis Pics",
+    "opensNewTab": "s’ouvre dans un nouvel onglet",
+    "empty": "Il n’y a pas encore de liens ici. Revenez bientôt.",
+    "errorTitle": "Les liens se sont égarés.",
+    "errorBody": "Impossible de les charger pour le moment. Réessayez ou retournez au portfolio.",
+    "retry": "Réessayer",
+    "backHome": "Retour à l’accueil"
+  },
   "footer": {
     "ctaBase": "Photographions ensemble",
     "ctaAccent": " ce qui est vrai chez vous.",

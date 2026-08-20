@@ -1,33 +1,7 @@
 import type { Metadata, Viewport } from "next";
-import {
-  Cormorant_Garamond,
-  JetBrains_Mono,
-  Lexend_Deca,
-} from "next/font/google";
 import type { ReactNode } from "react";
+import { adminFontVariables } from "@/lib/fonts";
 import "../globals.css";
-
-const cormorantGaramond = Cormorant_Garamond({
-  variable: "--font-display",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  style: ["normal", "italic"],
-  display: "swap",
-});
-
-const lexendDeca = Lexend_Deca({
-  variable: "--font-sans-body",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  display: "swap",
-});
-
-const jetBrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains-mono",
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  display: "swap",
-});
 
 // Admin area is private — keep it out of search engines.
 export const metadata: Metadata = {
@@ -47,10 +21,7 @@ export const viewport: Viewport = {
  *  own <html>/<body> since the marketing layout lives under [locale]. */
 export default function AdminRootLayout({ children }: { children: ReactNode }) {
   return (
-    <html
-      lang="en"
-      className={`${cormorantGaramond.variable} ${lexendDeca.variable} ${jetBrainsMono.variable}`}
-    >
+    <html lang="en" className={adminFontVariables}>
       <body className="bg-ink font-sans text-fg antialiased">{children}</body>
     </html>
   );
