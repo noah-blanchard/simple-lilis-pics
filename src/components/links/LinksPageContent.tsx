@@ -137,7 +137,7 @@ export function LinksPageContent({
               socials.length > 0 ? "mb-4 text-center" : "mb-7 text-center"
             }
           >
-            <h1 className="display text-[34px] tracking-tight">Lilis Pics</h1>
+            <h1 className="display text-[34px] tracking-tight">Lili Liang</h1>
             <p className="mx-auto mt-2 max-w-[340px] text-[14px] text-fg/60 leading-relaxed">
               {description}
             </p>
