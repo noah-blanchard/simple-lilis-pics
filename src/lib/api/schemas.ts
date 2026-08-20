@@ -289,6 +289,14 @@ export const linksEditorSaveSchema = z
       }),
     ),
     items: z.array(linkEditorItemSchema).max(100),
+    expected_settings_updated_at: z.string().datetime(),
+    settings: z.object({
+      banner_focal_x: z.number().int().min(0).max(100),
+      banner_focal_y: z.number().int().min(0).max(100),
+      tagline_en: nullableTrimmedText(160),
+      tagline_fr: nullableTrimmedText(160),
+    }),
+    banner_action: z.enum(["keep", "replace", "remove"]),
   })
   .superRefine((value, ctx) => {
     const expectedIds = value.expected_items.map((item) => item.id);

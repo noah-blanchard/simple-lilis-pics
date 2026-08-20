@@ -4,7 +4,13 @@ import type { Locale } from "@/i18n/routing";
 import { linkDestinationSchema } from "@/lib/api/schemas";
 import { LINK_ICON_KEYS, LINK_OPEN_BEHAVIORS } from "@/lib/links/constants";
 import { createSupabasePublicClient } from "@/lib/supabase/public";
-import type { LinkRow, ResolvedLink } from "@/types/db";
+import { resolveImageUrl } from "@/types/db";
+import type {
+  LinkRow,
+  LinksPageSettingsRow,
+  ResolvedLink,
+  ResolvedLinksPageSettings,
+} from "@/types/db";
 
 const publicLinkRowSchema = z.object({
   id: z.string().uuid(),
@@ -17,6 +23,17 @@ const publicLinkRowSchema = z.object({
   position: z.number().int().nonnegative(),
   published: z.literal(true),
   open_behavior: z.enum(LINK_OPEN_BEHAVIORS),
+  created_at: z.string(),
+  updated_at: z.string(),
+});
+
+const pageSettingsRowSchema = z.object({
+  id: z.literal(1),
+  banner_image_path: z.string().nullable(),
+  banner_focal_x: z.number().int().min(0).max(100),
+  banner_focal_y: z.number().int().min(0).max(100),
+  tagline_en: z.string().nullable(),
+  tagline_fr: z.string().nullable(),
   created_at: z.string(),
   updated_at: z.string(),
 });
@@ -38,19 +55,34 @@ function parsePublishedLinks(data: unknown): LinkRow[] {
   });
 }
 
-const getCachedPublishedLinkRows = unstable_cache(
-  async (): Promise<LinkRow[]> => {
+const getCachedLinksPageRows = unstable_cache(
+  async (): Promise<{
+    links: LinkRow[];
+    settings: LinksPageSettingsRow;
+  }> => {
     const supabase = createSupabasePublicClient();
-    const { data, error } = await supabase
-      .from("links")
-      .select("*")
-      .eq("published", true)
-      .order("position", { ascending: true })
-      .order("created_at", { ascending: true })
-      .order("id", { ascending: true });
+    const [linksResult, settingsResult] = await Promise.all([
+      supabase
+        .from("links")
+        .select("*")
+        .eq("published", true)
+        .order("position", { ascending: true })
+        .order("created_at", { ascending: true })
+        .order("id", { ascending: true }),
+      supabase.from("links_page_settings").select("*").eq("id", 1).single(),
+    ]);
 
-    if (error) throw new Error(`Failed to load links: ${error.message}`);
-    return parsePublishedLinks(data);
+    if (linksResult.error)
+      throw new Error(`Failed to load links: ${linksResult.error.message}`);
+    if (settingsResult.error)
+      throw new Error(
+        `Failed to load links page settings: ${settingsResult.error.message}`,
+      );
+    const settings = pageSettingsRowSchema.parse(settingsResult.data);
+    return {
+      links: parsePublishedLinks(linksResult.data),
+      settings: settings as LinksPageSettingsRow,
+    };
   },
   ["public-links"],
   { tags: ["public-links"], revalidate: 300 },
@@ -87,6 +119,28 @@ export function resolveLink(row: LinkRow, locale: Locale): ResolvedLink {
 export async function getPublishedLinks(
   locale: Locale,
 ): Promise<ResolvedLink[]> {
-  const rows = await getCachedPublishedLinkRows();
-  return rows.map((row) => resolveLink(row, locale));
+  const { links } = await getCachedLinksPageRows();
+  return links.map((row) => resolveLink(row, locale));
+}
+
+export async function getPublicLinksPage(locale: Locale): Promise<{
+  links: ResolvedLink[];
+  settings: ResolvedLinksPageSettings;
+}> {
+  const { links, settings } = await getCachedLinksPageRows();
+  const tagline =
+    locale === "fr"
+      ? settings.tagline_fr?.trim() || settings.tagline_en?.trim() || null
+      : settings.tagline_en?.trim() || settings.tagline_fr?.trim() || null;
+  return {
+    links: links.map((row) => resolveLink(row, locale)),
+    settings: {
+      bannerImageUrl: settings.banner_image_path
+        ? resolveImageUrl(settings.banner_image_path)
+        : null,
+      bannerFocalX: settings.banner_focal_x,
+      bannerFocalY: settings.banner_focal_y,
+      tagline,
+    },
+  };
 }
