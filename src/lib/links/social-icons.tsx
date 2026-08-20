@@ -42,6 +42,7 @@ export interface SocialIconDefinition {
   key: SocialIconKey;
   label: string;
   Icon: IconType;
+  aliases: readonly string[];
 }
 
 const SOCIAL_ICON_COMPONENTS: Record<SocialIconKey, IconType> = {
@@ -122,11 +123,30 @@ const SOCIAL_ICON_LABELS: Record<SocialIconKey, string> = {
   email: "Email",
 };
 
+const SOCIAL_ICON_ALIASES: Partial<Record<SocialIconKey, readonly string[]>> = {
+  x: ["twitter", "tweet"],
+  youtube: ["yt", "video"],
+  linkedin: ["linked in", "professional"],
+  whatsapp: ["whats app", "message", "phone"],
+  wechat: ["weixin", "message"],
+  messenger: ["facebook messenger", "message"],
+  github: ["git", "code", "developer"],
+  behance: ["portfolio", "creative"],
+  dribbble: ["portfolio", "design"],
+  flickr: ["photo", "photography"],
+  "500px": ["500 px", "five hundred px", "photo", "photography"],
+  soundcloud: ["sound cloud", "music", "audio"],
+  "ko-fi": ["kofi", "coffee", "support", "donation"],
+  website: ["web", "site", "homepage", "globe", "portfolio"],
+  email: ["mail", "contact", "message"],
+};
+
 export const SOCIAL_ICON_REGISTRY: SocialIconDefinition[] =
   SOCIAL_ICON_KEYS.map((key) => ({
     key,
     label: SOCIAL_ICON_LABELS[key],
     Icon: SOCIAL_ICON_COMPONENTS[key],
+    aliases: SOCIAL_ICON_ALIASES[key] ?? [],
   }));
 
 export function getSocialIcon(key: SocialIconKey): IconType {

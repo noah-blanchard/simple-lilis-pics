@@ -13,6 +13,7 @@ import {
 } from "react";
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
 import { Sheet } from "@/components/admin/Sheet";
+import { SocialIconPicker } from "@/components/admin/SocialIconPicker";
 import { LinkCard } from "@/components/links/LinkCard";
 import { LinksPageContent } from "@/components/links/LinksPageContent";
 import type { Locale } from "@/i18n/routing";
@@ -506,16 +507,10 @@ function SocialInspector({
   onMove: (direction: -1 | 1) => void;
   onDelete: () => void;
 }) {
-  const [iconSearch, setIconSearch] = useState("");
   const selectedIndex = items.findIndex(
     (item) => item.client_id === selectedId,
   );
   const selected = selectedIndex >= 0 ? items[selectedIndex] : null;
-  const matchingIcons = SOCIAL_ICON_REGISTRY.filter((definition) =>
-    `${definition.label} ${definition.key}`
-      .toLowerCase()
-      .includes(iconSearch.trim().toLowerCase()),
-  );
   const set = <K extends keyof EditorSocial>(
     key: K,
     value: EditorSocial[K],
@@ -628,34 +623,11 @@ function SocialInspector({
               className={fieldClass}
             />
           </label>
-          <fieldset>
-            <legend className={labelClass}>Social icon</legend>
-            <input
-              value={iconSearch}
-              onChange={(event) => setIconSearch(event.target.value)}
-              placeholder="Search icons"
-              className={fieldClass}
-            />
-            <div className="mt-2 grid grid-cols-4 gap-2">
-              {matchingIcons.map(({ key, label, Icon }) => (
-                <button
-                  key={key}
-                  type="button"
-                  onClick={() => set("icon_key", key)}
-                  aria-pressed={selected.icon_key === key}
-                  className={`flex min-h-14 flex-col items-center justify-center gap-1 rounded-xl border px-1 text-[9px] ${selected.icon_key === key ? "border-accent bg-accent-soft text-accent" : "border-line"}`}
-                >
-                  <Icon aria-hidden className="h-5 w-5" />
-                  <span className="max-w-full truncate">{label}</span>
-                </button>
-              ))}
-            </div>
-            {matchingIcons.length === 0 && (
-              <p className="mt-2 text-[11px] text-fg/45">
-                No matching social icon.
-              </p>
-            )}
-          </fieldset>
+          <SocialIconPicker
+            value={selected.icon_key}
+            suggestionText={`${selected.label_en ?? ""} ${selected.label_fr ?? ""} ${selected.url}`}
+            onChange={(key) => set("icon_key", key)}
+          />
           <label className={labelClass}>
             Visibility
             <select
