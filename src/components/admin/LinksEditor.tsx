@@ -1,8 +1,16 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import imageCompression from "browser-image-compression";
 import { Reorder } from "motion/react";
-import { useEffect, useMemo, useState } from "react";
+import {
+  type ChangeEvent,
+  type PointerEvent as ReactPointerEvent,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
 import { Sheet } from "@/components/admin/Sheet";
 import { LinkCard } from "@/components/links/LinkCard";
@@ -20,15 +28,27 @@ import type {
   AdminLinksSnapshot,
   LinkClickStat,
   LinkRow,
+  LinksPageSettingsRow,
   ResolvedLink,
 } from "@/types/db";
+import { resolveImageUrl } from "@/types/db";
 import { PillButton } from "../PillButton";
 
 type EditorLink = LinkEditorItemInput;
+type BannerAction = "keep" | "replace" | "remove";
+type InspectorMode = "page" | "link";
+type PageDraft = Pick<
+  LinksPageSettingsRow,
+  "banner_focal_x" | "banner_focal_y" | "tagline_en" | "tagline_fr"
+>;
 
 const fieldClass =
   "mt-1.5 w-full rounded-xl border border-line-strong bg-ink px-3 py-2.5 text-[14px] outline-none focus:border-accent";
 const labelClass = "block text-[12px] font-medium text-fg/60";
+const defaultCopy = {
+  en: "Photography, recent work and the places where you can find me.",
+  fr: "Photographie, travaux récents et les endroits où me retrouver.",
+};
 
 function toEditorLink(row: LinkRow): EditorLink {
   return {
@@ -43,6 +63,15 @@ function toEditorLink(row: LinkRow): EditorLink {
     published: row.published,
     open_behavior: row.open_behavior,
     updated_at: row.updated_at,
+  };
+}
+
+function toPageDraft(settings: LinksPageSettingsRow): PageDraft {
+  return {
+    banner_focal_x: settings.banner_focal_x,
+    banner_focal_y: settings.banner_focal_y,
+    tagline_en: settings.tagline_en,
+    tagline_fr: settings.tagline_fr,
   };
 }
 
@@ -95,6 +124,135 @@ function variationLabel(stat?: LinkClickStat) {
   return `${percent > 0 ? "+" : ""}${percent}%`;
 }
 
+function PageInspector({
+  settings,
+  bannerUrl,
+  onChange,
+  onChooseBanner,
+  onRemoveBanner,
+}: {
+  settings: PageDraft;
+  bannerUrl: string | null;
+  onChange: (next: PageDraft) => void;
+  onChooseBanner: (event: ChangeEvent<HTMLInputElement>) => void;
+  onRemoveBanner: () => void;
+}) {
+  const focalRef = useRef<HTMLDivElement>(null);
+  const set = <K extends keyof PageDraft>(key: K, value: PageDraft[K]) =>
+    onChange({ ...settings, [key]: value });
+  const updateFocal = (event: ReactPointerEvent<HTMLDivElement>) => {
+    const bounds = focalRef.current?.getBoundingClientRect();
+    if (!bounds) return;
+    const x = Math.round(((event.clientX - bounds.left) / bounds.width) * 100);
+    const y = Math.round(((event.clientY - bounds.top) / bounds.height) * 100);
+    onChange({
+      ...settings,
+      banner_focal_x: Math.max(0, Math.min(100, x)),
+      banner_focal_y: Math.max(0, Math.min(100, y)),
+    });
+  };
+
+  return (
+    <div className="h-full space-y-5 overflow-y-auto pr-1 pb-4">
+      <div>
+        <span className={labelClass}>Banner image</span>
+        <div
+          ref={focalRef}
+          onPointerDown={(event) => {
+            event.currentTarget.setPointerCapture(event.pointerId);
+            updateFocal(event);
+          }}
+          onPointerMove={(event) => {
+            if (event.currentTarget.hasPointerCapture(event.pointerId))
+              updateFocal(event);
+          }}
+          className="relative mt-2 aspect-[16/8] touch-none overflow-hidden rounded-2xl bg-[linear-gradient(145deg,var(--accent-strong),var(--accent),var(--accent-soft))]"
+        >
+          {bannerUrl && (
+            <div
+              className="absolute inset-0 bg-cover"
+              style={{
+                backgroundImage: `url(${JSON.stringify(bannerUrl)})`,
+                backgroundPosition: `${settings.banner_focal_x}% ${settings.banner_focal_y}%`,
+              }}
+            />
+          )}
+          <span
+            aria-hidden
+            className="-translate-x-1/2 -translate-y-1/2 absolute h-7 w-7 rounded-full border-2 border-white bg-black/25 shadow-lg"
+            style={{
+              left: `${settings.banner_focal_x}%`,
+              top: `${settings.banner_focal_y}%`,
+            }}
+          />
+        </div>
+        <p className="mt-2 text-[11px] text-fg/45">
+          Drag the target to keep the important part of the photo visible.
+        </p>
+        <div className="mt-3 flex gap-2">
+          <label className="inline-flex min-h-11 flex-1 cursor-pointer items-center justify-center rounded-full bg-inverse px-4 text-[12px] text-on-inverse">
+            {bannerUrl ? "Replace image" : "Choose image"}
+            <input
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/avif"
+              onChange={onChooseBanner}
+              className="sr-only"
+            />
+          </label>
+          {bannerUrl && (
+            <PillButton
+              size="sm"
+              variant="ghost"
+              onClick={onRemoveBanner}
+              className="min-h-11 flex-1"
+            >
+              Remove
+            </PillButton>
+          )}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3">
+        {(["banner_focal_x", "banner_focal_y"] as const).map((key) => (
+          <label key={key} className={labelClass}>
+            {key.endsWith("x") ? "Horizontal focus" : "Vertical focus"}
+            <input
+              type="range"
+              min={0}
+              max={100}
+              value={settings[key]}
+              onChange={(event) => set(key, Number(event.target.value))}
+              className="mt-3 w-full accent-accent"
+            />
+            <span className="mt-1 block text-center text-[11px] text-fg/45">
+              {settings[key]}%
+            </span>
+          </label>
+        ))}
+      </div>
+
+      <label className={labelClass}>
+        Welcome phrase (EN)
+        <textarea
+          value={settings.tagline_en ?? ""}
+          onChange={(event) => set("tagline_en", event.target.value || null)}
+          maxLength={160}
+          className={`${fieldClass} min-h-20 resize-y`}
+        />
+      </label>
+      <label className={labelClass}>
+        Welcome phrase (FR)
+        <textarea
+          value={settings.tagline_fr ?? ""}
+          onChange={(event) => set("tagline_fr", event.target.value || null)}
+          maxLength={160}
+          className={`${fieldClass} min-h-20 resize-y`}
+        />
+      </label>
+    </div>
+  );
+}
+
 function LinkInspector({
   item,
   stat,
@@ -135,7 +293,6 @@ function LinkInspector({
           <span className="text-[10px] text-fg/45">Change</span>
         </div>
       </div>
-
       <div className="grid grid-cols-2 gap-3">
         <label className={labelClass}>
           Name (EN)
@@ -174,7 +331,6 @@ function LinkInspector({
           />
         </label>
       </div>
-
       <label className={labelClass}>
         Destination URL
         <input
@@ -184,7 +340,6 @@ function LinkInspector({
           inputMode="url"
         />
       </label>
-
       <fieldset>
         <legend className={labelClass}>Icon</legend>
         <div className="mt-2 grid grid-cols-4 gap-2">
@@ -210,7 +365,6 @@ function LinkInspector({
           ))}
         </div>
       </fieldset>
-
       <div className="grid grid-cols-2 gap-3">
         <label className={labelClass}>
           Opening
@@ -241,7 +395,6 @@ function LinkInspector({
           </select>
         </label>
       </div>
-
       <div className="flex gap-2">
         <PillButton
           size="sm"
@@ -284,11 +437,20 @@ export function LinksEditor() {
   const isDesktop = useIsDesktop();
   const [items, setItems] = useState<EditorLink[]>([]);
   const [baseline, setBaseline] = useState<EditorLink[]>([]);
+  const [settings, setSettings] = useState<PageDraft | null>(null);
+  const [settingsBaseline, setSettingsBaseline] = useState<PageDraft | null>(
+    null,
+  );
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [inspectorMode, setInspectorMode] = useState<InspectorMode>("page");
   const [locale, setLocale] = useState<Locale>("en");
   const [mobileInspector, setMobileInspector] = useState(false);
   const [deleting, setDeleting] = useState<EditorLink | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const [bannerFile, setBannerFile] = useState<File | null>(null);
+  const [bannerPreview, setBannerPreview] = useState<string | null>(null);
+  const [bannerAction, setBannerAction] = useState<BannerAction>("keep");
+  const [previewKey, setPreviewKey] = useState(0);
 
   const query = useQuery({
     queryKey: ["links"],
@@ -298,12 +460,34 @@ export function LinksEditor() {
   useEffect(() => {
     if (!query.data) return;
     const next = query.data.links.map(toEditorLink);
+    const nextSettings = toPageDraft(query.data.settings);
     setItems(next);
     setBaseline(next);
+    setSettings(nextSettings);
+    setSettingsBaseline(nextSettings);
     setSelectedId((current) => current ?? next[0]?.client_id ?? null);
+    setBannerFile(null);
+    setBannerAction("keep");
+    setBannerPreview((current) => {
+      if (current?.startsWith("blob:")) URL.revokeObjectURL(current);
+      return query.data.settings.banner_image_path
+        ? resolveImageUrl(query.data.settings.banner_image_path)
+        : null;
+    });
   }, [query.data]);
 
-  const dirty = JSON.stringify(items) !== JSON.stringify(baseline);
+  useEffect(
+    () => () => {
+      if (bannerPreview?.startsWith("blob:"))
+        URL.revokeObjectURL(bannerPreview);
+    },
+    [bannerPreview],
+  );
+
+  const dirty =
+    JSON.stringify(items) !== JSON.stringify(baseline) ||
+    JSON.stringify(settings) !== JSON.stringify(settingsBaseline) ||
+    bannerAction !== "keep";
   useEffect(() => {
     const warn = (event: BeforeUnloadEvent) => {
       if (!dirty) return;
@@ -315,6 +499,8 @@ export function LinksEditor() {
 
   const save = useMutation({
     mutationFn: async () => {
+      if (!settings || !query.data)
+        throw new Error("Page settings are unavailable");
       const payload = {
         expected_items: baseline.flatMap((item) =>
           item.id && item.updated_at
@@ -322,21 +508,68 @@ export function LinksEditor() {
             : [],
         ),
         items,
+        expected_settings_updated_at: query.data.settings.updated_at,
+        settings,
+        banner_action: bannerAction,
       };
       const checked = linksEditorSaveSchema.safeParse(payload);
       if (!checked.success)
-        throw new Error(checked.error.issues[0]?.message ?? "Invalid links");
+        throw new Error(
+          checked.error.issues[0]?.message ?? "Invalid links page",
+        );
+      const formData = new FormData();
+      formData.set("snapshot", JSON.stringify(checked.data));
+      if (bannerAction === "replace" && bannerFile) {
+        const compressed = await imageCompression(bannerFile, {
+          maxSizeMB: 4.5,
+          maxWidthOrHeight: 2400,
+          useWebWorker: true,
+        });
+        formData.set("banner", compressed, compressed.name);
+      }
       return apiFetch<AdminLinksSnapshot>("/api/links", {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(checked.data),
+        body: formData,
       });
     },
     onSuccess: (snapshot) => {
       queryClient.setQueryData(["links"], snapshot);
-      setMessage("Links saved and public page refreshed.");
+      setMessage("Links page saved and public cache refreshed.");
     },
   });
+
+  const chooseBanner = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+    if (
+      !(
+        ["image/jpeg", "image/png", "image/webp", "image/avif"] as string[]
+      ).includes(file.type)
+    ) {
+      setMessage("Choose a JPEG, PNG, WebP, or AVIF image.");
+      return;
+    }
+    if (bannerPreview?.startsWith("blob:")) URL.revokeObjectURL(bannerPreview);
+    setBannerFile(file);
+    setBannerPreview(URL.createObjectURL(file));
+    setBannerAction("replace");
+    setMessage("New banner ready. Save to publish it.");
+  };
+  const discard = () => {
+    if (!query.data) return;
+    if (bannerPreview?.startsWith("blob:")) URL.revokeObjectURL(bannerPreview);
+    setItems(baseline);
+    setSettings(settingsBaseline);
+    setBannerFile(null);
+    setBannerAction("keep");
+    setBannerPreview(
+      query.data.settings.banner_image_path
+        ? resolveImageUrl(query.data.settings.banner_image_path)
+        : null,
+    );
+    setMessage("Draft discarded.");
+  };
 
   const selectedIndex = items.findIndex(
     (item) => item.client_id === selectedId,
@@ -351,9 +584,9 @@ export function LinksEditor() {
   );
   const openInspector = (id: string) => {
     setSelectedId(id);
+    setInspectorMode("link");
     if (isDesktop === false) setMobileInspector(true);
   };
-
   const updateSelected = (next: EditorLink) =>
     setItems((current) =>
       current.map((item) => (item.client_id === next.client_id ? next : item)),
@@ -369,7 +602,17 @@ export function LinksEditor() {
       `${selected.name_en ?? selected.name_fr ?? "Link"} moved to position ${target + 1}.`,
     );
   };
-  const inspector = selected ? (
+
+  if (query.isError)
+    return (
+      <p className="rounded-xl border border-danger/30 bg-danger/10 px-4 py-3 text-danger">
+        {(query.error as Error).message}
+      </p>
+    );
+  if (query.isLoading || !settings)
+    return <p className="text-[14px] text-fg/55">Loading editor…</p>;
+
+  const linkInspector = selected ? (
     <LinkInspector
       item={selected}
       stat={selected.id ? stats.get(selected.id) : undefined}
@@ -382,15 +625,27 @@ export function LinksEditor() {
   ) : (
     <p className="text-[14px] text-fg/50">Select a link to edit it.</p>
   );
-
-  if (query.isLoading)
-    return <p className="text-[14px] text-fg/55">Loading editor…</p>;
-  if (query.isError)
-    return (
-      <p className="rounded-xl border border-danger/30 bg-danger/10 px-4 py-3 text-danger">
-        {(query.error as Error).message}
-      </p>
-    );
+  const pageInspector = (
+    <PageInspector
+      settings={settings}
+      bannerUrl={bannerPreview}
+      onChange={setSettings}
+      onChooseBanner={chooseBanner}
+      onRemoveBanner={() => {
+        if (bannerPreview?.startsWith("blob:"))
+          URL.revokeObjectURL(bannerPreview);
+        setBannerPreview(null);
+        setBannerFile(null);
+        setBannerAction("remove");
+        setMessage("Banner removed from the draft. Save to publish.");
+      }}
+    />
+  );
+  const inspector = inspectorMode === "page" ? pageInspector : linkInspector;
+  const tagline =
+    locale === "fr"
+      ? settings.tagline_fr || settings.tagline_en || defaultCopy.fr
+      : settings.tagline_en || settings.tagline_fr || defaultCopy.en;
 
   return (
     <div>
@@ -407,10 +662,7 @@ export function LinksEditor() {
           <PillButton
             size="sm"
             variant="ghost"
-            onClick={() => {
-              setItems(baseline);
-              setMessage("Draft discarded.");
-            }}
+            onClick={discard}
             disabled={!dirty}
             className="min-h-11 flex-1"
           >
@@ -423,6 +675,7 @@ export function LinksEditor() {
               const next = makeDraft();
               setItems((current) => [...current, next]);
               setSelectedId(next.client_id);
+              setInspectorMode("link");
               if (isDesktop === false) setMobileInspector(true);
             }}
             className="min-h-11 flex-1"
@@ -447,10 +700,10 @@ export function LinksEditor() {
         >
           <p>{save.isError ? (save.error as Error).message : message}</p>
           {save.isError && (
-            <div className="mt-3 flex flex-wrap gap-2">
+            <div className="mt-3 flex gap-2">
               <button
                 type="button"
-                className="rounded-full border border-danger/30 px-3 py-1.5 font-medium text-[11px]"
+                className="rounded-full border border-danger/30 px-3 py-1.5 text-[11px]"
                 onClick={() => {
                   save.reset();
                   void query.refetch();
@@ -460,7 +713,7 @@ export function LinksEditor() {
               </button>
               <button
                 type="button"
-                className="rounded-full border border-danger/30 px-3 py-1.5 font-medium text-[11px]"
+                className="rounded-full border border-danger/30 px-3 py-1.5 text-[11px]"
                 onClick={() => save.reset()}
               >
                 Keep my draft
@@ -472,41 +725,51 @@ export function LinksEditor() {
 
       <div className="grid items-start gap-6 lg:grid-cols-[minmax(380px,1fr)_400px]">
         <div className="rounded-card border border-line bg-panel2 p-3 sm:p-5">
-          <div className="mb-3 flex items-center justify-between">
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
             <span className="tag-mono">LIVE MOBILE PREVIEW</span>
-            <div className="flex rounded-full border border-line bg-ink p-1">
-              {(["en", "fr"] as const).map((value) => (
-                <button
-                  key={value}
-                  type="button"
-                  onClick={() => setLocale(value)}
-                  className={`rounded-full px-3 py-1 text-[11px] uppercase ${locale === value ? "bg-inverse text-on-inverse" : "text-fg/50"}`}
-                >
-                  {value}
-                </button>
-              ))}
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setPreviewKey((key) => key + 1)}
+                className="min-h-9 rounded-full border border-line bg-ink px-3 text-[11px]"
+              >
+                Replay intro
+              </button>
+              <div className="flex rounded-full border border-line bg-ink p-1">
+                {(["en", "fr"] as const).map((value) => (
+                  <button
+                    key={value}
+                    type="button"
+                    onClick={() => setLocale(value)}
+                    className={`rounded-full px-3 py-1 text-[11px] uppercase ${locale === value ? "bg-inverse text-on-inverse" : "text-fg/50"}`}
+                  >
+                    {value}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
           <div
             className={`${publicFontVariables} mx-auto max-h-[760px] max-w-[420px] overflow-y-auto rounded-[32px] border border-line bg-ink shadow-xl`}
           >
             <LinksPageContent
+              key={previewKey}
               links={previewLinks}
               locale={locale}
-              description={
-                locale === "fr"
-                  ? "Photographie, travaux récents et les endroits où me retrouver."
-                  : "Photography, recent work and the places where you can find me."
-              }
+              description={tagline}
               emptyLabel="No links yet."
               linksLabel="Editor preview"
               opensNewTabLabel="opens in a new tab"
+              backHomeLabel={
+                locale === "fr" ? "Retour à l’accueil" : "Back home"
+              }
+              bannerImageUrl={bannerPreview}
+              bannerFocalX={settings.banner_focal_x}
+              bannerFocalY={settings.banner_focal_y}
               mode="editor"
+              animateIntro
               selectedId={selectedId}
               onSelect={openInspector}
-              localeControl={
-                <span className="tag-mono uppercase">{locale}</span>
-              }
               listContent={
                 items.length === 0 ? undefined : (
                   <nav aria-label="Editor preview">
@@ -552,17 +815,42 @@ export function LinksEditor() {
               }
             />
           </div>
+          <button
+            type="button"
+            onClick={() => {
+              setInspectorMode("page");
+              if (isDesktop === false) setMobileInspector(true);
+            }}
+            className="mt-3 min-h-11 w-full rounded-full border border-line bg-ink text-[12px] lg:hidden"
+          >
+            Edit page appearance
+          </button>
         </div>
         <aside className="sticky top-8 hidden max-h-[calc(100vh-4rem)] rounded-card border border-line bg-panel p-5 lg:block">
-          <h2 className="mb-5 font-semibold text-[17px]">Link properties</h2>
+          <div className="mb-5 grid grid-cols-2 rounded-full border border-line bg-ink p-1">
+            <button
+              type="button"
+              onClick={() => setInspectorMode("page")}
+              className={`rounded-full px-3 py-2 text-[12px] ${inspectorMode === "page" ? "bg-inverse text-on-inverse" : "text-fg/50"}`}
+            >
+              Page
+            </button>
+            <button
+              type="button"
+              onClick={() => setInspectorMode("link")}
+              className={`rounded-full px-3 py-2 text-[12px] ${inspectorMode === "link" ? "bg-inverse text-on-inverse" : "text-fg/50"}`}
+            >
+              Selected link
+            </button>
+          </div>
           {inspector}
         </aside>
       </div>
 
       <Sheet
-        open={mobileInspector && !!selected}
+        open={mobileInspector}
         onClose={() => setMobileInspector(false)}
-        title="Link properties"
+        title={inspectorMode === "page" ? "Page appearance" : "Link properties"}
       >
         {inspector}
       </Sheet>

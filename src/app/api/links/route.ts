@@ -7,8 +7,8 @@ import {
 } from "@/lib/api/schemas";
 import { validate } from "@/lib/api/validate";
 import { withAuth } from "@/lib/api/with-auth";
-import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { PHOTOS_BUCKET } from "@/lib/env";
+import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import type {
   AdminLinksSnapshot,
   LinkClickStat,
@@ -142,15 +142,13 @@ export const PUT = withAuth(async ({ request }) => {
         contentType: banner.type,
         upsert: false,
       });
-    if (uploadError)
-      return apiError("UPLOAD_FAILED", uploadError.message, 500);
+    if (uploadError) return apiError("UPLOAD_FAILED", uploadError.message, 500);
   }
 
   const { error } = await admin.rpc("save_links_editor", {
     p_expected_items: parsed.data.expected_items,
     p_items: items,
-    p_expected_settings_updated_at:
-      parsed.data.expected_settings_updated_at,
+    p_expected_settings_updated_at: parsed.data.expected_settings_updated_at,
     p_settings: {
       ...parsed.data.settings,
       banner_image_path: newBannerPath,

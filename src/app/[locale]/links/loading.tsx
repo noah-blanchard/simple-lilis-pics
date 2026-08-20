@@ -12,10 +12,7 @@ export default function LinksLoading() {
           <div className="mx-auto mt-3 h-4 w-64 max-w-full rounded-lg bg-panel" />
           <div className="mt-8 flex flex-col gap-3">
             {[0, 1, 2].map((item) => (
-              <div
-                key={item}
-                className="h-[72px] rounded-[22px] bg-panel"
-              />
+              <div key={item} className="h-[72px] rounded-[22px] bg-panel" />
             ))}
           </div>
         </div>

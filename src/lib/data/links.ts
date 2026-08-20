@@ -4,13 +4,13 @@ import type { Locale } from "@/i18n/routing";
 import { linkDestinationSchema } from "@/lib/api/schemas";
 import { LINK_ICON_KEYS, LINK_OPEN_BEHAVIORS } from "@/lib/links/constants";
 import { createSupabasePublicClient } from "@/lib/supabase/public";
-import { resolveImageUrl } from "@/types/db";
 import type {
   LinkRow,
   LinksPageSettingsRow,
   ResolvedLink,
   ResolvedLinksPageSettings,
 } from "@/types/db";
+import { resolveImageUrl } from "@/types/db";
 
 const publicLinkRowSchema = z.object({
   id: z.string().uuid(),

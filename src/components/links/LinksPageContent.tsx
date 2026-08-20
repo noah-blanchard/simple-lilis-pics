@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import { motion, useReducedMotion } from "motion/react";
+import Image from "next/image";
 import type { ReactNode } from "react";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
@@ -21,6 +21,7 @@ interface LinksPageContentProps {
   bannerFocalX?: number;
   bannerFocalY?: number;
   mode?: "public" | "editor";
+  animateIntro?: boolean;
   selectedId?: string | null;
   onSelect?: (id: string) => void;
   listContent?: ReactNode;
@@ -38,23 +39,20 @@ export function LinksPageContent({
   bannerFocalX = 50,
   bannerFocalY = 50,
   mode = "public",
+  animateIntro = mode === "public",
   selectedId,
   onSelect,
   listContent,
 }: LinksPageContentProps) {
   const reduce = useReducedMotion();
   const Root = mode === "public" ? "main" : "div";
-  const enter = reduce
-    ? { duration: 0.15 }
-    : { duration: 0.65, ease: EASE };
+  const enter = reduce ? { duration: 0.15 } : { duration: 0.65, ease: EASE };
 
   return (
     <Root className="min-h-svh bg-[radial-gradient(circle_at_top,var(--accent-soft),var(--bg)_58%)] text-fg md:flex md:items-start md:justify-center md:px-8 md:py-10">
       <motion.div
         initial={
-          mode === "public"
-            ? { opacity: 0, scale: reduce ? 1 : 1.015 }
-            : false
+          animateIntro ? { opacity: 0, scale: reduce ? 1 : 1.015 } : false
         }
         animate={{ opacity: 1, scale: 1 }}
         transition={enter}
@@ -62,9 +60,7 @@ export function LinksPageContent({
       >
         <motion.div
           initial={
-            mode === "public"
-              ? { opacity: 0, scale: reduce ? 1 : 1.04 }
-              : false
+            animateIntro ? { opacity: 0, scale: reduce ? 1 : 1.04 } : false
           }
           animate={{ opacity: 1, scale: 1 }}
           transition={enter}
@@ -87,7 +83,7 @@ export function LinksPageContent({
         <section className="relative bg-[linear-gradient(180deg,var(--accent-soft)_0%,var(--bg)_180px)] px-5 pt-[72px] pb-12 sm:px-7">
           <motion.div
             initial={
-              mode === "public"
+              animateIntro
                 ? {
                     opacity: 0,
                     y: reduce ? 0 : -18,
@@ -119,11 +115,7 @@ export function LinksPageContent({
           </motion.div>
 
           <motion.header
-            initial={
-              mode === "public"
-                ? { opacity: 0, y: reduce ? 0 : 10 }
-                : false
-            }
+            initial={animateIntro ? { opacity: 0, y: reduce ? 0 : 10 } : false}
             animate={{ opacity: 1, y: 0 }}
             transition={{
               duration: reduce ? 0.15 : 0.42,
@@ -142,9 +134,7 @@ export function LinksPageContent({
             (links.length === 0 ? (
               <motion.p
                 initial={
-                  mode === "public"
-                    ? { opacity: 0, y: reduce ? 0 : 12 }
-                    : false
+                  animateIntro ? { opacity: 0, y: reduce ? 0 : 12 } : false
                 }
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
@@ -203,7 +193,7 @@ export function LinksPageContent({
             ))}
 
           <motion.div
-            initial={mode === "public" ? { opacity: 0 } : false}
+            initial={animateIntro ? { opacity: 0 } : false}
             animate={{ opacity: 1 }}
             transition={{
               duration: 0.35,
