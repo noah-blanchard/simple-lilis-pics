@@ -58,6 +58,24 @@ export interface LinkRow {
   updated_at: string;
 }
 
+export interface LinksPageSettingsRow {
+  id: number;
+  banner_image_path: string | null;
+  banner_focal_x: number;
+  banner_focal_y: number;
+  tagline_en: string | null;
+  tagline_fr: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ResolvedLinksPageSettings {
+  bannerImageUrl: string | null;
+  bannerFocalX: number;
+  bannerFocalY: number;
+  tagline: string | null;
+}
+
 export interface LinkClickStat {
   link_id: string;
   total: number;
@@ -69,6 +87,7 @@ export interface LinkClickStat {
 export interface AdminLinksSnapshot {
   links: LinkRow[];
   stats: LinkClickStat[];
+  settings: LinksPageSettingsRow;
 }
 
 export type Orientation = "landscape" | "portrait";
