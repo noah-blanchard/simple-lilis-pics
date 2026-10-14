@@ -35,6 +35,7 @@ export const SOCIAL_ICON_KEYS = [
   "telegram",
   "signal",
   "wechat",
+  "rednote",
   "line",
   "messenger",
   "github",

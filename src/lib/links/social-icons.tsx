@@ -34,6 +34,7 @@ import {
   SiWechat,
   SiWhatsapp,
   SiX,
+  SiXiaohongshu,
   SiYoutube,
 } from "react-icons/si";
 import { SOCIAL_ICON_KEYS, type SocialIconKey } from "@/lib/links/constants";
@@ -66,6 +67,7 @@ const SOCIAL_ICON_COMPONENTS: Record<SocialIconKey, IconType> = {
   telegram: SiTelegram,
   signal: SiSignal,
   wechat: SiWechat,
+  rednote: SiXiaohongshu,
   line: SiLine,
   messenger: SiMessenger,
   github: SiGithub,
@@ -105,6 +107,7 @@ const SOCIAL_ICON_LABELS: Record<SocialIconKey, string> = {
   telegram: "Telegram",
   signal: "Signal",
   wechat: "WeChat",
+  rednote: "Rednote (小红书)",
   line: "LINE",
   messenger: "Messenger",
   github: "GitHub",
@@ -129,6 +132,7 @@ const SOCIAL_ICON_ALIASES: Partial<Record<SocialIconKey, readonly string[]>> = {
   linkedin: ["linked in", "professional"],
   whatsapp: ["whats app", "message", "phone"],
   wechat: ["weixin", "message"],
+  rednote: ["xiaohongshu", "xhs", "red note", "little red book", "小红书"],
   messenger: ["facebook messenger", "message"],
   github: ["git", "code", "developer"],
   behance: ["portfolio", "creative"],

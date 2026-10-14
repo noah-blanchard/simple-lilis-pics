@@ -18,6 +18,8 @@ Apply `supabase/migrations/` in numeric order. They are the schema history:
 | `0010_links.sql` | Adds localized public links, click events/totals, RLS, statistics, retention, and editor functions |
 | `0011_links_editor_lock.sql` | Serializes editor saves even when the links table is empty |
 | `0012_links_page_settings.sql` | Adds the singleton links-page appearance settings and extends atomic editor saves |
+| `0013_social_links.sql` | Adds ordered, localized links-page social icons with click statistics and extends atomic editor saves |
+| `0014_social_links_rednote.sql` | Allows the `rednote` (Xiaohongshu) social icon key |
 
 The active schema does **not** include the `photos` or `photo_tags` tables created by migration 0001; migration 0003 drops them.
 
