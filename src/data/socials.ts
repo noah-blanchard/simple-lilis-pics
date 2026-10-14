@@ -10,4 +10,5 @@ export const socials: SocialLink[] = [
   { label: "Instagram", href: "https://www.instagram.com/itslilis.pics" },
   { label: "TikTok", href: "https://www.tiktok.com/@itslilis.pics" },
   { label: "Douyin (抖音)", href: "https://v.douyin.com/XQKlYarX5y4/" },
+  { label: "Rednote (小红书)", href: "https://xhslink.cn/m/4S3VEx4orEp" },
 ];
