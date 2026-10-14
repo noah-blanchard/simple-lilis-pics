@@ -16,7 +16,7 @@ type Ctx = { params: Promise<{ id: string }> };
  *  the photos are too large for one batch POST, or the batch fails with a 413.
  *
  *  FormData fields:
- *    file         File     (1, ≤5 MB, JPEG/PNG/WebP/AVIF)
+ *    file         File     (1, ≤4 MiB, JPEG/PNG/WebP/AVIF)
  *    orientation  string   landscape | portrait
  *    position     string   0-based index
  *
@@ -63,7 +63,7 @@ export const POST = withAuth<Ctx>(async ({ request, ctx }) => {
   }
 
   if (rawFile.size > MAX_FILE_BYTES) {
-    return apiError("FILE_TOO_LARGE", "Image must be ≤ 5 MB", 422);
+    return apiError("FILE_TOO_LARGE", "Image must be ≤ 4 MB", 422);
   }
 
   // ── 3) Validate orientation + position ────────────────────────

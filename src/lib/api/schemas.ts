@@ -34,7 +34,8 @@ export type TranslateInput = z.infer<typeof translateSchema>;
 
 /* ── File upload constraints ── */
 
-export const MAX_FILE_BYTES = 5 * 1024 * 1024; // 5 MB
+/** 4 MiB keeps a single-photo request under Vercel's 4.5 MB body limit. */
+export const MAX_FILE_BYTES = 4 * 1024 * 1024;
 export const ACCEPTED_IMAGE_TYPES = [
   "image/jpeg",
   "image/png",

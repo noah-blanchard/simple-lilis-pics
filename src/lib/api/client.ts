@@ -13,6 +13,10 @@ export async function apiFetch<T>(
   try {
     body = (await res.json()) as ApiResponse<T>;
   } catch {
+    // Vercel rejects oversized bodies (413) with a plain-text page.
+    if (res.status === 413) {
+      throw new Error("Upload too large for the server (413)");
+    }
     throw new Error(`Unexpected response (${res.status})`);
   }
 

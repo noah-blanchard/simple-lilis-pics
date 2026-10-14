@@ -146,7 +146,7 @@ export const PUT = withAuth(async ({ request }) => {
     if (!(ACCEPTED_IMAGE_TYPES as readonly string[]).includes(banner.type))
       return apiError("INVALID_TYPE", "Unsupported banner image type", 422);
     if (banner.size > MAX_FILE_BYTES)
-      return apiError("FILE_TOO_LARGE", "Banner must be at most 5 MB", 422);
+      return apiError("FILE_TOO_LARGE", "Banner must be at most 4 MB", 422);
   }
 
   const items = parsed.data.items.map((item, position) => ({

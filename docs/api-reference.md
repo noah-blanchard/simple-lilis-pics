@@ -53,7 +53,7 @@ Returns resolved project rows with photos and tags, newest first when not govern
 
 Consumes `multipart/form-data`:
 
-- Repeated `files`: zero or more JPEG, PNG, WebP, or AVIF files, each at most 5 MiB. There is no photo-count limit; the whole request must still fit the hosting platform's body limit, so large galleries use the per-photo endpoint below.
+- Repeated `files`: zero or more JPEG, PNG, WebP, or AVIF files, each at most 4 MiB. There is no photo-count limit; the whole request must still fit the hosting platform's body limit, so large galleries use the per-photo endpoint below.
 - Repeated `orientation`: `landscape` or `portrait` aligned with files.
 - Repeated `position`: zero-based integer aligned with files.
 - `cover_index`: zero-based index into `files`.
@@ -82,7 +82,7 @@ Fetches image paths, deletes the project (cascading relational rows), then remov
 
 ### `POST /api/projects/[id]/photos`
 
-Consumes multipart fields `file`, `orientation`, and `position`. It accepts exactly one supported file up to 5 MiB, verifies the project, uploads the object, and creates the photo row. Returns HTTP 201 with the photo ID.
+Consumes multipart fields `file`, `orientation`, and `position`. It accepts exactly one supported file up to 4 MiB, verifies the project, uploads the object, and creates the photo row. Returns HTTP 201 with the photo ID.
 
 ### `PATCH /api/projects/reorder`
 
@@ -166,7 +166,7 @@ the original `{id, updated_at}` lists for regular and social links, both
 complete ordered editor lists, original settings timestamp, focal coordinates,
 localized phrases, and `banner_action` (`keep`, `replace`, or `remove`). A
 `replace` request also includes `banner`, a JPEG, PNG, WebP, or AVIF file no
-larger than 5 MiB. Each array order becomes its collection's persisted
+larger than 4 MiB. Each array order becomes its collection's persisted
 zero-based position.
 
 The database save reconciles regular links, social links, and settings in one

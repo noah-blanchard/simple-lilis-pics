@@ -787,8 +787,9 @@ export function LinksEditor() {
       const formData = new FormData();
       formData.set("snapshot", JSON.stringify(checked.data));
       if (bannerAction === "replace" && bannerFile) {
+        // Under MAX_FILE_BYTES (4 MiB) so the request fits Vercel's 4.5 MB cap.
         const compressed = await imageCompression(bannerFile, {
-          maxSizeMB: 4.5,
+          maxSizeMB: 3.8,
           maxWidthOrHeight: 2400,
           useWebWorker: true,
         });

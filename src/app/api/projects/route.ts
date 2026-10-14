@@ -47,7 +47,7 @@ export async function GET(request: Request) {
  *  bounded in practice by the platform request-body limit).
  *
  *  FormData fields:
- *    files          File[]  (each ≤5 MB, JPEG/PNG/WebP/AVIF)
+ *    files          File[]  (each ≤4 MiB, JPEG/PNG/WebP/AVIF)
  *    orientation    string[] aligned to files (landscape | portrait)
  *    position       string[] aligned to files (0-based)
  *    cover_index    string   index into files that becomes the cover
@@ -91,7 +91,7 @@ export const POST = withAuth(async ({ request }) => {
       );
     }
     if (file.size > MAX_FILE_BYTES) {
-      return apiError("FILE_TOO_LARGE", "Each image must be ≤ 5 MB", 422);
+      return apiError("FILE_TOO_LARGE", "Each image must be ≤ 4 MB", 422);
     }
   }
 

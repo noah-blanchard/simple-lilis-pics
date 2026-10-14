@@ -19,7 +19,11 @@ import { TranslatableField } from "@/components/admin/TranslatableField";
 import { IconSparkle } from "@/components/Icons";
 import { PillButton } from "@/components/PillButton";
 import { apiFetch } from "@/lib/api/client";
-import { ACCEPTED_IMAGE_TYPES, MAX_FEATURED_PROJECTS } from "@/lib/api/schemas";
+import {
+  ACCEPTED_IMAGE_TYPES,
+  MAX_FEATURED_PROJECTS,
+  MAX_FILE_BYTES,
+} from "@/lib/api/schemas";
 import { useTranslate } from "@/lib/translate/use-translate";
 import {
   type Orientation,
@@ -38,8 +42,10 @@ const schema = z.object({
 });
 type FormValues = z.infer<typeof schema>;
 
+// Target stays under MAX_FILE_BYTES (4 MiB) so even a one-photo request
+// fits Vercel's 4.5 MB request-body limit.
 const COMPRESSION_OPTIONS = {
-  maxSizeMB: 6,
+  maxSizeMB: 3.8,
   maxWidthOrHeight: 2560,
   useWebWorker: true,
 };
@@ -91,7 +97,13 @@ async function compressPhotos(
 ): Promise<Blob[]> {
   const out: Blob[] = [];
   for (const p of photos) {
-    out.push(await imageCompression(p.file, COMPRESSION_OPTIONS));
+    const compressed = await imageCompression(p.file, COMPRESSION_OPTIONS);
+    if (compressed.size > MAX_FILE_BYTES) {
+      throw new Error(
+        `"${p.file.name}" is still over 4 MB after compression — export it smaller and try again.`,
+      );
+    }
+    out.push(compressed);
     onProgress(out.length);
   }
   return out;

@@ -35,7 +35,7 @@ Deleting a project removes its database relationships and attempts to remove upl
 7. Choose a date, featured state, and tags.
 8. Save.
 
-Images are compressed in the browser before upload. The server accepts at most 5 MiB per resulting image.
+Images are compressed in the browser before upload. Compression targets under 4 MiB per image, and the server rejects anything larger, so a single-photo request always fits Vercel's 4.5 MB request-body limit.
 
 When the compressed images total more than 4 MiB (the hosting platform caps a request at 4.5 MB), the form skips the single batch request and uploads sequentially: it creates project metadata first, uploads each image individually, then saves the cover. If the platform still rejects a batch as too large, the form offers the same sequential upload as a retry. A sequential upload that fails part-way resumes the same project on retry instead of creating a duplicate.
 
