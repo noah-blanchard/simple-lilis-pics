@@ -78,6 +78,19 @@ export function ProjectGallery({ project }: ProjectGalleryProps) {
     return () => window.removeEventListener("keydown", onKey);
   }, [paginate, count]);
 
+  // Keep the active thumbnail visible when the strip overflows. Attached
+  // only to the active thumb, so it re-fires whenever the index changes.
+  const scrollThumbIntoView = useCallback(
+    (el: HTMLButtonElement | null) => {
+      el?.scrollIntoView({
+        behavior: prefersReduced ? "auto" : "smooth",
+        block: "nearest",
+        inline: "nearest",
+      });
+    },
+    [prefersReduced],
+  );
+
   const photo = photos[index];
   const title = project.title || t("untitled");
 
@@ -219,10 +232,11 @@ export function ProjectGallery({ project }: ProjectGalleryProps) {
 
             {/* ── Thumbnail strip ── */}
             {count > 1 && (
-              <div className="pointer-events-auto mt-5 flex w-fit gap-2.5">
+              <div className="no-scrollbar pointer-events-auto mt-5 flex w-fit max-w-full gap-2.5 overflow-x-auto">
                 {photos.map((p, i) => (
                   <motion.button
                     key={p.id}
+                    ref={i === index ? scrollThumbIntoView : undefined}
                     type="button"
                     onClick={() => setState([i, i > index ? 1 : -1])}
                     onContextMenu={(e) => e.preventDefault()}

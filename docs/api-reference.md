@@ -53,15 +53,15 @@ Returns resolved project rows with photos and tags, newest first when not govern
 
 Consumes `multipart/form-data`:
 
-- Repeated `files`: zero to four JPEG, PNG, WebP, or AVIF files, each at most 5 MiB.
+- Repeated `files`: zero or more JPEG, PNG, WebP, or AVIF files, each at most 5 MiB. There is no photo-count limit; the whole request must still fit the hosting platform's body limit, so large galleries use the per-photo endpoint below.
 - Repeated `orientation`: `landscape` or `portrait` aligned with files.
-- Repeated `position`: integer 0–3 aligned with files.
-- `cover_index`: integer 0–3.
+- Repeated `position`: zero-based integer aligned with files.
+- `cover_index`: zero-based index into `files`.
 - Optional `title_fr`, `title_en`, `description_fr`, `description_en`, and `project_date` (`YYYY-MM-DD`).
 - `featured`: `true` or `false`.
 - Repeated `tag_ids`: UUID values.
 
-Zero files creates a metadata-only row for the sequential upload recovery flow. Batch upload failures remove uploaded objects and the new project where possible. Returns HTTP 201 with the project ID.
+Zero files creates a metadata-only row for the sequential upload flow. Batch upload failures remove uploaded objects and the new project where possible. Returns HTTP 201 with the project ID.
 
 ### `PATCH /api/projects/[id]`
 

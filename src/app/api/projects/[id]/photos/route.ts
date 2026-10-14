@@ -12,8 +12,8 @@ import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 type Ctx = { params: Promise<{ id: string }> };
 
 /** POST /api/projects/[id]/photos — upload a single photo to an existing
- *  project (metadata-only created). Used by the sequential-upload retry flow
- *  when the initial batch POST fails with a 413 (entity too large).
+ *  project (metadata-only created). Used by the sequential-upload flow when
+ *  the photos are too large for one batch POST, or the batch fails with a 413.
  *
  *  FormData fields:
  *    file         File     (1, ≤5 MB, JPEG/PNG/WebP/AVIF)

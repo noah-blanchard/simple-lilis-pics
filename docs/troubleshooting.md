@@ -45,7 +45,7 @@ Eight projects are already featured. Unfeature one before featuring another. If 
 
 ## Upload is rejected
 
-Supported MIME types are JPEG, PNG, WebP, and AVIF. The server limit is 5 MiB per image after browser compression and four photos per project.
+Supported MIME types are JPEG, PNG, WebP, and AVIF. The server limit is 5 MiB per image after browser compression; there is no photo-count limit per project.
 
 If a batch receives HTTP 413 from the host, use the form's sequential upload retry. If Storage fails, verify bucket name, service-role key, and Storage availability.
 

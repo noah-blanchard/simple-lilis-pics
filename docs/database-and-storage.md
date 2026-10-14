@@ -41,7 +41,7 @@ Project metadata:
 
 ### `project_photos`
 
-One row per gallery image with an owning project, Storage object key or legacy full URL, `landscape`/`portrait` orientation, zero-based position, and timestamp. The API enforces no more than four photos per project.
+One row per gallery image with an owning project, Storage object key or legacy full URL, `landscape`/`portrait` orientation, zero-based position, and timestamp. There is no limit on photos per project.
 
 ### `project_tags`
 

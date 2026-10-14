@@ -3,7 +3,6 @@ import {
   ACCEPTED_IMAGE_TYPES,
   MAX_FEATURED_PROJECTS,
   MAX_FILE_BYTES,
-  MAX_PROJECT_PHOTOS,
   projectCreateSchema,
   projectPhotoMetaSchema,
 } from "@/lib/api/schemas";
@@ -44,12 +43,13 @@ export async function GET(request: Request) {
   return apiSuccess<ProjectWithRelations[]>(parseProjects(data));
 }
 
-/** POST /api/projects — authenticated multipart upload (1–4 photos).
+/** POST /api/projects — authenticated multipart upload (any number of photos,
+ *  bounded in practice by the platform request-body limit).
  *
  *  FormData fields:
- *    files          File[]  (1–4, each ≤5 MB, JPEG/PNG/WebP/AVIF)
+ *    files          File[]  (each ≤5 MB, JPEG/PNG/WebP/AVIF)
  *    orientation    string[] aligned to files (landscape | portrait)
- *    position       string[] aligned to files (0..3)
+ *    position       string[] aligned to files (0-based)
  *    cover_index    string   index into files that becomes the cover
  *    title_fr/en    string?
  *    description_fr/en string?
@@ -82,13 +82,6 @@ export const POST = withAuth(async ({ request }) => {
     (f): f is File => f instanceof File && f.size > 0,
   );
 
-  if (files.length > MAX_PROJECT_PHOTOS) {
-    return apiError(
-      "TOO_MANY_FILES",
-      `Maximum ${MAX_PROJECT_PHOTOS} photos per project`,
-      422,
-    );
-  }
   for (const file of files) {
     if (!(ACCEPTED_IMAGE_TYPES as readonly string[]).includes(file.type)) {
       return apiError(

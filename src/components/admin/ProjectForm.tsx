@@ -4,7 +4,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import imageCompression from "browser-image-compression";
 import { Reorder, useDragControls } from "motion/react";
-import { type ReactNode, useCallback, useEffect, useState } from "react";
+import {
+  type ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { PhotoLightbox } from "@/components/admin/PhotoLightbox";
@@ -13,11 +19,7 @@ import { TranslatableField } from "@/components/admin/TranslatableField";
 import { IconSparkle } from "@/components/Icons";
 import { PillButton } from "@/components/PillButton";
 import { apiFetch } from "@/lib/api/client";
-import {
-  ACCEPTED_IMAGE_TYPES,
-  MAX_FEATURED_PROJECTS,
-  MAX_PROJECT_PHOTOS,
-} from "@/lib/api/schemas";
+import { ACCEPTED_IMAGE_TYPES, MAX_FEATURED_PROJECTS } from "@/lib/api/schemas";
 import { useTranslate } from "@/lib/translate/use-translate";
 import {
   type Orientation,
@@ -41,6 +43,10 @@ const COMPRESSION_OPTIONS = {
   maxWidthOrHeight: 2560,
   useWebWorker: true,
 };
+
+/** Hosted function request bodies cap at 4.5 MB; above this total the photos
+ *  go up one per request instead of in a single batch. */
+const BATCH_UPLOAD_BYTES = 4 * 1024 * 1024;
 
 const fieldClass =
   "w-full rounded-2xl border border-line bg-panel2 px-4 py-3 text-[15px] text-fg placeholder:text-fg/40 outline-none transition-colors focus:border-accent";
@@ -76,6 +82,19 @@ function detectOrientation(file: File): Promise<Orientation> {
     };
     img.src = url;
   });
+}
+
+/** Compress every photo once, in order (sequential to bound memory use). */
+async function compressPhotos(
+  photos: LocalPhoto[],
+  onProgress: (done: number) => void,
+): Promise<Blob[]> {
+  const out: Blob[] = [];
+  for (const p of photos) {
+    out.push(await imageCompression(p.file, COMPRESSION_OPTIONS));
+    onProgress(out.length);
+  }
+  return out;
 }
 
 interface ProjectFormProps {
@@ -126,13 +145,20 @@ export function ProjectForm({
   const [fileError, setFileError] = useState<string | null>(null);
   const [status, setStatus] = useState<string | null>(null);
 
-  // Sequential upload retry (when batch POST fails with 413).
+  // Sequential upload (batch too large, or batch POST failed with 413).
   const [uploadMode, setUploadMode] = useState<"batch" | "sequential">("batch");
   const [seqProgress, setSeqProgress] = useState<{
     current: number;
     total: number;
   } | null>(null);
   const [seqError, setSeqError] = useState<string | null>(null);
+  // Survives retries so a failure part-way resumes the same project instead
+  // of creating a duplicate and re-uploading finished photos.
+  const seqRun = useRef<{
+    projectId: string | null;
+    photoIds: string[];
+    files: Blob[] | null;
+  }>({ projectId: null, photoIds: [], files: null });
 
   // Featured cap: an already-featured project doesn't count against itself.
   const othersFeatured = project?.featured ? featuredCount - 1 : featuredCount;
@@ -225,9 +251,8 @@ export function ProjectForm({
     e.target.value = ""; // allow re-selecting the same file
     if (picked.length === 0) return;
 
-    const remaining = MAX_PROJECT_PHOTOS - newPhotos.length;
     const accepted: LocalPhoto[] = [];
-    for (const file of picked.slice(0, remaining)) {
+    for (const file of picked) {
       if (!(ACCEPTED_IMAGE_TYPES as readonly string[]).includes(file.type)) {
         setFileError("Unsupported image type (JPEG, PNG, WebP or AVIF)");
         continue;
@@ -238,9 +263,6 @@ export function ProjectForm({
         previewUrl: URL.createObjectURL(file),
         orientation,
       });
-    }
-    if (picked.length > remaining) {
-      setFileError(`Maximum ${MAX_PROJECT_PHOTOS} photos per project`);
     }
     setNewPhotos((prev) => [...prev, ...accepted]);
   };
@@ -269,46 +291,51 @@ export function ProjectForm({
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
     );
 
-  // ── Sequential upload retry (used when batch POST returns 413) ──
+  // ── Sequential upload: one photo per request ──
   const startSequentialUpload = useCallback(
-    async (values: FormValues) => {
+    async (values: FormValues, compressed?: Blob[]) => {
       if (isEdit) return; // sequential is create-only
       setUploadMode("sequential");
       setSeqError(null);
 
+      const run = seqRun.current;
+      if (compressed) run.files = compressed;
+      const total = newPhotos.length;
+
       try {
-        // 1) Create metadata-only project
-        setSeqProgress({ current: 0, total: newPhotos.length });
-        const body: Record<string, string> = {};
-        if (values.title_en) body.title_en = values.title_en;
-        if (values.title_fr) body.title_fr = values.title_fr;
-        if (values.description_en) body.description_en = values.description_en;
-        if (values.description_fr) body.description_fr = values.description_fr;
-        if (values.project_date) body.project_date = values.project_date;
-        body.featured = String(featured);
-        const metaFd = new FormData();
-        for (const [k, v] of Object.entries(body)) metaFd.append(k, v);
-        for (const id of selectedTags) metaFd.append("tag_ids", id);
+        // 1) Create the metadata-only project (once across retries)
+        setSeqProgress({ current: run.photoIds.length, total });
+        if (!run.projectId) {
+          const metaFd = new FormData();
+          if (values.title_en) metaFd.append("title_en", values.title_en);
+          if (values.title_fr) metaFd.append("title_fr", values.title_fr);
+          if (values.description_en)
+            metaFd.append("description_en", values.description_en);
+          if (values.description_fr)
+            metaFd.append("description_fr", values.description_fr);
+          if (values.project_date)
+            metaFd.append("project_date", values.project_date);
+          metaFd.append("featured", String(featured));
+          for (const id of selectedTags) metaFd.append("tag_ids", id);
 
-        const project = await apiFetch<{ id: string }>("/api/projects", {
-          method: "POST",
-          body: metaFd,
-        });
-        const projectId = project.id;
+          const project = await apiFetch<{ id: string }>("/api/projects", {
+            method: "POST",
+            body: metaFd,
+          });
+          run.projectId = project.id;
+        }
+        const projectId = run.projectId;
 
-        // 2) Upload each photo sequentially with 1.5s delay
-        const photoIds: string[] = [];
-        for (let i = 0; i < newPhotos.length; i++) {
-          setSeqProgress({ current: i + 1, total: newPhotos.length });
-          setSeqError(`Uploading photo ${i + 1}/${newPhotos.length}…`);
+        // 2) Upload each remaining photo
+        for (let i = run.photoIds.length; i < total; i++) {
+          setSeqProgress({ current: i + 1, total });
 
-          const compressed = await imageCompression(
-            newPhotos[i].file,
-            COMPRESSION_OPTIONS,
-          );
+          const file =
+            run.files?.[i] ??
+            (await imageCompression(newPhotos[i].file, COMPRESSION_OPTIONS));
 
           const fd = new FormData();
-          fd.append("file", compressed, newPhotos[i].file.name);
+          fd.append("file", file, newPhotos[i].file.name);
           fd.append("orientation", newPhotos[i].orientation);
           fd.append("position", String(i));
 
@@ -316,16 +343,11 @@ export function ProjectForm({
             `/api/projects/${projectId}/photos`,
             { method: "POST", body: fd },
           );
-          photoIds.push(photo.id);
-
-          // 1.5s delay between uploads to keep request size low
-          if (i < newPhotos.length - 1) {
-            await new Promise((r) => setTimeout(r, 1500));
-          }
+          run.photoIds.push(photo.id);
         }
 
         // 3) Set cover photo
-        if (photoIds.length > 0) {
+        if (run.photoIds.length > 0) {
           const coverIdx = Math.max(
             0,
             newPhotos.findIndex((p) => p.previewUrl === coverKey),
@@ -333,13 +355,13 @@ export function ProjectForm({
           await apiFetch(`/api/projects/${projectId}`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ cover_photo_id: photoIds[coverIdx] }),
+            body: JSON.stringify({ cover_photo_id: run.photoIds[coverIdx] }),
           });
         }
 
         // 4) Done
+        seqRun.current = { projectId: null, photoIds: [], files: null };
         setSeqProgress(null);
-        setSeqError(null);
         queryClient.invalidateQueries({ queryKey: ["projects"] });
         onSuccess?.();
       } catch (err) {
@@ -361,7 +383,14 @@ export function ProjectForm({
   );
 
   const mutation = useMutation({
-    mutationFn: async (values: FormValues) => {
+    mutationFn: async ({
+      values,
+      files,
+    }: {
+      values: FormValues;
+      /** Compressed photos aligned with newPhotos (create mode only). */
+      files?: Blob[];
+    }) => {
       if (isEdit && project) {
         return apiFetch<{ id: string }>(`/api/projects/${project.id}`, {
           method: "PATCH",
@@ -384,7 +413,9 @@ export function ProjectForm({
         });
       }
 
-      if (newPhotos.length === 0) throw new Error("Add at least one photo");
+      if (!files || files.length === 0) {
+        throw new Error("Add at least one photo");
+      }
 
       const fd = new FormData();
       if (values.title_en) fd.append("title_en", values.title_en);
@@ -402,15 +433,12 @@ export function ProjectForm({
       fd.append("cover_index", String(coverIdx));
       for (const id of selectedTags) fd.append("tag_ids", id);
 
-      setStatus("Compressing…");
       for (const [i, p] of newPhotos.entries()) {
-        const compressed = await imageCompression(p.file, COMPRESSION_OPTIONS);
-        fd.append("files", compressed, p.file.name);
+        fd.append("files", files[i], p.file.name);
         fd.append("orientation", p.orientation);
         fd.append("position", String(i));
       }
 
-      setStatus("Uploading…");
       return apiFetch<{ id: string }>("/api/projects", {
         method: "POST",
         body: fd,
@@ -426,8 +454,41 @@ export function ProjectForm({
     },
   });
 
-  const onSubmit = handleSubmit((values) => mutation.mutate(values));
-  const busy = mutation.isPending;
+  const onSubmit = handleSubmit(async (values) => {
+    if (isEdit) {
+      mutation.mutate({ values });
+      return;
+    }
+    if (newPhotos.length === 0) {
+      setFileError("Add at least one photo");
+      return;
+    }
+    setFileError(null);
+
+    let files: Blob[];
+    try {
+      setStatus("Compressing…");
+      files = await compressPhotos(newPhotos, (done) =>
+        setStatus(`Compressing ${done}/${newPhotos.length}…`),
+      );
+    } catch (err) {
+      setStatus(null);
+      setFileError(err instanceof Error ? err.message : "Compression failed");
+      return;
+    }
+
+    // Too big for one request — skip the doomed batch and go one by one.
+    const totalBytes = files.reduce((sum, f) => sum + f.size, 0);
+    if (totalBytes > BATCH_UPLOAD_BYTES) {
+      setStatus(null);
+      void startSequentialUpload(values, files);
+      return;
+    }
+
+    setStatus("Uploading…");
+    mutation.mutate({ values, files });
+  });
+  const busy = mutation.isPending || status !== null;
 
   // Detect 413 — the server response is not JSON so apiFetch throws
   // "Unexpected response (413)".
@@ -499,31 +560,30 @@ export function ProjectForm({
             </DraggablePhotoItem>
           ))}
 
-          {/* Add-more dropzone (< 4) — plain trailing child, not draggable */}
-          {newPhotos.length < MAX_PROJECT_PHOTOS && (
-            <label
-              htmlFor="project-files"
-              className="flex min-h-22 cursor-pointer items-center justify-center rounded-2xl border border-line border-dashed bg-panel2 px-4 text-center transition-colors hover:border-accent"
-            >
-              <div>
-                <p className="text-[14px] text-fg/70">
-                  Click to add {newPhotos.length === 0 ? "photos" : "more"} (
-                  {newPhotos.length}/{MAX_PROJECT_PHOTOS})
-                </p>
-                <p className="mt-1 text-[12px] text-fg/40">
-                  1–4 photos · orientation auto-detected
-                </p>
-              </div>
-              <input
-                id="project-files"
-                type="file"
-                multiple
-                accept={ACCEPTED_IMAGE_TYPES.join(",")}
-                onChange={onFilesChange}
-                className="hidden"
-              />
-            </label>
-          )}
+          {/* Add-more dropzone — plain trailing child, not draggable */}
+          <label
+            htmlFor="project-files"
+            className="flex min-h-22 cursor-pointer items-center justify-center rounded-2xl border border-line border-dashed bg-panel2 px-4 text-center transition-colors hover:border-accent"
+          >
+            <div>
+              <p className="text-[14px] text-fg/70">
+                {newPhotos.length === 0
+                  ? "Click to add photos"
+                  : `Click to add more (${newPhotos.length} selected)`}
+              </p>
+              <p className="mt-1 text-[12px] text-fg/40">
+                As many as you like · orientation auto-detected
+              </p>
+            </div>
+            <input
+              id="project-files"
+              type="file"
+              multiple
+              accept={ACCEPTED_IMAGE_TYPES.join(",")}
+              onChange={onFilesChange}
+              className="hidden"
+            />
+          </label>
         </Reorder.Group>
       )}
       {fileError && <p className="text-[13px] text-danger">{fileError}</p>}
@@ -733,7 +793,9 @@ export function ProjectForm({
             type="button"
             variant="light"
             disabled={mutation.isPending}
-            onClick={handleSubmit(startSequentialUpload)}
+            onClick={handleSubmit((values) =>
+              startSequentialUpload(values, mutation.variables?.files),
+            )}
           >
             ⟳ Retry — upload photos one by one
           </PillButton>
@@ -782,7 +844,9 @@ export function ProjectForm({
                 <PillButton
                   type="button"
                   variant="light"
-                  onClick={handleSubmit(startSequentialUpload)}
+                  onClick={handleSubmit((values) =>
+                    startSequentialUpload(values),
+                  )}
                 >
                   ⟳ Retry sequential upload
                 </PillButton>

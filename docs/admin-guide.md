@@ -27,7 +27,7 @@ Deleting a project removes its database relationships and attempts to remove upl
 ## Create a project
 
 1. Open the new-project form.
-2. Add up to four JPEG, PNG, WebP, or AVIF images.
+2. Add any number of JPEG, PNG, WebP, or AVIF images.
 3. Review automatic orientation and change it when needed.
 4. Drag images into gallery order and choose the cover.
 5. Enter either or both localized titles and descriptions.
@@ -37,7 +37,7 @@ Deleting a project removes its database relationships and attempts to remove upl
 
 Images are compressed in the browser before upload. The server accepts at most 5 MiB per resulting image.
 
-If the hosting platform rejects the batch request as too large, the form offers a sequential retry. It creates project metadata first, uploads each image individually, then saves the cover and photo metadata.
+When the compressed images total more than 4 MiB (the hosting platform caps a request at 4.5 MB), the form skips the single batch request and uploads sequentially: it creates project metadata first, uploads each image individually, then saves the cover. If the platform still rejects a batch as too large, the form offers the same sequential upload as a retry. A sequential upload that fails part-way resumes the same project on retry instead of creating a duplicate.
 
 ## Edit a project
 
