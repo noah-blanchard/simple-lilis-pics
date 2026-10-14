@@ -107,7 +107,7 @@ const SOCIAL_ICON_LABELS: Record<SocialIconKey, string> = {
   telegram: "Telegram",
   signal: "Signal",
   wechat: "WeChat",
-  rednote: "Rednote (小红书)",
+  rednote: "Rednote",
   line: "LINE",
   messenger: "Messenger",
   github: "GitHub",
