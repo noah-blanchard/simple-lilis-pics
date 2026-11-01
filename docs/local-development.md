@@ -17,9 +17,10 @@ From the repository root:
 bun install
 Copy-Item apps\web\.env.example apps\web\.env.local
 Copy-Item apps\admin\.env.example apps\admin\.env.local
+Copy-Item apps\wedding\.env.example apps\wedding\.env.local
 ```
 
-Each app has its own `.env.local` (`apps/web/.env.local` and `apps/admin/.env.local`), because Next.js loads env files from the app directory, not the repo root. Do not commit `.env.local`.
+Each app has its own `.env.local` (`apps/web/.env.local`, `apps/admin/.env.local` and `apps/wedding/.env.local`), because Next.js loads env files from the app directory, not the repo root. Do not commit `.env.local`.
 
 ## Environment variables
 
@@ -29,7 +30,7 @@ Each app has its own `.env.local` (`apps/web/.env.local` and `apps/admin/.env.lo
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | web, admin | Browser and server | Yes | Public client key protected by RLS |
 | `SUPABASE_SERVICE_ROLE_KEY` | web, admin | Server only | Yes | Admin writes and uploads (admin); contact, rating and click inserts (web); seed (web) |
 | `NEXT_PUBLIC_SUPABASE_BUCKET` | web, admin | Browser and server | No | Storage bucket; defaults to `photos` |
-| `NEXT_PUBLIC_SITE_URL` | web, admin | Browser and server | Production | Each app's own canonical origin (web: Open Graph and sitemap) |
+| `NEXT_PUBLIC_SITE_URL` | web, admin, wedding | Browser and server | Production | Each app's own canonical origin (web: Open Graph and sitemap) |
 | `PORTFOLIO_URL` | admin | Server only | Yes | Portfolio origin: QR rating links point here, and the admin calls its `/api/revalidate` |
 | `REVALIDATE_SECRET` | web, admin | Server only | Yes | Shared secret for the cache-revalidation webhook; must be identical in both apps |
 | `ADMIN_URL` | web | Build time | No | Admin origin that old `/admin` and `/login` URLs redirect to; defaults to `http://localhost:3051` |
@@ -47,7 +48,7 @@ bun -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 
 The application throws during import when the two public Supabase variables are absent. Routes using the admin client also require the service-role key.
 
-For local canonical metadata, set `NEXT_PUBLIC_SITE_URL=http://localhost:3050` in the web app and `http://localhost:3051` in the admin app. The web code fallback is `http://localhost:3000`, while the development scripts intentionally run ports 3050 (web) and 3051 (admin).
+For local canonical metadata, set `NEXT_PUBLIC_SITE_URL=http://localhost:3050` in the web app, `http://localhost:3051` in the admin app and `http://localhost:3052` in the wedding app. The web code fallback is `http://localhost:3000`, while the development scripts intentionally run ports 3050 (web), 3051 (admin) and 3052 (wedding). The wedding scaffold only needs `NEXT_PUBLIC_SITE_URL`; its Supabase variables are not used yet.
 
 ## Create the database
 
@@ -79,13 +80,14 @@ For a solo deployment, keep public registration disabled and manage the small ad
 bun run dev
 ```
 
-From the repository root, `bun run dev` starts every app through Turborepo. Use `bun run dev:web` to start only the portfolio (`@lili/web`) or `bun run dev:admin` to start only the CMS (`@lili/admin`).
+From the repository root, `bun run dev` starts every app through Turborepo. Use `bun run dev:web` to start only the portfolio (`@lili/web`) `bun run dev:admin` to start only the CMS (`@lili/admin`) or `bun run dev:wedding` to start only the wedding scaffold (`@lili/wedding`).
 
 Open:
 
 - Public site: `http://localhost:3050`
 - French site: `http://localhost:3050/fr`
 - Admin login: `http://localhost:3051/login`
+- Wedding scaffold: `http://localhost:3052` (French at `/fr`; noindex until launch)
 
 The old `http://localhost:3050/admin` and `/login` URLs redirect to the admin app.
 

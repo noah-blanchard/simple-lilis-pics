@@ -1,0 +1,28 @@
+{
+  "name": "@lili/wedding",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --port 3052",
+    "build": "next build",
+    "start": "next start --port 3052",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@lili/core": "workspace:*",
+    "@lili/ui": "workspace:*",
+    "next": "16.2.7",
+    "next-intl": "^4.13.0",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
+  },
+  "devDependencies": {
+    "@lili/config": "workspace:*",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
