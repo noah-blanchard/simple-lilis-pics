@@ -1,0 +1,25 @@
+# VCS / tooling
+.git
+.github
+.vercel
+**/.turbo
+**/*.tsbuildinfo
+
+# dependencies and build output (rebuilt inside the image)
+**/node_modules
+**/.next
+**/out
+**/build
+**/dist
+**/next-env.d.ts
+
+# secrets: NEVER send env files to the Docker daemon
+**/.env
+**/.env.*
+!**/.env.example
+
+# not needed to build
+docs
+supabase
+**/*.md
+!**/README.md

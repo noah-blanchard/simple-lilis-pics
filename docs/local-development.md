@@ -15,29 +15,39 @@ From the repository root:
 
 ```powershell
 bun install
-Copy-Item .env.example .env.local
+Copy-Item apps\web\.env.example apps\web\.env.local
+Copy-Item apps\admin\.env.example apps\admin\.env.local
 ```
 
-Do not commit `.env.local`.
+Each app has its own `.env.local` (`apps/web/.env.local` and `apps/admin/.env.local`), because Next.js loads env files from the app directory, not the repo root. Do not commit `.env.local`.
 
 ## Environment variables
 
-| Variable | Exposure | Required | Purpose |
-| --- | --- | --- | --- |
-| `NEXT_PUBLIC_SUPABASE_URL` | Browser and server | Yes | Supabase project URL and Storage hostname |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Browser and server | Yes | Public client key protected by RLS |
-| `SUPABASE_SERVICE_ROLE_KEY` | Server only | Yes | Authenticated API writes, uploads, contact inserts, and seed |
-| `NEXT_PUBLIC_SUPABASE_BUCKET` | Browser and server | No | Storage bucket; defaults to `photos` |
-| `NEXT_PUBLIC_SITE_URL` | Browser and server | Production | Canonical, Open Graph, and sitemap origin |
-| `OPENROUTER_API_KEY` | Server only | Translation only | Admin EN/FR translation |
-| `OPENROUTER_MODEL` | Server only | No | Translation model override |
-| `RESEND_API_KEY` | Server only | Email only | Contact notification delivery |
-| `CONTACT_TO_EMAIL` | Server only | Email only | Notification recipient |
-| `CONTACT_FROM_EMAIL` | Server only | Email only | Verified Resend sender |
+| Variable | Used by | Exposure | Required | Purpose |
+| --- | --- | --- | --- | --- |
+| `NEXT_PUBLIC_SUPABASE_URL` | web, admin | Browser and server | Yes | Supabase project URL and Storage hostname |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | web, admin | Browser and server | Yes | Public client key protected by RLS |
+| `SUPABASE_SERVICE_ROLE_KEY` | web, admin | Server only | Yes | Admin writes and uploads (admin); contact, rating and click inserts (web); seed (web) |
+| `NEXT_PUBLIC_SUPABASE_BUCKET` | web, admin | Browser and server | No | Storage bucket; defaults to `photos` |
+| `NEXT_PUBLIC_SITE_URL` | web, admin | Browser and server | Production | Each app's own canonical origin (web: Open Graph and sitemap) |
+| `PORTFOLIO_URL` | admin | Server only | Yes | Portfolio origin: QR rating links point here, and the admin calls its `/api/revalidate` |
+| `REVALIDATE_SECRET` | web, admin | Server only | Yes | Shared secret for the cache-revalidation webhook; must be identical in both apps |
+| `ADMIN_URL` | web | Build time | No | Admin origin that old `/admin` and `/login` URLs redirect to; defaults to `http://localhost:3051` |
+| `OPENROUTER_API_KEY` | admin | Server only | Translation only | Admin EN/FR translation |
+| `OPENROUTER_MODEL` | admin | Server only | No | Translation model override |
+| `RESEND_API_KEY` | web | Server only | Email only | Contact notification delivery |
+| `CONTACT_TO_EMAIL` | web | Server only | Email only | Notification recipient |
+| `CONTACT_FROM_EMAIL` | web | Server only | Email only | Verified Resend sender |
+
+Generate `REVALIDATE_SECRET` once and paste the same value into both files:
+
+```powershell
+bun -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
 
 The application throws during import when the two public Supabase variables are absent. Routes using the admin client also require the service-role key.
 
-For local canonical metadata, set `NEXT_PUBLIC_SITE_URL=http://localhost:3050`. The code fallback is `http://localhost:3000`, while the development script intentionally runs port 3050.
+For local canonical metadata, set `NEXT_PUBLIC_SITE_URL=http://localhost:3050` in the web app and `http://localhost:3051` in the admin app. The web code fallback is `http://localhost:3000`, while the development scripts intentionally run ports 3050 (web) and 3051 (admin).
 
 ## Create the database
 
@@ -69,11 +79,15 @@ For a solo deployment, keep public registration disabled and manage the small ad
 bun run dev
 ```
 
+From the repository root, `bun run dev` starts every app through Turborepo. Use `bun run dev:web` to start only the portfolio (`@lili/web`) or `bun run dev:admin` to start only the CMS (`@lili/admin`).
+
 Open:
 
 - Public site: `http://localhost:3050`
 - French site: `http://localhost:3050/fr`
-- Admin login: `http://localhost:3050/login`
+- Admin login: `http://localhost:3051/login`
+
+The old `http://localhost:3050/admin` and `/login` URLs redirect to the admin app.
 
 ## Optional integrations
 
@@ -89,7 +103,10 @@ Configure a verified Resend domain, then set the three Resend/contact variables.
 
 The seed uses the service-role key and deletes all existing project data in the configured database before inserting demos.
 
+The seed script runs from `apps/web`:
+
 ```powershell
+cd apps\web
 bun run seed --force
 ```
 

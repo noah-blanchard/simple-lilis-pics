@@ -1,0 +1,8 @@
+@import "tailwindcss";
+@import "@lili/ui/styles/theme.css";
+@import "@lili/ui/styles/base.css";
+
+/* Shared components live in packages/ui, outside this app's folder. Tailwind
+   does not scan outside the app by default, so register it explicitly
+   (path is relative to this file). */
+@source "../../../../packages/ui/src";
