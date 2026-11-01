@@ -8,6 +8,14 @@ const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseHost = supabaseUrl ? new URL(supabaseUrl).hostname : undefined;
 
+// The CMS moved to its own origin. ADMIN_URL is read at build time (redirects
+// are compiled into the routes manifest), so it must be a build argument in
+// Docker. Local default = the admin dev server.
+const adminUrl = (process.env.ADMIN_URL ?? "http://localhost:3051").replace(
+  /\/$/,
+  "",
+);
+
 const nextConfig: NextConfig = {
   transpilePackages: ["@lili/core", "@lili/ui"],
   images: {
@@ -23,6 +31,16 @@ const nextConfig: NextConfig = {
           ]
         : []),
     ],
+  },
+  async redirects() {
+    return [
+      {
+        source: "/admin/:path*",
+        destination: `${adminUrl}/admin/:path*`,
+        permanent: false,
+      },
+      { source: "/login", destination: `${adminUrl}/login`, permanent: false },
+    ];
   },
 };
 

@@ -1,6 +1,7 @@
 import { unstable_cache } from "next/cache";
 import { z } from "zod";
 import { linkDestinationSchema, socialDestinationSchema } from "../api/schemas";
+import { PUBLIC_LINKS_TAG } from "../cache-tags";
 import type { Locale } from "../i18n/routing";
 import {
   LINK_ICON_KEYS,
@@ -135,8 +136,8 @@ const getCachedLinksPageRows = unstable_cache(
       settings: settings as LinksPageSettingsRow,
     };
   },
-  ["public-links"],
-  { tags: ["public-links"], revalidate: 300 },
+  [PUBLIC_LINKS_TAG],
+  { tags: [PUBLIC_LINKS_TAG], revalidate: 300 },
 );
 
 function localizedValue(

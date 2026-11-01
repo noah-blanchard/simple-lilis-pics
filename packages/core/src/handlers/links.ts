@@ -1,5 +1,4 @@
 import "server-only";
-import { revalidateTag } from "next/cache";
 import { apiError, apiSuccess } from "../api/response";
 import {
   ACCEPTED_IMAGE_TYPES,
@@ -8,7 +7,9 @@ import {
 } from "../api/schemas";
 import { validate } from "../api/validate";
 import { withAuth } from "../api/with-auth";
+import { PUBLIC_LINKS_TAG } from "../cache-tags";
 import { PHOTOS_BUCKET } from "../env";
+import { requestPublicRevalidation } from "../revalidate";
 import { createSupabaseAdminClient } from "../supabase/admin";
 import type {
   AdminLinksSnapshot,
@@ -219,7 +220,7 @@ export const saveLinksEditorSnapshot = withAuth(async ({ request }) => {
       console.error("[links] old banner cleanup failed:", cleanupError.message);
   }
 
-  revalidateTag("public-links", { expire: 0 });
+  await requestPublicRevalidation([PUBLIC_LINKS_TAG]);
   const snapshot = await readSnapshot();
   return snapshot.ok ? apiSuccess(snapshot.data) : snapshot.response;
 });

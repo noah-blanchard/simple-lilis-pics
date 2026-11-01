@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { adminFontVariables } from "@/lib/fonts";
-import "../globals.css";
+import "./globals.css";
 
 // Admin area is private — keep it out of search engines.
 export const metadata: Metadata = {
@@ -17,8 +17,8 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-/** Root layout for the non-localized admin area (/login, /admin). Provides its
- *  own <html>/<body> since the marketing layout lives under [locale]. */
+/** Root layout of the admin app (/login, /admin). The CMS is not localized, so
+ *  this layout provides the <html>/<body> for the whole app. */
 export default function AdminRootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={adminFontVariables}>

@@ -40,11 +40,14 @@ export function generateRatingToken(): string {
   return token;
 }
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3050";
+/** Origin of the public portfolio, where `/rate/...` lives. `buildRateUrl` runs
+ *  only in the admin app (rating-tokens handler), whose own NEXT_PUBLIC_SITE_URL
+ *  is the admin origin, so the portfolio origin comes from PORTFOLIO_URL. */
+const PORTFOLIO_URL = process.env.PORTFOLIO_URL ?? "http://localhost:3050";
 
 /** Absolute URL encoded into the QR code. The locale is always explicit: a
  *  stranger's phone must not decide the language via cookie or Accept-Language,
  *  Lili picks it when she generates the code. */
 export function buildRateUrl(locale: Locale, token: string): string {
-  return `${SITE_URL.replace(/\/$/, "")}/rate/${locale}/${token}`;
+  return `${PORTFOLIO_URL.replace(/\/$/, "")}/rate/${locale}/${token}`;
 }

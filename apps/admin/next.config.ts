@@ -1,0 +1,30 @@
+import type { NextConfig } from "next";
+
+// Derive the Supabase Storage host from the env var so uploaded images work
+// against any project — never hardcode a specific project ref.
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseHost = supabaseUrl ? new URL(supabaseUrl).hostname : undefined;
+
+const nextConfig: NextConfig = {
+  transpilePackages: ["@lili/core", "@lili/ui"],
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "images.unsplash.com" },
+      ...(supabaseHost
+        ? [
+            {
+              protocol: "https" as const,
+              hostname: supabaseHost,
+              pathname: "/storage/v1/object/public/**",
+            },
+          ]
+        : []),
+    ],
+  },
+  // The CMS keeps its historical /admin/* paths; the bare origin opens it.
+  async redirects() {
+    return [{ source: "/", destination: "/admin", permanent: false }];
+  },
+};
+
+export default nextConfig;

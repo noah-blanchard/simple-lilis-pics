@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "turbo run dev",
     "dev:web": "turbo run dev --filter=@lili/web",
+    "dev:admin": "turbo run dev --filter=@lili/admin",
     "build": "turbo run build",
     "typecheck": "turbo run typecheck",
     "lint": "biome check",
