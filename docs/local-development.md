@@ -15,10 +15,10 @@ From the repository root:
 
 ```powershell
 bun install
-Copy-Item .env.example .env.local
+Copy-Item apps\web\.env.example apps\web\.env.local
 ```
 
-Do not commit `.env.local`.
+The app now lives in `apps/web`, so `.env.local` lives at `apps/web/.env.local` (Next.js loads env files from the app directory, not the repo root). Do not commit `.env.local`.
 
 ## Environment variables
 
@@ -69,6 +69,8 @@ For a solo deployment, keep public registration disabled and manage the small ad
 bun run dev
 ```
 
+From the repository root, `bun run dev` starts every app through Turborepo. Use `bun run dev:web` to start only the portfolio (`@lili/web`).
+
 Open:
 
 - Public site: `http://localhost:3050`
@@ -89,7 +91,10 @@ Configure a verified Resend domain, then set the three Resend/contact variables.
 
 The seed uses the service-role key and deletes all existing project data in the configured database before inserting demos.
 
+The seed script runs from `apps/web`:
+
 ```powershell
+cd apps\web
 bun run seed --force
 ```
 

@@ -1,5 +1,9 @@
 # AGENTS.md — Repository Directives
 
+> **Migration in progress (branch `refactor/monorepo`).** The app now lives in
+> `apps/web`. See [`docs/plans/monorepo/`](docs/plans/monorepo/README.md).
+> Some paths below describe the pre-migration layout until phase 09.
+
 This file is the canonical instruction source for AI agents working in this repository. Tool-specific files such as `CLAUDE.md` and `CODEX.md` may add narrow guidance, but they must defer to this file when instructions overlap.
 
 ## 1. Project Context

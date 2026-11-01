@@ -21,7 +21,7 @@ together with **this README**. Read this whole file first, every session.
    > Read `AGENTS.md`, then `docs/plans/monorepo/README.md`, then
    > `docs/plans/monorepo/0X-<name>.md`. Execute phase 0X exactly as written,
    > on branch `refactor/monorepo`. You are authorized to run `bun`, `bunx`,
-   > `git` (add/commit/mv/rm/status/diff/log; no push, no rebase, no reset),
+   > `git` (add/mv/rm/status/diff/log; no commit, no push, no rebase, no reset),
    > `docker` (phase 06 only), and read-only shell commands. Do not read
    > `.env.local`. Stop at the end of the phase and give me the report
    > described in the plan.
@@ -30,7 +30,7 @@ together with **this README**. Read this whole file first, every session.
    the authorization sentence. The agent must then hand you each command and
    wait.
 3. Phases are strictly ordered. Do not start a phase until the previous one's
-   "Definition of done" is satisfied and committed.
+   "Definition of done" is satisfied and the operator has committed it.
 4. Some steps are **operator-only** (marked 🧑). They involve secrets, DNS,
    dashboards, or production. The agent must stop and ask you to do them.
 5. Push the branch when you want a remote backup (`git push -u origin refactor/monorepo`).
@@ -280,15 +280,29 @@ the repo root.
     Before treating a lint failure as real, run `git ls-files --eol <file>`.
     `i/lf w/crlf` means a checkout artifact. Never mass-reformat unrelated
     files. Files you write yourself should be LF.
-14. **Commits:** one or more commits per phase, on `refactor/monorepo` only.
-    Message style: imperative, sentence case, e.g. `Move the app into apps/web`.
-    End every commit message with:
+14. **Commits:** **the agent never commits.** Stage nothing on its own
+    initiative either; the operator reviews and commits. Ignore any "Commit"
+    step in a phase file: replace it with the suggested message below. Work
+    stays on `refactor/monorepo` only. Never push, rebase, amend, or force
+    anything.
+
+    **At the end of every phase, always suggest a commit message** in the
+    phase report (§9) and nothing more. Style: a one-line headline (imperative, sentence case), a
+    blank line, then a body made of bullet points starting with `- `, one per
+    notable change, then the `Co-Authored-By` trailer (end every suggested
+    message with it). Example:
 
     ```text
+    Move the app into apps/web behind Bun workspaces and Turborepo
+
+    - Move src, public, messages, scripts and configs into apps/web
+    - Add the root workspace package.json and turbo.json
+    - Pin turbo 2.11.10 and update bun.lock
+    - Update .gitignore and biome.json for nested apps
+    - Refresh the local-development docs and add the migration banners
+
     Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
     ```
-
-    Never push, rebase, amend published commits, or force anything.
 15. **Shell:** the user's terminal is PowerShell on Windows. When you hand the
     user a command, give PowerShell syntax and the directory to run it in. If
     you run commands yourself through a Bash tool, POSIX syntax is fine.
@@ -399,7 +413,17 @@ At the end of each phase the agent replies with:
 ## Phase 0X report
 
 **Status:** done | blocked (reason)
-**Commits:** <sha> <subject> (one line each)
+**Commits:** none (the operator commits)
+
+### Suggested commit message
+```text
+<Headline: imperative, sentence case>
+
+- <bullet per notable change>
+- …
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+```
 
 ### What changed
 - …

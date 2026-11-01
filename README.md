@@ -1,5 +1,9 @@
 # Lilis Pics
 
+> **Migration in progress (branch `refactor/monorepo`).** The app now lives in
+> `apps/web`. See [`docs/plans/monorepo/`](docs/plans/monorepo/README.md).
+> Some paths below describe the pre-migration layout until phase 09.
+
 A bilingual photography portfolio and self-service content management system built with Next.js 16. The public experience combines a motion-led marketing page, project archive, and lightweight links page, while the private admin manages the site through a responsive CMS.
 
 ## What the project includes
