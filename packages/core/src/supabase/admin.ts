@@ -2,16 +2,15 @@ import "server-only";
 import { createClient } from "@supabase/supabase-js";
 import { SUPABASE_URL } from "../env";
 
-const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-if (!serviceRoleKey)
-  throw new Error("Missing env var: SUPABASE_SERVICE_ROLE_KEY");
-
 /** Service-role Supabase client. Bypasses RLS — use ONLY inside route handlers
  *  on the server, never in client code. Auth is enforced by `withAuth` before
- *  this client touches the database or storage. */
+ *  this client touches the database or storage.
+ *
+ *  The key is read per call rather than at module load: `next build` imports
+ *  every route module, and the service-role key is a runtime-only secret that
+ *  must never be a Docker build argument. */
 export function createSupabaseAdminClient() {
-  // Re-narrow inside the closure: the module-level check above doesn't carry
-  // `string` narrowing across the function boundary for a captured binding.
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!serviceRoleKey) {
     throw new Error("Missing env var: SUPABASE_SERVICE_ROLE_KEY");
   }

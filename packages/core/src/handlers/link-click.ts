@@ -1,14 +1,13 @@
 import "server-only";
 import { apiError, apiSuccess } from "../api/response";
+import { isSameOriginRequest } from "../api/same-origin";
 import { createSupabaseAdminClient } from "../supabase/admin";
 
 type Ctx = { params: Promise<{ id: string }> };
 
 /** Best-effort same-origin click signal. Navigation never waits for this. */
 export async function recordLinkClick(request: Request, { params }: Ctx) {
-  const origin = request.headers.get("origin");
-  const fetchSite = request.headers.get("sec-fetch-site");
-  if (origin !== new URL(request.url).origin || fetchSite === "cross-site") {
+  if (!isSameOriginRequest(request)) {
     return apiError("FORBIDDEN", "Same-origin request required", 403);
   }
 
