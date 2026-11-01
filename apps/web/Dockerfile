@@ -36,7 +36,10 @@ ENV NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL} \
     NEXT_TELEMETRY_DISABLED=1
 
 WORKDIR /app/apps/web
-RUN bun run build
+# next/font/google downloads fonts from Google at build time and that fetch
+# fails intermittently ("next/font/google queries have exactly one entry").
+# Retry the build up to 3 times; a real error still fails after the last try.
+RUN for i in 1 2 3; do bun run build && exit 0; echo "build attempt $i failed"; rm -rf .next; sleep 3; done; exit 1
 
 # ── Runtime ─────────────────────────────────────────────────────────────────
 FROM node:${NODE_VERSION}-bookworm-slim AS runner
