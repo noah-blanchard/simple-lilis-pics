@@ -1,7 +1,7 @@
 "use client";
 
+import { IconChevronLeft } from "@lili/ui/components/Icons";
 import Link from "next/link";
-import { IconChevronLeft } from "@/components/Icons";
 import { ADMIN_HOME } from "@/lib/admin/sections";
 import { AdminWordmark } from "./AdminWordmark";
 

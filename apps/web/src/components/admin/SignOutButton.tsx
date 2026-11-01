@@ -1,8 +1,8 @@
 "use client";
 
 import { createSupabaseBrowserClient } from "@lili/core/supabase/browser";
+import { PillButton } from "@lili/ui/components/PillButton";
 import { useRouter } from "next/navigation";
-import { PillButton } from "@/components/PillButton";
 
 export function SignOutButton() {
   const router = useRouter();

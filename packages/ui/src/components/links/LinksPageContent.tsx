@@ -4,9 +4,9 @@ import type { Locale } from "@lili/core/i18n/routing";
 import type { ResolvedLink, ResolvedSocialLink } from "@lili/core/types/db";
 import { motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
+import NextLink from "next/link";
 import type { ReactNode } from "react";
-import { Link } from "@/i18n/navigation";
-import { EASE } from "@/lib/motion";
+import { EASE } from "../../lib/motion";
 import { LinkCard } from "./LinkCard";
 import { SocialLinks } from "./SocialLinks";
 
@@ -20,6 +20,9 @@ interface LinksPageContentProps {
   socialsLabel: string;
   opensNewTabLabel: string;
   backHomeLabel?: string;
+  /** Locale-resolved home URL for the public "back" link (e.g. "/" or "/fr").
+   *  Ignored in editor mode. */
+  homeHref?: string;
   bannerImageUrl?: string | null;
   bannerFocalX?: number;
   bannerFocalY?: number;
@@ -43,6 +46,7 @@ export function LinksPageContent({
   socialsLabel,
   opensNewTabLabel,
   backHomeLabel = "Back to the portfolio",
+  homeHref = "/",
   bannerImageUrl = null,
   bannerFocalX = 50,
   bannerFocalY = 50,
@@ -227,15 +231,15 @@ export function LinksPageContent({
             className="mt-9 text-center"
           >
             {mode === "public" ? (
-              <Link
-                href="/"
+              <NextLink
+                href={homeHref}
                 className="inline-flex min-h-11 items-center rounded-full px-4 text-[13px] text-fg/55 hover:text-accent-strong"
               >
                 <span aria-hidden className="mr-2">
                   ←
                 </span>
                 {backHomeLabel}
-              </Link>
+              </NextLink>
             ) : (
               <span className="inline-flex min-h-11 items-center text-[13px] text-fg/55">
                 <span aria-hidden className="mr-2">

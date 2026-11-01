@@ -3,12 +3,12 @@
 import { apiFetch } from "@lili/core/api/client";
 import type { Locale } from "@lili/core/i18n/routing";
 import { RATED_STORAGE_KEY } from "@lili/core/rating";
+import { PillButton } from "@lili/ui/components/PillButton";
+import { EASE, hoverColorTransition } from "@lili/ui/lib/motion";
+import { FIELD_CLASS, FIELD_FOCUS } from "@lili/ui/lib/ui";
 import { AnimatePresence, motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
-import { EASE, hoverColorTransition } from "@/lib/motion";
-import { FIELD_CLASS, FIELD_FOCUS } from "@/lib/ui";
-import { PillButton } from "../PillButton";
 import { RateSuccess } from "./RateSuccess";
 import { StarRating } from "./StarRating";
 

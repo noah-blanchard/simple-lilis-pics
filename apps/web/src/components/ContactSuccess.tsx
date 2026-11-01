@@ -1,8 +1,8 @@
 "use client";
 
+import { PillButton } from "@lili/ui/components/PillButton";
+import { EASE } from "@lili/ui/lib/motion";
 import { motion, useReducedMotion } from "motion/react";
-import { EASE } from "@/lib/motion";
-import { PillButton } from "./PillButton";
 import { WAX_COLOR, WaxSeal } from "./WaxSeal";
 
 interface ContactSuccessProps {

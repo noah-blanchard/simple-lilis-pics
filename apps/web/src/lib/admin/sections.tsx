@@ -1,10 +1,15 @@
+import {
+  IconGrid,
+  IconLayout,
+  IconMail,
+  IconStar,
+} from "@lili/ui/components/Icons";
 import type { ComponentType } from "react";
 import { FeaturedStat } from "@/components/admin/hub/FeaturedStat";
 import { LinksStat } from "@/components/admin/hub/LinksStat";
 import { MessagesStat } from "@/components/admin/hub/MessagesStat";
 import { ProjectsStat } from "@/components/admin/hub/ProjectsStat";
 import { RatingsStat } from "@/components/admin/hub/RatingsStat";
-import { IconGrid, IconLayout, IconMail, IconStar } from "@/components/Icons";
 
 export interface AdminSection {
   /** Stable id — also the React key in every consumer. */

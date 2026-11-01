@@ -2,13 +2,13 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createSupabaseBrowserClient } from "@lili/core/supabase/browser";
+import { NeonRotatingBorder } from "@lili/ui/components/NeonRotatingBorder";
+import { PillButton } from "@lili/ui/components/PillButton";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { NeonRotatingBorder } from "@/components/NeonRotatingBorder";
-import { PillButton } from "@/components/PillButton";
 
 const schema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email"),
@@ -16,8 +16,8 @@ const schema = z.object({
 });
 type LoginValues = z.infer<typeof schema>;
 
-import { EASE } from "@/lib/motion";
-import { FIELD_CLASS, FIELD_FOCUS } from "@/lib/ui";
+import { EASE } from "@lili/ui/lib/motion";
+import { FIELD_CLASS, FIELD_FOCUS } from "@lili/ui/lib/ui";
 
 const INFINITE = Number.POSITIVE_INFINITY;
 

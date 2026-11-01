@@ -12,6 +12,7 @@
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
     "@lili/core": "workspace:*",
+    "@lili/ui": "workspace:*",
     "@openrouter/sdk": "^0.12.79",
     "@supabase/ssr": "^0.10.3",
     "@supabase/supabase-js": "^2.107.0",

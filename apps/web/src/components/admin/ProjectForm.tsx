@@ -13,6 +13,8 @@ import {
   resolveImageUrl,
   type TagRow,
 } from "@lili/core/types/db";
+import { IconSparkle } from "@lili/ui/components/Icons";
+import { PillButton } from "@lili/ui/components/PillButton";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import imageCompression from "browser-image-compression";
 import { Reorder, useDragControls } from "motion/react";
@@ -28,8 +30,6 @@ import { z } from "zod";
 import { PhotoLightbox } from "@/components/admin/PhotoLightbox";
 import { PhotoListItem } from "@/components/admin/PhotoListItem";
 import { TranslatableField } from "@/components/admin/TranslatableField";
-import { IconSparkle } from "@/components/Icons";
-import { PillButton } from "@/components/PillButton";
 import { useTranslate } from "@/lib/translate/use-translate";
 
 // All metadata is optional; empty strings become null on submit.

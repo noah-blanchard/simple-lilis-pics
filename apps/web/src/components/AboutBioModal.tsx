@@ -1,11 +1,11 @@
 "use client";
 
+import { EASE } from "@lili/ui/lib/motion";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { EASE } from "@/lib/motion";
 
 interface AboutBioModalProps {
   open: boolean;

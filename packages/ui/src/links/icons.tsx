@@ -8,7 +8,7 @@ import {
   IconInstagram,
   IconMail,
   IconTikTok,
-} from "@/components/Icons";
+} from "../components/Icons";
 
 type LinkIconComponent = ComponentType<{ className?: string }>;
 

@@ -1,7 +1,7 @@
 "use client";
 
+import { PillButton } from "@lili/ui/components/PillButton";
 import { useLocale, useTranslations } from "next-intl";
-import { PillButton } from "@/components/PillButton";
 
 export default function LinksError({ reset }: { reset: () => void }) {
   const t = useTranslations("links");

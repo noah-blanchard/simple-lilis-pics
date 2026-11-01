@@ -1,11 +1,11 @@
 "use client";
 
 import type { SocialIconKey } from "@lili/core/links/constants";
-import { useId, useMemo, useRef, useState } from "react";
 import {
   SOCIAL_ICON_REGISTRY,
   type SocialIconDefinition,
-} from "@/lib/links/social-icons";
+} from "@lili/ui/links/social-icons";
+import { useId, useMemo, useRef, useState } from "react";
 
 interface SocialIconPickerProps {
   value: SocialIconKey;

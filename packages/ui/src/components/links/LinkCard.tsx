@@ -3,7 +3,7 @@
 import type { Locale } from "@lili/core/i18n/routing";
 import type { ResolvedLink } from "@lili/core/types/db";
 import { motion, useReducedMotion } from "motion/react";
-import { getLinkIcon } from "@/lib/links/icons";
+import { getLinkIcon } from "../../links/icons";
 
 interface LinkCardProps {
   link: ResolvedLink;

@@ -1,5 +1,7 @@
 "use client";
 
+import { PillButton } from "@lili/ui/components/PillButton";
+import { EASE } from "@lili/ui/lib/motion";
 import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { HeroCarousel } from "@/components/HeroCarousel";
@@ -7,9 +9,7 @@ import { HoverLink } from "@/components/HoverLink";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 import { Logo } from "@/components/Logo";
 import { NavIndexList } from "@/components/NavIndexList";
-import { PillButton } from "@/components/PillButton";
 import { socials } from "@/data/socials";
-import { EASE } from "@/lib/motion";
 
 // Splits a translated line on `**word**` markers and renders the marked
 // portion in accent color. Word position differs by language (e.g. the

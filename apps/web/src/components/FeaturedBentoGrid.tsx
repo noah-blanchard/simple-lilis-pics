@@ -1,8 +1,8 @@
 "use client";
 
 import type { ResolvedProject } from "@lili/core/types/db";
+import { FEATURED_BENTO_BREAKPOINTS } from "@lili/ui/lib/bento";
 import { BentoImageGrid } from "@/components/BentoImageGrid";
-import { FEATURED_BENTO_BREAKPOINTS } from "@/lib/bento";
 
 interface FeaturedBentoGridProps {
   items: ResolvedProject[];

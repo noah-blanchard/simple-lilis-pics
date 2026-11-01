@@ -1,9 +1,9 @@
 "use client";
 
+import { EASE } from "@lili/ui/lib/motion";
 import { motion, useInView, useReducedMotion } from "motion/react";
 import { useEffect, useRef } from "react";
 import { ProcessBody } from "@/components/ProcessParts";
-import { EASE } from "@/lib/motion";
 import type { ProcessStep } from "@/types";
 
 interface ProcessStepItemProps {

@@ -1,5 +1,6 @@
 "use client";
 
+import { EASE } from "@lili/ui/lib/motion";
 import {
   motion,
   useMotionValue,
@@ -8,7 +9,6 @@ import {
 } from "motion/react";
 import Image from "next/image";
 import type { MouseEvent as ReactMouseEvent } from "react";
-import { EASE } from "@/lib/motion";
 
 const MAX_TILT = 20;
 const TILT_SPRING = { stiffness: 200, damping: 18, mass: 0.4 } as const;

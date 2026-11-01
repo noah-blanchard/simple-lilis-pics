@@ -2,7 +2,7 @@
    PALETTE — single source of truth for theming.
    This site ships a single, refined LIGHT theme (no dark mode). Edit ONLY this
    file to retune colors. Each token is bound to a Tailwind utility via
-   `@theme inline` in globals.css (e.g. `--bg` -> `bg-ink`, `--fg` -> `text-fg`).
+   `@theme inline` in base.css (e.g. `--bg` -> `bg-ink`, `--fg` -> `text-fg`).
 
    Design intent — "warm gallery":
    - Grays are strictly TRUE-NEUTRAL (R=G=B). A tint reads as that color once it

@@ -1,8 +1,8 @@
 "use client";
 
+import { PillButton } from "@lili/ui/components/PillButton";
 import type { PillVariant } from "@/types";
 import { MenuIcon } from "./MenuIcon";
-import { PillButton } from "./PillButton";
 
 interface MenuToggleProps {
   open: boolean;

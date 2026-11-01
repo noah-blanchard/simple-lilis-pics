@@ -1,17 +1,17 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { NeonRotatingBorder } from "@lili/ui/components/NeonRotatingBorder";
+import { PillButton } from "@lili/ui/components/PillButton";
+import { EASE, hoverColorTransition } from "@lili/ui/lib/motion";
+import { FIELD_CLASS, FIELD_FOCUS } from "@lili/ui/lib/ui";
 import { AnimatePresence, motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { EASE, hoverColorTransition } from "@/lib/motion";
-import { FIELD_CLASS, FIELD_FOCUS } from "@/lib/ui";
 import type { ContactFormValues } from "@/types";
 import { ContactSuccess } from "./ContactSuccess";
-import { NeonRotatingBorder } from "./NeonRotatingBorder";
-import { PillButton } from "./PillButton";
 
 interface ContactFormProps {
   /** Injected submit handler — keeps this component free of data-fetching. */

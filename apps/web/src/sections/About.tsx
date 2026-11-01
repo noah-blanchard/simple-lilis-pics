@@ -1,5 +1,6 @@
 "use client";
 
+import { hoverColorTransition } from "@lili/ui/lib/motion";
 import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
@@ -9,7 +10,6 @@ import { Reveal } from "@/components/Reveal";
 import { RoundedImage } from "@/components/RoundedImage";
 import { SectionHeader } from "@/components/SectionHeader";
 import { rawList } from "@/lib/messages";
-import { hoverColorTransition } from "@/lib/motion";
 
 const ABOUT_IMG = "/about/about_landscape.webp";
 

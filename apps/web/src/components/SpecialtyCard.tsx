@@ -1,5 +1,7 @@
 "use client";
 
+import { CatIcon } from "@lili/ui/components/Icons";
+import { EASE, zoomTransition } from "@lili/ui/lib/motion";
 import {
   animate,
   motion,
@@ -12,9 +14,7 @@ import {
 } from "motion/react";
 import Image from "next/image";
 import { type MouseEvent, type ReactNode, useRef, useState } from "react";
-import { EASE, zoomTransition } from "@/lib/motion";
 import type { Specialty } from "@/types";
-import { CatIcon } from "./Icons";
 
 interface SpecialtyCardProps {
   specialty: Specialty;

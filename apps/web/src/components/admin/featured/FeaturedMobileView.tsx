@@ -1,9 +1,9 @@
 "use client";
 
+import { PillButton } from "@lili/ui/components/PillButton";
+import { packSkyline, presetLabel, useBentoMetrics } from "@lili/ui/lib/bento";
 import Image from "next/image";
 import type { EditorTile } from "@/components/admin/FeaturedBentoEditor";
-import { PillButton } from "@/components/PillButton";
-import { packSkyline, presetLabel, useBentoMetrics } from "@/lib/bento";
 
 /** Gap between preview tiles, in px — tighter than the editor's, since the
  *  whole grid is scaled down to phone width. */

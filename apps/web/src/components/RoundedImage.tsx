@@ -1,9 +1,9 @@
 "use client";
 
+import { zoomTransition } from "@lili/ui/lib/motion";
 import { motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
 import type { ReactNode } from "react";
-import { zoomTransition } from "@/lib/motion";
 
 interface RoundedImageProps {
   src: string;

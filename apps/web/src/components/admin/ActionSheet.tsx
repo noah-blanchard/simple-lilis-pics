@@ -1,7 +1,7 @@
 "use client";
 
+import { EASE } from "@lili/ui/lib/motion";
 import { AnimatePresence, motion } from "motion/react";
-import { EASE } from "@/lib/motion";
 
 export interface SheetAction {
   label: string;

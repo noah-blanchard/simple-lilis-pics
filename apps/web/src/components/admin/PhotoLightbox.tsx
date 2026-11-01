@@ -1,11 +1,11 @@
 "use client";
 
+import { IconArrow } from "@lili/ui/components/Icons";
+import { ZoomableImage } from "@lili/ui/components/ZoomableImage";
+import { EASE, hoverColorTransition } from "@lili/ui/lib/motion";
 import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { IconArrow } from "@/components/Icons";
-import { ZoomableImage } from "@/components/ZoomableImage";
-import { EASE, hoverColorTransition } from "@/lib/motion";
 
 const navBtnHover = {
   backgroundColor: "var(--inverse)",

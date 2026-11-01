@@ -1,7 +1,7 @@
 "use client";
 
+import { PillButton } from "@lili/ui/components/PillButton";
 import { useTranslations } from "next-intl";
-import { PillButton } from "@/components/PillButton";
 
 // Localized 404 rendered within the [locale] layout (so it inherits the theme,
 // fonts and next-intl provider). Triggered by notFound() — e.g. an unknown

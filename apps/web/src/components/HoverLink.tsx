@@ -1,8 +1,8 @@
 "use client";
 
+import { hoverColorTransition } from "@lili/ui/lib/motion";
 import { motion, type TargetAndTransition } from "motion/react";
 import type { ReactNode } from "react";
-import { hoverColorTransition } from "@/lib/motion";
 
 interface HoverLinkProps {
   href: string;

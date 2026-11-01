@@ -1,7 +1,7 @@
 "use client";
 
+import { IconSparkle } from "@lili/ui/components/Icons";
 import { motion } from "motion/react";
-import { IconSparkle } from "@/components/Icons";
 
 export type TranslateButtonState = "idle" | "confirm" | "loading";
 

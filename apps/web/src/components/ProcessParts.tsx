@@ -1,7 +1,7 @@
 "use client";
 
+import { EASE } from "@lili/ui/lib/motion";
 import { motion, useReducedMotion, type Variants } from "motion/react";
-import { EASE } from "@/lib/motion";
 import type { ProcessStep } from "@/types";
 
 const listV: Variants = {

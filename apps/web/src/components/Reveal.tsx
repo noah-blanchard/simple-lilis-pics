@@ -1,8 +1,8 @@
 "use client";
 
+import { EASE } from "@lili/ui/lib/motion";
 import { motion } from "motion/react";
 import type { ReactNode } from "react";
-import { EASE } from "@/lib/motion";
 
 interface RevealProps {
   children: ReactNode;

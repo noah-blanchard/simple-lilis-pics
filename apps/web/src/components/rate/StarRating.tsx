@@ -1,10 +1,10 @@
 "use client";
 
+import { StarIcon } from "@lili/ui/components/rate/StarIcon";
+import { EASE } from "@lili/ui/lib/motion";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { useCallback, useRef, useState } from "react";
-import { EASE } from "@/lib/motion";
-import { StarIcon } from "./StarIcon";
 
 const STARS = [1, 2, 3, 4, 5] as const;
 

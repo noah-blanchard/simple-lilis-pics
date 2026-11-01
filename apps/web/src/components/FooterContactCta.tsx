@@ -1,8 +1,8 @@
 "use client";
 
+import { PillButton } from "@lili/ui/components/PillButton";
 import { useTranslations } from "next-intl";
 import { usePathname } from "@/i18n/navigation";
-import { PillButton } from "./PillButton";
 
 // Footer renders on the homepage, the portfolio archive, and project detail
 // pages, but #contact only exists on the homepage — off-home this needs to

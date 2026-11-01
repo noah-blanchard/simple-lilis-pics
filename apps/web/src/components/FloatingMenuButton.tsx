@@ -1,10 +1,10 @@
 "use client";
 
+import { EASE } from "@lili/ui/lib/motion";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { usePathname } from "@/i18n/navigation";
-import { EASE } from "@/lib/motion";
 import { MenuOverlay } from "./MenuOverlay";
 import { MenuToggle } from "./MenuToggle";
 

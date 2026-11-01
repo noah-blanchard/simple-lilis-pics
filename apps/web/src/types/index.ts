@@ -2,14 +2,9 @@
  *  data held in `src/data` — shaped like an API response. The fully-resolved
  *  types add the translated strings merged in by section containers. */
 
-export type IconKind =
-  | "landscape"
-  | "street"
-  | "portrait"
-  | "fashion"
-  | "event";
+import type { IconKind, PillVariant } from "@lili/ui/types";
 
-export type PillVariant = "light" | "dark" | "accent" | "ghost" | "danger";
+export type { IconKind, PillVariant };
 
 /* ── Specialty ── */
 export interface SpecialtyMeta {

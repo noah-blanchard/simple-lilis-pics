@@ -6,12 +6,12 @@ import {
   type ProjectWithRelations,
   resolveImageUrl,
 } from "@lili/core/types/db";
+import { IconDots } from "@lili/ui/components/Icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { useState } from "react";
 import { ActionSheet } from "@/components/admin/ActionSheet";
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
-import { IconDots } from "@/components/Icons";
 
 /** One project in the admin list. A compact row on phones and a cover-led card
  *  from `sm` up — one DOM tree either way, so the cover image is never fetched

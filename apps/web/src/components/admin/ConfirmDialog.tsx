@@ -1,9 +1,8 @@
 "use client";
 
+import { PillButton } from "@lili/ui/components/PillButton";
+import { EASE } from "@lili/ui/lib/motion";
 import { AnimatePresence, motion } from "motion/react";
-import { PillButton } from "@/components/PillButton";
-
-import { EASE } from "@/lib/motion";
 
 interface ConfirmDialogProps {
   open: boolean;

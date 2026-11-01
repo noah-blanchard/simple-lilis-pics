@@ -1,12 +1,12 @@
 "use client";
 
+import { IconDots, IconGrid } from "@lili/ui/components/Icons";
+import { EASE } from "@lili/ui/lib/motion";
 import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
 import { useState } from "react";
 import { SignOutButton } from "@/components/admin/SignOutButton";
-import { IconDots, IconGrid } from "@/components/Icons";
 import { ADMIN_HOME, ADMIN_SECTIONS } from "@/lib/admin/sections";
-import { EASE } from "@/lib/motion";
 
 const tabClass =
   "flex min-h-14 flex-1 flex-col items-center justify-center gap-1 text-[10px] transition-colors";

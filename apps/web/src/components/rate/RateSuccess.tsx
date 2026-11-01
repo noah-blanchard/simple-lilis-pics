@@ -1,12 +1,12 @@
 "use client";
 
 import type { Locale } from "@lili/core/i18n/routing";
+import { PillButton } from "@lili/ui/components/PillButton";
+import { StarIcon } from "@lili/ui/components/rate/StarIcon";
+import { EASE } from "@lili/ui/lib/motion";
 import { motion, useReducedMotion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { EASE } from "@/lib/motion";
-import { PillButton } from "../PillButton";
-import { StarIcon } from "./StarIcon";
 import { ThankYouLetter } from "./ThankYouLetter";
 
 interface RateSuccessProps {

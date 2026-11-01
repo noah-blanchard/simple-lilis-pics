@@ -6,11 +6,7 @@ import {
   type ProjectWithRelations,
   resolveImageUrl,
 } from "@lili/core/types/db";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { motion } from "motion/react";
-import { useEffect, useRef, useState } from "react";
-import { FeaturedMobileView } from "@/components/admin/featured/FeaturedMobileView";
-import { PillButton } from "@/components/PillButton";
+import { PillButton } from "@lili/ui/components/PillButton";
 import {
   aspectFor,
   type BentoTile,
@@ -20,7 +16,11 @@ import {
   presetLabel,
   presetsForOrientation,
   useBentoMetrics,
-} from "@/lib/bento";
+} from "@lili/ui/lib/bento";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { motion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
+import { FeaturedMobileView } from "@/components/admin/featured/FeaturedMobileView";
 
 /** The editor canvas always renders the canonical desktop grid (8 base columns)
  *  so every size preset is reachable and the saved `col_span` is the desktop

@@ -9,7 +9,7 @@ import {
 } from "motion/react";
 import Image from "next/image";
 import { useCallback, useEffect, useRef } from "react";
-import { EASE } from "@/lib/motion";
+import { EASE } from "../lib/motion";
 
 const MIN_SCALE = 1;
 const MAX_SCALE = 4;

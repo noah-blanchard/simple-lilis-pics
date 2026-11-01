@@ -1,6 +1,10 @@
 "use client";
 
 import type { ResolvedProject } from "@lili/core/types/db";
+import { IconArrow } from "@lili/ui/components/Icons";
+import { PillButton } from "@lili/ui/components/PillButton";
+import { ZoomableImage } from "@lili/ui/components/ZoomableImage";
+import { EASE, hoverColorTransition } from "@lili/ui/lib/motion";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
@@ -8,11 +12,7 @@ import { useCallback, useEffect, useState } from "react";
 import { GalleryIntro } from "@/components/GalleryIntro";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 import { Logo } from "@/components/Logo";
-import { ZoomableImage } from "@/components/ZoomableImage";
 import { useRouter } from "@/i18n/navigation";
-import { EASE, hoverColorTransition } from "@/lib/motion";
-import { IconArrow } from "./Icons";
-import { PillButton } from "./PillButton";
 
 const navBtnHover = {
   backgroundColor: "var(--inverse)",

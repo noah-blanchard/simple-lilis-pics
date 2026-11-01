@@ -2,8 +2,8 @@
 
 import { motion, useReducedMotion, type Variants } from "motion/react";
 import type { ReactNode } from "react";
-import { EASE } from "@/lib/motion";
-import type { PillVariant } from "@/types";
+import { EASE } from "../lib/motion";
+import type { PillVariant } from "../types";
 
 type PillSize = "sm" | "md";
 

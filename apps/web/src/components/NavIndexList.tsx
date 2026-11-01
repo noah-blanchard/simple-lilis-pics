@@ -1,16 +1,16 @@
 "use client";
 
+import { IconArrow } from "@lili/ui/components/Icons";
+import { EASE } from "@lili/ui/lib/motion";
 import { motion, useReducedMotion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { navItems } from "@/data/nav";
 import { Link, usePathname } from "@/i18n/navigation";
-import { EASE } from "@/lib/motion";
 import {
   isInPageAnchor,
   resolveNavHref,
   smoothScrollToAnchor,
 } from "@/lib/navTarget";
-import { IconArrow } from "./Icons";
 
 interface NavIndexListProps {
   /** Called after a link is activated — e.g. to close a hosting overlay. Omit for inline use. */

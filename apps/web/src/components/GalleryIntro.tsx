@@ -1,8 +1,7 @@
 "use client";
 
+import { EASE } from "@lili/ui/lib/motion";
 import { motion, useReducedMotion } from "motion/react";
-
-import { EASE } from "@/lib/motion";
 
 // Full-screen intro shown while the first gallery photo decodes. It keeps the
 // user looking at something intentional — the project title over a quiet

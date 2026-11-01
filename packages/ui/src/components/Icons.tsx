@@ -1,4 +1,4 @@
-import type { IconKind } from "@/types";
+import type { IconKind } from "../types";
 
 interface IconProps {
   className?: string;

@@ -1,10 +1,10 @@
 "use client";
 
+import { IconCheck } from "@lili/ui/components/Icons";
+import { PillButton } from "@lili/ui/components/PillButton";
+import { EASE } from "@lili/ui/lib/motion";
 import { motion } from "motion/react";
-import { EASE } from "@/lib/motion";
 import type { Plan } from "@/types";
-import { IconCheck } from "./Icons";
-import { PillButton } from "./PillButton";
 
 interface PriceCardProps {
   plan: Plan;

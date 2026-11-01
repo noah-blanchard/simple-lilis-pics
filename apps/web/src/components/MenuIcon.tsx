@@ -1,7 +1,7 @@
 "use client";
 
+import { EASE } from "@lili/ui/lib/motion";
 import { motion, useReducedMotion } from "motion/react";
-import { EASE } from "@/lib/motion";
 
 interface MenuIconProps {
   open: boolean;

@@ -1,7 +1,7 @@
 "use client";
 
+import { useIsDesktop } from "@lili/ui/lib/use-media-query";
 import type { ReactNode } from "react";
-import { useIsDesktop } from "@/lib/use-media-query";
 import { Modal } from "./Modal";
 import { Sheet } from "./Sheet";
 

@@ -15,6 +15,7 @@
       "dependencies": {
         "@hookform/resolvers": "^5.4.0",
         "@lili/core": "workspace:*",
+        "@lili/ui": "workspace:*",
         "@openrouter/sdk": "^0.12.79",
         "@supabase/ssr": "^0.10.3",
         "@supabase/supabase-js": "^2.107.0",
@@ -66,6 +67,27 @@
       "peerDependencies": {
         "next": "16.2.7",
         "react": "19.2.4",
+      },
+    },
+    "packages/ui": {
+      "name": "@lili/ui",
+      "version": "0.0.0",
+      "dependencies": {
+        "@lili/core": "workspace:*",
+        "motion": "^12.40.0",
+        "react-icons": "^5.7.0",
+      },
+      "devDependencies": {
+        "@lili/config": "workspace:*",
+        "@types/node": "^20",
+        "@types/react": "^19",
+        "@types/react-dom": "^19",
+        "typescript": "^5",
+      },
+      "peerDependencies": {
+        "next": "16.2.7",
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
       },
     },
   },
@@ -168,6 +190,8 @@
     "@lili/config": ["@lili/config@workspace:packages/config"],
 
     "@lili/core": ["@lili/core@workspace:packages/core"],
+
+    "@lili/ui": ["@lili/ui@workspace:packages/ui"],
 
     "@lili/web": ["@lili/web@workspace:apps/web"],
 

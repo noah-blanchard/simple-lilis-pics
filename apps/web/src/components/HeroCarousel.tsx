@@ -1,10 +1,10 @@
 "use client";
 
+import { EASE } from "@lili/ui/lib/motion";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
-import { EASE } from "@/lib/motion";
 
 // Curated editorial/portrait photography, optimized for web (WebP, resized
 // to the carousel's max display width).

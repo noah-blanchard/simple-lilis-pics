@@ -1,8 +1,8 @@
 "use client";
 
+import { EASE } from "@lili/ui/lib/motion";
 import { motion, useScroll } from "motion/react";
 import { useRef, useState } from "react";
-import { EASE } from "@/lib/motion";
 import type { ProcessStep } from "@/types";
 import { ProcessStage } from "./ProcessStage";
 import { ProcessStepItem } from "./ProcessStepItem";
