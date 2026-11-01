@@ -1,12 +1,12 @@
 # Admin guide
 
-The admin CMS is a private, responsive English-only tool under `/admin`. Its hub and navigation expose Projects, Featured, Ratings, and Messages.
+The admin CMS is a private, responsive English-only tool served by its own app at **`https://admin.lilispics.com`** (`http://localhost:3051` in development). Old `lilispics.com/admin` and `lilispics.com/login` links redirect there, so existing bookmarks keep working. Its hub and navigation expose Projects, Featured, Ratings, and Messages.
 
 It also exposes a Links editor for the public `/links` and `/fr/links` page.
 
 ## Sign in
 
-1. Open `/login`.
+1. Open `https://admin.lilispics.com/login`.
 2. Enter an email/password user created in Supabase Auth.
 3. After authentication, the app redirects to `/admin`.
 
@@ -35,9 +35,9 @@ Deleting a project removes its database relationships and attempts to remove upl
 7. Choose a date, featured state, and tags.
 8. Save.
 
-Images are compressed in the browser before upload. Compression targets under 4 MiB per image, and the server rejects anything larger, so a single-photo request always fits Vercel's 4.5 MB request-body limit.
+Images are compressed in the browser before upload. Compression targets under 4 MiB per image, and the server rejects anything larger. These limits were chosen for the previous host's 4.5 MB request-body cap and are intentionally kept; they can be relaxed in a future change.
 
-When the compressed images total more than 4 MiB (the hosting platform caps a request at 4.5 MB), the form skips the single batch request and uploads sequentially: it creates project metadata first, uploads each image individually, then saves the cover. If the platform still rejects a batch as too large, the form offers the same sequential upload as a retry. A sequential upload that fails part-way resumes the same project on retry instead of creating a duplicate.
+When the compressed images total more than 4 MiB, the form skips the single batch request and uploads sequentially: it creates project metadata first, uploads each image individually, then saves the cover. If the server still rejects a batch as too large, the form offers the same sequential upload as a retry. A sequential upload that fails part-way resumes the same project on retry instead of creating a duplicate.
 
 ## Edit a project
 
@@ -75,7 +75,7 @@ Only currently featured projects belong in the submitted layout. The maximum is 
 
 ## Ratings and testimonials
 
-Open `/admin/ratings` to generate an English or French QR code. Each URL expires after 24 hours and works once. Show it to the person being photographed; their phone opens `/rate/[locale]/[token]`.
+Open `/admin/ratings` to generate an English or French QR code. Each URL expires after 24 hours and works once. Show it to the person being photographed; their phone opens `https://lilispics.com/rate/[locale]/[token]` on the public site (not on the admin origin).
 
 Visitors can submit 1–5 stars with an optional name and note. The token is consumed atomically, so refreshes/double taps cannot create two ratings. In the admin:
 
@@ -118,7 +118,10 @@ Open `/admin/links` to edit the public links page in a live mobile preview.
   and Move down for keyboard and precise mobile operation.
 - Draft links remain visible in the editor with a Draft badge but never reach
   the public page.
-- Save commits the complete draft atomically. Discard restores the last server
+- Save commits the complete draft atomically and the public page reflects it
+  immediately: the admin asks the portfolio app to refresh its cached links data.
+  If that request fails the save still succeeds and the public page catches up
+  within about five minutes. Discard restores the last server
   snapshot. Closing or reloading a dirty editor triggers a browser warning.
 - A conflict means another tab saved first. Reload the server version or keep
   the local draft; the editor never silently overwrites concurrent changes.

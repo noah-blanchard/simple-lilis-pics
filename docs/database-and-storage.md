@@ -2,7 +2,7 @@
 
 ## Migration policy
 
-Apply `supabase/migrations/` in numeric order. They are the schema history:
+Apply `supabase/migrations/` in numeric order. They are the schema history, shared by every app (there is one Supabase project and no per-app schema). Migrations are applied **manually** (Supabase SQL Editor or CLI); a committed file is not an applied migration, and deploying code does not run it. Apply a migration before the code that depends on it. The history:
 
 | Migration | Result |
 | --- | --- |
@@ -105,7 +105,7 @@ Deleting a project cascades its photo and tag-link rows. The API separately remo
 - Contact messages have authenticated read access only and no public insert/update/delete policy.
 - Only approved ratings are publicly readable; authenticated users can moderate ratings and manage tokens.
 - Anonymous users can read published regular links, published links-page social icons, and the singleton page settings only. Click tables have no public policies; the same-origin APIs write through restricted service-role functions.
-- The public contact route inserts with the server-only service-role client.
+- The public contact route (served by the web app) inserts with the server-only service-role client, as do the rating submission and click-beacon routes.
 - Storage objects in the configured bucket are publicly readable; authenticated policies permit object writes.
 
 The service-role key bypasses RLS. It must stay server-only.
@@ -116,9 +116,9 @@ The maximum of eight featured projects is enforced in the admin UI, API handlers
 
 ## Storage
 
-The default bucket is `photos` and may be overridden by `NEXT_PUBLIC_SUPABASE_BUCKET`. Uploaded records store only object keys. `resolveImageUrl` builds public URLs from the configured Supabase origin and bucket. Full `http(s)` URLs remain untouched for legacy/demo images.
+The default bucket is `photos` and may be overridden by `NEXT_PUBLIC_SUPABASE_BUCKET`. Uploaded records store only object keys. `resolveImageUrl` (`packages/core/src/types/db.ts`) builds public URLs from the configured Supabase origin and bucket. Full `http(s)` URLs remain untouched for legacy/demo images.
 
-`next.config.ts` derives the allowed Supabase image hostname from `NEXT_PUBLIC_SUPABASE_URL` at build time. Changing Supabase projects requires rebuilding the application.
+Each app's `next.config.ts` (`apps/web`, `apps/admin`, `apps/wedding`) derives the allowed Supabase image hostname from `NEXT_PUBLIC_SUPABASE_URL` at build time. Changing Supabase projects requires rebuilding every app, which also means passing the new value as a Docker build argument.
 
 Links-page banners use `links/banners/<uuid>.<extension>` in the same bucket.
 The admin previews a local object URL, uploads only on Save, and removes the
@@ -129,6 +129,6 @@ remove the newly uploaded object.
 
 - Never edit an applied migration to change production history; add a new numbered migration.
 - Test destructive SQL and seed actions against a disposable project first.
-- `bun run seed --force` wipes project data and bypasses RLS; it does not seed or clear messages/ratings.
+- `bun run seed --force` (run from `apps/web`) wipes project data and bypasses RLS; it does not seed or clear messages/ratings.
 - Database deletion may leave an object orphan only when Storage cleanup fails; route code logs that condition.
 - Back up production data before destructive maintenance.

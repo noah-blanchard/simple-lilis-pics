@@ -1,5 +1,9 @@
 # Monorepo migration: master plan
 
+> **Status: completed (2026-11-01).** This folder is the historical record of
+> the migration. Current documentation lives in `AGENTS.md`, `README.md`, and
+> `docs/`.
+
 This folder contains the full plan for turning the single Next.js app into a
 Bun + Turborepo monorepo with three apps that share one backend, and for moving
 hosting from Vercel to a self-hosted Dokploy instance.

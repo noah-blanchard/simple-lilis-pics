@@ -1,6 +1,6 @@
 # API reference
 
-All handlers live under `src/app/api/` and use a shared JSON envelope.
+Route handlers live in `packages/core/src/handlers/` and are mounted by one-line route files under `apps/<app>/src/app/api/`. Every handler uses a shared JSON envelope.
 
 ```ts
 type ApiResponse<T> =
@@ -10,33 +10,46 @@ type ApiResponse<T> =
 
 Validation failures use HTTP 422 with `VALIDATION_ERROR` and issue details. Invalid JSON/form data uses HTTP 400. Protected handlers return HTTP 401 `UNAUTHORIZED` without a valid Supabase user.
 
+## Which app serves what
+
+The API is split between two apps, each with its own base URL. A route called on the wrong origin returns 404 (or 405 for a method the app does not mount).
+
+| App | Base URL | Serves |
+| --- | --- | --- |
+| `apps/web` | `https://lilispics.com` | The public writes and the revalidation webhook |
+| `apps/admin` | `https://admin.lilispics.com` | Every authenticated route, plus `GET /api/projects` and `GET /api/tags` |
+
+Admin client calls are same-origin from the CMS pages, and public client calls (contact form, rating submission, link beacons) are same-origin from the public site. The wedding app has no API routes.
+
 ## Endpoint summary
 
-| Method | Path | Auth | Purpose |
-| --- | --- | --- | --- |
-| GET | `/api/projects` | Public | List projects |
-| POST | `/api/projects` | Required | Create project and optionally upload photos |
-| PATCH | `/api/projects/[id]` | Required | Edit project, tags, cover, and photo metadata |
-| DELETE | `/api/projects/[id]` | Required | Delete project and associated Storage objects |
-| POST | `/api/projects/[id]/photos` | Required | Upload one photo for sequential fallback |
-| PATCH | `/api/projects/reorder` | Required | Save featured order and tile widths |
-| GET | `/api/tags` | Public | List tags alphabetically |
-| POST | `/api/tags` | Required | Create a bilingual tag |
-| PATCH | `/api/tags/[id]` | Required | Update bilingual tag labels |
-| DELETE | `/api/tags/[id]` | Required | Delete a tag |
-| POST | `/api/translate` | Required | Translate admin text |
-| GET | `/api/contact` | Required | List private inquiries newest first |
-| POST | `/api/contact` | Public | Store an inquiry and attempt notification email |
-| PATCH | `/api/contact/[id]` | Required | Mark an inquiry read or unread |
-| DELETE | `/api/contact/[id]` | Required | Delete an inquiry |
-| POST | `/api/rating-tokens` | Required | Mint a single-use localized rating URL |
-| GET | `/api/ratings` | Required | List all ratings newest first |
-| POST | `/api/ratings` | Public/token | Submit one rating |
-| PATCH | `/api/ratings/[id]` | Required | Approve or unapprove a rating |
-| DELETE | `/api/ratings/[id]` | Required | Delete a rating |
-| GET | `/api/links` | Required | Load the links editor snapshot and statistics |
-| PUT | `/api/links` | Required | Atomically save the complete links editor snapshot |
-| POST | `/api/links/[id]/click` | Public/same-origin | Record a best-effort click on a published link |
+| Method | Path | App | Auth | Purpose |
+| --- | --- | --- | --- | --- |
+| GET | `/api/projects` | admin | None (only the admin calls it) | List projects |
+| POST | `/api/projects` | admin | Required | Create project and optionally upload photos |
+| PATCH | `/api/projects/[id]` | admin | Required | Edit project, tags, cover, and photo metadata |
+| DELETE | `/api/projects/[id]` | admin | Required | Delete project and associated Storage objects |
+| POST | `/api/projects/[id]/photos` | admin | Required | Upload one photo for sequential fallback |
+| PATCH | `/api/projects/reorder` | admin | Required | Save featured order and tile widths |
+| GET | `/api/tags` | admin | None (only the admin calls it) | List tags alphabetically |
+| POST | `/api/tags` | admin | Required | Create a bilingual tag |
+| PATCH | `/api/tags/[id]` | admin | Required | Update bilingual tag labels |
+| DELETE | `/api/tags/[id]` | admin | Required | Delete a tag |
+| POST | `/api/translate` | admin | Required | Translate admin text |
+| GET | `/api/contact` | admin | Required | List private inquiries newest first |
+| POST | `/api/contact` | web | Public | Store an inquiry and attempt notification email |
+| PATCH | `/api/contact/[id]` | admin | Required | Mark an inquiry read or unread |
+| DELETE | `/api/contact/[id]` | admin | Required | Delete an inquiry |
+| POST | `/api/rating-tokens` | admin | Required | Mint a single-use localized rating URL |
+| GET | `/api/ratings` | admin | Required | List all ratings newest first |
+| POST | `/api/ratings` | web | Public/token | Submit one rating |
+| PATCH | `/api/ratings/[id]` | admin | Required | Approve or unapprove a rating |
+| DELETE | `/api/ratings/[id]` | admin | Required | Delete a rating |
+| GET | `/api/links` | admin | Required | Load the links editor snapshot and statistics |
+| PUT | `/api/links` | admin | Required | Atomically save the complete links editor snapshot |
+| POST | `/api/links/[id]/click` | web | Public/same-origin | Record a best-effort click on a published link |
+| POST | `/api/links/socials/[id]/click` | web | Public/same-origin | Record a best-effort click on a published social link |
+| POST | `/api/revalidate` | web | Bearer secret | Drop whitelisted public cache tags (called by the admin) |
 
 ## Projects
 
@@ -47,13 +60,13 @@ Query parameters:
 - `featured=true` filters to featured projects and applies manual order.
 - `limit=N` applies a positive numeric result cap.
 
-Returns resolved project rows with photos and tags, newest first when not governed by featured order.
+Returns resolved project rows with photos and tags, newest first when not governed by featured order. It is served by the admin app only.
 
 ### `POST /api/projects`
 
 Consumes `multipart/form-data`:
 
-- Repeated `files`: zero or more JPEG, PNG, WebP, or AVIF files, each at most 4 MiB. There is no photo-count limit; the whole request must still fit the hosting platform's body limit, so large galleries use the per-photo endpoint below.
+- Repeated `files`: zero or more JPEG, PNG, WebP, or AVIF files, each at most 4 MiB. There is no photo-count limit. The client keeps a request under 4.5 MB (a limit inherited from the previous host, see [Troubleshooting](troubleshooting.md#upload-is-rejected)), so large galleries use the per-photo endpoint below.
 - Repeated `orientation`: `landscape` or `portrait` aligned with files.
 - Repeated `position`: zero-based integer aligned with files.
 - `cover_index`: zero-based index into `files`.
@@ -100,7 +113,7 @@ The array contains 1–8 currently featured projects. Array index becomes `featu
 
 ## Tags
 
-`GET /api/tags` returns all tags ordered by English label.
+`GET /api/tags` returns all tags ordered by English label. It is served by the admin app only.
 
 `POST /api/tags` requires non-empty `label_en` and `label_fr`. The slug is derived from English; a duplicate returns HTTP 409 `DUPLICATE_LABEL`.
 
@@ -123,17 +136,17 @@ Text is trimmed and limited to 1–2000 characters. Languages must be `en` and `
 
 ## Contact
 
-`POST /api/contact` accepts `name` (1–200), valid `email` (maximum 320), `message` (10–5000), and optional hidden `company` (maximum 200).
+`POST /api/contact` (web) accepts `name` (1–200), valid `email` (maximum 320), `message` (10–5000), and optional hidden `company` (maximum 200).
 
 A non-empty `company` is treated as a bot honeypot and receives a fake HTTP 201 success without storage. Real submissions are inserted before email is attempted. Resend failures are logged but the stored submission still receives HTTP 201.
 
-`GET /api/contact` returns the authenticated inbox. `PATCH /api/contact/[id]` accepts `{ "read": boolean }` and sets or clears the server-generated `read_at` timestamp. `DELETE` permanently removes the inquiry.
+`GET /api/contact` (admin) returns the authenticated inbox. `PATCH /api/contact/[id]` accepts `{ "read": boolean }` and sets or clears the server-generated `read_at` timestamp. `DELETE` permanently removes the inquiry.
 
 ## Ratings
 
-`POST /api/rating-tokens` accepts `{ "locale": "en" | "fr" }`. It creates a short single-use token with the database's 24-hour expiry and returns HTTP 201 with `token`, absolute `url`, and `expires_at`.
+`POST /api/rating-tokens` (admin) accepts `{ "locale": "en" | "fr" }`. It creates a short single-use token with the database's 24-hour expiry and returns HTTP 201 with `token`, absolute `url`, and `expires_at`. The URL is built from `PORTFOLIO_URL`, so it points at the public site (`https://lilispics.com/rate/<locale>/<token>`), not at the admin.
 
-`POST /api/ratings` accepts:
+`POST /api/ratings` (web) accepts:
 
 ```json
 {
@@ -147,46 +160,54 @@ A non-empty `company` is treated as a bot honeypot and receives a fake HTTP 201 
 
 The public handler atomically claims an unused, unexpired token before inserting. Invalid, expired, used, or concurrently claimed tokens return HTTP 410 `TOKEN_INVALID`. Stars must be 1–5. A non-empty honeypot returns a fake success. Locale comes from the token rather than the request body.
 
-`GET /api/ratings` returns every rating for moderation. `PATCH /api/ratings/[id]` accepts `{ "approved": boolean }`; approval gates stranger-written notes before public testimonial queries can read them. `DELETE` removes the rating but intentionally leaves its token spent.
-
-## Client guidance
-
-Use `src/lib/api/client.ts` inside the application so error envelopes become useful exceptions. Do not call protected endpoints from untrusted automation with the service-role key; authenticate through Supabase and retain the session cookie.
+`GET /api/ratings` (admin) returns every rating for moderation. `PATCH /api/ratings/[id]` accepts `{ "approved": boolean }`; approval gates stranger-written notes before public testimonial queries can read them. `DELETE` removes the rating but intentionally leaves its token spent.
 
 ## Links
 
-`GET /api/links` returns
-`{ links, stats, socials, socialStats, settings }`. Links, social links, and the
-singleton settings include their `updated_at` versions. Both statistics arrays
-contain lifetime totals, current and previous seven-day counts, and the last
-click timestamp.
+`GET /api/links` (admin) returns `{ links, stats, socials, socialStats, settings }`. Links, social links, and the singleton settings include their `updated_at` versions. Both statistics arrays contain lifetime totals, current and previous seven-day counts, and the last click timestamp.
 
-`PUT /api/links` consumes multipart form data. Its `snapshot` field contains
-the original `{id, updated_at}` lists for regular and social links, both
-complete ordered editor lists, original settings timestamp, focal coordinates,
-localized phrases, and `banner_action` (`keep`, `replace`, or `remove`). A
-`replace` request also includes `banner`, a JPEG, PNG, WebP, or AVIF file no
-larger than 4 MiB. Each array order becomes its collection's persisted
-zero-based position.
+`PUT /api/links` (admin) consumes multipart form data. Its `snapshot` field contains the original `{id, updated_at}` lists for regular and social links, both complete ordered editor lists, original settings timestamp, focal coordinates, localized phrases, and `banner_action` (`keep`, `replace`, or `remove`). A `replace` request also includes `banner`, a JPEG, PNG, WebP, or AVIF file no larger than 4 MiB. Each array order becomes its collection's persisted zero-based position.
 
-The database save reconciles regular links, social links, and settings in one
-transaction. If any version changed, it returns HTTP 409 `EDIT_CONFLICT`
-without partial database updates. A failed transaction removes a newly
-uploaded banner; a successful replacement removes the old Storage object
-afterward.
+The database save reconciles regular links, social links, and settings in one transaction. If any version changed, it returns HTTP 409 `EDIT_CONFLICT` without partial database updates. A failed transaction removes a newly uploaded banner; a successful replacement removes the old Storage object afterward. After a successful save the handler asks the web app to drop its public links cache (see `POST /api/revalidate` below); that call is best effort and never fails the save.
 
-Destinations are limited to HTTPS URLs, locale-neutral internal paths beginning
-with `/`, and simple `mailto:` addresses. At least one EN/FR name is required;
-optional blank text is stored as null.
+Destinations are limited to HTTPS URLs, locale-neutral internal paths beginning with `/`, and simple `mailto:` addresses. At least one EN/FR name is required; optional blank text is stored as null.
 
-Social destinations accept HTTPS and simple `mailto:` addresses, require a
-registered icon key and at least one EN/FR tooltip label, and do not accept
-internal paths.
+Social destinations accept HTTPS and simple `mailto:` addresses, require a registered icon key and at least one EN/FR tooltip label, and do not accept internal paths.
 
-`POST /api/links/[id]/click` requires a same-origin browser request. It accepts
-only published links, records the event and increments the lifetime counter,
-then returns HTTP 202. Public anchors navigate directly to their destinations
-and never wait for this response.
+### Click beacons
 
-`POST /api/links/socials/[id]/click` provides the same behavior for published
-social links.
+`POST /api/links/[id]/click` and `POST /api/links/socials/[id]/click` (web) require a same-origin browser request. They accept only published links, record the event and increment the lifetime counter, then return HTTP 202. Public anchors navigate directly to their destinations and never wait for this response.
+
+The same-origin check (`isSameOriginRequest` in `@lili/core/api/same-origin`) returns HTTP 403 `FORBIDDEN` when:
+
+- the `Origin` header is missing, or
+- `Sec-Fetch-Site` is `cross-site`, or
+- `Origin` matches neither the request URL's origin nor the public origin derived from the `X-Forwarded-Proto` and `X-Forwarded-Host` (or `Host`) headers.
+
+Behind a TLS-terminating proxy such as Traefik, the Node server receives plain HTTP, so the forwarded headers are what make a browser's `https://` origin match. The check only stops other sites from inflating click counts; it is not an authentication boundary.
+
+## Cache revalidation
+
+`POST /api/revalidate` (web) is a server-to-server webhook called by the admin after a CMS mutation.
+
+```http
+POST /api/revalidate
+Authorization: Bearer <REVALIDATE_SECRET>
+Content-Type: application/json
+
+{ "tags": ["public-links"] }
+```
+
+| Status | Meaning |
+| --- | --- |
+| 200 | `{ ok: true, data: { revalidated: ["public-links"] } }` |
+| 400 | `INVALID_JSON`: the body is not JSON |
+| 401 | `UNAUTHORIZED`: missing, malformed, or wrong bearer secret |
+| 422 | `VALIDATION_ERROR`: `tags` is empty or contains a tag that is not whitelisted |
+| 503 | `REVALIDATE_DISABLED`: `REVALIDATE_SECRET` is not configured on the server |
+
+Only the tags listed in `PUBLIC_CACHE_TAGS` (`@lili/core/cache-tags`) are accepted; today that is `public-links`. The secret is compared in constant time. Browsers never call this route.
+
+## Client guidance
+
+Use `@lili/core/api/client` inside the applications so error envelopes become useful exceptions. Do not call protected endpoints from untrusted automation with the service-role key; authenticate through Supabase and retain the session cookie for the admin origin.
