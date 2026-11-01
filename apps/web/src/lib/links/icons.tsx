@@ -1,3 +1,4 @@
+import { LINK_ICON_KEYS, type LinkIconKey } from "@lili/core/links/constants";
 import type { ComponentType } from "react";
 import {
   IconArrow,
@@ -8,7 +9,6 @@ import {
   IconMail,
   IconTikTok,
 } from "@/components/Icons";
-import { LINK_ICON_KEYS, type LinkIconKey } from "@/lib/links/constants";
 
 type LinkIconComponent = ComponentType<{ className?: string }>;
 

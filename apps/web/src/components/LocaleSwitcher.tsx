@@ -1,10 +1,10 @@
 "use client";
 
+import { routing } from "@lili/core/i18n/routing";
 import { motion } from "motion/react";
 import { useLocale } from "next-intl";
 import { useTransition } from "react";
 import { usePathname, useRouter } from "@/i18n/navigation";
-import { routing } from "@/i18n/routing";
 import { hoverColorTransition } from "@/lib/motion";
 
 // Toggles the active locale while preserving the current pathname.

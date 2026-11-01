@@ -1,6 +1,6 @@
+import { getAllProjects } from "@lili/core/data/projects";
+import { routing } from "@lili/core/i18n/routing";
 import type { MetadataRoute } from "next";
-import { routing } from "@/i18n/routing";
-import { getAllProjects } from "@/lib/data/projects";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 

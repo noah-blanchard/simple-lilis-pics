@@ -1,10 +1,10 @@
+import { getFeaturedProjects } from "@lili/core/data/projects";
+import type { Locale } from "@lili/core/i18n/routing";
 import { getLocale, getTranslations } from "next-intl/server";
 import { AccentUnderline } from "@/components/AccentUnderline";
 import { FeaturedBentoGrid } from "@/components/FeaturedBentoGrid";
 import { Reveal } from "@/components/Reveal";
 import { Link } from "@/i18n/navigation";
-import type { Locale } from "@/i18n/routing";
-import { getFeaturedProjects } from "@/lib/data/projects";
 
 export const Featured = async () => {
   const locale = (await getLocale()) as Locale;

@@ -1,6 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
-import { SUPABASE_ANON_KEY, SUPABASE_URL } from "@/lib/env";
+import { SUPABASE_ANON_KEY, SUPABASE_URL } from "../env";
 
 /** Supabase client for Server Components, Server Actions and Route Handlers.
  *  Uses the anon key + the request cookies, so RLS applies as the logged-in

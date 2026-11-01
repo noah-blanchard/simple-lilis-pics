@@ -1,8 +1,8 @@
-import { apiError, apiSuccess } from "@/lib/api/response";
-import { featuredReorderSchema } from "@/lib/api/schemas";
-import { validate } from "@/lib/api/validate";
-import { withAuth } from "@/lib/api/with-auth";
-import { createSupabaseAdminClient } from "@/lib/supabase/admin";
+import { apiError, apiSuccess } from "@lili/core/api/response";
+import { featuredReorderSchema } from "@lili/core/api/schemas";
+import { validate } from "@lili/core/api/validate";
+import { withAuth } from "@lili/core/api/with-auth";
+import { createSupabaseAdminClient } from "@lili/core/supabase/admin";
 
 /** PATCH /api/projects/reorder — set the manual display order and bento tile
  *  size of the featured projects. Body: `{ items: { id, col_span }[] }`, the

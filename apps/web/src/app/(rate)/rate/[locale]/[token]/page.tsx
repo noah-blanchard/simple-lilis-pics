@@ -1,8 +1,8 @@
+import type { Locale } from "@lili/core/i18n/routing";
+import { createSupabaseAdminClient } from "@lili/core/supabase/admin";
 import { connection } from "next/server";
 import { RateExperience } from "@/components/rate/RateExperience";
 import { RateExpired } from "@/components/rate/RateExpired";
-import type { Locale } from "@/i18n/routing";
-import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 
 /** True when the token exists, has not been spent, and is still inside its TTL.
  *  This is only the *display* check — POST /api/ratings re-checks the same

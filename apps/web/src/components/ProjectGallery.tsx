@@ -1,5 +1,6 @@
 "use client";
 
+import type { ResolvedProject } from "@lili/core/types/db";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
@@ -10,7 +11,6 @@ import { Logo } from "@/components/Logo";
 import { ZoomableImage } from "@/components/ZoomableImage";
 import { useRouter } from "@/i18n/navigation";
 import { EASE, hoverColorTransition } from "@/lib/motion";
-import type { ResolvedProject } from "@/types/db";
 import { IconArrow } from "./Icons";
 import { PillButton } from "./PillButton";
 

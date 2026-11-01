@@ -1,9 +1,9 @@
 "use client";
 
+import type { ResolvedRating } from "@lili/core/types/db";
 import { motion, type Variants } from "motion/react";
 import { StarIcon } from "@/components/rate/StarIcon";
 import { EASE } from "@/lib/motion";
-import type { ResolvedRating } from "@/types/db";
 import { IconQuote } from "./Icons";
 
 interface ReviewCardProps {

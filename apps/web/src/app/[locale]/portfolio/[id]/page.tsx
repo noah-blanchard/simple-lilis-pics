@@ -1,9 +1,9 @@
+import { getProject } from "@lili/core/data/projects";
+import type { Locale } from "@lili/core/i18n/routing";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import { ProjectGallery } from "@/components/ProjectGallery";
-import type { Locale } from "@/i18n/routing";
-import { getProject } from "@/lib/data/projects";
 
 type Props = { params: Promise<{ locale: string; id: string }> };
 

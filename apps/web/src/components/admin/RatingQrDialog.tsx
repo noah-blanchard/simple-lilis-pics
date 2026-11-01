@@ -1,11 +1,11 @@
 "use client";
 
+import { apiFetch } from "@lili/core/api/client";
+import type { Locale } from "@lili/core/i18n/routing";
 import { useMutation } from "@tanstack/react-query";
 import QRCode from "qrcode";
 import { useCallback, useEffect, useState } from "react";
 import { PillButton } from "@/components/PillButton";
-import type { Locale } from "@/i18n/routing";
-import { apiFetch } from "@/lib/api/client";
 
 interface RatingTokenCreated {
   token: string;

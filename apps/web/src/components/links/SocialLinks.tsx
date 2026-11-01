@@ -1,9 +1,9 @@
 "use client";
 
+import type { ResolvedSocialLink } from "@lili/core/types/db";
 import { motion, useReducedMotion } from "motion/react";
 import { getSocialIcon } from "@/lib/links/social-icons";
 import { EASE } from "@/lib/motion";
-import type { ResolvedSocialLink } from "@/types/db";
 
 interface SocialLinksProps {
   socials: ResolvedSocialLink[];

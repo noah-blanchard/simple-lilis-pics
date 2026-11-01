@@ -1,8 +1,8 @@
+import { SUPABASE_ANON_KEY, SUPABASE_URL } from "@lili/core/env";
+import { routing } from "@lili/core/i18n/routing";
 import { createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
 import createMiddleware from "next-intl/middleware";
-import { routing } from "@/i18n/routing";
-import { SUPABASE_ANON_KEY, SUPABASE_URL } from "@/lib/env";
 
 // Next.js 16 renamed `middleware` to `proxy`. We compose two concerns here:
 //  - the admin area (/admin, /login) is gated by Supabase Auth, outside i18n;

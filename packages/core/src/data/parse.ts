@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { ProjectWithRelations } from "@/types/db";
+import type { ProjectWithRelations } from "../types/db";
 
 /** Shared PostgREST select. Two FKs exist between projects↔project_photos
  *  (project_id + cover_photo_id), so the `!project_id` hint disambiguates. */

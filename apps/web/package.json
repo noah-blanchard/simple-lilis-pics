@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
+    "@lili/core": "workspace:*",
     "@openrouter/sdk": "^0.12.79",
     "@supabase/ssr": "^0.10.3",
     "@supabase/supabase-js": "^2.107.0",
@@ -28,6 +29,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@lili/config": "workspace:*",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/qrcode": "^1.5.6",

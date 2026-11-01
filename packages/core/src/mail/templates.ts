@@ -1,4 +1,4 @@
-import type { ContactInput } from "@/lib/api/schemas";
+import type { ContactInput } from "../api/schemas";
 
 /** Escape text dropped into the HTML email body. */
 function escapeHtml(value: string): string {

@@ -1,3 +1,4 @@
+import type { Orientation } from "@lili/core/types/db";
 import {
   type RefObject,
   useCallback,
@@ -6,7 +7,6 @@ import {
   useRef,
   useState,
 } from "react";
-import type { Orientation } from "@/types/db";
 
 export interface ColumnBreakpoint {
   query: string;

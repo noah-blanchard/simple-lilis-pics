@@ -1,5 +1,8 @@
 "use client";
 
+import { apiFetch } from "@lili/core/api/client";
+import { MAX_FEATURED_PROJECTS } from "@lili/core/api/schemas";
+import type { ProjectWithRelations } from "@lili/core/types/db";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { AdminDialog } from "@/components/admin/AdminDialog";
@@ -8,9 +11,6 @@ import { ProjectForm } from "@/components/admin/ProjectForm";
 import { AdminProjectCard } from "@/components/admin/projects/AdminProjectCard";
 import { TagsManager } from "@/components/admin/TagsManager";
 import { PillButton } from "@/components/PillButton";
-import { apiFetch } from "@/lib/api/client";
-import { MAX_FEATURED_PROJECTS } from "@/lib/api/schemas";
-import type { ProjectWithRelations } from "@/types/db";
 
 export default function AdminDashboard() {
   const [uploadOpen, setUploadOpen] = useState(false);

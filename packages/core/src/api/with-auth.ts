@@ -1,5 +1,5 @@
 import type { User } from "@supabase/supabase-js";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseServerClient } from "../supabase/server";
 import { apiError } from "./response";
 
 interface AuthedArgs<Ctx> {

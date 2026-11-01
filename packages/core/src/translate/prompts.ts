@@ -2,7 +2,7 @@
  *  network layer so the wording can evolve without touching the OpenRouter
  *  client. Pure functions, no side effects. */
 
-import type { TranslateInput } from "@/lib/api/schemas";
+import type { TranslateInput } from "../api/schemas";
 
 /** Discriminated per role so the array is assignable to the OpenRouter SDK's
  *  `ChatMessages[]` union without coupling this module to the SDK types. */

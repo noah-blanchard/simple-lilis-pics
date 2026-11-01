@@ -3,7 +3,7 @@ import {
   LINK_ICON_KEYS,
   LINK_OPEN_BEHAVIORS,
   SOCIAL_ICON_KEYS,
-} from "@/lib/links/constants";
+} from "../links/constants";
 
 /* ── Tags ── */
 

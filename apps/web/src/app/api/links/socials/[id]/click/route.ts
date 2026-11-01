@@ -1,5 +1,5 @@
-import { apiError, apiSuccess } from "@/lib/api/response";
-import { createSupabaseAdminClient } from "@/lib/supabase/admin";
+import { apiError, apiSuccess } from "@lili/core/api/response";
+import { createSupabaseAdminClient } from "@lili/core/supabase/admin";
 
 type Ctx = { params: Promise<{ id: string }> };
 

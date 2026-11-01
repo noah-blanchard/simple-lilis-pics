@@ -1,12 +1,12 @@
 import { cache } from "react";
-import type { Locale } from "@/i18n/routing";
-import { PROJECT_SELECT, parseProject, parseProjects } from "@/lib/data/parse";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import type { Locale } from "../i18n/routing";
+import { createSupabaseServerClient } from "../supabase/server";
 import {
   type ProjectWithRelations,
   type ResolvedProject,
   resolveProject,
-} from "@/types/db";
+} from "../types/db";
+import { PROJECT_SELECT, parseProject, parseProjects } from "./parse";
 
 async function fetchProjects(opts: {
   featuredOnly?: boolean;

@@ -1,8 +1,8 @@
 "use client";
 
+import type { Locale } from "@lili/core/i18n/routing";
 import { motion, useReducedMotion } from "motion/react";
 import { useTranslations } from "next-intl";
-import type { Locale } from "@/i18n/routing";
 import { EASE } from "@/lib/motion";
 import { PillButton } from "../PillButton";
 import { StarIcon } from "./StarIcon";

@@ -1,9 +1,9 @@
 "use client";
 
+import type { ResolvedProject } from "@lili/core/types/db";
 import { motion } from "motion/react";
 import { Link } from "@/i18n/navigation";
 import { EASE } from "@/lib/motion";
-import type { ResolvedProject } from "@/types/db";
 import { RoundedImage } from "./RoundedImage";
 
 interface BentoCardProps {

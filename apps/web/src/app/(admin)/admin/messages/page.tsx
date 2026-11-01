@@ -1,11 +1,11 @@
 "use client";
 
+import { apiFetch } from "@lili/core/api/client";
+import type { ContactMessageRow } from "@lili/core/types/db";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
 import { PillButton } from "@/components/PillButton";
-import { apiFetch } from "@/lib/api/client";
-import type { ContactMessageRow } from "@/types/db";
 
 export default function AdminMessagesPage() {
   const queryClient = useQueryClient();

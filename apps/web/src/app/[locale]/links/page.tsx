@@ -1,8 +1,8 @@
+import { getPublicLinksPage } from "@lili/core/data/links";
+import type { Locale } from "@lili/core/i18n/routing";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { LinksPageContent } from "@/components/links/LinksPageContent";
-import type { Locale } from "@/i18n/routing";
-import { getPublicLinksPage } from "@/lib/data/links";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 

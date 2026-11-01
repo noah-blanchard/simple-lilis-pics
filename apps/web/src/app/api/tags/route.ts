@@ -1,11 +1,11 @@
-import { apiError, apiSuccess } from "@/lib/api/response";
-import { tagCreateSchema } from "@/lib/api/schemas";
-import { validate } from "@/lib/api/validate";
-import { withAuth } from "@/lib/api/with-auth";
-import { slugify } from "@/lib/slugify";
-import { createSupabaseAdminClient } from "@/lib/supabase/admin";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
-import type { TagRow } from "@/types/db";
+import { apiError, apiSuccess } from "@lili/core/api/response";
+import { tagCreateSchema } from "@lili/core/api/schemas";
+import { validate } from "@lili/core/api/validate";
+import { withAuth } from "@lili/core/api/with-auth";
+import { slugify } from "@lili/core/slugify";
+import { createSupabaseAdminClient } from "@lili/core/supabase/admin";
+import { createSupabaseServerClient } from "@lili/core/supabase/server";
+import type { TagRow } from "@lili/core/types/db";
 
 /** GET /api/tags — public list of the tag taxonomy (alphabetical by EN label). */
 export async function GET() {

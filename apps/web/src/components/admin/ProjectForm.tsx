@@ -1,6 +1,18 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { apiFetch } from "@lili/core/api/client";
+import {
+  ACCEPTED_IMAGE_TYPES,
+  MAX_FEATURED_PROJECTS,
+  MAX_FILE_BYTES,
+} from "@lili/core/api/schemas";
+import {
+  type Orientation,
+  type ProjectWithRelations,
+  resolveImageUrl,
+  type TagRow,
+} from "@lili/core/types/db";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import imageCompression from "browser-image-compression";
 import { Reorder, useDragControls } from "motion/react";
@@ -18,19 +30,7 @@ import { PhotoListItem } from "@/components/admin/PhotoListItem";
 import { TranslatableField } from "@/components/admin/TranslatableField";
 import { IconSparkle } from "@/components/Icons";
 import { PillButton } from "@/components/PillButton";
-import { apiFetch } from "@/lib/api/client";
-import {
-  ACCEPTED_IMAGE_TYPES,
-  MAX_FEATURED_PROJECTS,
-  MAX_FILE_BYTES,
-} from "@/lib/api/schemas";
 import { useTranslate } from "@/lib/translate/use-translate";
-import {
-  type Orientation,
-  type ProjectWithRelations,
-  resolveImageUrl,
-  type TagRow,
-} from "@/types/db";
 
 // All metadata is optional; empty strings become null on submit.
 const schema = z.object({

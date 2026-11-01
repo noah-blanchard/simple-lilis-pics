@@ -1,6 +1,6 @@
 "use client";
 
-import type { Orientation } from "@/types/db";
+import type { Orientation } from "@lili/core/types/db";
 
 const ORIENTATIONS: Orientation[] = ["landscape", "portrait"];
 

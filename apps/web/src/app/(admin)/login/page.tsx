@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { createSupabaseBrowserClient } from "@lili/core/supabase/browser";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -8,7 +9,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { NeonRotatingBorder } from "@/components/NeonRotatingBorder";
 import { PillButton } from "@/components/PillButton";
-import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
 
 const schema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email"),

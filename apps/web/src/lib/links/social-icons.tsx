@@ -1,3 +1,7 @@
+import {
+  SOCIAL_ICON_KEYS,
+  type SocialIconKey,
+} from "@lili/core/links/constants";
 import type { IconType } from "react-icons";
 import { FaLinkedinIn } from "react-icons/fa6";
 import { FiGlobe, FiMail } from "react-icons/fi";
@@ -37,7 +41,6 @@ import {
   SiXiaohongshu,
   SiYoutube,
 } from "react-icons/si";
-import { SOCIAL_ICON_KEYS, type SocialIconKey } from "@/lib/links/constants";
 
 export interface SocialIconDefinition {
   key: SocialIconKey;

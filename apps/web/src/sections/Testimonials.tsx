@@ -1,10 +1,10 @@
+import { getApprovedRatings } from "@lili/core/data/ratings";
+import { MIN_PUBLIC_TESTIMONIALS } from "@lili/core/rating";
 import { getTranslations } from "next-intl/server";
 import { InfiniteRow } from "@/components/InfiniteRow";
 import { Reveal } from "@/components/Reveal";
 import { ReviewCard } from "@/components/ReviewCard";
 import { SectionHeader } from "@/components/SectionHeader";
-import { getApprovedRatings } from "@/lib/data/ratings";
-import { MIN_PUBLIC_TESTIMONIALS } from "@/lib/rating";
 
 /** Real words from people Lili photographed, collected through the hidden
  *  /rate link and published one by one from /admin/ratings.

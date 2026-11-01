@@ -1,5 +1,8 @@
 "use client";
 
+import { apiFetch } from "@lili/core/api/client";
+import { MIN_PUBLIC_TESTIMONIALS } from "@lili/core/rating";
+import type { RatingRow } from "@lili/core/types/db";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { AdminDialog } from "@/components/admin/AdminDialog";
@@ -7,9 +10,6 @@ import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
 import { RatingQrDialog } from "@/components/admin/RatingQrDialog";
 import { PillButton } from "@/components/PillButton";
 import { StarIcon } from "@/components/rate/StarIcon";
-import { apiFetch } from "@/lib/api/client";
-import { MIN_PUBLIC_TESTIMONIALS } from "@/lib/rating";
-import type { RatingRow } from "@/types/db";
 
 const STARS = [1, 2, 3, 4, 5];
 

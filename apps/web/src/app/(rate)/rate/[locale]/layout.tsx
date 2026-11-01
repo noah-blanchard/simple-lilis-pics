@@ -1,10 +1,10 @@
+import { routing } from "@lili/core/i18n/routing";
 import type { Metadata, Viewport } from "next";
 import { JetBrains_Mono, Outfit, Playfair_Display } from "next/font/google";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import type { ReactNode } from "react";
-import { routing } from "@/i18n/routing";
 import "../../../globals.css";
 
 const playfairDisplay = Playfair_Display({

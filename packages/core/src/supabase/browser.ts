@@ -1,5 +1,5 @@
 import { createBrowserClient } from "@supabase/ssr";
-import { SUPABASE_ANON_KEY, SUPABASE_URL } from "@/lib/env";
+import { SUPABASE_ANON_KEY, SUPABASE_URL } from "../env";
 
 /** Supabase client for the browser (admin UI auth: sign-in/out, session). */
 export function createSupabaseBrowserClient() {

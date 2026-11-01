@@ -1,5 +1,6 @@
 "use client";
 
+import type { ResolvedProject } from "@lili/core/types/db";
 import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { AccentUnderline } from "@/components/AccentUnderline";
@@ -12,7 +13,6 @@ import { Link } from "@/i18n/navigation";
 import { BENTO_BREAKPOINTS } from "@/lib/bento";
 import { EASE, hoverColorTransition } from "@/lib/motion";
 import { Footer } from "@/sections/Footer";
-import type { ResolvedProject } from "@/types/db";
 
 const MotionLink = motion.create(Link);
 

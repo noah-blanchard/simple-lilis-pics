@@ -1,7 +1,7 @@
 "use client";
 
+import type { TranslateInput } from "@lili/core/api/schemas";
 import { useEffect, useState } from "react";
-import type { TranslateInput } from "@/lib/api/schemas";
 import { useTranslate } from "@/lib/translate/use-translate";
 import { TranslateButton, type TranslateButtonState } from "./TranslateButton";
 

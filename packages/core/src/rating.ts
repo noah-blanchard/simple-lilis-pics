@@ -2,7 +2,7 @@
  *  Shared by the API routes, the admin QR dialog and the rate page, so the
  *  promo code and the URL shape have exactly one definition. */
 
-import type { Locale } from "@/i18n/routing";
+import type { Locale } from "./i18n/routing";
 
 /** Promo code offered in Lili's thank-you letter after a rating. */
 export const RATING_PROMO_CODE = "MERCI40";

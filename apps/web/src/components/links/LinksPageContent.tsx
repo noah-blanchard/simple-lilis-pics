@@ -1,12 +1,12 @@
 "use client";
 
+import type { Locale } from "@lili/core/i18n/routing";
+import type { ResolvedLink, ResolvedSocialLink } from "@lili/core/types/db";
 import { motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
 import type { ReactNode } from "react";
 import { Link } from "@/i18n/navigation";
-import type { Locale } from "@/i18n/routing";
 import { EASE } from "@/lib/motion";
-import type { ResolvedLink, ResolvedSocialLink } from "@/types/db";
 import { LinkCard } from "./LinkCard";
 import { SocialLinks } from "./SocialLinks";
 

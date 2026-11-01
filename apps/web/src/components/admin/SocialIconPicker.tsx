@@ -1,7 +1,7 @@
 "use client";
 
+import type { SocialIconKey } from "@lili/core/links/constants";
 import { useId, useMemo, useRef, useState } from "react";
-import type { SocialIconKey } from "@/lib/links/constants";
 import {
   SOCIAL_ICON_REGISTRY,
   type SocialIconDefinition,

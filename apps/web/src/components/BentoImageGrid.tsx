@@ -1,5 +1,6 @@
 "use client";
 
+import type { Orientation, ResolvedProject } from "@lili/core/types/db";
 import { BentoCard } from "@/components/BentoCard";
 import {
   aspectFor,
@@ -8,7 +9,6 @@ import {
   useBentoMetrics,
   useColumnCount,
 } from "@/lib/bento";
-import type { Orientation, ResolvedProject } from "@/types/db";
 
 interface BentoImageGridProps {
   items: ResolvedProject[];

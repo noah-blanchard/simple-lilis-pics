@@ -1,10 +1,10 @@
-import { apiError, apiSuccess } from "@/lib/api/response";
-import { contactSchema } from "@/lib/api/schemas";
-import { validate } from "@/lib/api/validate";
-import { withAuth } from "@/lib/api/with-auth";
-import { sendContactNotification } from "@/lib/mail/resend";
-import { createSupabaseAdminClient } from "@/lib/supabase/admin";
-import type { ContactMessageRow } from "@/types/db";
+import { apiError, apiSuccess } from "@lili/core/api/response";
+import { contactSchema } from "@lili/core/api/schemas";
+import { validate } from "@lili/core/api/validate";
+import { withAuth } from "@lili/core/api/with-auth";
+import { sendContactNotification } from "@lili/core/mail/resend";
+import { createSupabaseAdminClient } from "@lili/core/supabase/admin";
+import type { ContactMessageRow } from "@lili/core/types/db";
 
 /** GET /api/contact — the admin inbox (authenticated). These are private
  *  visitor submissions, so unlike the site's content endpoints there is no

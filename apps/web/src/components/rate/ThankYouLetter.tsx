@@ -1,12 +1,12 @@
 "use client";
 
+import type { Locale } from "@lili/core/i18n/routing";
+import { RATING_PROMO_CODE, RATING_PROMO_PERCENT } from "@lili/core/rating";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import type { Locale } from "@/i18n/routing";
 import { EASE } from "@/lib/motion";
-import { RATING_PROMO_CODE, RATING_PROMO_PERCENT } from "@/lib/rating";
 import { PillButton } from "../PillButton";
 import { WaxSeal } from "../WaxSeal";
 

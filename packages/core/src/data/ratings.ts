@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { type RatingRow, type ResolvedRating, resolveRating } from "@/types/db";
+import { createSupabaseServerClient } from "../supabase/server";
+import { type RatingRow, type ResolvedRating, resolveRating } from "../types/db";
 
 /** Only the columns the public cards render — never `token_id`, and never the
  *  rows' internal flags. Reads go through the anon client, so the

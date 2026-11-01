@@ -1,7 +1,7 @@
 import "server-only";
 
 import { OpenRouter } from "@openrouter/sdk";
-import type { TranslateInput } from "@/lib/api/schemas";
+import type { TranslateInput } from "../api/schemas";
 import { buildMessages } from "./prompts";
 
 /** Thrown when the OpenRouter API key is not configured. The route handler maps

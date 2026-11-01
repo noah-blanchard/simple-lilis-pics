@@ -1,9 +1,9 @@
 "use client";
 
+import { apiFetch } from "@lili/core/api/client";
+import { MAX_FEATURED_PROJECTS } from "@lili/core/api/schemas";
+import type { ProjectWithRelations } from "@lili/core/types/db";
 import { useQuery } from "@tanstack/react-query";
-import { apiFetch } from "@/lib/api/client";
-import { MAX_FEATURED_PROJECTS } from "@/lib/api/schemas";
-import type { ProjectWithRelations } from "@/types/db";
 import { HubStat } from "./HubStat";
 
 export function FeaturedStat() {

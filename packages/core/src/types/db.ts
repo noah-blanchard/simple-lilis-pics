@@ -1,10 +1,10 @@
-import type { Locale } from "@/i18n/routing";
-import { PHOTOS_BUCKET, SUPABASE_URL } from "@/lib/env";
+import { PHOTOS_BUCKET, SUPABASE_URL } from "../env";
+import type { Locale } from "../i18n/routing";
 import type {
   LinkIconKey,
   LinkOpenBehavior,
   SocialIconKey,
-} from "@/lib/links/constants";
+} from "../links/constants";
 
 /* ── Shared ── */
 

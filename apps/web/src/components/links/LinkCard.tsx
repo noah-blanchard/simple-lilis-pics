@@ -1,9 +1,9 @@
 "use client";
 
+import type { Locale } from "@lili/core/i18n/routing";
+import type { ResolvedLink } from "@lili/core/types/db";
 import { motion, useReducedMotion } from "motion/react";
-import type { Locale } from "@/i18n/routing";
 import { getLinkIcon } from "@/lib/links/icons";
-import type { ResolvedLink } from "@/types/db";
 
 interface LinkCardProps {
   link: ResolvedLink;

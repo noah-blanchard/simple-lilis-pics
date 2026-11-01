@@ -1,10 +1,10 @@
+import { routing } from "@lili/core/i18n/routing";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { ReactNode } from "react";
 import { FloatingMenuButton } from "@/components/FloatingMenuButton";
-import { routing } from "@/i18n/routing";
 import { publicFontVariables } from "@/lib/fonts";
 import "../globals.css";
 

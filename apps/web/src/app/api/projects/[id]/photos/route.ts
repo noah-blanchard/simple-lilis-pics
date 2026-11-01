@@ -1,13 +1,13 @@
-import { apiError, apiSuccess } from "@/lib/api/response";
+import { apiError, apiSuccess } from "@lili/core/api/response";
 import {
   ACCEPTED_IMAGE_TYPES,
   MAX_FILE_BYTES,
   projectPhotoMetaSchema,
-} from "@/lib/api/schemas";
-import { validate } from "@/lib/api/validate";
-import { withAuth } from "@/lib/api/with-auth";
-import { PHOTOS_BUCKET } from "@/lib/env";
-import { createSupabaseAdminClient } from "@/lib/supabase/admin";
+} from "@lili/core/api/schemas";
+import { validate } from "@lili/core/api/validate";
+import { withAuth } from "@lili/core/api/with-auth";
+import { PHOTOS_BUCKET } from "@lili/core/env";
+import { createSupabaseAdminClient } from "@lili/core/supabase/admin";
 
 type Ctx = { params: Promise<{ id: string }> };
 

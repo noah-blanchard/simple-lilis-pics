@@ -1,7 +1,7 @@
 import "server-only";
 
 import { Resend } from "resend";
-import type { ContactInput } from "@/lib/api/schemas";
+import type { ContactInput } from "../api/schemas";
 import { contactNotificationHtml } from "./templates";
 
 /** Thrown when Resend or the sender/recipient env vars aren't configured.

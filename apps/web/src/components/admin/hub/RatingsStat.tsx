@@ -1,9 +1,9 @@
 "use client";
 
+import { apiFetch } from "@lili/core/api/client";
+import { MIN_PUBLIC_TESTIMONIALS } from "@lili/core/rating";
+import type { RatingRow } from "@lili/core/types/db";
 import { useQuery } from "@tanstack/react-query";
-import { apiFetch } from "@/lib/api/client";
-import { MIN_PUBLIC_TESTIMONIALS } from "@/lib/rating";
-import type { RatingRow } from "@/types/db";
 import { HubStat } from "./HubStat";
 
 export function RatingsStat() {

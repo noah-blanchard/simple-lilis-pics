@@ -1,9 +1,9 @@
 "use client";
 
+import { apiFetch } from "@lili/core/api/client";
+import type { TagRow } from "@lili/core/types/db";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { apiFetch } from "@/lib/api/client";
-import type { TagRow } from "@/types/db";
 import { ConfirmDialog } from "./ConfirmDialog";
 import { TranslatableInput } from "./TranslatableInput";
 

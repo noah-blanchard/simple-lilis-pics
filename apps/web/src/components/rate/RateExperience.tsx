@@ -1,12 +1,12 @@
 "use client";
 
+import { apiFetch } from "@lili/core/api/client";
+import type { Locale } from "@lili/core/i18n/routing";
+import { RATED_STORAGE_KEY } from "@lili/core/rating";
 import { AnimatePresence, motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
-import type { Locale } from "@/i18n/routing";
-import { apiFetch } from "@/lib/api/client";
 import { EASE, hoverColorTransition } from "@/lib/motion";
-import { RATED_STORAGE_KEY } from "@/lib/rating";
 import { FIELD_CLASS, FIELD_FOCUS } from "@/lib/ui";
 import { PillButton } from "../PillButton";
 import { RateSuccess } from "./RateSuccess";

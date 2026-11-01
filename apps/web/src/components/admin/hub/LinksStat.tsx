@@ -1,8 +1,8 @@
 "use client";
 
+import { apiFetch } from "@lili/core/api/client";
+import type { AdminLinksSnapshot } from "@lili/core/types/db";
 import { useQuery } from "@tanstack/react-query";
-import { apiFetch } from "@/lib/api/client";
-import type { AdminLinksSnapshot } from "@/types/db";
 import { HubStat } from "./HubStat";
 
 export function LinksStat() {

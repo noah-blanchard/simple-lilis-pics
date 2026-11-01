@@ -1,6 +1,6 @@
 import "server-only";
 import { createClient } from "@supabase/supabase-js";
-import { SUPABASE_ANON_KEY, SUPABASE_URL } from "@/lib/env";
+import { SUPABASE_ANON_KEY, SUPABASE_URL } from "../env";
 
 /** Anonymous, cookie-free client for cacheable public reads under RLS. */
 export function createSupabasePublicClient() {

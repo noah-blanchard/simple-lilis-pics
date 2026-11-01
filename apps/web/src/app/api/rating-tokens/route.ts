@@ -1,9 +1,9 @@
-import { apiError, apiSuccess } from "@/lib/api/response";
-import { ratingTokenCreateSchema } from "@/lib/api/schemas";
-import { validate } from "@/lib/api/validate";
-import { withAuth } from "@/lib/api/with-auth";
-import { buildRateUrl, generateRatingToken } from "@/lib/rating";
-import { createSupabaseAdminClient } from "@/lib/supabase/admin";
+import { apiError, apiSuccess } from "@lili/core/api/response";
+import { ratingTokenCreateSchema } from "@lili/core/api/schemas";
+import { validate } from "@lili/core/api/validate";
+import { withAuth } from "@lili/core/api/with-auth";
+import { buildRateUrl, generateRatingToken } from "@lili/core/rating";
+import { createSupabaseAdminClient } from "@lili/core/supabase/admin";
 
 export interface RatingTokenCreated {
   token: string;

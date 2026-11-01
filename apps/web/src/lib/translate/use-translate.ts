@@ -1,8 +1,8 @@
 "use client";
 
+import { apiFetch } from "@lili/core/api/client";
+import type { TranslateInput } from "@lili/core/api/schemas";
 import { useMutation } from "@tanstack/react-query";
-import { apiFetch } from "@/lib/api/client";
-import type { TranslateInput } from "@/lib/api/schemas";
 
 /** React Query mutation that proxies a translation request through
  *  POST /api/translate and returns the translated string. UI-agnostic and

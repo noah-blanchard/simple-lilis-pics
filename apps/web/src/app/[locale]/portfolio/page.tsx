@@ -1,7 +1,7 @@
+import { getAllProjects } from "@lili/core/data/projects";
+import type { Locale } from "@lili/core/i18n/routing";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import type { Locale } from "@/i18n/routing";
-import { getAllProjects } from "@/lib/data/projects";
 import { PortfolioBento } from "@/sections/PortfolioBento";
 
 export async function generateMetadata({

@@ -1,16 +1,13 @@
 import { unstable_cache } from "next/cache";
 import { z } from "zod";
-import type { Locale } from "@/i18n/routing";
-import {
-  linkDestinationSchema,
-  socialDestinationSchema,
-} from "@/lib/api/schemas";
+import { linkDestinationSchema, socialDestinationSchema } from "../api/schemas";
+import type { Locale } from "../i18n/routing";
 import {
   LINK_ICON_KEYS,
   LINK_OPEN_BEHAVIORS,
   SOCIAL_ICON_KEYS,
-} from "@/lib/links/constants";
-import { createSupabasePublicClient } from "@/lib/supabase/public";
+} from "../links/constants";
+import { createSupabasePublicClient } from "../supabase/public";
 import type {
   LinkRow,
   LinksPageSettingsRow,
@@ -18,8 +15,8 @@ import type {
   ResolvedLinksPageSettings,
   ResolvedSocialLink,
   SocialLinkRow,
-} from "@/types/db";
-import { resolveImageUrl } from "@/types/db";
+} from "../types/db";
+import { resolveImageUrl } from "../types/db";
 
 const publicLinkRowSchema = z.object({
   id: z.string().uuid(),

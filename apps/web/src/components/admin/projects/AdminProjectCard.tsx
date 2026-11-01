@@ -1,14 +1,17 @@
 "use client";
 
+import { apiFetch } from "@lili/core/api/client";
+import { MAX_FEATURED_PROJECTS } from "@lili/core/api/schemas";
+import {
+  type ProjectWithRelations,
+  resolveImageUrl,
+} from "@lili/core/types/db";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { useState } from "react";
 import { ActionSheet } from "@/components/admin/ActionSheet";
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
 import { IconDots } from "@/components/Icons";
-import { apiFetch } from "@/lib/api/client";
-import { MAX_FEATURED_PROJECTS } from "@/lib/api/schemas";
-import { type ProjectWithRelations, resolveImageUrl } from "@/types/db";
 
 /** One project in the admin list. A compact row on phones and a cover-led card
  *  from `sm` up — one DOM tree either way, so the cover image is never fetched

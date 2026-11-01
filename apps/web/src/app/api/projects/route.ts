@@ -1,18 +1,18 @@
-import { apiError, apiSuccess } from "@/lib/api/response";
+import { apiError, apiSuccess } from "@lili/core/api/response";
 import {
   ACCEPTED_IMAGE_TYPES,
   MAX_FEATURED_PROJECTS,
   MAX_FILE_BYTES,
   projectCreateSchema,
   projectPhotoMetaSchema,
-} from "@/lib/api/schemas";
-import { validate } from "@/lib/api/validate";
-import { withAuth } from "@/lib/api/with-auth";
-import { PROJECT_SELECT, parseProjects } from "@/lib/data/parse";
-import { PHOTOS_BUCKET } from "@/lib/env";
-import { createSupabaseAdminClient } from "@/lib/supabase/admin";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
-import type { ProjectWithRelations } from "@/types/db";
+} from "@lili/core/api/schemas";
+import { validate } from "@lili/core/api/validate";
+import { withAuth } from "@lili/core/api/with-auth";
+import { PROJECT_SELECT, parseProjects } from "@lili/core/data/parse";
+import { PHOTOS_BUCKET } from "@lili/core/env";
+import { createSupabaseAdminClient } from "@lili/core/supabase/admin";
+import { createSupabaseServerClient } from "@lili/core/supabase/server";
+import type { ProjectWithRelations } from "@lili/core/types/db";
 
 /** GET /api/projects — public list, newest first.
  *  ?featured=true  filter to featured only
