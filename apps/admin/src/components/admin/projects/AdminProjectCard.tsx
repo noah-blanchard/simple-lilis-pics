@@ -53,7 +53,7 @@ export function AdminProjectCard({
   const cover =
     project.project_photos.find((p) => p.id === project.cover_photo_id) ??
     project.project_photos[0];
-  const title = project.title_en || project.title_fr || "Untitled";
+  const title = project.title_en || project.title_fr || "";
   const year = project.project_date?.slice(0, 4) ?? "";
   const tags = project.project_tags.map((pt) => pt.tags.label_en).join(", ");
   const photoCount = project.project_photos.length;
@@ -85,10 +85,12 @@ export function AdminProjectCard({
       </div>
 
       <div className="min-w-0 flex-1 sm:p-4">
-        <h3 className="truncate font-semibold text-[15px] tracking-tight">
-          {title}
-        </h3>
-        <p className="mt-1 truncate text-[12px] text-fg/50">
+        {title && (
+          <h3 className="mb-1 truncate font-semibold text-[15px] tracking-tight">
+            {title}
+          </h3>
+        )}
+        <p className="truncate text-[12px] text-fg/50">
           {year}
           {tags && ` — ${tags}`}
           <span className="sm:hidden">
@@ -134,7 +136,7 @@ export function AdminProjectCard({
       <button
         type="button"
         onClick={() => setActionsOpen(true)}
-        aria-label={`Actions for ${title}`}
+        aria-label={title ? `Actions for ${title}` : "Project actions"}
         disabled={busy}
         className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-fg/50 disabled:opacity-40 sm:hidden"
       >
@@ -144,7 +146,7 @@ export function AdminProjectCard({
       <ActionSheet
         open={actionsOpen}
         onClose={() => setActionsOpen(false)}
-        title={title}
+        title={title || undefined}
         actions={[
           {
             label: project.featured ? "Remove from featured" : "Feature",
@@ -166,7 +168,7 @@ export function AdminProjectCard({
       <ConfirmDialog
         open={confirmOpen}
         title="Delete project"
-        message={`“${title}” and its ${photoCount} photo${photoCount === 1 ? "" : "s"} will be permanently removed.`}
+        message={`${title ? `“${title}”` : "This project"} and its ${photoCount} photo${photoCount === 1 ? "" : "s"} will be permanently removed.`}
         loading={del.isPending}
         onConfirm={() => del.mutate()}
         onClose={() => setConfirmOpen(false)}

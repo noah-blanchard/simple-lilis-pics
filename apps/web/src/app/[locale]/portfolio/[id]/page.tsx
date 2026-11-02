@@ -11,7 +11,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, id } = await params;
   const project = await getProject(id, locale as Locale);
   if (!project) return {};
-  const title = project.title || "Project";
+  // No title → fall back to the layout's default page title.
+  const title = project.title || undefined;
   const description = project.description || undefined;
   return {
     title,

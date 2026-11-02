@@ -4,8 +4,8 @@ import { EASE } from "@lili/ui/lib/motion";
 import { motion, useReducedMotion } from "motion/react";
 
 // Full-screen intro shown while the first gallery photo decodes. It keeps the
-// user looking at something intentional — the project title over a quiet
-// scanning line — instead of an empty frame, then fades away the moment the
+// user looking at something intentional — the project title (when it has one)
+// over a quiet scanning line — instead of an empty frame, then fades away the moment the
 // image is ready (the parent unmounts it via AnimatePresence).
 export function GalleryIntro({ title }: { title: string }) {
   const prefersReduced = useReducedMotion();
@@ -17,14 +17,16 @@ export function GalleryIntro({ title }: { title: string }) {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.6, ease: EASE }}
     >
-      <motion.h2
-        initial={prefersReduced ? { opacity: 0 } : { opacity: 0, y: 14 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: EASE }}
-        className="display text-2xl text-fg italic md:text-4xl"
-      >
-        {title}
-      </motion.h2>
+      {title && (
+        <motion.h2
+          initial={prefersReduced ? { opacity: 0 } : { opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: EASE }}
+          className="display text-2xl text-fg italic md:text-4xl"
+        >
+          {title}
+        </motion.h2>
+      )}
 
       {/* Quiet loading line. Indeterminate scan when motion is allowed, a static
           accent rule otherwise (no infinite motion under reduced-motion). */}

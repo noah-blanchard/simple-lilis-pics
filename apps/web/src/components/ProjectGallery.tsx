@@ -7,7 +7,6 @@ import { ZoomableImage } from "@lili/ui/components/ZoomableImage";
 import { EASE, hoverColorTransition } from "@lili/ui/lib/motion";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
 import { GalleryIntro } from "@/components/GalleryIntro";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
@@ -24,7 +23,6 @@ interface ProjectGalleryProps {
 }
 
 export function ProjectGallery({ project }: ProjectGalleryProps) {
-  const t = useTranslations("portfolio");
   const prefersReduced = useReducedMotion();
   const router = useRouter();
   const photos = project.photos;
@@ -92,7 +90,8 @@ export function ProjectGallery({ project }: ProjectGalleryProps) {
   );
 
   const photo = photos[index];
-  const title = project.title || t("untitled");
+  // Titles are optional; an untitled project simply shows no title anywhere.
+  const title = project.title;
 
   // Slide + fade transition; respects reduced motion.
   const slideVariants = {
@@ -214,9 +213,11 @@ export function ProjectGallery({ project }: ProjectGalleryProps) {
           <footer className="pointer-events-none absolute inset-x-0 bottom-0 px-6 pt-4 pb-6 md:px-10 md:pb-8">
             <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-3">
               <div className="min-w-0">
-                <h1 className="display font-semibold text-2xl text-fg tracking-tight md:text-4xl">
-                  {title}
-                </h1>
+                {title && (
+                  <h1 className="display font-semibold text-2xl text-fg tracking-tight md:text-4xl">
+                    {title}
+                  </h1>
+                )}
                 {project.description && (
                   <p className="mt-2 max-w-prose text-[14px] text-fg/60">
                     {project.description}
