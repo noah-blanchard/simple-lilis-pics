@@ -163,7 +163,7 @@ packages/
   ui/                   Shared UI: src/{components,lib,links,styles}
   config/               tsconfig bases
 supabase/migrations/    Ordered schema, policy, trigger, and storage migrations
-docs/                   Developer and operator handbook (docs/plans/ is the migration history)
+docs/                   Developer and operator handbook (docs/plans/: migration history, wedding plan)
 ```
 
 ## Documentation
