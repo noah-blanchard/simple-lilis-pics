@@ -23,25 +23,35 @@ It has one placeholder page.
   `apps/wedding/src/app/globals.css`. Do not edit
   `packages/ui/src/styles/theme.css` for wedding needs, because that file
   re-themes the portfolio and the admin too.
-- Grays stay true neutral (R=G=B). The only colour is the "something blue"
-  accent (plus the shared oxblood wax seal).
+- Grays stay true neutral (R=G=B). The only colour is the cyanotype blue, used
+  as ink on paper (plus the shared oxblood wax seal).
+- Respect the "What we do not do" list in the brief (§11): no monospace, no
+  pills, no CSS grain, no screen blues.
 - The app stays `noindex` until phase 07.
 
 ## Style tile
 
 A private visual companion to the brief is published at
-<https://claude.ai/artifact/8P66PL87YZDXkdAJgx8FaX>. It shows both palettes,
-the type, the stationery components, the dusk band (neutral and "blue hour"),
-and working demos of the ink draw, flash develop, and RSVP seal motions. It is a
-throwaway prototype written in plain CSS and the Web Animations API. The app
-itself must use motion/react.
+<https://claude.ai/artifact/8P66PL87YZDXkdAJgx8FaX>. It is the second proof, in
+French. It shows:
+
+- the paper and table colours, with the cyanotype blue;
+- a live switcher between the three type options (A, B, C);
+- the stationery components;
+- the dusk band, in neutral and cyanotype versions;
+- working demos of the clock in words, the ink draw, the flash develop, and
+  the reply-card seal.
+
+The images are Lili's portfolio photographs, used as stand-ins until wedding
+photographs exist. The tile is a throwaway prototype written in plain CSS and
+the Web Animations API. The app itself must use motion/react.
 
 ## Phases
 
 | # | Phase | Scope | Status |
 | --- | --- | --- | --- |
-| 01 | [Design brief](01-design-brief.md) | Research, section map, tokens, typography, components, motion, imagery, voice | Written; awaiting review |
-| 02 | Foundations | Wedding token overrides and `[data-tone="night"]` scope; font swap in `apps/wedding/src/lib/fonts.ts`; add `motion` (`^12.40.0`, same range as `@lili/ui`) to `apps/wedding/package.json` after approval, with `bun.lock` checked; move `WaxSeal` from `apps/web` to `@lili/ui` | Not started |
+| 01 | [Design brief](01-design-brief.md) | Research, section map, tokens, typography, components, motion, imagery, voice | Revision 2; awaiting the type choice (A, B or C) |
+| 02 | Foundations | Wedding token overrides and `[data-tone="night"]` scope; serif font swap in `apps/wedding/src/lib/fonts.ts` with the chosen option; add `motion` (`^12.40.0`, same range as `@lili/ui`) to `apps/wedding/package.json` after approval, with `bun.lock` checked; move `WaxSeal` from `apps/web` to `@lili/ui` | Not started |
 | 03 | Shell | Top bar, menu overlay (invitation index), locale switcher, footer ("Last dance") | Not started |
 | 04 | Home sections | The ten home sections from the brief, with static EN/FR copy and placeholder images | Not started |
 | 05 | Stories | Content model for full wedding stories (Supabase + admin, or static); `/stories` and `/stories/[slug]` | Needs a decision |
