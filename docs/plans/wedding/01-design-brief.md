@@ -3,7 +3,7 @@
 > Read [`README.md`](README.md) first. This brief is the visual and content
 > source for phases 02–07.
 >
-> **Revision 2 (after the first style-tile review).**
+> **Revision 3 (after two style-tile reviews).**
 >
 > The first proof read as generic, AI-made design. The reviewer pointed at:
 > - the fonts;
@@ -12,7 +12,12 @@
 > - the indigo/periwinkle blue;
 > - the grey dot texture on the black sections.
 >
-> All of it has been replaced. §11 lists what we no longer do.
+> The second proof went too far the other way. The operator then decided:
+> - keep the **lilispics.com fonts** (Playfair Display, Outfit);
+> - use **no underlines at all**, hand-drawn or otherwise;
+> - keep **times as figures**, not written out in words.
+>
+> §11 lists what we do not do.
 
 ## 1. Intent
 
@@ -27,7 +32,6 @@ The wedding site is **wedding stationery that lives through one day**:
 It says "wedding" through printed objects and their conventions:
 
 - invitation wording;
-- times and dates written out in words;
 - place cards, the order of service, and the reply card;
 - the wax seal;
 - "something blue", here a cyanotype blue.
@@ -85,11 +89,11 @@ nobody uses blue. Nobody tells the **day hour by hour** as the backbone of the p
 
 | Kept (brand DNA) | Changed (wedding feeling) |
 | --- | --- |
-| Italic accent words (`renderAccentLine` grammar) | Typefaces: letterpress serifs only (§6), no sans and no monospace |
+| Fonts: Playfair Display + Outfit (§6) | No monospace on the wedding site |
 | Wax seal object, oxblood `#a8462b` | Accent: cyanotype blue instead of cognac, used only on paper |
 | `EASE` and timings from `@lili/ui/lib/motion` | Canvas: paper by day, a dark table by night, instead of gallery gray |
 | `container-site` and `section-y` rhythm | Shapes: paper objects (prints, stamps, cards, envelope) instead of the bento grid, pills, and 28px cards |
-| Lili's warm first-person voice, her colour grade | Numbers: old-style figures; times written out in words |
+| Italic accent words (`renderAccentLine` grammar); Lili's warm first-person voice, her colour grade | Typography set like stationery: centred invitation wording, place cards, an order of service |
 
 ## 4. Information architecture
 
@@ -101,14 +105,14 @@ hour-by-hour section, in photo captions, and on the order of service.
 
 | # | Section | Tone | Content |
 | --- | --- | --- | --- |
-| 00 | **The invitation** (hero) | paper | Set like a real invitation, centred (see §10 for the wording). Availability is a small-caps line in the text, with the years spelled out. Two ink-underlined links: *Check your date* and *See the stories*. Beside it, three prints and a stamp laid on the table. |
-| 01 | **My promises** (approach) | paper | Three short vows set as display lines, separated by a small ink ornament. Coverage as a sentence: "About eight photographs in ten are taken as they happen, with no posing." |
-| 02 | **Stories** | paper | Three prints. Captions are written like the back of a photograph: names, place, season, number of photographs. Wedding-type filter as plain ink-underlined words. Each story links to `/stories/[slug]`. |
-| 03 | **The day, hour by hour** | paper → dusk → table | **Signature section.** The time is written out in words, large and italic ("half past two in the afternoon"). It changes as eight moments scroll past: getting ready, first look, ceremony, family, portraits, golden hour, speeches, last dance. One photograph and one line each. The paper turns to the night table at dusk. It doubles as "what I cover". |
+| 00 | **The invitation** (hero) | paper | Set like a real invitation, centred (see §10 for the wording). Availability is one line in the text ("Dates open in 2027 and 2028"). One solid button, *Check your date*, and one plain text link, *See the stories*. Beside it, three prints and a stamp laid on the table. |
+| 01 | **My promises** (approach) | paper | Three short vows set as display lines, separated by a short hairline rule. Coverage as a sentence: "About eight photographs in ten are taken as they happen, with no posing." |
+| 02 | **Stories** | paper | Three prints. Captions are written like the back of a photograph: names, place, season, number of photographs. Wedding-type filter as plain words: the active one is in ink, the others muted. Each story links to `/stories/[slug]`. |
+| 03 | **The day, hour by hour** | paper → dusk → table | **Signature section.** A large clock in Playfair figures, Québec style ("14 h 30", EN "2:30 pm"), with the part of the day in italic beside it ("in the afternoon"). It changes as eight moments scroll past: getting ready, first look, ceremony, family, portraits, golden hour, speeches, last dance. One photograph and one line each. The paper turns to the night table at dusk. It doubles as "what I cover". |
 | 04 | **Hello** (about) | table | Portrait, short bio, link to `lilispics.com` ("the rest of my work"). |
-| 05 | **Toasts** (testimonials) | table | Large display quotes, couple names in small caps, place and date in italic, text links "Previous" and "Next". Two flash-lit photographs beside them. |
+| 05 | **Toasts** (testimonials) | table | Large display quotes, couple names in roman, place and date in italic, plain text buttons "Previous" and "Next". Two flash-lit photographs beside them. |
 | 06 | **The order of service** (experience) | paper card on the table | Each step: when (italic, blue), what (display), why (one line). Steps: you write to me → a 30-minute call within 48 hours → reserve (contract + retainer) → plan together → the day → a sneak peek after three days → the full gallery after about six weeks, then the album. |
-| 07 | **Three ways to be there** (collections) | place cards on the table | "Table one / two / three" folded place cards: **Elopement**, **Intimate** (up to 6 h), **Full day** (about 10 h). "From" prices in display figures. Add-ons as one sentence below. Real prices to be supplied by Lili. |
+| 07 | **Three ways to be there** (collections) | place cards on the table | "Table 1 / 2 / 3" folded place cards: **Elopement**, **Intimate** (up to 6 h), **Full day** (about 10 h). "From" prices in display figures. Add-ons as one sentence below. Real prices to be supplied by Lili. |
 | 08 | **Good to know** (FAQ) | table | Groups and seed questions are in §4.3. |
 | 09 | **Reply card** (RSVP) | paper card on the table | Form described in §4.4. Submitting seals an envelope with the wax seal. |
 | — | **The last dance** (footer) | table | Availability, email, Instagram, EN/FR, link back to `lilispics.com`, legal links. |
@@ -118,7 +122,7 @@ hour-by-hour section, in photo captions, and on the order of service.
 | Route | Purpose |
 | --- | --- |
 | `/stories` | Index of full weddings, filterable by type |
-| `/stories/[slug]` | One wedding told in time chapters (times in words), with mixed layouts (full-bleed, pair, triptych, pull quote from the couple) and a lightbox |
+| `/stories/[slug]` | One wedding told in time chapters, with mixed layouts (full-bleed, pair, triptych, pull quote from the couple) and a lightbox |
 | `/experience` | Full collections, order of service, and FAQ (home shows summaries) |
 | `/rsvp` | The reply card on its own page |
 
@@ -189,7 +193,7 @@ scope, so it keeps paper colours.
 Rules:
 
 - **Grays are true neutral (R=G=B).** The only colour in the interface is the cyanotype blue.
-- **The blue is ink.** It appears only on paper: italic accent words, hand-drawn underlines, the "when" line in the order of service, prices, and postmarks. It never fills an area. It never appears on the dark table; there, accents are italic in paper white.
+- **The blue is ink.** It appears only on paper: italic accent words, the "when" line in the order of service, prices, the clock, and postmarks. The solid button turns blue on hover. It never fills an area. It never appears on the dark table; there, accents are italic in paper white.
 - **Why cyanotype:** the cyanotype (1842) is one of the first photographic printing processes. Its Prussian blue gives the photographer's "something blue" a reason.
 - **Dusk band:** a tall gradient from paper to table inside the hour-by-hour section.
   - The default is **neutral**.
@@ -198,23 +202,21 @@ Rules:
 
 ## 6. Typography
 
-**Serif only, like printed stationery.** There is no sans-serif and no monospace
-anywhere on the wedding site. The style tile offers three families; the
-operator chooses one before phase 02. All of them are in the installed
-`next/font/google` list.
+**The lilispics.com families**, already declared in `apps/wedding/src/lib/fonts.ts`
+(the scaffold copied them from the portfolio). The wedding site gets its own
+feeling from layout, paper, and colour, not from new typefaces.
 
-| Option | Display | Text | Small capitals | Character |
-| --- | --- | --- | --- | --- |
-| **A. Letterpress (proposed)** | IM Fell French Canon, 400 normal + italic | Fanwood Text, 400 normal + italic | IM Fell French Canon SC | 17th-century Fell types with natural ink spread, and Fournier for reading. The most distinctive option. |
-| B. Goudy | Sorts Mill Goudy, normal + italic | Fanwood Text | Sorts Mill Goudy capitals, tracked | Warm, Arts & Crafts, 1915 |
-| C. Caslon | Libre Caslon Text, normal + italic | Libre Caslon Text | Caslon capitals, tracked | The classic invitation face, the most sober option |
+| Role | Family | Use |
+| --- | --- | --- |
+| Display | **Playfair Display** 400, normal + italic | Headlines set large, invitation lines, quotes, prices, the clock, couple names. Italic accent words take the blue on paper. |
+| Text | **Outfit** (300–600) | Paragraphs, captions, form labels, buttons |
+| Capitals | Playfair Display in uppercase, 0.08em tracking | At most once per section: the host line of the invitation, the reply-card heading, FAQ group names |
 
 Rules:
 
-- **Numbers:** old-style figures (`font-variant-numeric: oldstyle-nums`). French prices use a narrow no-break space ("3 200 $").
-- **Times and dates:** written out in words wherever they are read as text, following invitation convention. Examples: "half past two in the afternoon", « deux heures et demie de l'après-midi », "Saturday the fourteenth of August, two thousand twenty-seven".
-- **Small capitals:** used for names, the reply-card heading, and group headings, at most once per section. With option A they come from a true small-caps font; there are no letter-spaced uppercase eyebrows.
-- **Implementation:** in `apps/wedding/src/lib/fonts.ts`, keep the CSS variable names that `base.css` reads. `--font-display` takes the display face; `--font-sans-body` takes the text serif, because `font-sans` is the body default. Add a new `--font-caps`. Do not load JetBrains Mono, and do not use `.tag-mono`.
+- **No monospace.** JetBrains Mono stays loaded only if a shared component needs it. The wedding pages never use `.tag-mono`, mono timestamps, or mono labels.
+- **Times and numbers are figures.** French follows Québec usage ("14 h 30", "3 200 $" with narrow no-break spaces); English uses "2:30 pm" and "$3,200". The large clock uses `tabular-nums` so it does not jitter while scrolling.
+- **No underlines anywhere**, neither CSS `text-decoration` nor hand-drawn SVG strokes. Links show their state through colour (muted to ink on hover). The main call to action is a solid button.
 
 ## 7. Components
 
@@ -227,20 +229,20 @@ The components below are app-local in `apps/wedding/src/components/` unless note
 | Component | Description |
 | --- | --- |
 | `Invitation` | Centred hero block in invitation wording (§10) |
+| `Button` | Solid ink fill, 2px radius, Outfit label in sentence case, no arrow; turns cyanotype blue on hover. One per section at most. |
+| `TextLink` | Plain text in muted colour that turns to ink on hover, with no underline. Also used for filters and toggles (`aria-pressed`). |
 | `Print` | Photograph on white paper with a mat and an italic handwritten-style caption; optional slight rotation |
-| `Stamp` | Perforated thumbnail with an optional circular postmark (city, date) in small caps |
-| `InkStroke` | Hand-drawn SVG path (underline, ornament) that draws itself |
-| `InkLink` | The only kind of call to action: an italic serif link whose ink underline draws on hover. It is also used for filters and toggles (`aria-pressed`). |
-| `TimeInWords` | Formats a time as words in EN or FR, with a matching lib helper in `apps/wedding/src/lib/time-in-words.ts` |
-| `Vow` | Display line plus one sentence; vows separated by an ink ornament |
+| `Stamp` | Perforated thumbnail with an optional circular postmark (city, date) |
+| `Clock` | Formats a time in figures for EN or FR; helper in `apps/wedding/src/lib/format-time.ts` |
+| `Vow` | Display line plus one sentence; vows separated by a short hairline rule |
 | `StoryPrint` | `Print` plus a caption written like the back of a photo |
-| `Moment` | One hour-by-hour moment: photograph, time in words, title, one line |
-| `ToastQuote` | Display quote, names in small caps, place and date in italic |
+| `Moment` | One hour-by-hour moment: photograph, time, title, one line |
+| `ToastQuote` | Display quote, names in roman, place and date in italic |
 | `PaperCard` | A white card on the night table (order of service, reply card) |
 | `OrderOfService` | Steps with when (blue italic), what (display), and why |
 | `PlaceCard` | Folded place card: "table one", name in italic, "from" price, inclusions |
 | `FaqItem` | Display-size question with a plain "+" glyph that turns to "×"; height animated |
-| `ReplyCard`, `Envelope` | The form on ruled lines; the seal button; the sealing sequence |
+| `ReplyCard`, `Envelope` | The form on ruled lines; the wax-seal submit button; the sealing sequence |
 | `ToneSection`, `DuskBand` | Section wrapper setting `data-tone`; the gradient between day and night |
 | `WaxSeal` | **Moves to `@lili/ui`** from `apps/web/src/components/WaxSeal.tsx`, so both apps share it |
 
@@ -255,12 +257,11 @@ All motion uses `motion/react`, following the repository rule. Every effect read
 
 | # | Effect | Where | Behaviour |
 | --- | --- | --- | --- |
-| 1 | **Clock in words** | Hour by hour | `useScroll` + `useTransform` map scroll progress to a time from 09:00 to 23:40 (rounded to five minutes). The italic words change with a short fade; the paper darkens to the table in the second half. |
-| 2 | **Ink draw** | Hero underline, ornaments, links | `pathLength` 0 → 1 over about 1 s with `EASE`; the link underline completes on hover |
-| 3 | **Flash develop** | Night photographs | Enter overexposed (`brightness` about 2.6 → 1) over about 0.6 s, like a flash firing |
-| 4 | **Prints settle** | Hero, stories | Prints drop onto the table with a small rotation and a spring |
-| 5 | **Seal the reply** | Reply card | The card slides into the envelope, the flap closes, the seal presses with a "thunk", and the postmark stamps |
-| 6 | **Reveals** | Elsewhere | `revealTransition` from `@lili/ui/lib/motion` |
+| 1 | **Scroll clock** | Hour by hour | `useScroll` + `useTransform` map scroll progress to a time from 9 h to 23 h 40 (rounded to five minutes) in tabular Playfair figures; the paper darkens to the table in the second half |
+| 2 | **Flash develop** | Night photographs | Enter overexposed (`brightness` about 2.6 → 1) over about 0.6 s, like a flash firing |
+| 3 | **Prints settle** | Hero, stories | Prints drop onto the table with a small rotation and a spring |
+| 4 | **Seal the reply** | Reply card | The card slides into the envelope, the flap closes, the seal presses with a "thunk", and the postmark stamps |
+| 5 | **Reveals** | Elsewhere | `revealTransition` from `@lili/ui/lib/motion` |
 
 At most one signature effect per section.
 
@@ -279,7 +280,7 @@ At most one signature effect per section.
 ## 10. Voice and copy
 
 - **Voice:** Lili's first person, warm and calm, with short lines. Reassuring for camera-shy couples ("You don't need to know how to pose").
-- **Stationery conventions:** invitation wording in the hero, place cards, the order of service, "Kindly reply", years and times spelled out.
+- **Stationery conventions:** invitation wording in the hero, place cards, the order of service, "Kindly reply". Times, years, and prices stay in figures.
 - **Languages:** EN and Québec French at full parity, in `apps/wedding/messages/{en,fr}.json`. Accent words stay marked in the strings (`**simply**`), as on the main site.
 - **French typography:** narrow no-break spaces before `:`, `?`, `!`, `;`, and inside « ».
 
@@ -287,22 +288,23 @@ Hero wording:
 
 | EN | FR |
 | --- | --- |
-| LILI, PHOTOGRAPHER *(small caps)* | LILI, PHOTOGRAPHE |
+| LILI, PHOTOGRAPHER *(capitals)* | LILI, PHOTOGRAPHE |
 | *is delighted to invite you* | *a le plaisir de vous inviter* |
 | to **simply** be there | à **simplement** être là |
 | *on your wedding day,* | *le jour de votre mariage,* |
 | in Montréal, elsewhere in Québec, or wherever you say yes. | à Montréal, ailleurs au Québec, ou là où vous direz oui. |
-| DATES OPEN IN TWO THOUSAND TWENTY-SEVEN AND TWENTY-EIGHT *(small caps)* | DATES LIBRES EN DEUX MILLE VINGT-SEPT ET DEUX MILLE VINGT-HUIT |
-| *Check your date* · *See the stories* | *Vérifier votre date* · *Voir les histoires* |
+| Dates open in 2027 and 2028 | Dates libres en 2027 et 2028 |
+| Check your date *(button)* · See the stories *(text link)* | Vérifier votre date · Voir les histoires |
 
 ## 11. What we do not do
 
-These patterns read as generic, AI-made design, and they were rejected in review:
+These patterns read as generic, AI-made design, or the operator rejected them in review:
 
-- **Type:** monospace for labels, times, or numbers; uppercase letter-spaced eyebrows above every heading.
-- **Fonts:** trendy "editorial" families such as Instrument Serif or Sans, Inter, Space Grotesk, Fraunces, Cormorant, or Playfair. Playfair belongs to the portfolio.
+- **Type:** monospace for labels, times, or numbers; uppercase letter-spaced eyebrows above every heading; switching away from the lilispics.com fonts.
+- **Underlines:** any underline, CSS or hand-drawn ("felt-pen" strokes), including animated ones and decorative ink ornaments.
+- **Times in words:** times and years stay in figures.
 - **Badges:** pills or chips with a coloured status dot, and bordered tag chips.
-- **Buttons:** rectangular solid buttons with arrows ("→").
+- **Buttons:** arrows ("→") in buttons or links.
 - **Colour:** indigo, periwinkle, or any "screen blue". The near-black canvas with a single bright accent on it.
 - **Texture:** dot grids, grain, or noise overlays generated in CSS.
 - **Layout:** the same "eyebrow + giant headline + lede" opener on every section; numbered "01 / 02 / 03" markers where the order means nothing; stat bars and dashboard-style figures; tick-mark icon lists.
@@ -312,11 +314,11 @@ These patterns read as generic, AI-made design, and they were rejected in review
 
 - **Contrast:** body text is 4.5:1 or better in both tones; see the ratios in §5.
 - **Focus:** the focus ring is a thin cyanotype outline.
-- **Clock in words:** it is `aria-hidden`; every moment also shows its own time as text.
+- **Scroll clock:** it is `aria-hidden`; every moment also shows its own time as text.
 - **FAQ:** uses real disclosure buttons.
 - **Forms:** every field has a label, errors are announced, and success is announced even when motion is reduced.
 - **Layout stability:** fixed aspect ratios on every print and stamp.
-- **Animation cost:** the scroll-driven effects animate only transform, opacity, and filter. The fonts are single-weight files, so they stay light.
+- **Animation cost:** the scroll-driven effects animate only transform, opacity, and filter. The fonts are the ones the portfolio already ships.
 
 ## 13. Sources
 
