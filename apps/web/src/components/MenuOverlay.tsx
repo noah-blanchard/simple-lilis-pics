@@ -6,7 +6,6 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { socials } from "@/data/socials";
 import { HoverLink } from "./HoverLink";
 import { LocaleSwitcher } from "./LocaleSwitcher";
 import { Logo } from "./Logo";
@@ -104,20 +103,8 @@ export const MenuOverlay = ({ open, onClose }: MenuOverlayProps) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: reduce ? 0 : 0.5, duration: 0.5, ease: EASE }}
-            className="flex flex-col gap-5 border-fg/10 border-t px-6 py-8 md:flex-row md:items-center md:justify-between md:px-12"
+            className="flex flex-col gap-5 border-fg/10 border-t px-6 py-8 md:flex-row md:items-center md:justify-end md:px-12"
           >
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
-              {socials.map((s) => (
-                <HoverLink
-                  key={s.label}
-                  href={s.href}
-                  target="_blank"
-                  className="text-[14px] text-fg/65"
-                >
-                  {s.label}
-                </HoverLink>
-              ))}
-            </div>
             <div className="flex items-center gap-6">
               <HoverLink
                 href={`mailto:${t("email")}`}
