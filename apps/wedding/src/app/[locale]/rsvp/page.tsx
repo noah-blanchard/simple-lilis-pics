@@ -2,6 +2,7 @@ import type { Locale } from "@lili/core/i18n/routing";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { PageTop } from "@/components/PageTop";
+import { pageAlternates } from "@/lib/seo";
 import { ReplySection } from "@/sections/ReplySection";
 
 type Props = { params: Promise<{ locale: Locale }> };
@@ -9,7 +10,11 @@ type Props = { params: Promise<{ locale: Locale }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta" });
-  return { title: t("rsvpTitle"), description: t("rsvpDescription") };
+  return {
+    title: t("rsvpTitle"),
+    description: t("rsvpDescription"),
+    alternates: pageAlternates("/rsvp", locale),
+  };
 }
 
 export default async function RsvpPage({ params }: Props) {

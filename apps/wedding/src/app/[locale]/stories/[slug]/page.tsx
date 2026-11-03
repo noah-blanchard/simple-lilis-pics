@@ -11,6 +11,7 @@ import { StoryPrint } from "@/components/StoryPrint";
 import { TextLink } from "@/components/TextLink";
 import { Tone } from "@/components/Tone";
 import { seasonOf } from "@/lib/format";
+import { pageAlternates } from "@/lib/seo";
 
 type Props = { params: Promise<{ locale: Locale; slug: string }> };
 
@@ -29,6 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: story.couple,
     description: [story.venue, season].filter(Boolean).join(", "),
+    alternates: pageAlternates(`/stories/${slug}`, locale),
     openGraph: story.cover ? { images: [story.cover.img] } : undefined,
   };
 }

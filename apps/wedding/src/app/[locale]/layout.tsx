@@ -6,9 +6,13 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { ReactNode } from "react";
 import { FloatingMenuButton } from "@/components/FloatingMenuButton";
 import { MenuProvider } from "@/components/MenuProvider";
+import { HERO_PHOTO, PLACEHOLDERS } from "@/data/placeholder-photos";
 import { publicFontVariables } from "@/lib/fonts";
 import { Footer } from "@/sections/Footer";
 import "../globals.css";
+
+// Replace with a real wedding photograph when one exists.
+const heroImage = PLACEHOLDERS[HERO_PHOTO].src;
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3052";
 
@@ -25,9 +29,21 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "meta" });
   return {
     metadataBase: new URL(SITE_URL),
-    title: t("title"),
+    title: { default: t("title"), template: `%s · ${t("title")}` },
     description: t("description"),
-    // Scaffold: not indexed until the wedding site launches.
+    openGraph: {
+      type: "website",
+      siteName: t("title"),
+      locale: locale === "fr" ? "fr_CA" : "en_CA",
+      images: [
+        {
+          url: heroImage.src,
+          width: heroImage.width,
+          height: heroImage.height,
+        },
+      ],
+    },
+    // Launch checklist (docs/plans/wedding/README.md §6): delete this line to allow indexing.
     robots: { index: false, follow: false },
   };
 }

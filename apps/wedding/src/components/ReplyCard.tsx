@@ -35,7 +35,7 @@ interface FieldProps {
 const CONTROL =
   "mt-1 w-full rounded-none border-0 border-b border-line-strong bg-transparent px-0 pt-1 pb-1.5 font-display text-[22px] text-fg outline-none focus-visible:border-cyanotype focus-visible:shadow-[0_1px_0_var(--cyanotype)]";
 
-/** Ruled-line field: italic label, one underline-style control, error text. */
+/** Ruled-line field: italic label, one ruled-line control, error text. */
 const Field = ({ id, label, error, className = "", children }: FieldProps) => (
   <div className={className}>
     <label htmlFor={id} className="block text-[15px] text-muted italic">

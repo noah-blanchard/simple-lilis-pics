@@ -1,8 +1,9 @@
 # Wedding site: master plan
 
-> **Status: ready to build.** Decisions are taken (see
-> [`02-design-decisions.md`](02-design-decisions.md)). Phases 05–12 are written
-> and none is started. The app is still the noindex scaffold from
+> **Status: built; awaiting launch inputs.** Decisions are taken (see
+> [`02-design-decisions.md`](02-design-decisions.md)). Phases 05–12 are done.
+> The site is noindex and waits for the operator's launch checklist (§6) and
+> the inputs in §5. It grew from the scaffold in
 > [`../monorepo/08-wedding-app-scaffold.md`](../monorepo/08-wedding-app-scaffold.md).
 
 This folder plans the wedding product on `apps/wedding` (`wedding.lilispics.com`):
@@ -122,7 +123,7 @@ Stop the whole run and ask only when:
 | 09 | [Stories data](09-phase-stories-data.md): migration 0015, core data layer, revalidation, admin wedding panel | 05 | writes `0015` | Done |
 | 10 | [Stories pages](10-phase-stories-pages.md): `/stories`, `/stories/[slug]`, lightbox, home stories section | 08, 09 | reads | Done |
 | 11 | [Reply card](11-phase-reply-card.md): migration 0016, inquiry API, form, seal sequence, `/rsvp`, admin inbox | 08 | writes `0016` | Done |
-| 12 | [Privacy, SEO, docs](12-phase-privacy-seo-docs.md): `/privacy`, metadata, sitemap (still noindex), documentation | 10, 11 | no | Not started |
+| 12 | [Privacy, SEO, docs](12-phase-privacy-seo-docs.md): `/privacy`, metadata, sitemap (still noindex), documentation | 10, 11 | no | Done |
 
 **Migrations.** The agent writes the `.sql` files and keeps going. It never runs
 them. Code must work before they are applied: the wedding data layer treats

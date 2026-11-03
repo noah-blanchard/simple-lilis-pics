@@ -41,7 +41,7 @@ Each app has its own `.env.local` (`apps/web/.env.local`, `apps/admin/.env.local
 | `CONTACT_TO_EMAIL` | web | Server only | Email only | Notification recipient |
 | `CONTACT_FROM_EMAIL` | web | Server only | Email only | Verified Resend sender |
 
-The wedding scaffold only needs `NEXT_PUBLIC_SITE_URL`; its Supabase variables are not used yet. `NEXT_OUTPUT` is set only by the Dockerfiles (standalone output) and is not an `.env.local` variable.
+The wedding app needs the public Supabase variables for the stories data layer, plus `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL` and `REVALIDATE_SECRET` for the reply card; the admin also needs `WEDDING_URL`. `NEXT_OUTPUT` is set only by the Dockerfiles (standalone output) and is not an `.env.local` variable.
 
 Generate `REVALIDATE_SECRET` once and paste the same value into both the web and admin files:
 
@@ -71,6 +71,8 @@ Apply every file in `supabase/migrations/` in numeric order:
 12. `0012_links_page_settings.sql`
 13. `0013_social_links.sql`
 14. `0014_social_links_rednote.sql`
+15. `0015_wedding_stories.sql`
+16. `0016_wedding_inquiries.sql`
 
 The migrations are chronological. Migration 0003 removes the original photo-centric tables from 0001 and replaces them with the active project-centric model. Do not skip earlier files on a new database. See [Database and storage](database-and-storage.md) for what each one does.
 
@@ -94,7 +96,7 @@ From the repository root, `bun run dev` starts every app through Turborepo. Use 
 | --- | --- |
 | Public site | `http://localhost:3050` (French at `/fr`) |
 | Admin login | `http://localhost:3051/login` |
-| Wedding scaffold | `http://localhost:3052` (French at `/fr`, noindex until launch) |
+| Wedding site | `http://localhost:3052` (French at `/fr`, noindex until launch) |
 
 The old `http://localhost:3050/admin` and `/login` URLs redirect to the admin app. The admin and the portfolio talk to each other: the admin calls the portfolio's `/api/revalidate` (through `PORTFOLIO_URL`) after saving the links page, and QR rating links point at the portfolio, so run both apps when testing those flows.
 

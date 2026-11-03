@@ -7,6 +7,7 @@ import { PageTop } from "@/components/PageTop";
 import { StoriesIndex } from "@/components/StoriesIndex";
 import { StoryPrint } from "@/components/StoryPrint";
 import { Tone } from "@/components/Tone";
+import { pageAlternates } from "@/lib/seo";
 
 type Props = { params: Promise<{ locale: Locale }> };
 
@@ -18,6 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: t("storiesTitle"),
     description: t("storiesDescription"),
+    alternates: pageAlternates("/stories", locale),
   };
 }
 
