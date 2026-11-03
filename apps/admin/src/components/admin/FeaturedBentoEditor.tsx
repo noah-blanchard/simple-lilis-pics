@@ -57,7 +57,7 @@ function toTile(project: ProjectWithRelations): EditorTile {
   const orientation: Orientation = cover?.orientation ?? "landscape";
   return {
     id: project.id,
-    title: project.title_en || project.title_fr || "Untitled",
+    title: project.title_en || project.title_fr || "",
     year: project.project_date?.slice(0, 4) ?? "",
     src: cover ? resolveImageUrl(cover.image_path) : "",
     orientation,
@@ -350,7 +350,11 @@ export function FeaturedBentoEditor() {
             {selected ? (
               <>
                 <span className="max-w-[220px] truncate text-[13px] text-fg/70">
-                  <span className="text-fg">{selected.title}</span> ·{" "}
+                  {selected.title && (
+                    <>
+                      <span className="text-fg">{selected.title}</span> ·{" "}
+                    </>
+                  )}
                   {selected.orientation}
                 </span>
                 <span className="mx-1 h-4 w-px bg-line" />

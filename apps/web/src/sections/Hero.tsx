@@ -5,11 +5,9 @@ import { EASE } from "@lili/ui/lib/motion";
 import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { HeroCarousel } from "@/components/HeroCarousel";
-import { HoverLink } from "@/components/HoverLink";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 import { Logo } from "@/components/Logo";
 import { NavIndexList } from "@/components/NavIndexList";
-import { socials } from "@/data/socials";
 
 // Splits a translated line on `**word**` markers and renders the marked
 // portion in accent color. Word position differs by language (e.g. the
@@ -56,7 +54,7 @@ export const Hero = () => {
         {/* <HeroDecor /> */}
 
         {/* Left column — headline pinned to the top, nav rail centered in the
-            middle, CTA + socials pinned to the bottom. */}
+            middle, CTA pinned to the bottom. */}
         <div className="flex flex-col md:col-span-5">
           {/* Top — byline/location, headline, intro */}
           <div className="flex flex-col gap-5">
@@ -96,7 +94,7 @@ export const Hero = () => {
             <NavIndexList size="md" standalone delayChildren={0.65} />
           </div>
 
-          {/* Bottom — CTA + socials */}
+          {/* Bottom — CTA */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -106,18 +104,6 @@ export const Hero = () => {
             <PillButton href="#contact" variant="light">
               {t("cta")}
             </PillButton>
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-              {socials.map((s) => (
-                <HoverLink
-                  key={s.label}
-                  href={s.href}
-                  target="_blank"
-                  className="text-[13px] text-fg/60"
-                >
-                  {s.label}
-                </HoverLink>
-              ))}
-            </div>
           </motion.div>
         </div>
 
