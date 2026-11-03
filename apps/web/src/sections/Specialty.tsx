@@ -1,8 +1,8 @@
 "use client";
 
+import { SectionHeader } from "@lili/ui/components/SectionHeader";
 import { useTranslations } from "next-intl";
 import { InfiniteRow } from "@/components/InfiniteRow";
-import { SectionHeader } from "@/components/SectionHeader";
 import { SpecialtyCard } from "@/components/SpecialtyCard";
 import { specialties } from "@/data/specialties";
 import type { Specialty as SpecialtyType } from "@/types";

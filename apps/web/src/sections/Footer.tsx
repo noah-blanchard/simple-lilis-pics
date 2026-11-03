@@ -1,9 +1,9 @@
+import { AccentUnderline } from "@lili/ui/components/AccentUnderline";
+import { Reveal } from "@lili/ui/components/Reveal";
 import { useTranslations } from "next-intl";
-import { AccentUnderline } from "@/components/AccentUnderline";
 import { FooterContactCta } from "@/components/FooterContactCta";
 import { FooterSitemapLinks } from "@/components/FooterSitemapLinks";
 import { HoverLink } from "@/components/HoverLink";
-import { Reveal } from "@/components/Reveal";
 import { socials } from "@/data/socials";
 
 export const Footer = () => {

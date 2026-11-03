@@ -1,16 +1,16 @@
 "use client";
 
 import type { ResolvedProject } from "@lili/core/types/db";
+import { AccentUnderline } from "@lili/ui/components/AccentUnderline";
+import { Reveal } from "@lili/ui/components/Reveal";
 import { BENTO_BREAKPOINTS } from "@lili/ui/lib/bento";
 import { EASE, hoverColorTransition } from "@lili/ui/lib/motion";
 import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
-import { AccentUnderline } from "@/components/AccentUnderline";
 import { BentoImageGrid } from "@/components/BentoImageGrid";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 import { Logo } from "@/components/Logo";
 import { navTextControl } from "@/components/nav/navControl";
-import { Reveal } from "@/components/Reveal";
 import { Link } from "@/i18n/navigation";
 import { Footer } from "@/sections/Footer";
 

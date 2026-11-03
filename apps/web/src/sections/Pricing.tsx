@@ -1,6 +1,6 @@
+import { Reveal } from "@lili/ui/components/Reveal";
 import { useTranslations } from "next-intl";
 import { PriceCard } from "@/components/PriceCard";
-import { Reveal } from "@/components/Reveal";
 import { plans } from "@/data/plans";
 import { rawList } from "@/lib/messages";
 import type { Plan } from "@/types";

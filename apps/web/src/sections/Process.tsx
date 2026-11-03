@@ -1,7 +1,7 @@
+import { SectionHeader } from "@lili/ui/components/SectionHeader";
 import { useTranslations } from "next-intl";
 import { ProcessFilmstrip } from "@/components/process/ProcessFilmstrip";
 import { ProcessFrame } from "@/components/process/ProcessFrame";
-import { SectionHeader } from "@/components/SectionHeader";
 import { processSteps } from "@/data/process";
 import { rawList } from "@/lib/messages";
 import type { ProcessStep } from "@/types";

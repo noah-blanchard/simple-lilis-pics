@@ -3,12 +3,12 @@
 import type { Locale } from "@lili/core/i18n/routing";
 import { RATING_PROMO_CODE, RATING_PROMO_PERCENT } from "@lili/core/rating";
 import { PillButton } from "@lili/ui/components/PillButton";
+import { WaxSeal } from "@lili/ui/components/WaxSeal";
 import { EASE } from "@lili/ui/lib/motion";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { WaxSeal } from "../WaxSeal";
 
 interface ThankYouLetterProps {
   open: boolean;

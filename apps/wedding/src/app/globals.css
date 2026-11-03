@@ -5,3 +5,68 @@
 /* Shared components live in packages/ui, outside this app's folder.
    Path is relative to this file. */
 @source "../../../../packages/ui/src";
+
+/* Wedding-only tokens. Day values are the shared theme's; these add the paper
+   sheet and the cyanotype ink, then re-scope the palette for the night table.
+   Never edit packages/ui/src/styles/theme.css for wedding needs. */
+:root {
+  --sheet: #ffffff;
+  --cyanotype: #1b4a72;
+  --cyanotype-strong: #12344f;
+  --wax: #a8462b;
+  --wax-deep: #722c19;
+  --shadow-sheet: 0 24px 60px -30px rgb(0 0 0 / 0.45);
+}
+
+@theme inline {
+  --color-sheet: var(--sheet);
+  --color-cyanotype: var(--cyanotype);
+  --color-cyanotype-strong: var(--cyanotype-strong);
+  --color-wax: var(--wax);
+}
+
+/* The reception table. Utilities (bg-ink, text-fg, border-line…) resolve
+   through these variables, so a section only needs data-tone="night". */
+[data-tone="night"] {
+  --bg: #141414;
+  --panel: #1d1d1d;
+  --panel-2: #262626;
+  --line: #303030;
+  --line-strong: #6b6b6b;
+  --muted: #a0a0a0;
+  --fg: #ededed;
+  --fg-rgb: 237 237 237;
+  --accent: #ffffff;
+  --accent-strong: #ffffff;
+  --on-accent: #141414;
+  --inverse: #ededed;
+  --on-inverse: #141414;
+  --shadow-sheet: 0 30px 60px -36px rgb(0 0 0 / 0.9);
+  color-scheme: dark;
+  background-color: var(--bg);
+  color: var(--fg);
+}
+
+/* A paper card lying on the table: back to day values, on white. */
+[data-tone="day"] {
+  --bg: #f4f4f4;
+  --panel: #ededed;
+  --panel-2: #e4e4e4;
+  --line: #dbdbdb;
+  --line-strong: #868686;
+  --muted: #5c5c5c;
+  --fg: #171717;
+  --fg-rgb: 23 23 23;
+  --accent: #9a5b1e;
+  --accent-strong: #77440f;
+  --on-accent: #ffffff;
+  --inverse: #171717;
+  --on-inverse: #f6f6f6;
+  color-scheme: light;
+  color: var(--fg);
+}
+
+/* Inside paper cards the focus ring is cyanotype ink. */
+[data-paper] :focus-visible {
+  outline-color: var(--cyanotype);
+}
