@@ -1,24 +1,27 @@
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import type { Locale } from "@lili/core/i18n/routing";
+import { setRequestLocale } from "next-intl/server";
 import { PageTop } from "@/components/PageTop";
-import { renderAccentLine } from "@/lib/accent";
+import { HourByHour } from "@/sections/HourByHour";
+import { Invitation } from "@/sections/Invitation";
+import { Promises } from "@/sections/Promises";
 
 export default async function WeddingHomePage({
   params,
 }: {
-  params: Promise<{ locale: string }>;
+  params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const t = await getTranslations({ locale, namespace: "hero" });
 
   return (
     <>
       <PageTop />
-      <main id="main" className="container-site section-y">
-        {/* Phase 07 replaces this with the invitation and the day half. */}
-        <h1 className="display-xl text-center text-[clamp(40px,6vw,88px)]">
-          {renderAccentLine(t("title"))}
-        </h1>
+      <main id="main">
+        <Invitation locale={locale} hasStories={false} />
+        <Promises locale={locale} />
+        {/* Phase 10: <HomeStories /> */}
+        <HourByHour locale={locale} />
+        {/* Phase 08: night sections */}
       </main>
     </>
   );

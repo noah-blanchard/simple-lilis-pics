@@ -117,7 +117,7 @@ Stop the whole run and ask only when:
 | --- | --- | --- | --- | --- |
 | 05 | [Foundations](05-phase-foundations.md): deps, shared components moved to `@lili/ui`, tokens, primitives, placeholders, dev kit page | none | no | Done |
 | 06 | [Shell](06-phase-shell.md): page top, floating menu, menu overlay, locale switcher, footer | 05 | no | Done |
-| 07 | [Home, day half](07-phase-home-day.md): invitation hero, promises, hour by hour (scroll clock) | 06 | no | Not started |
+| 07 | [Home, day half](07-phase-home-day.md): invitation hero, promises, hour by hour (scroll clock) | 06 | no | Done |
 | 08 | [Home, night half](08-phase-home-night.md): about, testimonials (flash develop), order of service, collections, FAQ | 07 | no | Not started |
 | 09 | [Stories data](09-phase-stories-data.md): migration 0015, core data layer, revalidation, admin wedding panel | 05 | writes `0015` | Not started |
 | 10 | [Stories pages](10-phase-stories-pages.md): `/stories`, `/stories/[slug]`, lightbox, home stories section | 08, 09 | reads | Not started |
