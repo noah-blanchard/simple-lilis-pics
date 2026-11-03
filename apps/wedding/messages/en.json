@@ -1,12 +1,426 @@
 {
   "meta": {
-    "title": "Lilis Pics — Weddings",
-    "description": "Wedding photography by Lili. Coming soon."
+    "title": "Lilis Pics · Weddings",
+    "description": "Wedding photographer in Montréal and across Québec. Lili photographs your day as it happens, from the morning to the last dance.",
+    "storiesTitle": "Wedding stories",
+    "storiesDescription": "Whole wedding days photographed by Lili, from the first hour to the last.",
+    "rsvpTitle": "Check your date",
+    "rsvpDescription": "Tell Lili about your wedding. It takes about a minute.",
+    "privacyTitle": "Privacy policy",
+    "privacyDescription": "How Lili handles the details you send through this site."
   },
-  "home": {
-    "eyebrow": "Lilis Pics · Weddings",
-    "title": "Wedding stories, coming soon.",
-    "body": "This space is being prepared. In the meantime, discover Lili's work on the main portfolio.",
-    "portfolioLink": "Visit the portfolio"
+  "nav": {
+    "menu": "Menu",
+    "close": "Close",
+    "email": "hello@lilispics.com",
+    "logoAlt": "Lilis Pics, weddings, home",
+    "skip": "Skip to content",
+    "localeLabel": "Language",
+    "items": {
+      "stories": "Stories",
+      "day": "Your day",
+      "collections": "Collections",
+      "questions": "Questions",
+      "reply": "Check your date",
+      "portfolio": "Portfolio"
+    }
+  },
+  "hero": {
+    "host": "Lili, photographer",
+    "lead": "is delighted to invite you",
+    "title": "to **simply** be there",
+    "lead2": "on your wedding day,",
+    "place": "in Montréal, elsewhere in Québec, or wherever you say yes.",
+    "reassurance": "You don't need to know how to pose. I stay close, quietly, and keep the day the way you lived it.",
+    "availability": "Dates open in 2027 and 2028",
+    "cta": "Check your date",
+    "storiesLink": "See the stories"
+  },
+  "promises": {
+    "heading": "What I promise",
+    "items": [
+      {
+        "title": "I stay out of the way.",
+        "line": "By the first hour you stop noticing me. That's when the good photographs start."
+      },
+      {
+        "title": "You won't need to pose.",
+        "line": "I give a direction when it helps, then I leave you to each other."
+      },
+      {
+        "title": "You see the photos quickly.",
+        "line": "A first selection three days after the wedding, while you still remember every detail."
+      }
+    ],
+    "coverage": "About eight photographs in ten are taken as they happen, with no posing."
+  },
+  "day": {
+    "titleBase": "Your day,",
+    "titleAccent": "hour by hour",
+    "intro": "From the first coffee to the last song, this is what I photograph, and when.",
+    "parts": {
+      "morning": "in the morning",
+      "afternoon": "in the afternoon",
+      "evening": "in the evening",
+      "night": "at night"
+    },
+    "moments": {
+      "getting-ready": {
+        "title": "Getting ready",
+        "line": "Buttons, hairspray, and a parent who keeps checking the time."
+      },
+      "first-look": {
+        "title": "The first look",
+        "line": "Some couples want it alone, some in front of everyone. Both work."
+      },
+      "ceremony": {
+        "title": "The ceremony",
+        "line": "I stay at the back during the vows and only move between them."
+      },
+      "family": {
+        "title": "Family photos",
+        "line": "A list you give me ahead of time, done in about twenty minutes."
+      },
+      "portraits": {
+        "title": "The two of you",
+        "line": "A short walk away from the guests. Most couples say it was the calmest part of their day."
+      },
+      "golden-hour": {
+        "title": "Golden hour",
+        "line": "Ten minutes outside while the light is low. Worth leaving dessert for."
+      },
+      "speeches": {
+        "title": "Speeches",
+        "line": "I watch the people listening as much as the person speaking."
+      },
+      "last-dance": {
+        "title": "The last dance",
+        "line": "Flash on, shoes off. I stay until the floor empties or you send me home."
+      }
+    }
+  },
+  "stories": {
+    "titleBase": "Weddings,",
+    "titleAccent": "as they happened",
+    "intro": "Each wedding from its first hour to its last, in the order it happened.",
+    "all": "All stories",
+    "filters": {
+      "all": "All",
+      "elopement": "Elopements",
+      "intimate": "Intimate weddings",
+      "full_day": "Full days"
+    },
+    "types": {
+      "elopement": "Elopement",
+      "intimate": "Intimate wedding",
+      "full_day": "Full day"
+    },
+    "photographs": "{count, plural, one {# photograph} other {# photographs}}",
+    "seasons": {
+      "spring": "Spring",
+      "summer": "Summer",
+      "autumn": "Autumn",
+      "winter": "Winter"
+    },
+    "seasonYear": "{season} {year}",
+    "empty": "The first stories are on their way.",
+    "notFound": "This story isn't here. It may have moved.",
+    "back": "All stories",
+    "next": "Next story",
+    "lightbox": {
+      "open": "Open photograph {n}",
+      "close": "Close",
+      "previous": "Previous photograph",
+      "next": "Next photograph",
+      "counter": "{current} of {total}"
+    }
+  },
+  "about": {
+    "titleBase": "I'm Lili,",
+    "titleAccent": "and I'll be nearby",
+    "body": [
+      "I photograph weddings the way I photograph everything else: close enough to see, far enough to stay out of it. Most of my work is people, in Montréal and wherever they take me.",
+      "On your day I arrive early and stay quiet. I'd rather you remember your guests than my camera."
+    ],
+    "link": "See the rest of my work on lilispics.com"
+  },
+  "words": {
+    "titleBase": "In their",
+    "titleAccent": "own words",
+    "previous": "Previous",
+    "next": "Next",
+    "items": []
+  },
+  "process": {
+    "titleBase": "From first email",
+    "titleAccent": "to the album",
+    "cardHeading": "Order of service",
+    "steps": [
+      {
+        "when": "Today",
+        "what": "You write to me",
+        "why": "A few lines about your day are enough. The reply card below takes a minute."
+      },
+      {
+        "when": "Within 48 hours",
+        "what": "A 30-minute call",
+        "why": "We talk about the day you have in mind, and you see whether we get along."
+      },
+      {
+        "when": "When you're ready",
+        "what": "You reserve your date",
+        "why": "A short contract and a retainer. From then on, the date is yours."
+      },
+      {
+        "when": "In the months before",
+        "what": "We plan together",
+        "why": "The timeline, the family list, and the places worth a detour."
+      },
+      {
+        "when": "On the day",
+        "what": "I'm there",
+        "why": "For the hours of your collection, from the first coffee onward."
+      },
+      {
+        "when": "Three days later",
+        "what": "A first selection",
+        "why": "A handful of photographs, so you're not left waiting with nothing."
+      },
+      {
+        "when": "About six weeks later",
+        "what": "Your full gallery",
+        "why": "Online, to download and share. Then the album, if you chose one."
+      }
+    ]
+  },
+  "collections": {
+    "titleBase": "Three ways",
+    "titleAccent": "to have me there",
+    "from": "from",
+    "onRequest": "On request",
+    "items": {
+      "elopement": {
+        "name": "Elopement",
+        "duration": "Up to 3 hours",
+        "includes": [
+          "The two of you and a few guests",
+          "Ceremony and portraits",
+          "Online gallery"
+        ]
+      },
+      "intimate": {
+        "name": "Intimate",
+        "duration": "Up to 6 hours",
+        "includes": [
+          "Up to 60 guests",
+          "Ceremony, family photos and portraits",
+          "First selection and online gallery"
+        ]
+      },
+      "full_day": {
+        "name": "Full day",
+        "duration": "About 10 hours",
+        "includes": [
+          "From getting ready to the first dances",
+          "Second photographer available",
+          "First selection and online gallery"
+        ]
+      }
+    },
+    "addons": "You can add a second photographer, an engagement session, a printed album, or a roll of 35 mm film."
+  },
+  "questions": {
+    "titleBase": "Questions",
+    "titleAccent": "couples ask",
+    "groups": [
+      {
+        "title": "Style and approach",
+        "items": [
+          {
+            "q": "Do we need to know how to pose?",
+            "a": "No. Most of the day I photograph what happens without stepping in. For the portraits I give simple directions, like where to walk or where to look, and then I let you be together."
+          },
+          {
+            "q": "Do you do family group photos?",
+            "a": "Yes. You send me a list before the wedding, and someone who knows the family helps me call people in. It usually takes about twenty minutes."
+          },
+          {
+            "q": "Do you work with a second photographer?",
+            "a": "For full days I can bring a second photographer I trust, so both sides of the morning are covered. It's an add-on to the collection."
+          },
+          {
+            "q": "Do you shoot film?",
+            "a": "I can shoot a roll or two of 35 mm film alongside the digital photographs. The scans arrive with your gallery."
+          }
+        ]
+      },
+      {
+        "title": "Booking and travel",
+        "items": [
+          {
+            "q": "How do we reserve our date?",
+            "a": "After our call I send a short contract and an invoice for the retainer. Your date is reserved once both are back."
+          },
+          {
+            "q": "Is there a retainer or a payment plan?",
+            "a": "A retainer reserves the date, and the balance is due before the wedding. If you need to spread it out, tell me and we'll find a schedule."
+          },
+          {
+            "q": "Do you travel outside Montréal?",
+            "a": "Yes, anywhere in Québec and beyond. Travel costs are added to the quote, and you know the amount before you reserve."
+          },
+          {
+            "q": "How many weddings do you take each year?",
+            "a": "A limited number, so each couple gets my full attention before and after the day."
+          }
+        ]
+      },
+      {
+        "title": "On the day",
+        "items": [
+          {
+            "q": "What if it rains?",
+            "a": "We bring umbrellas and find a covered spot with good light. Some of my favourite photographs were taken in the rain."
+          },
+          {
+            "q": "Can you work in dark venues?",
+            "a": "Yes. I use flash when the room is dark, and I keep it soft so it doesn't interrupt the evening."
+          },
+          {
+            "q": "Do you need a meal and a break?",
+            "a": "For days longer than six hours, a meal during dinner is appreciated. I eat when the guests eat, so I never miss the speeches."
+          }
+        ]
+      },
+      {
+        "title": "After the wedding",
+        "items": [
+          {
+            "q": "When do we see the photos?",
+            "a": "A first selection three days after the wedding, and the full gallery about six weeks later."
+          },
+          {
+            "q": "Do you make albums?",
+            "a": "Yes. We design the album together once the gallery is delivered, and a bindery I trust prints it."
+          },
+          {
+            "q": "Can we ask you not to share our photographs?",
+            "a": "Of course. Tell me before the wedding or at any time after, and your photographs stay private."
+          }
+        ]
+      }
+    ]
+  },
+  "reply": {
+    "titleBase": "Tell me",
+    "titleAccent": "about your day",
+    "intro": "Tell me where and when, even roughly. I reply within 48 hours with my availability and a first idea of the price.",
+    "introAside": "You can also write to me at {email}.",
+    "cardHeading": "Kindly reply",
+    "cardNote": "About a minute to fill in.",
+    "fields": {
+      "names": "Your names",
+      "email": "Email",
+      "date": "Wedding date",
+      "dateUnset": "We haven't set a date yet",
+      "venue": "Venue or city",
+      "guests": "Guests",
+      "collection": "Collection",
+      "budget": "Photography budget",
+      "heard": "How did you hear about me?",
+      "message": "Anything else you'd like me to know",
+      "consent": "I agree that Lili keeps these details to answer me, as described in the <link>privacy policy</link>.",
+      "choose": "Choose"
+    },
+    "options": {
+      "guests": {
+        "under_20": "Fewer than 20",
+        "20_60": "20 to 60",
+        "60_120": "60 to 120",
+        "over_120": "More than 120"
+      },
+      "collection": {
+        "elopement": "Elopement",
+        "intimate": "Intimate",
+        "full_day": "Full day",
+        "unsure": "Not sure yet"
+      },
+      "budget": {
+        "under_3000": "Under $3,000",
+        "3000_4500": "$3,000 to $4,500",
+        "4500_6000": "$4,500 to $6,000",
+        "over_6000": "More than $6,000",
+        "unsure": "I'd rather talk about it"
+      }
+    },
+    "errors": {
+      "required": "Please fill this in.",
+      "email": "This email address doesn't look right.",
+      "date": "Choose a date, or tick the box below it.",
+      "consent": "Please accept so I can keep your details.",
+      "server": "Something went wrong on my side. Your answers are still here, so you can try again, or write to hello@lilispics.com."
+    },
+    "submit": "Seal and send",
+    "sending": "Sealing",
+    "success": {
+      "title": "Sealed and sent",
+      "message": "Thank you. I'll write back within 48 hours, often sooner.",
+      "reset": "Write another reply"
+    }
+  },
+  "privacy": {
+    "title": "Privacy policy",
+    "updated": "Last updated: {date}",
+    "intro": "This page explains what happens to the details you send me through this site, in line with Québec's Act respecting the protection of personal information in the private sector (Law 25).",
+    "sections": [
+      {
+        "heading": "Who is responsible",
+        "body": [
+          "I'm Lili, the photographer behind Lilis Pics, and I'm the person responsible for protecting your personal information. You can reach me at hello@lilispics.com."
+        ]
+      },
+      {
+        "heading": "What I collect",
+        "body": [
+          "When you send the reply card: your names, email address, wedding date, venue or city, number of guests, collection, budget range, how you heard about me, and your message.",
+          "This site does not use advertising cookies or trackers."
+        ]
+      },
+      {
+        "heading": "Why",
+        "body": [
+          "Only to answer your request, prepare a quote and, if you book, organise the photography of your wedding. I never sell or share your details for marketing."
+        ]
+      },
+      {
+        "heading": "Where it is kept",
+        "body": [
+          "Your details are stored with Supabase, my database provider, and the notification email goes through Resend. These providers may keep data outside Québec. [HOSTING REGION TO CONFIRM]"
+        ]
+      },
+      {
+        "heading": "How long",
+        "body": [
+          "I keep a request for [RETENTION PERIOD TO CONFIRM] after our last exchange, then delete it. If you book, your details become part of your contract file."
+        ]
+      },
+      {
+        "heading": "Your rights",
+        "body": [
+          "You can ask to see, correct or delete your information, or withdraw your consent, at any time by writing to hello@lilispics.com. I answer within 30 days.",
+          "If you are not satisfied with my answer, you can contact the Commission d'accès à l'information du Québec."
+        ]
+      }
+    ]
+  },
+  "footer": {
+    "titleBase": "Your date might",
+    "titleAccent": "still be free",
+    "cta": "Check your date",
+    "availability": "Dates open in 2027 and 2028",
+    "instagram": "Instagram",
+    "portfolio": "lilispics.com",
+    "privacy": "Privacy",
+    "copyright": "© {year} Lilis Pics. Photographs by Lili."
   }
 }

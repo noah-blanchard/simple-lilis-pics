@@ -1,8 +1,6 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
-
-// Placeholder until the wedding experience is designed. The portfolio origin
-// is fixed on purpose: this page only exists to point visitors there.
-const PORTFOLIO_ORIGIN = "https://lilispics.com";
+import { PageTop } from "@/components/PageTop";
+import { renderAccentLine } from "@/lib/accent";
 
 export default async function WeddingHomePage({
   params,
@@ -11,23 +9,17 @@ export default async function WeddingHomePage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const t = await getTranslations({ locale, namespace: "home" });
-  const portfolioHref =
-    locale === "fr" ? `${PORTFOLIO_ORIGIN}/fr` : PORTFOLIO_ORIGIN;
+  const t = await getTranslations({ locale, namespace: "hero" });
 
   return (
-    <main className="container-site section-y flex min-h-dvh flex-col justify-center gap-6">
-      <p className="tag-mono uppercase">{t("eyebrow")}</p>
-      <h1 className="display-xl max-w-4xl text-[clamp(40px,6vw,88px)] text-fg">
-        {t("title")}
-      </h1>
-      <p className="max-w-xl text-body-fluid text-fg/70">{t("body")}</p>
-      <a
-        href={portfolioHref}
-        className="tag-mono w-fit text-accent-strong underline underline-offset-4"
-      >
-        {t("portfolioLink")}
-      </a>
-    </main>
+    <>
+      <PageTop />
+      <main id="main" className="container-site section-y">
+        {/* Phase 07 replaces this with the invitation and the day half. */}
+        <h1 className="display-xl text-center text-[clamp(40px,6vw,88px)]">
+          {renderAccentLine(t("title"))}
+        </h1>
+      </main>
+    </>
   );
 }

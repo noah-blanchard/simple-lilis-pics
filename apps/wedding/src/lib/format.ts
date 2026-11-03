@@ -5,7 +5,7 @@ export type Season = "spring" | "summer" | "autumn" | "winter";
 
 const NBSP = " ";
 
-/** Minutes since midnight → "2:30 pm" (en) or "14 h 30" (fr, Québec usage).
+/** Minutes since midnight to "2:30 pm" (en) or "14 h 30" (fr, Québec usage).
  *  Minutes are always shown so the scroll clock keeps a constant width. */
 export function formatTime(minutes: number, locale: Locale): string {
   const h = Math.floor(minutes / 60) % 24;
@@ -32,7 +32,7 @@ export function formatPrice(amount: number, locale: Locale): string {
   }).format(amount);
 }
 
-/** Northern-hemisphere season of an ISO date ("2025-10-04" → "autumn"). */
+/** Northern-hemisphere season of an ISO date ("2025-10-04" to "autumn"). */
 export function seasonOf(isoDate: string): Season {
   const month = Number(isoDate.slice(5, 7));
   if (month >= 3 && month <= 5) return "spring";

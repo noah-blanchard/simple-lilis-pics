@@ -16,7 +16,7 @@ interface TextLinkProps {
 
 const MotionLink = motion.create(Link);
 
-/** Quiet text link: muted, turns to full ink on hover. No underline, no arrow. */
+/** Quiet text link: muted, turns to full ink on hover. Colour change only. */
 export const TextLink = ({
   href,
   external = false,
