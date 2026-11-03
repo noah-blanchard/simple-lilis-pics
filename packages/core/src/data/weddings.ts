@@ -79,7 +79,18 @@ function resolveStory(
 export async function getWeddingStories(
   locale: Locale,
 ): Promise<ResolvedWeddingStory[]> {
-  return (await getStoryRows())
+  let rows: ProjectWithRelations[];
+  try {
+    rows = await getStoryRows();
+  } catch (error) {
+    // A database hiccup must not take the public pages down: show no stories.
+    console.error(
+      "[weddings] could not load stories:",
+      error instanceof Error ? error.message : error,
+    );
+    return [];
+  }
+  return rows
     .map((row) => resolveStory(row, locale))
     .filter((s): s is ResolvedWeddingStory => s !== null);
 }

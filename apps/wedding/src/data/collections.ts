@@ -1,4 +1,6 @@
-export type CollectionKey = "elopement" | "intimate" | "full_day";
+import type { WeddingType } from "@lili/core/api/schemas";
+
+export type CollectionKey = WeddingType;
 
 export interface CollectionMeta {
   key: CollectionKey;
