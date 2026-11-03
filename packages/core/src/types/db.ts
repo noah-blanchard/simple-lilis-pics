@@ -1,3 +1,4 @@
+import type { WeddingType } from "../api/schemas";
 import { PHOTOS_BUCKET, SUPABASE_URL } from "../env";
 import type { Locale } from "../i18n/routing";
 import type {
@@ -148,6 +149,13 @@ export interface ProjectRow {
   featured_col_span: number; // 1..8 base columns — tile width in the featured bento grid
   cover_photo_id: string | null;
   created_at: string;
+  wedding_story: boolean; // shown on wedding.lilispics.com as a story
+  wedding_slug: string | null;
+  wedding_couple: string | null;
+  wedding_venue: string | null;
+  wedding_type: WeddingType | null;
+  wedding_quote_en: string | null;
+  wedding_quote_fr: string | null;
 }
 
 /** Shape returned by the Supabase select:

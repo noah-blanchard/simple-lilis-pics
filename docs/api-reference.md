@@ -17,9 +17,10 @@ The API is split between two apps, each with its own base URL. A route called on
 | App | Base URL | Serves |
 | --- | --- | --- |
 | `apps/web` | `https://lilispics.com` | The public writes and the revalidation webhook |
+| `apps/wedding` | `https://wedding.lilispics.com` | The revalidation webhook (more public writes arrive with the reply card) |
 | `apps/admin` | `https://admin.lilispics.com` | Every authenticated route, plus `GET /api/projects` and `GET /api/tags` |
 
-Admin client calls are same-origin from the CMS pages, and public client calls (contact form, rating submission, link beacons) are same-origin from the public site. The wedding app has no API routes.
+Admin client calls are same-origin from the CMS pages, and public client calls (contact form, rating submission, link beacons) are same-origin from the public site. The wedding app exposes only the routes listed for it above.
 
 ## Endpoint summary
 
@@ -86,6 +87,9 @@ Consumes JSON with any of:
 - `tag_ids` UUID array.
 - `cover_photo_id` belonging to this project.
 - `photos` entries containing `id`, `position`, and `orientation`.
+- Wedding-story fields: `wedding_story`, `wedding_slug`, `wedding_couple`, `wedding_venue`, `wedding_type`, `wedding_quote_en`, `wedding_quote_fr`. With `wedding_story: true`, the slug, couple and type must be non-null (`VALIDATION_ERROR` names each missing field).
+
+Database errors map to `SLUG_TAKEN` (409, another story uses the address), `WEDDING_INCOMPLETE` (422) and `MIGRATION_PENDING` (409, migration 0015 not applied). Every successful project change (create, update, delete, photo upload) also asks the wedding site to drop its `public-weddings` cache.
 
 The handler checks the featured cap and cover ownership. Tag replacement uses best-effort restoration if reinsertion fails.
 
@@ -188,7 +192,7 @@ Behind a TLS-terminating proxy such as Traefik, the Node server receives plain H
 
 ## Cache revalidation
 
-`POST /api/revalidate` (web) is a server-to-server webhook called by the admin after a CMS mutation.
+`POST /api/revalidate` (web and wedding) is a server-to-server webhook called by the admin after a CMS mutation.
 
 ```http
 POST /api/revalidate
@@ -206,7 +210,7 @@ Content-Type: application/json
 | 422 | `VALIDATION_ERROR`: `tags` is empty or contains a tag that is not whitelisted |
 | 503 | `REVALIDATE_DISABLED`: `REVALIDATE_SECRET` is not configured on the server |
 
-Only the tags listed in `PUBLIC_CACHE_TAGS` (`@lili/core/cache-tags`) are accepted; today that is `public-links`. The secret is compared in constant time. Browsers never call this route.
+Only the tags listed in `PUBLIC_CACHE_TAGS` (`@lili/core/cache-tags`) are accepted; today those are `public-links` and `public-weddings`. The admin sends them to every origin in `PORTFOLIO_URL` and `WEDDING_URL`; an app ignores a tag it does not cache. `REVALIDATE_SECRET` must be identical in the admin, web and wedding apps. The secret is compared in constant time. Browsers never call this route.
 
 ## Client guidance
 

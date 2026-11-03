@@ -79,6 +79,11 @@ export function AdminProjectCard({
             <span className="hidden sm:inline">Featured</span>
           </span>
         )}
+        {project.wedding_story && (
+          <span className="absolute bottom-1 left-1 rounded-full bg-accent px-1.5 py-0.5 font-medium text-[9px] text-on-accent uppercase tracking-wide sm:bottom-3 sm:left-3 sm:px-2.5 sm:py-1 sm:text-[11px]">
+            Wedding
+          </span>
+        )}
         <span className="absolute top-1 right-1 hidden rounded-full bg-ink/70 px-2.5 py-1 font-medium text-[11px] text-fg backdrop-blur sm:top-3 sm:right-3 sm:inline">
           {photoCount} 📷
         </span>

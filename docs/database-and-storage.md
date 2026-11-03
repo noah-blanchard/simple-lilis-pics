@@ -20,6 +20,7 @@ Apply `supabase/migrations/` in numeric order. They are the schema history, shar
 | `0012_links_page_settings.sql` | Adds the singleton links-page appearance settings and extends atomic editor saves |
 | `0013_social_links.sql` | Adds ordered, localized links-page social icons with click statistics and extends atomic editor saves |
 | `0014_social_links_rednote.sql` | Allows the `rednote` (Xiaohongshu) social icon key |
+| `0015_wedding_stories.sql` | Adds the nullable wedding-story columns, constraints and indexes on `projects` (idempotent; applied manually) |
 
 The active schema does **not** include the `photos` or `photo_tags` tables created by migration 0001; migration 0003 drops them.
 
@@ -40,6 +41,14 @@ Project metadata:
 - Nullable `featured_order`.
 - `featured_col_span` from 1 to 8, defaulting to 2.
 - `created_at`.
+- Wedding-story fields (migration 0015), edited from the admin and read by the wedding site:
+  - `wedding_story` boolean, default `false`;
+  - `wedding_slug` (unique when set, lowercase letters, numbers and dashes), `wedding_couple`, `wedding_venue`;
+  - `wedding_type` (`elopement`, `intimate` or `full_day`);
+  - `wedding_quote_en` and `wedding_quote_fr`.
+- Constraints: `projects_wedding_type_check`, `projects_wedding_slug_format`, and `projects_wedding_story_complete` (a story needs a slug, couple and type).
+- Indexes: unique `projects_wedding_slug_key` on `wedding_slug`, and `projects_wedding_story_idx` on `project_date` for stories.
+- Public read is inherited from `public read projects`; no new policies. The wedding data layer treats Postgres errors `42703` and `42P01` as "no stories yet", so the site works before the migration is applied.
 
 ### `project_photos`
 

@@ -9,8 +9,10 @@ import {
 } from "../api/schemas";
 import { validate } from "../api/validate";
 import { withAuth } from "../api/with-auth";
+import { PUBLIC_WEDDINGS_TAG } from "../cache-tags";
 import { PROJECT_SELECT, parseProjects } from "../data/parse";
 import { PHOTOS_BUCKET } from "../env";
+import { requestPublicRevalidation } from "../revalidate";
 import { createSupabaseAdminClient } from "../supabase/admin";
 import { createSupabaseServerClient } from "../supabase/server";
 import type { ProjectWithRelations } from "../types/db";
@@ -237,5 +239,6 @@ export const createProject = withAuth(async ({ request }) => {
     }
   }
 
+  await requestPublicRevalidation([PUBLIC_WEDDINGS_TAG]);
   return apiSuccess({ id: projectId }, { status: 201 });
 });

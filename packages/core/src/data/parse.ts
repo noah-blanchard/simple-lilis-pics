@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { WEDDING_TYPES } from "../api/schemas";
 import type { ProjectWithRelations } from "../types/db";
 
 /** Shared PostgREST select. Two FKs exist between projects↔project_photos
@@ -37,6 +38,14 @@ const projectWithRelations = z.object({
   featured_col_span: z.number().default(2),
   cover_photo_id: z.string().nullable(),
   created_at: z.string(),
+  // Defaults keep rows from a database without migration 0015 parsing cleanly.
+  wedding_story: z.boolean().default(false),
+  wedding_slug: z.string().nullable().default(null),
+  wedding_couple: z.string().nullable().default(null),
+  wedding_venue: z.string().nullable().default(null),
+  wedding_type: z.enum(WEDDING_TYPES).nullable().catch(null).default(null),
+  wedding_quote_en: z.string().nullable().default(null),
+  wedding_quote_fr: z.string().nullable().default(null),
   project_photos: z.array(projectPhotoRow),
   project_tags: z.array(z.object({ tags: tagRow })),
 });

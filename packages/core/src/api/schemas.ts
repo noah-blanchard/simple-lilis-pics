@@ -71,30 +71,69 @@ export const projectCreateSchema = z.object({
   cover_index: z.number().int().min(0).default(0),
 });
 
-/** Project update — all fields optional; photos[] allows reorder/orientation edits. */
-export const projectUpdateSchema = z.object({
-  title_fr: z.string().nullable().optional(),
-  title_en: z.string().nullable().optional(),
-  description_fr: z.string().nullable().optional(),
-  description_en: z.string().nullable().optional(),
-  project_date: z
+/* ── Weddings ── */
+
+export const WEDDING_TYPES = ["elopement", "intimate", "full_day"] as const;
+export type WeddingType = (typeof WEDDING_TYPES)[number];
+
+const WEDDING_SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+
+/** Wedding-story fields on a project (edit-only; the admin sends all of them together). */
+export const projectWeddingSchema = z.object({
+  wedding_story: z.boolean(),
+  wedding_slug: z
     .string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/)
-    .nullable()
-    .optional(),
-  featured: z.boolean().optional(),
-  tag_ids: z.array(z.string().uuid()).optional(),
-  cover_photo_id: z.string().uuid().optional(),
-  photos: z
-    .array(
-      z.object({
-        id: z.string().uuid(),
-        position: z.number().int().min(0),
-        orientation: z.enum(ORIENTATIONS),
-      }),
-    )
-    .optional(),
+    .trim()
+    .max(80)
+    .regex(WEDDING_SLUG, "Use lowercase letters, numbers and dashes")
+    .nullable(),
+  wedding_couple: z.string().trim().max(120).nullable(),
+  wedding_venue: z.string().trim().max(160).nullable(),
+  wedding_type: z.enum(WEDDING_TYPES).nullable(),
+  wedding_quote_en: z.string().trim().max(400).nullable(),
+  wedding_quote_fr: z.string().trim().max(400).nullable(),
 });
+
+/** Project update — all fields optional; photos[] allows reorder/orientation edits. */
+export const projectUpdateSchema = z
+  .object({
+    title_fr: z.string().nullable().optional(),
+    title_en: z.string().nullable().optional(),
+    description_fr: z.string().nullable().optional(),
+    description_en: z.string().nullable().optional(),
+    project_date: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/)
+      .nullable()
+      .optional(),
+    featured: z.boolean().optional(),
+    tag_ids: z.array(z.string().uuid()).optional(),
+    cover_photo_id: z.string().uuid().optional(),
+    photos: z
+      .array(
+        z.object({
+          id: z.string().uuid(),
+          position: z.number().int().min(0),
+          orientation: z.enum(ORIENTATIONS),
+        }),
+      )
+      .optional(),
+  })
+  .extend(projectWeddingSchema.partial().shape)
+  .superRefine((data, ctx) => {
+    // Mirrors the database check: a published story needs an address, names and a type.
+    if (data.wedding_story !== true) return;
+    const required = [
+      ["wedding_slug", "A story needs an address"],
+      ["wedding_couple", "A story needs the couple's names"],
+      ["wedding_type", "A story needs a type"],
+    ] as const;
+    for (const [key, message] of required) {
+      if (data[key] === null || data[key] === undefined) {
+        ctx.addIssue({ code: "custom", path: [key], message });
+      }
+    }
+  });
 
 export type ProjectCreateInput = z.infer<typeof projectCreateSchema>;
 export type ProjectUpdateInput = z.infer<typeof projectUpdateSchema>;

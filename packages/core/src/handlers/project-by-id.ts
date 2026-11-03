@@ -3,7 +3,9 @@ import { apiError, apiSuccess } from "../api/response";
 import { MAX_FEATURED_PROJECTS, projectUpdateSchema } from "../api/schemas";
 import { validate } from "../api/validate";
 import { withAuth } from "../api/with-auth";
+import { PUBLIC_WEDDINGS_TAG } from "../cache-tags";
 import { PHOTOS_BUCKET } from "../env";
+import { requestPublicRevalidation } from "../revalidate";
 import { createSupabaseAdminClient } from "../supabase/admin";
 
 type Ctx = { params: Promise<{ id: string }> };
@@ -73,7 +75,27 @@ export const updateProject = withAuth<Ctx>(async ({ request, ctx }) => {
       .from("projects")
       .update(updatePayload)
       .eq("id", id);
-    if (updateErr) return apiError("DB_UPDATE_FAILED", updateErr.message, 500);
+    if (updateErr) {
+      if (updateErr.code === "23505")
+        return apiError(
+          "SLUG_TAKEN",
+          "Another wedding story already uses this address",
+          409,
+        );
+      if (updateErr.code === "23514")
+        return apiError(
+          "WEDDING_INCOMPLETE",
+          "A wedding story needs an address, the couple's names and a type",
+          422,
+        );
+      if (updateErr.code === "42703")
+        return apiError(
+          "MIGRATION_PENDING",
+          "Wedding fields need migration 0015 to be applied",
+          409,
+        );
+      return apiError("DB_UPDATE_FAILED", updateErr.message, 500);
+    }
   }
 
   // ── Replace tags ──────────────────────────────────────────────
@@ -117,6 +139,7 @@ export const updateProject = withAuth<Ctx>(async ({ request, ctx }) => {
     }
   }
 
+  await requestPublicRevalidation([PUBLIC_WEDDINGS_TAG]);
   return apiSuccess({ id });
 });
 
@@ -156,5 +179,6 @@ export const deleteProject = withAuth<Ctx>(async ({ ctx }) => {
     }
   }
 
+  await requestPublicRevalidation([PUBLIC_WEDDINGS_TAG]);
   return apiSuccess({ id });
 });
