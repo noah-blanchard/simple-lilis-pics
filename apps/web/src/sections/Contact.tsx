@@ -1,10 +1,10 @@
 "use client";
 
 import { apiFetch } from "@lili/core/api/client";
+import { Reveal } from "@lili/ui/components/Reveal";
+import { SectionHeader } from "@lili/ui/components/SectionHeader";
 import { useTranslations } from "next-intl";
 import { ContactForm } from "@/components/ContactForm";
-import { Reveal } from "@/components/Reveal";
-import { SectionHeader } from "@/components/SectionHeader";
 import type { ContactFormValues } from "@/types";
 
 export const Contact = () => {

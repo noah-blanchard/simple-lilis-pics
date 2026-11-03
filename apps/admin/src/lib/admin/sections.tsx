@@ -1,4 +1,5 @@
 import {
+  IconCalendar,
   IconGrid,
   IconLayout,
   IconMail,
@@ -82,6 +83,14 @@ export const ADMIN_SECTIONS: AdminSection[] = [
     description: "Enquiries from the contact form.",
     Icon: IconMail,
     Stat: MessagesStat,
+  },
+  {
+    key: "inquiries",
+    href: "/admin/inquiries",
+    label: "Inquiries",
+    title: "Wedding inquiries",
+    description: "Reply cards from the wedding site.",
+    Icon: IconCalendar,
   },
 ];
 

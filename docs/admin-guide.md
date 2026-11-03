@@ -43,6 +43,17 @@ When the compressed images total more than 4 MiB, the form skips the single batc
 
 Editing supports localized text, date, tags, featured state, cover selection, photo order, and orientation. The current implementation does not add or remove photos from an existing project; create a replacement project when the gallery itself must change.
 
+### Mark a project as a wedding story
+
+Open a project in edit mode and use the **Wedding story** block (it is not shown when creating). Create the project first, then mark it.
+
+1. Tick "Show as a wedding story on wedding.lilispics.com".
+2. Fill in the couple's names. The address fills itself from the names until you edit it by hand.
+3. Add the venue or city, choose the type, and optionally write the couple's quote in one language and use the sparkle button for the other.
+4. Save. A story needs an address, names and a type. If another story already uses the address you get an error on that field. Until migration 0015 is applied the save reports that the wedding fields need it.
+
+Marked projects show a "Wedding" label on their dashboard card and still appear on the portfolio.
+
 Project text fields are optional. The public resolver uses the other language or a neutral fallback when localized text is missing.
 
 ## Manage tags
@@ -72,6 +83,10 @@ Open `/admin/featured` to arrange the home-page featured grid.
 - Save to persist both order and column span.
 
 Only currently featured projects belong in the submitted layout. The maximum is eight. The tile's vertical footprint is derived from its cover orientation, so verify cover choices before fine-tuning the grid.
+
+## Wedding inquiries
+
+Open `/admin/inquiries` to read the reply cards sent from wedding.lilispics.com. Each row shows the couple, the wedding date (or "No date yet") and the venue. Opening an unread card marks it read. Expand a row to see every answer, then reply by email, mark it unread again, or delete it. Until migration 0016 is applied the list shows an error and the wedding site's card reports a server problem.
 
 ## Ratings and testimonials
 

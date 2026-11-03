@@ -8,7 +8,7 @@ Lilis Pics is a Bun + Turborepo monorepo of three Next.js App Router apps and th
 | --- | --- | --- |
 | `apps/web` | `lilispics.com` | Localized public site, `/links` page, token-gated bilingual rating experience, public API routes, cache-revalidation webhook |
 | `apps/admin` | `admin.lilispics.com` | Authenticated CMS (`/login`, `/admin/*`) and every authenticated API route |
-| `apps/wedding` | `wedding.lilispics.com` | EN/FR placeholder page, noindex. No features yet. |
+| `apps/wedding` | `wedding.lilispics.com` | Bilingual wedding site: home, stories, reply card, privacy. Noindex until launch. Design rationale in [the wedding plan](plans/wedding/README.md). |
 
 | Package | Responsibility |
 | --- | --- |
@@ -38,7 +38,11 @@ Rating request (web)
   → admin moderation → approved public testimonial
 
 Wedding request (wedding)
-  → apps/wedding/src/proxy.ts → next-intl → static EN/FR placeholder
+  → apps/wedding/src/proxy.ts → next-intl → pages
+  → stories read through @lili/core/data/weddings (cached, tag public-weddings)
+  → reply card: public POST /api/inquiry → wedding_inquiries (service role) → best-effort Resend email
+  → admin inbox at /admin/inquiries
+  → POST /api/revalidate drops the public-weddings cache after project edits
 ```
 
 ## Route organization
@@ -64,7 +68,11 @@ Each app owns its routes under `src/app/`. Route files in `api/` are shims that 
 
 **`apps/wedding`**
 
-- `[locale]/layout.tsx` and `[locale]/page.tsx` render the placeholder; `robots.ts` disallows every crawler.
+- `[locale]/` holds the home, `stories`, `stories/[slug]`, `rsvp`, `privacy` and the development-only `kit` page; the layout renders the skip link, the menu provider, the floating menu pill and the night footer.
+- `api/` holds `POST /api/inquiry` and `POST /api/revalidate`.
+- `robots.ts` disallows every crawler (the launch version is a comment) and `sitemap.ts` is built but not advertised.
+- Sections live in `src/sections/`, app-local components in `src/components/`, typed data in `src/data/` and helpers in `src/lib/`.
+- Colour scopes: `globals.css` defines `[data-tone="night"]` and `[data-tone="day"]` token scopes, so a section only sets `data-tone` to move between paper and the reception table. Never edit the shared theme for wedding needs.
 
 English is served without a prefix. French is served under `/fr` (routing is shared from `@lili/core/i18n/routing`).
 
@@ -107,7 +115,7 @@ Admin saves links (PUT /api/links)
   → the next public request reads fresh data
 ```
 
-The call is best effort: a failure is logged as `[revalidate] …` and never fails the admin save, and the cache still expires on its own after 300 seconds. The webhook accepts only whitelisted tags (`@lili/core/cache-tags`), compares the secret in constant time, and returns 503 when `REVALIDATE_SECRET` is not configured. `PORTFOLIO_URL` and `REVALIDATE_SECRET` must therefore be set in the admin, and `REVALIDATE_SECRET` must match web's.
+The call is best effort: a failure is logged as `[revalidate] …` and never fails the admin save, and the cache still expires on its own after 300 seconds. The webhook accepts only whitelisted tags (`@lili/core/cache-tags`), compares the secret in constant time, and returns 503 when `REVALIDATE_SECRET` is not configured. `PORTFOLIO_URL`, `WEDDING_URL` and `REVALIDATE_SECRET` must therefore be set in the admin, and `REVALIDATE_SECRET` must match web's and the wedding app's. Wedding stories are cached under the tag `public-weddings` (300-second window) and refreshed after every project mutation; the admin sends every tag to every origin and an app ignores a tag it does not cache.
 
 `PORTFOLIO_URL` is also the origin of the QR rating URLs the admin generates, because `/rate/...` is served by the web app.
 

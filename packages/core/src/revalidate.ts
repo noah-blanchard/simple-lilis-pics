@@ -3,10 +3,10 @@ import type { PublicCacheTag } from "./cache-tags";
 
 const REVALIDATE_TIMEOUT_MS = 5000;
 
-/** Public app origins that cache CMS data. Today only the portfolio does. */
+/** Public app origins that cache CMS data: the portfolio and the wedding site. */
 function revalidationTargets(): string[] {
-  return [process.env.PORTFOLIO_URL].filter((url): url is string =>
-    Boolean(url),
+  return [process.env.PORTFOLIO_URL, process.env.WEDDING_URL].filter(
+    (url): url is string => Boolean(url),
   );
 }
 
@@ -21,7 +21,7 @@ export async function requestPublicRevalidation(
   const targets = revalidationTargets();
   if (!secret || targets.length === 0) {
     console.warn(
-      "[revalidate] REVALIDATE_SECRET or PORTFOLIO_URL is not set; public caches will refresh on their own schedule",
+      "[revalidate] REVALIDATE_SECRET, PORTFOLIO_URL or WEDDING_URL is not set; public caches will refresh on their own schedule",
     );
     return;
   }

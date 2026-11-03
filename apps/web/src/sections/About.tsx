@@ -1,14 +1,14 @@
 "use client";
 
+import { Reveal } from "@lili/ui/components/Reveal";
+import { SectionHeader } from "@lili/ui/components/SectionHeader";
 import { hoverColorTransition } from "@lili/ui/lib/motion";
 import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { AboutBioModal } from "@/components/AboutBioModal";
 import { Logo } from "@/components/Logo";
-import { Reveal } from "@/components/Reveal";
 import { RoundedImage } from "@/components/RoundedImage";
-import { SectionHeader } from "@/components/SectionHeader";
 import { rawList } from "@/lib/messages";
 
 const ABOUT_IMG = "/about/about_landscape.webp";

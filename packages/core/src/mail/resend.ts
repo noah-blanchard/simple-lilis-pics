@@ -2,7 +2,11 @@ import "server-only";
 
 import { Resend } from "resend";
 import type { ContactInput } from "../api/schemas";
-import { contactNotificationHtml } from "./templates";
+import type { WeddingInquiryRow } from "../types/db";
+import {
+  contactNotificationHtml,
+  weddingInquiryNotificationHtml,
+} from "./templates";
 
 /** Thrown when Resend or the sender/recipient env vars aren't configured.
  *  The route handler treats this as a non-fatal, best-effort failure. */
@@ -55,6 +59,33 @@ export async function sendContactNotification(
     replyTo: input.email,
     subject: `New inquiry from ${input.name} — Lilis Pics`,
     html: contactNotificationHtml(input),
+  });
+
+  if (error) {
+    throw new MailUpstreamError(error.message);
+  }
+}
+
+/** Send the "new wedding inquiry" notification email. Same configuration and
+ *  errors as sendContactNotification; the reply goes to the couple. */
+export async function sendWeddingInquiryNotification(
+  row: WeddingInquiryRow,
+): Promise<void> {
+  const resend = getClient();
+  const to = process.env.CONTACT_TO_EMAIL;
+  const from = process.env.CONTACT_FROM_EMAIL;
+  if (!to || !from) {
+    throw new MailConfigError(
+      "Resend is not configured (CONTACT_TO_EMAIL / CONTACT_FROM_EMAIL)",
+    );
+  }
+
+  const { error } = await resend.emails.send({
+    from,
+    to,
+    replyTo: row.email,
+    subject: `New wedding inquiry from ${row.names}, Lilis Pics`,
+    html: weddingInquiryNotificationHtml(row),
   });
 
   if (error) {

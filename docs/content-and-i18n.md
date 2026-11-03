@@ -8,7 +8,7 @@ The public site combines checked-in marketing content with runtime portfolio con
 - `apps/web/src/data/` contains typed lists and identifiers for navigation, specialties, plans, process steps, and social links.
 - Supabase stores project content, featured settings, public links, click statistics, contact messages, rating tokens, and moderated ratings.
 - `apps/web/public/` contains checked-in static images and decorative assets.
-- `apps/wedding/messages/en.json` and `fr.json` contain the wedding scaffold's placeholder copy (a `meta` and a `home` namespace).
+- `apps/wedding/messages/en.json` and `fr.json` contain the wedding site's copy (namespaces `meta`, `nav`, `hero`, `promises`, `day`, `stories`, `about`, `words`, `process`, `collections`, `questions`, `reply`, `privacy` and `footer`).
 
 Do not move runtime CMS content into message files or fetch static marketing lists from Supabase without an explicit architecture change.
 
@@ -46,9 +46,16 @@ Admin translation buttons can translate titles, descriptions, and tag labels in 
 
 The rating experience carries its language explicitly in `/rate/en/[token]` or `/rate/fr/[token]` rather than through the normal next-intl prefix. Approved ratings with written notes feed the public testimonials section in their recorded locale. The section stays hidden until at least three qualifying ratings exist.
 
-## The wedding scaffold
+## The wedding site
 
-`apps/wedding` is a bilingual placeholder with a single page that points visitors to the portfolio. It is **noindex** (robots metadata in the layout and a `Disallow: /` `robots.txt`) until the wedding product is designed and launched, and it has no content model, database tables, or admin sections yet. When it goes live, replace its `robots.ts`, add a sitemap, and decide on its own typography.
+`apps/wedding` is the bilingual wedding site, **noindex** until the operator's launch checklist ([the wedding plan](plans/wedding/README.md) §6).
+
+- **Voice.** The complete EN and Québec French copy lives in [the copy deck](plans/wedding/04-copy-deck.md): Lili speaking in the first person, short sentences, concrete details, and the banned words and constructions listed in [the guardrails](plans/wedding/03-guardrails.md). Lines about her business are drafts until she confirms them.
+- **Québec typography.** French uses `vous`, a narrow no-break space before `? ! : ;` and inside guillemets, and times and prices as `14 h 30` and `3 200 $`.
+- **Formatting helpers.** Times, prices, seasons and long dates come from `apps/wedding/src/lib/format.ts`, never hand-built strings.
+- **Message parity.** Keys in `messages/en.json` and `fr.json` stay in parity, including array lengths.
+- **Stories.** Story content is not in messages: it comes from portfolio projects marked as wedding stories in the admin (couple, address, venue, type and quotes). Testimonials (`words.items`) ship empty and the section stays hidden until real ones exist; prices in `src/data/collections.ts` are `null` ("On request") until confirmed.
+- **Photographs.** Placeholders are Lili's own portfolio images in `src/assets/placeholders/`, with alt text in `src/data/placeholder-photos.ts`.
 
 ## Static assets
 

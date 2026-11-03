@@ -30,16 +30,43 @@ import { z } from "zod";
 import { PhotoLightbox } from "@/components/admin/PhotoLightbox";
 import { PhotoListItem } from "@/components/admin/PhotoListItem";
 import { TranslatableField } from "@/components/admin/TranslatableField";
+import { WeddingPanel } from "@/components/admin/WeddingPanel";
 import { useTranslate } from "@/lib/translate/use-translate";
 
 // All metadata is optional; empty strings become null on submit.
-const schema = z.object({
-  title_en: z.string(),
-  title_fr: z.string(),
-  description_en: z.string(),
-  description_fr: z.string(),
-  project_date: z.string(),
-});
+const schema = z
+  .object({
+    title_en: z.string(),
+    title_fr: z.string(),
+    description_en: z.string(),
+    description_fr: z.string(),
+    project_date: z.string(),
+    // Wedding story fields (edit mode only; "" becomes null on submit).
+    wedding_story: z.boolean(),
+    wedding_couple: z.string(),
+    wedding_slug: z
+      .string()
+      .refine((v) => v === "" || /^[a-z0-9]+(-[a-z0-9]+)*$/.test(v), {
+        message: "Use lowercase letters, numbers and dashes",
+      }),
+    wedding_venue: z.string(),
+    wedding_type: z.string(),
+    wedding_quote_en: z.string(),
+    wedding_quote_fr: z.string(),
+  })
+  .superRefine((v, ctx) => {
+    if (!v.wedding_story) return;
+    const required = [
+      ["wedding_couple", "A story needs the couple's names"],
+      ["wedding_slug", "A story needs an address"],
+      ["wedding_type", "A story needs a type"],
+    ] as const;
+    for (const [key, message] of required) {
+      if (v[key].trim() === "") {
+        ctx.addIssue({ code: "custom", path: [key], message });
+      }
+    }
+  });
 type FormValues = z.infer<typeof schema>;
 
 // Target stays under MAX_FILE_BYTES (4 MiB) so even a one-photo request
@@ -181,7 +208,13 @@ export function ProjectForm({
     queryFn: () => apiFetch<TagRow[]>("/api/tags"),
   });
 
-  const { register, handleSubmit, watch, setValue } = useForm<FormValues>({
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
       title_en: project?.title_en ?? "",
@@ -189,8 +222,25 @@ export function ProjectForm({
       description_en: project?.description_en ?? "",
       description_fr: project?.description_fr ?? "",
       project_date: project?.project_date ?? "",
+      wedding_story: project?.wedding_story ?? false,
+      wedding_couple: project?.wedding_couple ?? "",
+      wedding_slug: project?.wedding_slug ?? "",
+      wedding_venue: project?.wedding_venue ?? "",
+      wedding_type: project?.wedding_type ?? "",
+      wedding_quote_en: project?.wedding_quote_en ?? "",
+      wedding_quote_fr: project?.wedding_quote_fr ?? "",
     },
   });
+
+  const weddingValues = watch([
+    "wedding_story",
+    "wedding_couple",
+    "wedding_slug",
+    "wedding_venue",
+    "wedding_type",
+    "wedding_quote_en",
+    "wedding_quote_fr",
+  ]);
 
   // Live values powering the per-field AI translation buttons.
   const [titleEn, titleFr, descEn, descFr] = watch([
@@ -413,6 +463,13 @@ export function ProjectForm({
             description_en: values.description_en || null,
             description_fr: values.description_fr || null,
             project_date: values.project_date || null,
+            wedding_story: values.wedding_story,
+            wedding_couple: values.wedding_couple.trim() || null,
+            wedding_slug: values.wedding_slug.trim() || null,
+            wedding_venue: values.wedding_venue.trim() || null,
+            wedding_type: values.wedding_type || null,
+            wedding_quote_en: values.wedding_quote_en.trim() || null,
+            wedding_quote_fr: values.wedding_quote_fr.trim() || null,
             featured,
             tag_ids: selectedTags,
             cover_photo_id: coverPhotoId ?? undefined,
@@ -705,6 +762,28 @@ export function ProjectForm({
           }
         />
       </div>
+
+      {isEdit && (
+        <WeddingPanel
+          register={register}
+          setValue={setValue}
+          errors={errors}
+          values={{
+            wedding_story: weddingValues[0],
+            wedding_couple: weddingValues[1],
+            wedding_slug: weddingValues[2],
+            wedding_venue: weddingValues[3],
+            wedding_type: weddingValues[4],
+            wedding_quote_en: weddingValues[5],
+            wedding_quote_fr: weddingValues[6],
+          }}
+          fieldClass={fieldClass}
+          labelClass={labelClass}
+          serverError={
+            mutation.isError ? (mutation.error as Error).message : null
+          }
+        />
+      )}
 
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         <div>

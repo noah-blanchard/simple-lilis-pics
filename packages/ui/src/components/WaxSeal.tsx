@@ -16,6 +16,8 @@ interface WaxSealProps {
   /** Suffix for the SVG gradient ids — required when two seals share a page,
    *  since duplicate ids would make one of them reference the other's fills. */
   idSuffix?: string;
+  /** Public path of the logo knocked out into the wax; each app serves its own. */
+  logoSrc?: string;
 }
 
 /**
@@ -26,7 +28,11 @@ interface WaxSealProps {
  * Shared by the contact-form success panel and the thank-you letter so the two
  * seals can't drift apart.
  */
-export const WaxSeal = ({ className = "", idSuffix = "" }: WaxSealProps) => {
+export const WaxSeal = ({
+  className = "",
+  idSuffix = "",
+  logoSrc = "/logo.webp",
+}: WaxSealProps) => {
   const glossId = `waxGloss${idSuffix}`;
   const depthId = `waxDepth${idSuffix}`;
 
@@ -69,7 +75,7 @@ export const WaxSeal = ({ className = "", idSuffix = "" }: WaxSealProps) => {
           brightness→invert (reordering would flip it dark). */}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center drop-shadow-[0_1px_1px_rgba(0,0,0,0.4)]">
         <Image
-          src="/logo.webp"
+          src={logoSrc}
           alt=""
           aria-hidden
           width={1536}

@@ -13,7 +13,7 @@ A bilingual photography portfolio and self-service content management system bui
 - Contact submissions stored in Postgres with best-effort Resend notifications.
 - Single-use bilingual rating links, QR generation, moderation, and approved public testimonials.
 - Supabase Auth, Row Level Security, Postgres, and public image storage.
-- A bilingual wedding site scaffold (placeholder page, noindex) ready for a future design.
+- A bilingual wedding site: an invitation-style home page, wedding stories drawn from portfolio projects, a sealed reply card that feeds an admin inbox, and a privacy page. It stays noindex until launch (see [the wedding plan](docs/plans/wedding/README.md)).
 
 ## Apps
 
@@ -21,7 +21,7 @@ A bilingual photography portfolio and self-service content management system bui
 | --- | --- | --- | --- | --- |
 | `@lili/web` | `apps/web` | `lilispics.com` | 3050 | Public site, links page, rating flow, public API routes |
 | `@lili/admin` | `apps/admin` | `admin.lilispics.com` | 3051 | Login, CMS, and every authenticated API route |
-| `@lili/wedding` | `apps/wedding` | `wedding.lilispics.com` | 3052 | EN/FR placeholder, noindex until launch |
+| `@lili/wedding` | `apps/wedding` | `wedding.lilispics.com` | 3052 | Wedding site: home, stories, reply card, privacy; noindex until launch |
 
 ## Packages
 
@@ -85,7 +85,7 @@ Fill in each `.env.local`, apply every SQL file in `supabase/migrations/` in num
 bun run dev
 ```
 
-Open [http://localhost:3050](http://localhost:3050) (public site), [http://localhost:3051/login](http://localhost:3051/login) (admin), and [http://localhost:3052](http://localhost:3052) (wedding scaffold).
+Open [http://localhost:3050](http://localhost:3050) (public site), [http://localhost:3051/login](http://localhost:3051/login) (admin), and [http://localhost:3052](http://localhost:3052) (wedding site).
 
 For the complete setup, migration, and account instructions, read [Local development](docs/local-development.md).
 
@@ -118,6 +118,7 @@ For the complete setup, migration, and account instructions, read [Local develop
 | `/admin/featured` | Featured bento layout editor |
 | `/admin/ratings` | Rating links and testimonial moderation |
 | `/admin/messages` | Contact inquiry inbox |
+| `/admin/inquiries` | Wedding reply card inbox |
 | `/admin/links` | WYSIWYG links editor and click statistics |
 | `/robots.txt` | Blocks all crawlers |
 | `/api/*` | Authenticated CMS route handlers (see the [API reference](docs/api-reference.md)) |
@@ -126,8 +127,14 @@ For the complete setup, migration, and account instructions, read [Local develop
 
 | Route | Purpose |
 | --- | --- |
-| `/`, `/fr` | Placeholder home (noindex) |
-| `/robots.txt` | Blocks all crawlers |
+| `/`, `/fr` | Invitation, promises, stories (when any exist), hour by hour, about, process, collections, questions and the reply card |
+| `/stories`, `/stories/[slug]` | Wedding stories (portfolio projects marked as stories in the admin) |
+| `/rsvp` | The reply card on its own page |
+| `/privacy` | Privacy policy (draft until Lili confirms it) |
+| `/api/inquiry` | Public reply card endpoint |
+| `/api/revalidate` | Cache-revalidation webhook called by the admin |
+| `/robots.txt`, `/sitemap.xml` | Robots blocks all crawlers; the sitemap is built but not advertised |
+| `/kit` | Development-only component kit (404 in production) |
 
 ## Environment
 
@@ -157,13 +164,13 @@ The demo seed is **destructive** and runs from the web app: `cd apps\web; bun ru
 apps/
   web/                  Public site: src/{app,components,sections,data,i18n,lib,types}, messages/, public/, scripts/seed.ts
   admin/                CMS: src/{app,components/admin,lib}, proxy.ts (Supabase session guard)
-  wedding/              Scaffold: src/app/[locale], messages/
+  wedding/              Wedding site: src/{app,components,sections,data,lib}, messages/
 packages/
   core/                 Shared logic: src/{api,data,handlers,i18n,mail,supabase,translate,types,...}
   ui/                   Shared UI: src/{components,lib,links,styles}
   config/               tsconfig bases
 supabase/migrations/    Ordered schema, policy, trigger, and storage migrations
-docs/                   Developer and operator handbook (docs/plans/ is the migration history)
+docs/                   Developer and operator handbook (docs/plans/: migration history, wedding plan)
 ```
 
 ## Documentation

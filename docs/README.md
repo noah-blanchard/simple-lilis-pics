@@ -36,6 +36,8 @@ For production operations:
 
 The migration from a single Vercel-hosted app to this monorepo on Dokploy is kept as a historical record in [`plans/monorepo/`](plans/monorepo/README.md). Current rules live in [`AGENTS.md`](../AGENTS.md) and these documents, not in the plans.
 
+The wedding product for `apps/wedding` is planned in [`plans/wedding/`](plans/wedding/README.md), starting with its [design brief](plans/wedding/01-design-brief.md).
+
 ## Documentation rules
 
 - Source code, `package.json`, `.env.example`, and ordered migrations are the factual source of truth.

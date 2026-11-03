@@ -1,3 +1,9 @@
+import type {
+  BUDGET_RANGES,
+  GUEST_RANGES,
+  INQUIRY_COLLECTIONS,
+  WeddingType,
+} from "../api/schemas";
 import { PHOTOS_BUCKET, SUPABASE_URL } from "../env";
 import type { Locale } from "../i18n/routing";
 import type {
@@ -21,6 +27,26 @@ export interface ContactMessageRow {
   name: string;
   email: string;
   message: string;
+  created_at: string;
+  /** When the admin first opened it; null while unread. */
+  read_at: string | null;
+}
+
+/** A reply card from the wedding site (table wedding_inquiries). */
+export interface WeddingInquiryRow {
+  id: string;
+  names: string;
+  email: string;
+  wedding_date: string | null;
+  date_unset: boolean;
+  venue: string;
+  guests: (typeof GUEST_RANGES)[number] | null;
+  collection: (typeof INQUIRY_COLLECTIONS)[number] | null;
+  budget: (typeof BUDGET_RANGES)[number] | null;
+  heard_from: string;
+  message: string;
+  locale: "en" | "fr";
+  consent_at: string;
   created_at: string;
   /** When the admin first opened it; null while unread. */
   read_at: string | null;
@@ -148,6 +174,13 @@ export interface ProjectRow {
   featured_col_span: number; // 1..8 base columns — tile width in the featured bento grid
   cover_photo_id: string | null;
   created_at: string;
+  wedding_story: boolean; // shown on wedding.lilispics.com as a story
+  wedding_slug: string | null;
+  wedding_couple: string | null;
+  wedding_venue: string | null;
+  wedding_type: WeddingType | null;
+  wedding_quote_en: string | null;
+  wedding_quote_fr: string | null;
 }
 
 /** Shape returned by the Supabase select:

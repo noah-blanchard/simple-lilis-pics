@@ -1,7 +1,9 @@
 import type { MetadataRoute } from "next";
 
-/** Scaffold only: keep the wedding site out of search engines until launch.
- *  Replace with real rules (and add a sitemap) when the site goes live. */
+/** The wedding site stays out of search engines until the operator's launch
+ *  checklist (docs/plans/wedding/README.md §6). */
 export default function robots(): MetadataRoute.Robots {
   return { rules: { userAgent: "*", disallow: "/" } };
+  // Launch (README §6): replace with
+  // return { rules: { userAgent: "*", allow: "/" }, sitemap: `${SITE_URL}/sitemap.xml` };
 }

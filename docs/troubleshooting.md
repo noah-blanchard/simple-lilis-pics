@@ -137,6 +137,14 @@ Fonts are loaded through `next/font/google`. A restricted or offline build envir
 | Pages work but images are broken | `NEXT_PUBLIC_SUPABASE_URL` was missing at build, so no image host is allowed | Add it to Build-time Arguments and redeploy |
 | Certificate warning after a DNS change | Let's Encrypt is still issuing | Wait a few minutes and check the Traefik logs; make sure ports 80 and 443 are open |
 
+## Wedding stories don't appear
+
+Check, in order: migration `0015_wedding_stories.sql` is applied; the project has "Show as a wedding story" ticked and saved (address, couple and type are required); the public cache lasts up to 300 seconds, so wait or check that the admin has `WEDDING_URL` and a `REVALIDATE_SECRET` identical to the wedding app's. The wedding data layer returns no stories (with one logged warning) when the migration is missing.
+
+## Reply card fails with DB_INSERT_FAILED
+
+Migration `0016_wedding_inquiries.sql` is not applied, or the wedding app has no `SUPABASE_SERVICE_ROLE_KEY` at runtime. A missing Resend key does not cause this: the card is stored and only the notification email is skipped.
+
 ## Lint reports formatting errors on files I did not change
 
 The repository and Biome use LF line endings. With `core.autocrlf=true` on Windows many working files are CRLF, so `bun run lint` reports one `format` error per file even though git's content is fine. Run `git ls-files --eol <file>`: `i/lf w/crlf` means a checkout artifact. Do not mass-reformat unrelated files.

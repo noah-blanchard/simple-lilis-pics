@@ -71,30 +71,69 @@ export const projectCreateSchema = z.object({
   cover_index: z.number().int().min(0).default(0),
 });
 
-/** Project update — all fields optional; photos[] allows reorder/orientation edits. */
-export const projectUpdateSchema = z.object({
-  title_fr: z.string().nullable().optional(),
-  title_en: z.string().nullable().optional(),
-  description_fr: z.string().nullable().optional(),
-  description_en: z.string().nullable().optional(),
-  project_date: z
+/* ── Weddings ── */
+
+export const WEDDING_TYPES = ["elopement", "intimate", "full_day"] as const;
+export type WeddingType = (typeof WEDDING_TYPES)[number];
+
+const WEDDING_SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+
+/** Wedding-story fields on a project (edit-only; the admin sends all of them together). */
+export const projectWeddingSchema = z.object({
+  wedding_story: z.boolean(),
+  wedding_slug: z
     .string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/)
-    .nullable()
-    .optional(),
-  featured: z.boolean().optional(),
-  tag_ids: z.array(z.string().uuid()).optional(),
-  cover_photo_id: z.string().uuid().optional(),
-  photos: z
-    .array(
-      z.object({
-        id: z.string().uuid(),
-        position: z.number().int().min(0),
-        orientation: z.enum(ORIENTATIONS),
-      }),
-    )
-    .optional(),
+    .trim()
+    .max(80)
+    .regex(WEDDING_SLUG, "Use lowercase letters, numbers and dashes")
+    .nullable(),
+  wedding_couple: z.string().trim().max(120).nullable(),
+  wedding_venue: z.string().trim().max(160).nullable(),
+  wedding_type: z.enum(WEDDING_TYPES).nullable(),
+  wedding_quote_en: z.string().trim().max(400).nullable(),
+  wedding_quote_fr: z.string().trim().max(400).nullable(),
 });
+
+/** Project update — all fields optional; photos[] allows reorder/orientation edits. */
+export const projectUpdateSchema = z
+  .object({
+    title_fr: z.string().nullable().optional(),
+    title_en: z.string().nullable().optional(),
+    description_fr: z.string().nullable().optional(),
+    description_en: z.string().nullable().optional(),
+    project_date: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/)
+      .nullable()
+      .optional(),
+    featured: z.boolean().optional(),
+    tag_ids: z.array(z.string().uuid()).optional(),
+    cover_photo_id: z.string().uuid().optional(),
+    photos: z
+      .array(
+        z.object({
+          id: z.string().uuid(),
+          position: z.number().int().min(0),
+          orientation: z.enum(ORIENTATIONS),
+        }),
+      )
+      .optional(),
+  })
+  .extend(projectWeddingSchema.partial().shape)
+  .superRefine((data, ctx) => {
+    // Mirrors the database check: a published story needs an address, names and a type.
+    if (data.wedding_story !== true) return;
+    const required = [
+      ["wedding_slug", "A story needs an address"],
+      ["wedding_couple", "A story needs the couple's names"],
+      ["wedding_type", "A story needs a type"],
+    ] as const;
+    for (const [key, message] of required) {
+      if (data[key] === null || data[key] === undefined) {
+        ctx.addIssue({ code: "custom", path: [key], message });
+      }
+    }
+  });
 
 export type ProjectCreateInput = z.infer<typeof projectCreateSchema>;
 export type ProjectUpdateInput = z.infer<typeof projectUpdateSchema>;
@@ -166,6 +205,56 @@ export type RatingTokenCreateInput = z.infer<typeof ratingTokenCreateSchema>;
 export type RatingSubmitInput = z.infer<typeof ratingSubmitSchema>;
 export type RatingUpdateInput = z.infer<typeof ratingUpdateSchema>;
 export type ContactUpdateInput = z.infer<typeof contactUpdateSchema>;
+
+/* ── Wedding inquiries (reply card) ── */
+
+export const GUEST_RANGES = [
+  "under_20",
+  "20_60",
+  "60_120",
+  "over_120",
+] as const;
+export const BUDGET_RANGES = [
+  "under_3000",
+  "3000_4500",
+  "4500_6000",
+  "over_6000",
+  "unsure",
+] as const;
+export const INQUIRY_COLLECTIONS = [...WEDDING_TYPES, "unsure"] as const;
+
+/** Submissions faster than this are treated as bots (D19). */
+export const MIN_INQUIRY_FILL_MS = 3000;
+
+/** POST /api/inquiry (wedding app, public). */
+export const weddingInquirySchema = z
+  .object({
+    names: z.string().trim().min(1).max(200),
+    email: z.string().trim().email().max(320),
+    wedding_date: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/)
+      .nullable(),
+    date_unset: z.boolean(),
+    venue: z.string().trim().min(1).max(200),
+    guests: z.enum(GUEST_RANGES).nullable(),
+    collection: z.enum(INQUIRY_COLLECTIONS).nullable(),
+    budget: z.enum(BUDGET_RANGES).nullable(),
+    heard_from: z.string().trim().max(200).optional().default(""),
+    message: z.string().trim().max(5000).optional().default(""),
+    consent: z.literal(true),
+    locale: z.enum(["en", "fr"]),
+    company: z.string().max(200).optional().default(""), // honeypot
+    started_at: z.number().int().nonnegative(), // ms epoch when the card was shown
+  })
+  .refine((d) => d.wedding_date !== null || d.date_unset, {
+    path: ["wedding_date"],
+    message: "A date or date_unset is required",
+  });
+
+export type WeddingInquiryInput = z.infer<typeof weddingInquirySchema>;
+
+export const weddingInquiryUpdateSchema = z.object({ read: z.boolean() });
 
 /* ── Public links editor ── */
 
