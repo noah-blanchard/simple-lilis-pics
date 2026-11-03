@@ -55,15 +55,16 @@ DNS is hosted on Cloudflare. The production records point at the Dokploy server'
 | `NEXT_PUBLIC_SUPABASE_BUCKET` | yes | yes | yes | build (+ runtime) | `photos` |
 | `NEXT_PUBLIC_SITE_URL` | yes | yes | yes | build (+ runtime) | `https://lilispics.com` / `https://admin.lilispics.com` / `https://wedding.lilispics.com` |
 | `ADMIN_URL` | yes | – | – | build (+ runtime) | `https://admin.lilispics.com` |
-| `SUPABASE_SERVICE_ROLE_KEY` | yes | yes | – | runtime only | secret |
-| `RESEND_API_KEY` | yes | – | – | runtime only | secret |
-| `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL` | yes | – | – | runtime only | inbox and a sender on a verified Resend domain |
+| `SUPABASE_SERVICE_ROLE_KEY` | yes | yes | yes | runtime only | secret |
+| `RESEND_API_KEY` | yes | – | yes | runtime only | secret |
+| `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL` | yes | – | yes | runtime only | inbox and a sender on a verified Resend domain |
 | `OPENROUTER_API_KEY` | – | yes | – | runtime only | secret |
 | `OPENROUTER_MODEL` | – | yes | – | runtime only | optional model override |
 | `PORTFOLIO_URL` | – | yes | – | runtime only | `https://lilispics.com` |
-| `REVALIDATE_SECRET` | yes | yes | – | runtime only | the **same** random secret in both apps |
+| `WEDDING_URL` | – | yes | – | runtime only | `https://wedding.lilispics.com` |
+| `REVALIDATE_SECRET` | yes | yes | yes | runtime only | the **same** random secret in all three apps |
 
-Generate the shared secret once with `openssl rand -hex 32` (or `bun -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`) and keep it in a password manager. The wedding app has no server secrets yet, and its Supabase variables are not used by the scaffold.
+Generate the shared secret once with `openssl rand -hex 32` (or `bun -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`) and keep it in a password manager. The wedding app uses its Supabase variables for the stories data layer, and its server secrets (`SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`, `CONTACT_*`) for the reply card endpoint.
 
 Changing any build-time value requires a rebuild (redeploy). Never prefix a server secret with `NEXT_PUBLIC_`.
 
@@ -80,7 +81,7 @@ Changing any build-time value requires a rebuild (redeploy). Never prefix a serv
 
 1. In Cloudflare, add an A record `wedding` to the Dokploy IP (DNS only).
 2. In the `lilis-pics` project, create an Application `wedding` with the same settings as the others: `apps/wedding/Dockerfile`, context `.`, branch `master`, the watch paths above.
-3. Build-time Arguments and Environment: `NEXT_PUBLIC_SITE_URL=https://wedding.lilispics.com` plus the three `NEXT_PUBLIC_SUPABASE_*` values.
+3. Build-time Arguments and Environment: `NEXT_PUBLIC_SITE_URL=https://wedding.lilispics.com` plus the three `NEXT_PUBLIC_SUPABASE_*` values (build-time). Add the runtime secrets from the table above (`SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`, `REVALIDATE_SECRET`) to the Environment only. On the admin application, add `WEDDING_URL`. Apply migrations `0015` and `0016` before deploying.
 4. Domain: `wedding.lilispics.com`, path `/`, port `3000`, HTTPS on, Let's Encrypt.
 5. Deploy, then check `https://wedding.lilispics.com/` and `/fr` (200) and `/robots.txt` (`Disallow: /`).
 

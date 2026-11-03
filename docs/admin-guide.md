@@ -84,6 +84,10 @@ Open `/admin/featured` to arrange the home-page featured grid.
 
 Only currently featured projects belong in the submitted layout. The maximum is eight. The tile's vertical footprint is derived from its cover orientation, so verify cover choices before fine-tuning the grid.
 
+## Wedding inquiries
+
+Open `/admin/inquiries` to read the reply cards sent from wedding.lilispics.com. Each row shows the couple, the wedding date (or "No date yet") and the venue. Opening an unread card marks it read. Expand a row to see every answer, then reply by email, mark it unread again, or delete it. Until migration 0016 is applied the list shows an error and the wedding site's card reports a server problem.
+
 ## Ratings and testimonials
 
 Open `/admin/ratings` to generate an English or French QR code. Each URL expires after 24 hours and works once. Show it to the person being photographed; their phone opens `https://lilispics.com/rate/[locale]/[token]` on the public site (not on the admin origin).

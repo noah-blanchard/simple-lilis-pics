@@ -1,4 +1,9 @@
-import type { WeddingType } from "../api/schemas";
+import type {
+  BUDGET_RANGES,
+  GUEST_RANGES,
+  INQUIRY_COLLECTIONS,
+  WeddingType,
+} from "../api/schemas";
 import { PHOTOS_BUCKET, SUPABASE_URL } from "../env";
 import type { Locale } from "../i18n/routing";
 import type {
@@ -22,6 +27,26 @@ export interface ContactMessageRow {
   name: string;
   email: string;
   message: string;
+  created_at: string;
+  /** When the admin first opened it; null while unread. */
+  read_at: string | null;
+}
+
+/** A reply card from the wedding site (table wedding_inquiries). */
+export interface WeddingInquiryRow {
+  id: string;
+  names: string;
+  email: string;
+  wedding_date: string | null;
+  date_unset: boolean;
+  venue: string;
+  guests: (typeof GUEST_RANGES)[number] | null;
+  collection: (typeof INQUIRY_COLLECTIONS)[number] | null;
+  budget: (typeof BUDGET_RANGES)[number] | null;
+  heard_from: string;
+  message: string;
+  locale: "en" | "fr";
+  consent_at: string;
   created_at: string;
   /** When the admin first opened it; null while unread. */
   read_at: string | null;

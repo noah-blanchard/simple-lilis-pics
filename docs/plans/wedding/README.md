@@ -121,7 +121,7 @@ Stop the whole run and ask only when:
 | 08 | [Home, night half](08-phase-home-night.md): about, testimonials (flash develop), order of service, collections, FAQ | 07 | no | Done |
 | 09 | [Stories data](09-phase-stories-data.md): migration 0015, core data layer, revalidation, admin wedding panel | 05 | writes `0015` | Done |
 | 10 | [Stories pages](10-phase-stories-pages.md): `/stories`, `/stories/[slug]`, lightbox, home stories section | 08, 09 | reads | Done |
-| 11 | [Reply card](11-phase-reply-card.md): migration 0016, inquiry API, form, seal sequence, `/rsvp`, admin inbox | 08 | writes `0016` | Not started |
+| 11 | [Reply card](11-phase-reply-card.md): migration 0016, inquiry API, form, seal sequence, `/rsvp`, admin inbox | 08 | writes `0016` | Done |
 | 12 | [Privacy, SEO, docs](12-phase-privacy-seo-docs.md): `/privacy`, metadata, sitemap (still noindex), documentation | 10, 11 | no | Not started |
 
 **Migrations.** The agent writes the `.sql` files and keeps going. It never runs

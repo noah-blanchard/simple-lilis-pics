@@ -206,6 +206,56 @@ export type RatingSubmitInput = z.infer<typeof ratingSubmitSchema>;
 export type RatingUpdateInput = z.infer<typeof ratingUpdateSchema>;
 export type ContactUpdateInput = z.infer<typeof contactUpdateSchema>;
 
+/* ── Wedding inquiries (reply card) ── */
+
+export const GUEST_RANGES = [
+  "under_20",
+  "20_60",
+  "60_120",
+  "over_120",
+] as const;
+export const BUDGET_RANGES = [
+  "under_3000",
+  "3000_4500",
+  "4500_6000",
+  "over_6000",
+  "unsure",
+] as const;
+export const INQUIRY_COLLECTIONS = [...WEDDING_TYPES, "unsure"] as const;
+
+/** Submissions faster than this are treated as bots (D19). */
+export const MIN_INQUIRY_FILL_MS = 3000;
+
+/** POST /api/inquiry (wedding app, public). */
+export const weddingInquirySchema = z
+  .object({
+    names: z.string().trim().min(1).max(200),
+    email: z.string().trim().email().max(320),
+    wedding_date: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/)
+      .nullable(),
+    date_unset: z.boolean(),
+    venue: z.string().trim().min(1).max(200),
+    guests: z.enum(GUEST_RANGES).nullable(),
+    collection: z.enum(INQUIRY_COLLECTIONS).nullable(),
+    budget: z.enum(BUDGET_RANGES).nullable(),
+    heard_from: z.string().trim().max(200).optional().default(""),
+    message: z.string().trim().max(5000).optional().default(""),
+    consent: z.literal(true),
+    locale: z.enum(["en", "fr"]),
+    company: z.string().max(200).optional().default(""), // honeypot
+    started_at: z.number().int().nonnegative(), // ms epoch when the card was shown
+  })
+  .refine((d) => d.wedding_date !== null || d.date_unset, {
+    path: ["wedding_date"],
+    message: "A date or date_unset is required",
+  });
+
+export type WeddingInquiryInput = z.infer<typeof weddingInquirySchema>;
+
+export const weddingInquiryUpdateSchema = z.object({ read: z.boolean() });
+
 /* ── Public links editor ── */
 
 const nullableTrimmedText = (max: number) =>

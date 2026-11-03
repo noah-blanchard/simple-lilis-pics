@@ -45,8 +45,7 @@ export const Invitation = async ({ locale, hasStories }: InvitationProps) => {
             <Rule />
             <p className="text-[16px] text-muted italic">{t("availability")}</p>
             <div className="mt-2 flex flex-wrap items-center justify-center gap-x-9 gap-y-3">
-              {/* Phase 11 changes this href to "#reply". */}
-              <PillButton variant="light" href="#footer">
+              <PillButton variant="light" href="#reply">
                 {t("cta")}
               </PillButton>
               {hasStories ? (

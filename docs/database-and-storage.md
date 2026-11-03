@@ -20,6 +20,7 @@ Apply `supabase/migrations/` in numeric order. They are the schema history, shar
 | `0012_links_page_settings.sql` | Adds the singleton links-page appearance settings and extends atomic editor saves |
 | `0013_social_links.sql` | Adds ordered, localized links-page social icons with click statistics and extends atomic editor saves |
 | `0014_social_links_rednote.sql` | Allows the `rednote` (Xiaohongshu) social icon key |
+| `0016_wedding_inquiries.sql` | Adds the private `wedding_inquiries` table for reply cards (applied manually) |
 | `0015_wedding_stories.sql` | Adds the nullable wedding-story columns, constraints and indexes on `projects` (idempotent; applied manually) |
 
 The active schema does **not** include the `photos` or `photo_tags` tables created by migration 0001; migration 0003 drops them.
@@ -57,6 +58,15 @@ One row per gallery image with an owning project, Storage object key or legacy f
 ### `project_tags`
 
 Many-to-many link between projects and tags with a composite primary key. Links cascade when either side is deleted.
+
+### `wedding_inquiries`
+
+Private reply cards from the wedding site (migration 0016):
+
+- `names`, `email`, `venue` (required, length-checked), optional `wedding_date` plus `date_unset` (a check requires one of them).
+- `guests` (`under_20`, `20_60`, `60_120`, `over_120`), `collection` (`elopement`, `intimate`, `full_day`, `unsure`) and `budget` (`under_3000`, `3000_4500`, `4500_6000`, `over_6000`, `unsure`), all nullable and check-constrained.
+- `heard_from`, `message`, `locale` (`en` or `fr`), `consent_at`, `created_at`, nullable `read_at`.
+- Indexes on `created_at` and on unread rows. RLS is enabled with an authenticated read policy only: no public read and no insert, update or delete policy, so the only writer is the wedding app's service-role endpoint.
 
 ### `contact_messages`
 

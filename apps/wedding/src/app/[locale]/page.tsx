@@ -10,6 +10,7 @@ import { Invitation } from "@/sections/Invitation";
 import { OrderOfService } from "@/sections/OrderOfService";
 import { Promises } from "@/sections/Promises";
 import { Questions } from "@/sections/Questions";
+import { ReplySection } from "@/sections/ReplySection";
 import { Words } from "@/sections/Words";
 
 export default async function WeddingHomePage({
@@ -34,7 +35,7 @@ export default async function WeddingHomePage({
         <OrderOfService locale={locale} />
         <Collections locale={locale} />
         <Questions locale={locale} />
-        {/* Phase 11: <ReplySection /> */}
+        <ReplySection locale={locale} />
       </main>
     </>
   );
