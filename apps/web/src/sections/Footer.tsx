@@ -4,8 +4,6 @@ import { useTranslations } from "next-intl";
 import { FooterContactCta } from "@/components/FooterContactCta";
 import { FooterSitemapLinks } from "@/components/FooterSitemapLinks";
 import { HoverLink } from "@/components/HoverLink";
-import { socials } from "@/data/socials";
-import { Reveal } from "@/components/Reveal";
 
 export const Footer = () => {
   const t = useTranslations("footer");

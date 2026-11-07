@@ -8,18 +8,21 @@ import {
   useMotionTemplate,
   useMotionValue,
   useReducedMotion,
+  useScroll,
   useSpring,
   useTransform,
   type Variants,
 } from "motion/react";
 import Image from "next/image";
-import { type MouseEvent, type ReactNode, useRef, useState } from "react";
+import { type MouseEvent, type ReactNode, useRef } from "react";
 import type { Specialty } from "@/types";
 
 interface SpecialtyCardProps {
   specialty: Specialty;
   /** Mouse-reactive 3D tilt + photo wipe-reveal (desktop only — needs a mouse). */
   tilt?: boolean;
+  /** Position in the mobile 2-col grid; staggers the scroll reveal per column. */
+  index?: number;
 }
 
 // Hover-driven, fully presentational. Colours are Tailwind classes (so they flip
@@ -33,15 +36,17 @@ const liftVariants: Variants = {
   rest: { scale: 1 },
   hover: { scale: 1.02 },
 };
-const fadeIn: Variants = { rest: { opacity: 0 }, hover: { opacity: 1 } };
-const fadeOut: Variants = { rest: { opacity: 1 }, hover: { opacity: 0 } };
 
 // Radius (%) a clip-path circle needs to fully cover a square box from any
 // origin point: percentages resolve against the side length, and the
 // farthest corner is the diagonal (~141% of the side) — 150% adds margin.
 const FULL_COVER_RADIUS = 150;
 
-export const SpecialtyCard = ({ specialty, tilt }: SpecialtyCardProps) => {
+export const SpecialtyCard = ({
+  specialty,
+  tilt,
+  index,
+}: SpecialtyCardProps) => {
   // One content layer; rendered twice with different colour classes. Sizes are
   // unprefixed (mobile, where this only renders below `md`) vs `md:` (desktop
   // tilt cards, which only render at `md`+) — the two breakpoints never
@@ -73,7 +78,11 @@ export const SpecialtyCard = ({ specialty, tilt }: SpecialtyCardProps) => {
     return <TiltCard specialty={specialty}>{layer}</TiltCard>;
   }
 
-  return <MobileCard specialty={specialty}>{layer}</MobileCard>;
+  return (
+    <MobileCard specialty={specialty} index={index}>
+      {layer}
+    </MobileCard>
+  );
 };
 
 interface SpecialtyCardShellProps {
@@ -81,55 +90,76 @@ interface SpecialtyCardShellProps {
   children: (textClass: string, descClass: string) => ReactNode;
 }
 
-// Touch devices have no hover, so the mobile grid card reveals its photo on
-// tap instead — same fade-in used by the desktop tilt card's photo layer,
-// just toggled by press rather than driven by the cursor.
+// Touch devices have no hover, so the mobile grid card reveals its photo as it
+// scrolls into view instead of on tap. Scroll progress (scrubbed, so it reverses
+// when scrolling back up) is smoothed by a spring and drives a bottom-up
+// clip-path wipe plus a subtle de-zoom. The same clipPath drives the photo and
+// the on-accent text layer so they arrive in sync (like TiltCard). Right-column
+// cards start a little later so the two columns cascade.
+const revealSpring = { stiffness: 120, damping: 24, mass: 0.4 } as const;
+const REVEAL_OFFSETS = [
+  ["start 90%", "start 35%"],
+  ["start 82%", "start 27%"],
+] as const;
+
 const MobileCard = ({
   specialty,
+  index = 0,
   children: layer,
-}: SpecialtyCardShellProps) => {
-  const [revealed, setRevealed] = useState(false);
-  const toggle = () => setRevealed((v) => !v);
+}: SpecialtyCardShellProps & { index?: number }) => {
+  const reduce = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: [...REVEAL_OFFSETS[index % 2]],
+  });
+  const progress = useSpring(scrollYProgress, revealSpring);
+
+  const top = useTransform(progress, [0, 1], [100, 0]);
+  const clipPath = useMotionTemplate`inset(${top}% 0% 0% 0%)`;
+  const scale = useTransform(progress, [0, 1], [1.15, 1]);
+  const restOpacity = useTransform(progress, [0.6, 1], [1, 0]);
 
   return (
-    <motion.button
-      type="button"
-      initial="rest"
-      animate={revealed ? "hover" : "rest"}
-      whileTap={{ scale: 0.97 }}
-      variants={liftVariants}
-      transition={transition}
-      onClick={toggle}
-      aria-pressed={revealed}
-      className="relative aspect-[4/5] w-full cursor-pointer select-none overflow-hidden rounded-card bg-panel text-left"
+    <div
+      ref={ref}
+      className="relative aspect-[4/5] w-full overflow-hidden rounded-card bg-panel text-left"
     >
-      {/* rest content (fades out on reveal) */}
-      <motion.div variants={fadeOut} transition={transition}>
+      {/* rest content (always rendered underneath the wipe) */}
+      <motion.div style={{ opacity: reduce ? 0 : restOpacity }}>
         {layer("text-fg", "text-muted")}
       </motion.div>
 
-      {/* photo, fades in on reveal */}
+      {/* photo, wiped in from the bottom */}
       <motion.div
         aria-hidden
-        variants={fadeIn}
-        transition={transition}
+        style={{ clipPath: reduce ? "inset(0% 0% 0% 0%)" : clipPath }}
         className="absolute inset-0"
       >
-        <Image
-          src={specialty.image}
-          alt=""
-          fill
-          sizes="50vw"
-          className="object-cover"
-        />
+        <motion.div
+          style={{ scale: reduce ? 1 : scale }}
+          className="absolute inset-0"
+        >
+          <Image
+            src={specialty.image}
+            alt=""
+            fill
+            sizes="50vw"
+            className="object-cover"
+          />
+        </motion.div>
         <div className="absolute inset-0 bg-scrim" />
       </motion.div>
 
-      {/* on-photo text, fades in with the photo */}
-      <motion.div aria-hidden variants={fadeIn} transition={transition}>
+      {/* on-photo text, clipped in sync with the photo */}
+      <motion.div
+        aria-hidden
+        style={{ clipPath: reduce ? "inset(0% 0% 0% 0%)" : clipPath }}
+        className="absolute inset-0"
+      >
         {layer("text-on-accent", "text-on-accent")}
       </motion.div>
-    </motion.button>
+    </div>
   );
 };
 

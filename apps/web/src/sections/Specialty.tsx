@@ -24,10 +24,10 @@ export const Specialty = () => {
           titleAccent={t("titleAccent")}
         />
 
-        {/* Mobile: static 2-col grid (layout unchanged). */}
+        {/* Mobile: 2-col grid, photos reveal on scroll. */}
         <div className="mt-16 grid grid-cols-2 gap-5 md:hidden">
-          {items.map((item) => (
-            <SpecialtyCard key={item.id} specialty={item} />
+          {items.map((item, i) => (
+            <SpecialtyCard key={item.id} specialty={item} index={i} />
           ))}
         </div>
       </div>
