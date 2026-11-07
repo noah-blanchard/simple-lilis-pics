@@ -5,23 +5,29 @@ import { EASE, zoomTransition } from "@lili/ui/lib/motion";
 import {
   animate,
   motion,
+  useInView,
   useMotionTemplate,
   useMotionValue,
   useReducedMotion,
-  useScroll,
   useSpring,
   useTransform,
   type Variants,
 } from "motion/react";
 import Image from "next/image";
-import { type MouseEvent, type ReactNode, useRef } from "react";
+import {
+  type MouseEvent,
+  type ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import type { Specialty } from "@/types";
 
 interface SpecialtyCardProps {
   specialty: Specialty;
   /** Mouse-reactive 3D tilt + photo wipe-reveal (desktop only — needs a mouse). */
   tilt?: boolean;
-  /** Position in the mobile 2-col grid; staggers the scroll reveal per column. */
+  /** Position in the mobile 2-col grid; picks the slide-in side per column. */
   index?: number;
 }
 
@@ -90,17 +96,26 @@ interface SpecialtyCardShellProps {
   children: (textClass: string, descClass: string) => ReactNode;
 }
 
-// Touch devices have no hover, so the mobile grid card reveals its photo as it
-// scrolls into view instead of on tap. Scroll progress (scrubbed, so it reverses
-// when scrolling back up) is smoothed by a spring and drives a bottom-up
-// clip-path wipe plus a subtle de-zoom. The same clipPath drives the photo and
-// the on-accent text layer so they arrive in sync (like TiltCard). Right-column
-// cards start a little later so the two columns cascade.
-const revealSpring = { stiffness: 120, damping: 24, mass: 0.4 } as const;
-const REVEAL_OFFSETS = [
-  ["start 90%", "start 35%"],
-  ["start 82%", "start 27%"],
-] as const;
+// Touch devices have no hover, so the mobile grid card is a tap-toggled button
+// with an entrance. Cards start off-screen on their own side (left column from
+// the left, right column from the right) and, when scrolled into view (once),
+// spring into their slot so each row's pair converges and snaps together; the
+// right card lags slightly ("clac... clac"). Once a card has landed its photo
+// pops in (fade + settling scale, kept on an inner wrapper so the card edges
+// never grow) while the text layers cross-fade. Tapping toggles the photo.
+// The slide lives on a wrapper so it never competes with the button's whileTap
+// scale, and its completion cleanly signals "landed".
+const slideSpring = {
+  type: "spring",
+  stiffness: 320,
+  damping: 22,
+  mass: 0.9,
+} as const;
+const popSpring = { type: "spring", stiffness: 260, damping: 18 } as const;
+const SLIDE_OFFSET = 110;
+const SLIDE_ROTATE = 6;
+const RIGHT_COLUMN_DELAY = 0.12;
+const PHOTO_ZOOM = 1.12;
 
 const MobileCard = ({
   specialty,
@@ -108,56 +123,95 @@ const MobileCard = ({
   children: layer,
 }: SpecialtyCardShellProps & { index?: number }) => {
   const reduce = useReducedMotion();
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: [...REVEAL_OFFSETS[index % 2]],
-  });
-  const progress = useSpring(scrollYProgress, revealSpring);
+  const [showPhoto, setShowPhoto] = useState(false);
+  const toggle = () => setShowPhoto((v) => !v);
 
-  const top = useTransform(progress, [0, 1], [100, 0]);
-  const clipPath = useMotionTemplate`inset(${top}% 0% 0% 0%)`;
-  const scale = useTransform(progress, [0, 1], [1.15, 1]);
-  const restOpacity = useTransform(progress, [0.6, 1], [1, 0]);
+  // Reduced motion: no entrance, photo is shown straight away.
+  useEffect(() => {
+    if (reduce) setShowPhoto(true);
+  }, [reduce]);
+
+  const slotRef = useRef<HTMLDivElement>(null);
+  const inView = useInView(slotRef, { once: true, amount: 0.35 });
+
+  const dir = index % 2 === 0 ? -1 : 1;
+  const delay = dir === 1 ? RIGHT_COLUMN_DELAY : 0;
+  const offscreen = {
+    x: `${dir * SLIDE_OFFSET}%`,
+    rotate: dir * SLIDE_ROTATE,
+    opacity: 0,
+  };
+  const landed = { x: "0%", rotate: 0, opacity: 1 };
+  const fade = { duration: 0.3, ease: EASE } as const;
 
   return (
-    <div
-      ref={ref}
-      className="relative aspect-[4/5] w-full overflow-hidden rounded-card bg-panel text-left"
-    >
-      {/* rest content (always rendered underneath the wipe) */}
-      <motion.div style={{ opacity: reduce ? 0 : restOpacity }}>
-        {layer("text-fg", "text-muted")}
-      </motion.div>
-
-      {/* photo, wiped in from the bottom */}
+    // Observe a static wrapper: the sliding card starts fully off-screen, so
+    // observing it directly (transforms count for IntersectionObserver)
+    // would never fire.
+    <div ref={slotRef}>
       <motion.div
-        aria-hidden
-        style={{ clipPath: reduce ? "inset(0% 0% 0% 0%)" : clipPath }}
-        className="absolute inset-0"
+        initial={reduce ? false : offscreen}
+        animate={reduce || inView ? landed : offscreen}
+        transition={{
+          x: { ...slideSpring, delay },
+          rotate: { ...slideSpring, delay },
+          opacity: { duration: 0.25, ease: EASE, delay },
+        }}
+        onAnimationComplete={() => {
+          if (inView && !reduce) setShowPhoto(true);
+        }}
       >
-        <motion.div
-          style={{ scale: reduce ? 1 : scale }}
-          className="absolute inset-0"
+        <motion.button
+          type="button"
+          whileTap={{ scale: 0.97 }}
+          onClick={toggle}
+          aria-pressed={showPhoto}
+          className="relative aspect-[4/5] w-full cursor-pointer select-none overflow-hidden rounded-card bg-panel text-left"
         >
-          <Image
-            src={specialty.image}
-            alt=""
-            fill
-            sizes="50vw"
-            className="object-cover"
-          />
-        </motion.div>
-        <div className="absolute inset-0 bg-scrim" />
-      </motion.div>
+          {/* rest content (fades out when the photo shows) */}
+          <motion.div
+            initial={false}
+            animate={{ opacity: showPhoto ? 0 : 1 }}
+            transition={fade}
+          >
+            {layer("text-fg", "text-muted")}
+          </motion.div>
 
-      {/* on-photo text, clipped in sync with the photo */}
-      <motion.div
-        aria-hidden
-        style={{ clipPath: reduce ? "inset(0% 0% 0% 0%)" : clipPath }}
-        className="absolute inset-0"
-      >
-        {layer("text-on-accent", "text-on-accent")}
+          {/* photo: fades in; inner wrapper pops from slightly zoomed to 1 */}
+          <motion.div
+            aria-hidden
+            initial={false}
+            animate={{ opacity: showPhoto ? 1 : 0 }}
+            transition={fade}
+            className="absolute inset-0"
+          >
+            <motion.div
+              initial={false}
+              animate={{ scale: reduce || showPhoto ? 1 : PHOTO_ZOOM }}
+              transition={reduce ? { duration: 0 } : popSpring}
+              className="absolute inset-0"
+            >
+              <Image
+                src={specialty.image}
+                alt=""
+                fill
+                sizes="50vw"
+                className="object-cover"
+              />
+            </motion.div>
+            <div className="absolute inset-0 bg-scrim" />
+          </motion.div>
+
+          {/* on-photo text, fades in with the photo */}
+          <motion.div
+            aria-hidden
+            initial={false}
+            animate={{ opacity: showPhoto ? 1 : 0 }}
+            transition={fade}
+          >
+            {layer("text-on-accent", "text-on-accent")}
+          </motion.div>
+        </motion.button>
       </motion.div>
     </div>
   );

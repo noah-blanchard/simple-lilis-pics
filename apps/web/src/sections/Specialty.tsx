@@ -17,14 +17,15 @@ export const Specialty = () => {
   }));
 
   return (
-    <section className="section-y">
+    <section className="section-y overflow-x-clip">
       <div className="container-site">
         <SectionHeader
           titleBase={t("titleBase")}
           titleAccent={t("titleAccent")}
         />
 
-        {/* Mobile: 2-col grid, photos reveal on scroll. */}
+        {/* Mobile: 2-col grid; cards slide in from their side on scroll, then
+            pop their photo in. Tap toggles the photo. */}
         <div className="mt-16 grid grid-cols-2 gap-5 md:hidden">
           {items.map((item, i) => (
             <SpecialtyCard key={item.id} specialty={item} index={i} />
